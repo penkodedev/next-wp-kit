@@ -1,0 +1,16 @@
+{
+  "Sidebar": {
+    "latestResources": "Últimos recursos",
+    "noRecentResources": "Nenhum recurso recente encontrado."
+  },
+  "Search": {
+    "placeholder": "O que você está procurando?",
+    "searchButton": "Buscar",
+    "clearButton": "Limpar",
+    "noResults": "Nenhum resultado encontrado."
+  },
+  "RecursosPage": {
+    "loadMore": "Carregar mais",
+    "loading": "Carregando..."
+  }
+}

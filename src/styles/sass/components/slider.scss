@@ -1,0 +1,38 @@
+/* ==========================================================================
+   Component: Slider (Swiper)
+   ========================================================================== */
+.swiper-wrapper {
+  /* ¡Esta es la clave! Fuerza una transición lineal y constante. */
+  transition-timing-function: linear !important;
+}
+
+.swiper {
+  overflow: hidden;
+  width: 100vw;
+  height: 540px;
+
+  .post-card {
+    margin: 0 auto; // Asegura que cada tarjeta llene el contenedor del slider
+    width: 500px;
+    transition: transform 0.3s ease-in-out; // Añadimos una transición suave
+
+    a.button {
+      display: none;
+    }
+
+    a {
+      color: black;
+      text-decoration: none;
+
+    }
+
+    &:hover {
+      transform: scale(1.09); // Aumentamos el tamaño un 5% al pasar el ratón
+      z-index: 10; // Nos aseguramos que se ponga por encima de otros elementos
+    }
+  }
+}
+
+.swiper-pagination-bullet-active {
+  background: #000;
+}

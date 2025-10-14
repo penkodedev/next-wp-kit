@@ -1,0 +1,31 @@
+@use '../abstracts' as *;
+
+html {
+  scroll-behavior: smooth;
+
+//   background: 
+//     linear-gradient(
+//       to top right,
+//       #1285fc24 0%,
+//       #1285fc00 33%,
+//       #1285fc00 67%,
+//       #1285fc24 100%
+//     ),
+//     linear-gradient(
+//       to right,
+//       #220dfc0d 0%,
+//       #220dfc00 30%,
+//       #220dfc0d 100%
+//     );
+ }
+
+
+body {
+  font-family: 'futura-regular', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    color: #111;
+    margin: 0;
+    background-color: #F8F7F7;
+    overflow-x: hidden; // AVOID HORIZONTAL SCROLL
+  }

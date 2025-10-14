@@ -1,0 +1,303 @@
+// ******************** 1. ESTILOS GENERALES Y CONTENEDOR PRINCIPAL *********************//
+.resultado-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 30px;
+    margin: 30px 0 30px 0;
+    padding: 50px;
+    width: 780px;
+
+    box-shadow: -1px -1px 25px -2px rgba(0, 0, 0, 0.23);
+    -webkit-box-shadow: -1px -1px 25px -2px rgba(0, 0, 0, 0.23);
+    -moz-box-shadow: -1px -1px 25px -2px rgba(0, 0, 0, 0.23);
+
+    p {
+        margin: 0;
+    }
+
+    h1 {
+        margin: 0;
+        font-size: 1.8em;
+    }
+}
+
+// ******************** 2. VISTA DE EVALUACIÓN POR ÁMBITOS (EvaluacionAmbitos.tsx) *********************//
+.resultado-desc {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.7em;
+    text-align: center;
+    margin-top: 10px;
+    width: 90%;
+
+    p {
+        font-size: 0.66em; // Este estilo para la valoración final, pero se aplica aquí también.
+        line-height: 1.46em;
+        color: #000;
+        margin: 0;
+        text-align: center;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    strong {
+        font-weight: 800;
+    }
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeInAnim 1s ease forwards;
+}
+
+@keyframes fadeInAnim {
+  to {
+    opacity: 1;
+  }
+}
+
+.icono-alerta {
+    font-size: 0.7em;
+    color: #ffb41d;
+
+}
+
+.listado-result-amb {
+    text-align: center;
+    list-style: none;
+    padding: 0;
+    width: 100%;
+
+    li {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        background-color: #f7f7f7;
+        border: 1px solid #ccc;
+        border-radius: 14px;
+        padding: 20px;
+        margin-bottom: 30px;
+
+        p strong {
+            font-weight: 800;
+            font-size: 1.1em;
+        }
+    }
+
+    H2 {
+        margin: 0 0 12px 0;
+    }
+
+    p.score-animado {
+        display: flex;
+        justify-content: center;
+    }
+}
+
+p.valoracion-ambito {
+    color: #000;
+    text-align: left;
+    font-size: 17px;
+    background: white;
+    border-radius: 8px;
+    border: 3px solid #d9d9d9;
+    margin-bottom: 16px;
+}
+
+.accordion-content {
+    padding: 20px 0 10px 0;
+
+    p {
+        color: #000;
+        text-align: left;
+        background-color: #f7f7f7;
+    }
+}
+
+button.accordion-toggle {
+    font-family: futura-regular, sans-serif;
+    font-size: 0.7em;
+    font-weight: 800;
+    background-color: white;
+    border: 2px solid #8e8e8e;
+    cursor: pointer;
+    margin-top: 12px;
+    display: inline-flex; // Para alinear texto e icono
+    align-items: center;
+    gap: 16px; // Espacio entre texto e icono
+
+    &::after {
+        content: '';
+        display: block;
+        width: 16px; // Tamaño del icono
+        height: 16px;
+        background-image: url('/arrow-down.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        transition: transform 0.5s ease; // Animación de rotación
+    }
+}
+
+button.accordion-toggle.active {
+    &::after {
+        transform: rotate(180deg); // Gira el icono cuando está activo
+    }
+}
+
+// ******************** 3. VISTA DE EVALUACIÓN FINAL (EvaluacionFinal.tsx) *********************//
+.suma-puntos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #000;
+    padding: 8px 4px;
+    margin: 20px 0 0 0;
+    width: 100%;
+
+    bold {
+        font-weight: 800;
+    }
+
+    .score-animado {
+        color: #000;
+    }
+}
+
+.texto-eval-final {
+    font-size: 1.08em;
+    margin: 20px 40px 60px 40px;
+}
+
+.texto-eval-final p {
+  margin-bottom: 1em;
+}
+.texto-eval-final p:last-child {
+  margin-bottom: 0;
+}
+
+small.msj-final-boton {
+    color: #636363;
+    line-height: 1.24em;
+    max-width: 400px;
+    text-align: center;
+}
+
+// ******************** 4. ELEMENTOS COMUNES DE RESULTADOS (Barras, puntuaciones, etc.) *********************//
+.progress-bar-animada-container {
+    width: 100%;
+    height: 13px; // ajusta la altura si lo deseas
+    background: #fff;
+    border: 1px solid #989898;
+    border-radius: 13px;
+    margin: 5px 0 0.5rem 0;
+    overflow: hidden; // importante para que la barra no sobresalga
+  }
+  
+  .progress-bar-animada {
+    width: 0%;
+    height: 100%;
+    background: #FFB41D;
+    border-radius: 13px;
+    //animation: progressAnim 1.5s linear forwards; // estaba dando fallos en la progress de los amibitos
+    border: none; // quita el borde del relleno
+  }
+  
+  .progress-bar-animada.done {
+    width: 100%;
+    animation: none;
+  }
+
+@keyframes progressAnim {
+    from {
+        width: 0%;
+    }
+
+    to {
+        width: 100%;
+    }
+}
+
+.score-animado {
+    display: flex;
+    text-align: center;
+    //font-size: 2.2rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    //letter-spacing: 1px;
+    transition: color 0.3s;
+}
+
+.score-animado.final {
+    color: #000;
+    margin: 0;
+}
+
+.current-score {
+    background-color:var(--primary);
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    width: 27px;
+    height: 27px;
+    font-weight: bold;
+    transition: background .2s;
+    display: flex;
+    margin: 0 10px 0 10px;
+}
+
+// ******************** 5. BOTONES DE NAVEGACIÓN Y MODAL FINAL *********************//
+button.btn-sig-amb {
+    font-family: 'futura-regular', sans-serif;
+    font-size: 1.3em;
+    color: #000;
+    width: 100%;
+    padding: 16px;
+    margin: 0 auto 10px auto;
+}
+
+.modal-final {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 1rem;
+    backdrop-filter: blur(5px);
+
+    p {
+        
+        font-size: 1.1em;
+        line-height: 1.4em;
+        margin-bottom: 2rem;
+    }
+
+    h2 {
+        margin-bottom: 1rem;
+        font-size: 1.9rem;
+        color: #222;
+    }
+}
+
+.modal-final>div {
+    background: #fff;
+    border-radius: 15px;
+    padding: 2rem 2.5rem;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+}
+
+.botones-final {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+
+    button {
+        font-size: 1.3rem;
+    }
+}

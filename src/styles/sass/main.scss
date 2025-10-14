@@ -1,0 +1,13 @@
+/*
+ * Archivo principal de SASS
+ * Este archivo importa todos los parciales en el orden correcto.
+ * Sigue una arquitectura similar a ITCSS (Inverted Triangle CSS).
+*/
+
+@use 'abstracts';
+@use 'vendors';
+@use 'base';
+@use 'components';
+@use 'nav';
+@use 'pages';
+@use 'responsive';
