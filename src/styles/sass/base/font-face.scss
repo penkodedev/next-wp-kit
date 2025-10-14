@@ -1,8 +1,10 @@
 @font-face {
 	font-family: 'futura-regular';
-	src: url('/fonts/futura-regular/futura.woff') format('woff'),
-		 url('/fonts/futura-regular/futura.ttf') format('truetype'),
-		 url('/fonts/futura-regular/futura.svg') format('svg');
+	src: url('/public/fonts/futura-regular/futura.woff') format('woff'),
+		 url('/public/fonts/futura-regular/futura.ttf') format('truetype'),
+		 url('/public/fonts/futura-regular/futura.svg') format('svg'),
+		 url('/public/fonts/futura-regular/futura.eot') format('eot'),
+		 url('/public/fonts/futura-regular/futura.otf') format('otf');
 	font-weight: normal;
 	font-style: normal;
   }

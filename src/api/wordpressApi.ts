@@ -97,6 +97,14 @@ export async function getContentBySlug<T extends WpContent>(postType: string, sl
   return data?.[0] ?? null;
 }
 
+/**
+/******************** (HOME PAGE CONTENT) ****************************
+ * This implementation assumes the home page has the slug 'inicio'.
+ */
+export async function getHomePage(): Promise<Page | null> {
+  return await getContentBySlug<Page>('pages', 'inicio');
+}
+
 /******************** (MODALES/POPUPS CPT) ****************************/
 /**
  * Fetches all modals that are configured as active popups.
