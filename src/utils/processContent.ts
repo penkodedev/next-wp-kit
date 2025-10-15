@@ -1,3 +1,4 @@
+import type { WpBlock } from "@/types/wordpressTypes";
 // src/utils/processContent.ts
 
 /**
@@ -5,17 +6,25 @@
  * 1. Replaces absolute backend URLs with relative frontend paths.
  * 2. Adds `data-next-ignore="true"` to modal links (`/modals/...`) to prevent
  *    Next.js's App Router from hijacking the click event. This allows our
- *    `ModalController` to handle it and open the modal popup.
+ *    `ModalController` to handle it.
+ * 3. Re-wraps `wp-block-group` elements with their original classes (like background
+ *    colors) that are often stripped by the WordPress REST API.
  *
  * @param {string} content - The HTML content string from the WordPress API.
+ * @param {WpBlock[]} [blocks] - The array of block data from the API.
  * @returns {string} The processed HTML content with corrected links.
  */
-export function processContent(content: string): string {
-  if (!content) return '';
+export function processContent(content: string, blocks?: WpBlock[]): string {
+  if (!content) return "";
+
+  let processedContent = content;
+
+  // Fix for wp-block-group wrappers if block data is available
+  if (blocks && blocks.length > 0) {
+    processedContent = fixBlockGroupHTML(processedContent, blocks);
+  }
   
   const backendUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL?.replace('/wp-json', '');
-  
-  let processedContent = content;
   
   // 1. Replace backend URLs with relative paths
   if (backendUrl) {
@@ -35,4 +44,48 @@ export function processContent(content: string): string {
   );
   
   return processedContent;
+}
+
+/**
+ * Re-wraps `wp-block-group` HTML with the necessary classes that the REST API strips.
+ * It uses the block's attributes to reconstruct the wrapper div.
+ * @param html The raw HTML content.
+ * @param blocks The array of block objects from the API.
+ */
+function fixBlockGroupHTML(html: string, blocks: WpBlock[]): string {
+  let fixedHtml = html;
+
+  const findGroupBlocks = (blocksToSearch: WpBlock[]) => {
+    for (const block of blocksToSearch) {
+      if (block.blockName === 'core/group') {
+        const { backgroundColor, align, className } = block.attrs;
+        // Check if there are any attributes that require a wrapper
+        if (backgroundColor || align || (className && className.includes('is-style-'))) {
+          const originalHtml = block.innerHTML;
+          // Find the corresponding HTML part. We need to be careful here.
+          // The API often returns just the inner container.
+          const innerContainerMatch = originalHtml.match(/<div class="wp-block-group__inner-container".*?>/);
+
+          if (innerContainerMatch && fixedHtml.includes(originalHtml)) {
+            const wrapperClasses = [
+              'wp-block-group',
+              align ? `align${align}` : '',
+              backgroundColor ? `has-${backgroundColor}-background-color has-background` : '',
+              className || ''
+            ].filter(Boolean).join(' ');
+
+            const wrappedHtml = `<div class="${wrapperClasses}">${originalHtml}</div>`;
+            fixedHtml = fixedHtml.replace(originalHtml, wrappedHtml);
+          }
+        }
+      }
+      // Recursively search in inner blocks
+      if (block.innerBlocks && block.innerBlocks.length > 0) {
+        findGroupBlocks(block.innerBlocks);
+      }
+    }
+  };
+
+  findGroupBlocks(blocks);
+  return fixedHtml;
 }

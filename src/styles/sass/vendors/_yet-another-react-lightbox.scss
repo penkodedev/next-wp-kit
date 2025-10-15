@@ -1,0 +1,29 @@
+// src/styles/sass/vendors/_yet-another-react-lightbox.scss
+
+// Importamos los estilos para el plugin de miniaturas.
+@import "yet-another-react-lightbox/plugins/thumbnails.css";
+
+:root {
+  // Cambia el color del fondo oscuro (overlay)
+  --yarl__color_backdrop: #0a0a0ae6;
+
+  // Cambia el color de los iconos (cerrar, zoom, flechas)
+  --yarl__color_button: #acacac;
+  --yarl__color_button_active: #d6d6d6;
+}
+
+
+button.yarl__navigation_prev,
+button.yarl__navigation_next {
+  top: 50%!important;
+  transform: translateY(0) !important;
+}
+
+button.yarl__navigation_prev:hover,
+button.yarl__navigation_next:hover {
+  top: 50%!important;
+  transform: translateY(0);
+  background-color: transparent;
+  box-shadow: none;
+}
+

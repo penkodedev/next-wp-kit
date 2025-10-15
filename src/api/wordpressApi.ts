@@ -93,7 +93,9 @@ export async function getAllContent<T extends WpContent>(postType: string, param
  * @param slug The item's slug.
  */
 export async function getContentBySlug<T extends WpContent>(postType: string, slug: string): Promise<T | null> {
-  const data = await fetchAPI<T[]>(`/wp/v2/${postType}?slug=${slug}&_embed`); // fetchAPI can now return null
+  // We add `&_fields=...,blocks` to explicitly request the parsed Gutenberg blocks structure.
+  // This is needed to reconstruct block wrappers that the REST API might strip out.
+  const data = await fetchAPI<T[]>(`/wp/v2/${postType}?slug=${slug}&_embed&_fields=id,slug,title,content,excerpt,date,modified,author,featured_media,_links,_embedded,blocks`);
   return data?.[0] ?? null;
 }
 

@@ -14,6 +14,7 @@ import CookieManager from "@/components/cookies/CookieManager";
 import ScrollToTop from "@/components/navigation/ScrollToTop";
 import ModalController from '@/components/ui/ModalController';
 import AdvertisingPopup from '@/components/ui/AdvertisingPopup';
+import LightboxController from '@/components/ui/LightboxController';
 
 import BodyClass from "@/utils/BodyClass";
 import WpStyles from "@/components/wordpress/WpStyles";
@@ -65,6 +66,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <CookieConsent />
             <CookieManager />
             <ModalController />
+            <LightboxController />
             <AdvertisingPopup />
           </BodyClass>
         </WpPageIdProvider>

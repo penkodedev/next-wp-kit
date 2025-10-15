@@ -158,11 +158,31 @@ export default async function WpStyles() {
       color: inherit;
     }
 
-    /* Clases específicas que faltan */
+    /* Clases de color de texto y fondo que a veces faltan */
     .has-black-color { color: var(--wp--preset--color--black) !important; }
     .has-white-color { color: var(--wp--preset--color--white) !important; }
+    .has-cyan-bluish-gray-color { color: var(--wp--preset--color--cyan-bluish-gray) !important; }
+    .has-vivid-red-color { color: var(--wp--preset--color--vivid-red) !important; }
+    .has-luminous-vivid-orange-color { color: var(--wp--preset--color--luminous-vivid-orange) !important; }
+    .has-luminous-vivid-amber-color { color: var(--wp--preset--color--luminous-vivid-amber) !important; }
+    .has-light-green-cyan-color { color: var(--wp--preset--color--light-green-cyan) !important; }
+    .has-vivid-green-cyan-color { color: var(--wp--preset--color--vivid-green-cyan) !important; }
+    .has-pale-cyan-blue-color { color: var(--wp--preset--color--pale-cyan-blue) !important; }
+    .has-vivid-cyan-blue-color { color: var(--wp--preset--color--vivid-cyan-blue) !important; }
+    .has-vivid-purple-color { color: var(--wp--preset--color--vivid-purple) !important; }
+
     .has-black-background-color { background-color: var(--wp--preset--color--black) !important; }
     .has-white-background-color { background-color: var(--wp--preset--color--white) !important; }
+    .has-cyan-bluish-gray-background-color { background-color: var(--wp--preset--color--cyan-bluish-gray) !important; }
+    .has-pale-pink-background-color { background-color: var(--wp--preset--color--pale-pink) !important; }
+    .has-vivid-red-background-color { background-color: var(--wp--preset--color--vivid-red) !important; }
+    .has-luminous-vivid-orange-background-color { background-color: var(--wp--preset--color--luminous-vivid-orange) !important; }
+    .has-luminous-vivid-amber-background-color { background-color: var(--wp--preset--color--luminous-vivid-amber) !important; }
+    .has-light-green-cyan-background-color { background-color: var(--wp--preset--color--light-green-cyan) !important; }
+    .has-vivid-green-cyan-background-color { background-color: var(--wp--preset--color--vivid-green-cyan) !important; }
+    .has-pale-cyan-blue-background-color { background-color: var(--wp--preset--color--pale-cyan-blue) !important; }
+    .has-vivid-cyan-blue-background-color { background-color: var(--wp--preset--color--vivid-cyan-blue) !important; }
+    .has-vivid-purple-background-color { background-color: var(--wp--preset--color--vivid-purple) !important; }
     
     /* Asegurar que los elementos con fondo tengan padding */
     .has-background {

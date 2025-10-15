@@ -6,6 +6,7 @@ import type { Metadata } from 'next';
 import Sidebar from '@/components/layout/Sidebar';
 import { generateSeoMetadata } from '@/utils/seo';
 import type { Recurso } from '@/types/wordpressTypes';
+import { processContent } from '@/utils/processContent';
 import { WpPageId } from '@/utils/WpPageId';
 import PostNav from '@/components/navigation/PostNav';
 
@@ -62,7 +63,10 @@ export default async function RecursoPage({ params }: RecursoPageProps) {
                 <main className="main-content">
                     <article className="entry-content">
                         <h1>{recurso.title.rendered}</h1>
-                        <div dangerouslySetInnerHTML={{ __html: recurso.content.rendered }} />
+                        {/* We process the content to fix potential issues like missing block wrappers */}
+                        <div 
+                            dangerouslySetInnerHTML={{ __html: processContent(recurso.content.rendered, recurso.blocks) }} 
+                        />
                     </article>
                 </main>
                 <Sidebar />

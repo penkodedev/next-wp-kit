@@ -22,6 +22,7 @@
     "rss": "^1.2.2",
     "sass": "^1.93.2",
     "swiper": "^12.0.2",
+    "yet-another-react-lightbox": "^3.25.0",
     "zustand": "^5.0.8"
   },
   "devDependencies": {
