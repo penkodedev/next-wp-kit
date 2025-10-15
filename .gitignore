@@ -1,1 +1,16 @@
+# Next.js build
+.next
+
+# Node modules
 node_modules
+
+# Local envs
+.env
+.env.local
+
+# macOS / Windows trash
+.DS_Store
+Thumbs.db
+
+# Estatic exports
+out
