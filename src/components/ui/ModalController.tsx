@@ -13,15 +13,39 @@ import Modals from '@/components/ui/Modals'; // The visual component
  */
 export default function ModalController() {
   const { openModal } = useModalStore();
+  // Definimos la ruta base para los modales para mayor claridad y mantenibilidad.
+  const MODAL_CPT_PATH = '/modales/';
+  // Extraemos el hostname de la URL de la API de WP para comparaciones.
+  const wpApiHostname = process.env.NEXT_PUBLIC_WORDPRESS_API_URL
+    ? new URL(process.env.NEXT_PUBLIC_WORDPRESS_API_URL).hostname
+    : '';
+
+  useEffect(() => {
+    // Añadimos una clase al body para indicar que el controlador de modales está listo.
+    // Esto nos permite usar CSS para prevenir clics prematuros antes de la hidratación.
+    document.body.classList.add('modal-controller-ready');
+
+    // Limpiamos la clase cuando el componente se desmonte.
+    return () => {
+      document.body.classList.remove('modal-controller-ready');
+    };
+  }, []); // Se ejecuta solo una vez, cuando el componente se monta en el cliente.
 
   useEffect(() => {
     const handleClick = (event: MouseEvent) => {
       // Find the closest link element, if the user clicked on an element inside a link
       const target = (event.target as HTMLElement).closest('a');
 
-      // Check if the link's pathname includes the slug for the modal CPT.
-      // In WordPress, we registered it as 'modales'.
-      if (target && target.pathname.startsWith('/modals/')) {
+      if (!target) return;
+
+      // Comprobamos si es un enlace a un modal, ya sea una ruta relativa o una URL absoluta al backend de WP.
+      const isRelativeModalLink = target.pathname.startsWith(MODAL_CPT_PATH);
+      const isAbsoluteWpModalLink =
+        wpApiHostname &&
+        target.hostname === wpApiHostname &&
+        target.pathname.startsWith(MODAL_CPT_PATH);
+
+      if (isRelativeModalLink || isAbsoluteWpModalLink) {
         // Prevent the browser from navigating to the modal's page
         event.preventDefault();
 
@@ -42,7 +66,7 @@ export default function ModalController() {
     return () => {
       document.removeEventListener('click', handleClick);
     };
-  }, [openModal]);
+  }, [openModal, wpApiHostname]);
 
   // This component renders the actual modal UI
   return <Modals />;

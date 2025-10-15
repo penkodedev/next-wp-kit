@@ -1,5 +1,22 @@
 // src/styles/sass/components/_modals.scss
 
+/*
+ * Prevención de clics prematuros en enlaces de modales.
+ * Por defecto, los enlaces a modales están "desactivados" para evitar que el navegador
+ * navegue a la URL del backend de WP antes de que el JavaScript del cliente (hidratación)
+ * haya cargado y el ModalController esté listo para interceptar el clic.
+ */
+a[href*="/modales/"] {
+  pointer-events: none; // Desactiva los clics
+  cursor: wait;        // Muestra un cursor de espera para indicar que algo está cargando
+}
+
+/* Una vez que ModalController.tsx se monta, añade la clase 'modal-controller-ready' al body. */
+.modal-controller-ready a[href*="/modales/"] {
+  pointer-events: auto; // Reactiva los clics
+  cursor: pointer;      // Vuelve al cursor normal
+}
+
 .modal-overlay { 
   position: fixed;
   top: 0;
@@ -27,6 +44,9 @@
   overflow-x: hidden; // NOT shown scrollbar only when content overflows
   
   .modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
     top: 28px; //Adjusted to align with border size
     right: 28px; //Adjusted to align with border size
@@ -43,6 +63,11 @@
     
     &:hover {
       opacity: 0.5;
+    }
+
+    svg {
+      color:rgb(121, 121, 121);
+      size: 38px;
     }
   }
   

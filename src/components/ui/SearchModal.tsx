@@ -104,7 +104,9 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <a href="#" onClick={(e) => { e.preventDefault(); handleClose(); }} className="search-modal-close" aria-label="Cerrar búsqueda">
+            <a href="#" onClick={(e) => { e.preventDefault(); handleClose(); }}
+              className="search-modal-close"
+              aria-label="Cerrar búsqueda">
               <Icons.X size={28} strokeWidth={1.2} />
             </a>
 

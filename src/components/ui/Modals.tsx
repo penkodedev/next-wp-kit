@@ -108,7 +108,7 @@ export default function Modals() {
             role="document"
           >
             <button className="modal-close" onClick={closeModal} aria-label="Cerrar modal">
-              <Icons.CircleX size={48} strokeWidth={1.8} />
+              <Icons.X size={28} strokeWidth={1} />
             </button>
 
             {isLoading && <div className="modal-loader">Cargando...</div>}

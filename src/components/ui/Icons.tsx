@@ -1,10 +1,11 @@
 // src/components/ui/Icons.tsx
 
 /**
- * Archivo centralizado para re-exportar todos los iconos de Lucide-React.
- * Esto permite un fácil mantenimiento y la posibilidad de cambiar de biblioteca
- * de iconos modificando un solo archivo.
+ * Centralized file to re-export all Lucide-React icons.
+ * This allows for easy maintenance and the ability to switch
+ * icon libraries by modifying a single file.
  */
+
 import {
   ArrowUp,
   ArrowUpLeft,
@@ -20,7 +21,7 @@ import {
 } from 'lucide-react';
 
 
-// Agrupamos todos los iconos en un solo objeto para una importación más limpia.
+// Group all the icons into a single object for cleaner imports.
 export const Icons = {
   ArrowUp,
   ArrowUpLeft,

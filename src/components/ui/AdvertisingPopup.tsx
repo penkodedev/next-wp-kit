@@ -134,7 +134,7 @@ export default function AdvertisingPopup() {
             role="document"
           >
             <button className="modal-close" onClick={handleClose} aria-label="Cerrar popup">
-              <Icons.CircleX size={42} strokeWidth={1.1} />
+              <Icons.X size={28} strokeWidth={1} />
             </button>
 
             {/* --- DYNAMIC CONTENT FROM WORDPRESS --- */}

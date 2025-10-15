@@ -62,8 +62,8 @@ input[type="submit"] {
   color: #000;
   display: inline-block;
   padding: 12px 40px;
-  background-color: var(--gray-light);
-  border: 2px solid var(--gray);
+  background-color: white;
+  border: 1px solid #bdbdbd;
   border-radius: var(--radius-large);
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.1s ease;
