@@ -15,3 +15,7 @@ Thumbs.db
 
 # Estatic exports
 out
+
+# Editor
+.vscode/
+.idea/
