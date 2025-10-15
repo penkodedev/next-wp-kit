@@ -21,7 +21,7 @@ export default function ModalController() {
 
       // Check if the link's pathname includes the slug for the modal CPT.
       // In WordPress, we registered it as 'modales'.
-      if (target && target.pathname.startsWith('/modales/')) {
+      if (target && target.pathname.startsWith('/modals/')) {
         // Prevent the browser from navigating to the modal's page
         event.preventDefault();
 

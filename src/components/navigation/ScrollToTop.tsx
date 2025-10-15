@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Icons } from '@/components/ui/Icons';
 
 const ScrollToTop = () => {
   const [visible, setVisible] = useState(false);
@@ -39,7 +40,7 @@ const ScrollToTop = () => {
       className={`scroll-top-btn ${visible ? 'visible' : ''}`}
       aria-label="Volver arriba"
     >
-      ↑
+      <Icons.ArrowUp size={26} strokeWidth={1.5} />
     </button>
   );
 };

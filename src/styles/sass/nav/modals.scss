@@ -28,12 +28,10 @@
   
   .modal-close {
     position: absolute;
-    font-size: 2rem;
-    line-height: 1;
-    top: 23px; //Adjusted to align with border size
-    right: 23px; //Adjusted to align with border size
-    width: 36px;
-    height: 36px;
+    top: 28px; //Adjusted to align with border size
+    right: 28px; //Adjusted to align with border size
+    width: 46px;
+    height: 46px;
     background: #fff;
     border-radius: 50%;
     color: var(--text-color, #000);

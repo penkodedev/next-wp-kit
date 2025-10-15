@@ -6,8 +6,7 @@ import WpNavMain from '@/components/wordpress/WpNavMain';
 import SearchTrigger from '@/components/ui/SearchTrigger';
 
 export default async function Header() {
-  // Obtenemos los items del menú por su UBICACIÓN, no por su slug.
-  // 'mainnav' es el identificador que registraste en register-nav-menus.php
+  // Obtenemos los items del menú por su UBICACIÓN.
   const menuItems = await getMenuItemsByLocation('mainnav');
 
   return (

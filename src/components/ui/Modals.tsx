@@ -7,6 +7,7 @@ import { useModalStore } from '@/store/modalStore';
 import { getContentBySlug } from '@/api/wordpressApi';
 import type { Modal as ModalType } from '@/types/wordpressTypes';
 import { processContent } from '@/utils/processContent';
+import { Icons } from '@/components/ui/Icons';
 
 const backdrop = {
   visible: {
@@ -107,7 +108,7 @@ export default function Modals() {
             role="document"
           >
             <button className="modal-close" onClick={closeModal} aria-label="Cerrar modal">
-              &times;
+              <Icons.CircleX size={48} strokeWidth={1.8} />
             </button>
 
             {isLoading && <div className="modal-loader">Cargando...</div>}

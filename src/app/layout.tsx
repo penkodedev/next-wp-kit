@@ -22,6 +22,8 @@ import { WpPageIdProvider } from '@/utils/WpPageIdContext';
 
 // Metadatos base para el SEO
 export const metadata: Metadata = {
+  // Utiliza la variable de entorno BASE_URL y recurre a localhost apenas como fallback.
+  metadataBase: new URL(process.env.BASE_URL || 'http://localhost:3000'),
   title: {
     default: 'Next-WP Kit', // Título por defecto
     template: '%s | Next-WP Kit', // Plantilla para títulos de páginas internas
@@ -30,7 +32,6 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Next-WP Kit',
     description: 'Un kit de inicio para crear sitios web con Next.js y WordPress como headless CMS.',
-    url: process.env.BASE_URL || 'http://localhost:3000',
     siteName: 'Next-WP Kit',
     // images: [ // Puedes añadir una imagen por defecto para compartir en redes sociales
     //   { url: '/og-image.png' /* Debe estar en la carpeta /public */, width: 1200, height: 630 }

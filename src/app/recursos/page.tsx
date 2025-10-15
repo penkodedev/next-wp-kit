@@ -8,6 +8,11 @@ import type { Recurso } from '@/types/wordpressTypes';
 
 const POSTS_PER_PAGE = 8;
 
+// Función auxiliar para generar los parámetros de la API
+const getApiParams = (page: number) => {
+  return `?per_page=${POSTS_PER_PAGE}&page=${page}&_embed&orderby=date&order=desc`;
+};
+
 export default function RecursosArchivePage() {
   const [recursos, setRecursos] = useState<Recurso[]>([]);
   const [page, setPage] = useState(1);
@@ -18,8 +23,7 @@ export default function RecursosArchivePage() {
   useEffect(() => {
     const fetchInitialRecursos = async () => {
       setIsLoading(true);
-      const params = `?per_page=${POSTS_PER_PAGE}&page=1&_embed&orderby=date&order=desc`;
-      const initialRecursos = await getAllContent<Recurso>('recursos', params);
+      const initialRecursos = await getAllContent<Recurso>('recursos', getApiParams(1));
       setRecursos(initialRecursos || []);
       setHasMore((initialRecursos || []).length === POSTS_PER_PAGE);
       setIsLoading(false);
@@ -30,8 +34,7 @@ export default function RecursosArchivePage() {
   const handleLoadMore = async () => {
     setIsLoading(true);
     const nextPage = page + 1;
-    const params = `?per_page=${POSTS_PER_PAGE}&page=${nextPage}&_embed&orderby=date&order=desc`;
-    const newRecursos = await getAllContent<Recurso>('recursos', params);
+    const newRecursos = await getAllContent<Recurso>('recursos', getApiParams(nextPage));
 
     if (newRecursos && newRecursos.length > 0) {
       setRecursos((prevRecursos) => [...prevRecursos, ...newRecursos]);

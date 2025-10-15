@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { searchSite } from '@/api/wordpressApi';
 import type { SearchResult } from '@/types/wordpressTypes';
 import { cleanInternalUrl } from '@/utils/url';
+import { Icons } from '@/components/ui/Icons';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -78,6 +79,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     }
   };
 
+  
   return (
     <AnimatePresence>
       {isOpen && (
@@ -102,7 +104,9 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <a href="#" onClick={(e) => { e.preventDefault(); handleClose(); }} className="search-modal-close" aria-label="Cerrar búsqueda">&times;</a>
+            <a href="#" onClick={(e) => { e.preventDefault(); handleClose(); }} className="search-modal-close" aria-label="Cerrar búsqueda">
+              <Icons.X size={28} strokeWidth={1.2} />
+            </a>
 
             <form onSubmit={handleSearchSubmit} className="search-modal-form">
               <input
@@ -114,7 +118,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 aria-label="Campo de búsqueda"
               />
               <div className="search-modal-buttons">
-                <button className="button" type="submit" disabled={!query.trim()}>Buscar</button>
+                <button className="button" type="submit" disabled={!query.trim()}>Buscar </button>
                 <button className="button" type="button" onClick={resetSearch}>Limpiar</button>
               </div>
             </form>

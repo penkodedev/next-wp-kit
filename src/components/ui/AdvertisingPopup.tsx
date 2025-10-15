@@ -6,6 +6,7 @@ import { motion, AnimatePresence, useIsPresent } from 'framer-motion';
 import { useGlobalAppReady } from '@/hooks/useGlobalAppReady';
 import { getActivePopups } from '@/api/wordpressApi';
 import type { Modal } from '@/types/wordpressTypes';
+import { Icons } from '@/components/ui/Icons';
 
 const backdrop = {
   visible: { opacity: 1, transition: { duration: 0.3, ease: "easeOut" } },
@@ -111,6 +112,7 @@ export default function AdvertisingPopup() {
     setActivePopup(null);
   };
 
+
   return (
     <AnimatePresence mode="wait">
       {activePopup && (
@@ -132,7 +134,7 @@ export default function AdvertisingPopup() {
             role="document"
           >
             <button className="modal-close" onClick={handleClose} aria-label="Cerrar popup">
-              &times;
+              <Icons.CircleX size={42} strokeWidth={1.1} />
             </button>
 
             {/* --- DYNAMIC CONTENT FROM WORDPRESS --- */}
