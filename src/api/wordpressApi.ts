@@ -95,7 +95,7 @@ export async function getAllContent<T extends WpContent>(postType: string, param
 export async function getContentBySlug<T extends WpContent>(postType: string, slug: string): Promise<T | null> {
   // We add `&_fields=...,blocks` to explicitly request the parsed Gutenberg blocks structure.
   // This is needed to reconstruct block wrappers that the REST API might strip out.
-  const data = await fetchAPI<T[]>(`/wp/v2/${postType}?slug=${slug}&_embed&_fields=id,slug,title,content,excerpt,date,modified,author,featured_media,_links,_embedded,blocks`);
+  const data = await fetchAPI<T[]>(`/wp/v2/${postType}?slug=${slug}&_embed&_fields=id,slug,title,content,excerpt,date,modified,author,featured_media,_links,_embedded,blocks,yoast_head_json`);
   return data?.[0] ?? null;
 }
 
@@ -105,6 +105,20 @@ export async function getContentBySlug<T extends WpContent>(postType: string, sl
  */
 export async function getHomePage(): Promise<Page | null> {
   return await getContentBySlug<Page>('pages', 'inicio');
+}
+
+/**
+ * Fetches hero data from the customizer endpoint.
+ */
+export async function getHeroData(): Promise<{
+  title?: string;
+  subtitle?: string;
+  backgroundImage?: string;
+  backgroundVideo?: string;
+  buttonText?: string;
+  buttonLink?: string;
+} | null> {
+  return await fetchAPI('/custom/v1/hero-data');
 }
 
 /******************** (MODALES/POPUPS CPT) ****************************/
@@ -140,8 +154,11 @@ export async function getMenuItemsByLocation(location: string): Promise<MenuItem
  * @param postType The post type (e.g., 'posts', 'recursos').
  */
 export async function getPostNavigation(postId: number, postType: string): Promise<PostNavigation | null> {
-  return await fetchAPI<PostNavigation>(`/custom/v1/post-navigation?post_id=${postId}&post_type=${postType}`);
+  // We force revalidation on every request for navigation data to ensure it's always up-to-date.
+  return await fetchAPI<PostNavigation>(`/custom/v1/post-navigation?post_id=${postId}&post_type=${postType}`, { next: { revalidate: 0 } });
 }
+
+
 /******************** WORDPRESS SEARCH ****************************/
 /**
  * Searches the site using a custom search endpoint.

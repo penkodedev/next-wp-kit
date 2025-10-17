@@ -1,6 +1,13 @@
 /* ==========================================================================
    Component: Slider (Swiper)
    ========================================================================== */
+
+.page-home .slider-container {
+  background: #e5e5e5;
+    padding: 40px 0 20px 0;
+  margin-bottom: 50px;
+}
+
 .swiper-wrapper {
   /* ¡Esta es la clave! Fuerza una transición lineal y constante. */
   transition-timing-function: linear !important;

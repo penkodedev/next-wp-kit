@@ -127,22 +127,20 @@ export default function AdvertisingPopup() {
           aria-modal="true"
           aria-labelledby="popup-title"
         >
+          {/* Close button outside modal-content, like in Modals */}
+          <button className="modal-close" onClick={handleClose} aria-label="Cerrar popup">
+            <Icons.X size={28} strokeWidth={1} />
+          </button>
+
           <motion.div
-            className="modal-content advertising-popup" // Added a specific class for styling
+            className="modal-content advertising-popup"
             variants={modalVariants}
             onClick={(e) => e.stopPropagation()}
             role="document"
           >
-            <button className="modal-close" onClick={handleClose} aria-label="Cerrar popup">
-              <Icons.X size={28} strokeWidth={1} />
-            </button>
-
-            {/* --- DYNAMIC CONTENT FROM WORDPRESS --- */}
             <div className="modal-body"
                  dangerouslySetInnerHTML={{ __html: activePopup.content.rendered }}
             />
-            {/* --- END DYNAMIC CONTENT --- */}
-            
           </motion.div>
         </motion.div>
       )}

@@ -1,7 +1,8 @@
-// src/app/[locale]/[...slug]/page.tsx
+// src/app/[...slug]/page.tsx
 // Catch-all route to handle all static pages from WordPress.
 
 import { getContentBySlug, getAllContent } from '@/api/wordpressApi';
+import AnimatedArticle from '@/components/ui/AnimatedArticle';
 import { generateSeoMetadata } from '@/utils/seo';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
@@ -45,14 +46,18 @@ export default async function CatchAllPage({ params }: PageProps) {
     notFound();
   }
 
+
+/**********************************************
+      START BUILDING THE PAGE CONTENT HTML
+**********************************************/
   return (
     <main>
-      <div className="container">
-        <article className="page-content">
-          <h1>{page.title.rendered}</h1>
-          <div dangerouslySetInnerHTML={{ __html: page.content.rendered }} />
+      {/* <div className="container"> */}
+        <article className="page-content" >
+          <h1 className='page-title'>{page.title.rendered}</h1>
+          <AnimatedArticle htmlContent={page.content.rendered} />
         </article>
-      </div>
+      {/* </div> */}
     </main>
   );
 }

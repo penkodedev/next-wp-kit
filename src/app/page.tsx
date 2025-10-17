@@ -7,39 +7,34 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import SliderRecursos from '@/components/ui/SliderRecursos';
 
-
 /**
- * Genera los metadatos para la página de inicio.
- * Ahora se conecta a WordPress para obtener el título y la descripción.
+ * Connects to WordPress to get the title and description.
  */
 export async function generateMetadata(): Promise<Metadata> {
   const homePage = await getHomePage();
 
   if (!homePage) {
     return {
-      title: 'Página no encontrada',
-      description: 'El contenido de la página de inicio no pudo ser cargado.',
+      title: 'Page not found',
+      description: 'The home page content could not be loaded.',
     };
   }
 
   return {
     title: homePage.title.rendered,
-    description: homePage.excerpt.rendered.replace(/<[^>]+>/g, ''), // Limpiamos el HTML del extracto
+    // Remove HTML tags from the excerpt
+    description: homePage.excerpt.rendered.replace(/<[^>]+>/g, ''),
   };
 }
 
 export default async function Home() {
   const homePage = await getHomePage();
 
-  // Si la página no se encuentra, mostramos un error 404 de Next.js
   if (!homePage) {
     notFound();
   }
 
-/**********************************************
-    START BUILDING THE PAGE CONTENT HTML
-**********************************************/
-  // Ejemplo de cómo podrías añadir el slider a la home
+  // Build the main page content
   return (
     <>
       <article className="entry-content container">

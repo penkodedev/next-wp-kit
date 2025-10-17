@@ -1,4 +1,5 @@
 // src/app/recursos/[slug]/page.tsx
+// Like a single.php page on a WP theme
 
 import { getContentBySlug, getAllContent } from '@/api/wordpressApi';
 import { notFound } from 'next/navigation';
@@ -9,6 +10,9 @@ import type { Recurso } from '@/types/wordpressTypes';
 import { processContent } from '@/utils/processContent';
 import { WpPageId } from '@/utils/WpPageId';
 import PostNav from '@/components/navigation/PostNav';
+import { Icons } from '@/components/ui/Icons';
+import Link from 'next/link';
+import AnimatedArticle from '@/components/ui/AnimatedArticle';
 
 type RecursoPageProps = {
   params: {
@@ -55,23 +59,31 @@ export default async function RecursoPage({ params }: RecursoPageProps) {
 /**********************************************
       START BUILDING THE PAGE CONTENT HTML
 **********************************************/
-    return (
-        <>
+  return (
+      <div className="main-container">
+        <Link href="/recursos" className="back-to-archive-link">← Volver a Recursos</Link>
             {/* Este componente establece el ID de la página en el contexto para BodyClass */}
             <WpPageId id={recurso.id} />
             <div className="container with-sidebar">
                 <main className="main-content">
                     <article className="entry-content">
-                        <h1>{recurso.title.rendered}</h1>
+                    <section className='page-title'>
+                       <h1>{recurso.title.rendered}</h1>
+
+                      <div className="icons-wrap">
+                        <Icons.Share2 size={21} strokeWidth={1.5} className="icons-page-title icon-share" />
+                        <Icons.Heart size={21} strokeWidth={1.5} className="icons-page-title icon-heart" />
+                      </div>
+                    </section>
                         {/* We process the content to fix potential issues like missing block wrappers */}
-                        <div 
-                            dangerouslySetInnerHTML={{ __html: processContent(recurso.content.rendered, recurso.blocks) }} 
-                        />
+                        <AnimatedArticle 
+                          htmlContent={processContent(recurso.content.rendered)}
+                        /> 
                     </article>
                 </main>
                 <Sidebar />
             </div>
-            <PostNav postId={recurso.id} postType={recurso.type} />
-        </>
+            <PostNav postId={recurso.id} postType={recurso.type} basePath="/recursos" />
+        </div>
     );
 }

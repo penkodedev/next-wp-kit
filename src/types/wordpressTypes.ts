@@ -60,7 +60,7 @@ export interface Page extends WpContent {}
 export interface Proyecto extends WpContent {}
 
 /**
- * Interfaz para el CPT 'Recurso'.
+ * Interfaz para el CPT 'Recursos'.
  */
 export interface Recurso extends WpContent {}
 
@@ -86,7 +86,7 @@ export interface SearchResult {
   // Lo manejamos como un tipo de unión para ser robustos.
   title: string | { rendered: string };
   url: string;
-  type: 'post' | 'page' | string; // Puede ser 'post', 'page' o el slug de un CPT.
+  type: 'post' | 'page'  | 'recursos' | string; // Puede ser 'post', 'page' o el slug de un CPT.
   _embedded?: {
     self: [{
       excerpt: {

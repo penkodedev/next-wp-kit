@@ -123,11 +123,18 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 <button className="button" type="submit" disabled={!query.trim()}>Buscar </button>
                 <button className="button" type="button" onClick={resetSearch}>Limpiar</button>
               </div>
+
+              <div className="search-modal-hint">
+              <p>¿Estabas buscando eso?</p>
+              </div>
+              
             </form>
 
             <motion.div layout className="search-modal-results">
               {isLoading && <p>Buscando...</p>}
               {!isLoading && results.length > 0 && (
+                
+                
                 <ul>
                   {results.map((result) => (
                     <li key={result.id}>

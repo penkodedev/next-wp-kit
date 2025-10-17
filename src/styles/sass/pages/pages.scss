@@ -7,26 +7,28 @@ main {
   margin: 0px auto 40px auto;
   gap: 30px;
 }
-
-
-.page-encuesta .footer {
-  display: none;
+.page-title {
+  background-color: rgb(238, 238, 238);
+  border: 1px solid #b3b3b3;
+  position: relative;
+  padding: 22px 36px;
+  border-radius: 10px;
+  margin-top: 40px;
+  line-height: 2.7em;
 }
 
-.page-encuesta .copy-encuesta {
-  color: #908f8f;
-  font-size: 0.8em;
-  margin-top: 80px;
-  text-align: center;
-}
+.single .page-title {
+  background-color: rgb(66, 66, 66);
+  color: white;
 
-.page-encuesta .encuesta-container {
-  margin-bottom: 50px;
-}
+  .icons-wrap {
+    display: flex;
+    position: absolute;
+    bottom: 15px;
+    right: 25px;
+    gap: 15px;
+  }
 
-.page-encuesta .logo-footer-wrapper {
-  display: flex;
-  justify-content: center;
 }
 
 .full-width {
@@ -36,4 +38,10 @@ main {
   right: 50%;
   margin: 0 -50vw 0 -50vw;
   width: 100vw;
+}
+
+img.alignleft {
+  float: left;
+  margin-right: 1.5rem;
+  
 }

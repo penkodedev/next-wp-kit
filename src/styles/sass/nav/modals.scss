@@ -29,6 +29,34 @@ a[href*="/modales/"] {
   justify-content: center;
   z-index: 1000;
   padding: 1rem;
+
+  .modal-close {
+    position: absolute;
+    top: 28px;
+    right: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    background: #fff;
+    border-radius: 50%;
+    color: var(--text-color, #000);
+    cursor: pointer;
+    padding: 0;
+    opacity: 1;
+    transition: opacity 0.2s;
+    z-index: 9999;
+    
+    &:hover {
+      opacity: 0.5;
+    }
+
+    svg {
+      color:rgb(121, 121, 121);
+      size: 38px;
+    }
+  }
 }
 
 .modal-content {

@@ -21,57 +21,60 @@ import WpStyles from "@/components/wordpress/WpStyles";
 import { WpPageIdProvider } from '@/utils/WpPageIdContext';
 
 
-// Metadatos base para el SEO
+// Base metadata for SEO
 export const metadata: Metadata = {
-  // Utiliza la variable de entorno BASE_URL y recurre a localhost apenas como fallback.
   metadataBase: new URL(process.env.BASE_URL || 'http://localhost:3000'),
   title: {
-    default: 'Next-WP Kit', // Título por defecto
-    template: '%s | Next-WP Kit', // Plantilla para títulos de páginas internas
+    default: 'Next-WP Kit',
+    template: '%s | Next-WP Kit',
   },
-  description: 'Un kit de inicio avanzado para crear sitios web con Next.js y WordPress como headless CMS.',
+  description: 'An advanced starter kit for building websites with Next.js and WordPress as headless CMS.',
   openGraph: {
     title: 'Next-WP Kit',
-    description: 'Un kit de inicio para crear sitios web con Next.js y WordPress como headless CMS.',
+    description: 'A starter kit for building websites with Next.js and WordPress as headless CMS.',
     siteName: 'Next-WP Kit',
-    // images: [ // Puedes añadir una imagen por defecto para compartir en redes sociales
-    //   { url: '/og-image.png' /* Debe estar en la carpeta /public */, width: 1200, height: 630 }
-    // ],
+    // images: [{ url: '/og-image.png', width: 1200, height: 630 }],
     locale: 'es_ES',
     type: 'website',
   },
-  // Puedes añadir más metadatos aquí: openGraph, icons, etc.
+  // Add more metadata here: openGraph, icons, etc.
 };
 
 type RootLayoutProps = {
   children: ReactNode;
 };
 
+// Group global UI components for better organization
+function GlobalUI() {
+  return (
+    <>
+      <ScrollToTop />
+      <CookieConsent />
+      <CookieManager />
+      <ModalController />
+      <LightboxController />
+      <AdvertisingPopup />
+    </>
+  );
+}
+
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="es">
-      {/* Carga los estilos de WordPress aquí para que tengan prioridad */}
       <head>
         <WpStyles />
       </head>
-
       <body>
         <WpPageIdProvider>
           <BodyClass>
             <Header />
             {/* <Breadcrumbs /> */}
             <main>{children}</main>
-            <ScrollToTop />
             <Footer />
-            <CookieConsent />
-            <CookieManager />
-            <ModalController />
-            <LightboxController />
-            <AdvertisingPopup />
+            <GlobalUI /> 
           </BodyClass>
         </WpPageIdProvider>
       </body>
-
     </html>
   );
 }

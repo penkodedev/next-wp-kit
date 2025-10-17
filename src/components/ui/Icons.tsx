@@ -8,14 +8,19 @@
 
 import {
   ArrowUp,
+  ArrowRight,
+  ArrowLeft,
   ArrowUpLeft,
   ArrowUpRight,
   Camera,
   CircleX,
+  ExternalLink,
+  Heart,
   Funnel,
   Mail,
   SlidersHorizontal,
   Search,
+  Share2,
   User,
   X,
 } from 'lucide-react';
@@ -24,14 +29,19 @@ import {
 // Group all the icons into a single object for cleaner imports.
 export const Icons = {
   ArrowUp,
+  ArrowRight,
+  ArrowLeft,
   ArrowUpLeft,
   ArrowUpRight,
   Camera,
   CircleX,
+  ExternalLink,
+  Heart,
   Funnel,
   Mail,
   SlidersHorizontal,
   Search,
+  Share2,
   User,
   X,
 };

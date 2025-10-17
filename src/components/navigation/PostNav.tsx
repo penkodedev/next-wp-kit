@@ -1,35 +1,24 @@
-// src/components/ui/PostNavigation.tsx
-"use client";
+// src/components/navigation/PostNav.tsx
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import { getPostNavigation } from '@/api/wordpressApi';
-import type { PostNavigation } from '@/types/wordpressTypes';
+import { Icons } from '@/components/ui/Icons';
 
 type PostNavigationProps = {
   postId: number;
   postType: string;
+  basePath: string; // Añadimos la ruta base del CPT (ej: "/recursos")
 };
 
-export default function PostNavigationComponent({ postId, postType }: PostNavigationProps) {
-  const [navigation, setNavigation] = useState<PostNavigation | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    if (postId && postType) {
-      getPostNavigation(postId, postType).then(data => {
-        setNavigation(data);
-        setIsLoading(false);
-      });
-    }
-  }, [postId, postType]);
-
-  // if (isLoading) {
-  //   return <div className="post-navigation container"><p>Cargando navegación...</p></div>;
-  // }
+/**
+ * A Server Component that fetches and displays previous/next post navigation.
+  * It fetches data on the server, providing better performance and SEO.
+ */
+export default async function PostNav({ postId, postType, basePath }: PostNavigationProps) {
+  const navigation = await getPostNavigation(postId, postType);
 
   if (!navigation || (!navigation.previous && !navigation.next)) {
-    return null; // No renderizar nada si no hay post anterior ni siguiente
+    return null; // Don't render anything if there's no previous or next post
   }
 
 
@@ -37,17 +26,26 @@ export default function PostNavigationComponent({ postId, postType }: PostNaviga
       START BUILDING THE PAGE CONTENT HTML
 **********************************************/
   return (
-    <nav className="post-navigation container">
+    <nav className="post-navigation">
+
       {navigation.previous && (
         <div className="nav-previous">
-          <Link href={`/${postType}/${navigation.previous.slug}`} rel="prev">← {navigation.previous.title}</Link>
-        </div>
+        <Link href={`${basePath}/${navigation.previous.slug}`} rel="prev" className="prev-link">
+          <Icons.ArrowLeft size={26} strokeWidth={1} className="arrow-left" />
+          {navigation.previous.title}
+        </Link>
+      </div>
       )}
+
       {navigation.next && (
         <div className="nav-next">
-          <Link href={`/${postType}/${navigation.next.slug}`} rel="next">{navigation.next.title} →</Link>
-        </div>
+        <Link href={`${basePath}/${navigation.next.slug}`} rel="next" className="next-link">
+            {navigation.next.title}
+            <Icons.ArrowRight size={26} strokeWidth={1} className="arrow-right" />
+        </Link>
+      </div>
       )}
+
     </nav>
   );
 }

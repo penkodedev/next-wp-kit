@@ -87,8 +87,8 @@
 }
 
 .search-modal-results {
-  margin-top: 2rem;
-  max-width: 800px;
+  margin-top: 0;
+  max-width: 880px;
   margin-left: auto;
   margin-right: auto;
   max-height: 60vh; // Para que no ocupe toda la pantalla si hay muchos resultados
@@ -100,7 +100,7 @@
   }
 
   li {
-    padding: 2px0 2px 0;
+    padding: 0;
   }
 
   li a {
@@ -109,7 +109,7 @@
     font-weight: 600;
     text-decoration: none;
     width: 100%;
-    padding: 4px 4px 4px 10px;
+    padding: 4px;
 
     &:hover {
       background-color: #efefef;

@@ -98,6 +98,11 @@ export default function Modals() {
           role="dialog"
           aria-modal="true"
         >
+          {/* Close button outside modal-content */}
+          <button className="modal-close" onClick={closeModal} aria-label="Cerrar modal">
+            <Icons.X size={28} strokeWidth={1} />
+          </button>
+
           <motion.div
             className="modal-content"
             variants={modalVariants}
@@ -107,10 +112,6 @@ export default function Modals() {
             onClick={(e) => e.stopPropagation()}
             role="document"
           >
-            <button className="modal-close" onClick={closeModal} aria-label="Cerrar modal">
-              <Icons.X size={28} strokeWidth={1} />
-            </button>
-
             {isLoading && <div className="modal-loader">Cargando...</div>}
 
             {!isLoading && modalContent && (

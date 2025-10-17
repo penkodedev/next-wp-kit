@@ -6,7 +6,7 @@ import PostCard from '@/components/ui/PostCard';
 import PostCardSkeleton from '@/components/ui/PostCardSkeleton';
 import type { Recurso } from '@/types/wordpressTypes';
 
-const POSTS_PER_PAGE = 8;
+const POSTS_PER_PAGE = 9;
 
 // Función auxiliar para generar los parámetros de la API
 const getApiParams = (page: number) => {
@@ -51,7 +51,7 @@ export default function RecursosArchivePage() {
     return (
       <div className="container">
         <h1>Recursos</h1>
-        <div className="grid-posts">
+        <div className="post-grid">
           {/* Muestra 8 esqueletos para coincidir con POSTS_PER_PAGE */}
           {Array.from({ length: POSTS_PER_PAGE }).map((_, index) => (
             <PostCardSkeleton key={index} />
@@ -73,8 +73,11 @@ export default function RecursosArchivePage() {
 
   return(
     <div className="container">
-      <h1>Recursos</h1>
-      <div className="grid-posts">
+      <section className='page-title'>
+        <h1>Recursos</h1>
+      </section>
+      
+      <div className="post-grid cols-3">
         {recursos.map((recurso) => (
           <PostCard key={recurso.id} item={recurso} basePath="/recursos" excerptLength={80} />
         ))}
