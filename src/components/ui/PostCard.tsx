@@ -3,8 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { WpContent } from "@/types/wordpressTypes";
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import AnimatedFadeIn from '@/components/animations/AnimatedFadeIn';
 
 interface PostCardProps {
   item: WpContent;
@@ -45,21 +44,20 @@ export default function PostCard({
     featuredMedia?.source_url;
   const excerptText = createExcerpt(item, excerptLength);
 
-  // Framer Motion: animar al entrar en viewport
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-50px" });
-
-  /**********************************************
+/**********************************************
       START BUILDING THE PAGE CONTENT HTML
 **********************************************/
   return (
-    <motion.article
-      ref={ref}
+    <AnimatedFadeIn
+      as="article"
       className="post-card"
       whileHover={{ scale: 1.056 }}
-      initial={{ opacity: 0, y: 80, scale: 0.95 }}
-      animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-      transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+      // TODO: Animación personalizada para PostCard - scale inicial reducido para efecto de "crecimiento"
+      // Si quieres cambiar esto, edita aquí o en AnimatedFadeIn por defecto
+      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      amount={0.1}
     >
       <Link href={`${basePath}/${item.slug}`} className="post-card-link">
         {imageUrl && (
@@ -92,7 +90,7 @@ export default function PostCard({
             </Link>
           </div>
         </div>
-      
-    </motion.article>
+
+    </AnimatedFadeIn>
   );
 }

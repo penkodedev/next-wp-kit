@@ -12,7 +12,7 @@ import { WpPageId } from '@/utils/WpPageId';
 import PostNav from '@/components/navigation/PostNav';
 import { Icons } from '@/components/ui/Icons';
 import Link from 'next/link';
-import AnimatedArticle from '@/components/ui/AnimatedArticle';
+import AnimatedArticle from '@/components/animations/AnimatedArticle';
 
 type RecursoPageProps = {
   params: {
@@ -76,9 +76,12 @@ export default async function RecursoPage({ params }: RecursoPageProps) {
                       </div>
                     </section>
                         {/* We process the content to fix potential issues like missing block wrappers */}
-                        <AnimatedArticle 
-                          htmlContent={processContent(recurso.content.rendered)}
-                        /> 
+                        <AnimatedArticle
+                          className="custom-article-class"
+                          amount={0.5}
+                        >
+                          <div dangerouslySetInnerHTML={{ __html: processContent(recurso.content.rendered) }} />
+                        </AnimatedArticle>
                     </article>
                 </main>
                 <Sidebar />

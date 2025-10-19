@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { searchSite } from '@/api/wordpressApi';
 import { cleanInternalUrl } from '@/utils/url';
+import AnimatedFadeIn from '@/components/animations/AnimatedFadeIn';
 
 // La API de búsqueda devuelve un 'subtype' que es más útil
 interface SearchResultWithSubtype {
@@ -46,31 +47,37 @@ export default function SearchPage() {
     return result.title.rendered;
   }
 
+
+/**********************************************
+      START BUILDING THE PAGE CONTENT HTML
+**********************************************/
   return (
-    <div className="container">
+    <AnimatedFadeIn>
       <h1>Resultados de búsqueda para: "{query}"</h1>
-      {isLoading ? (
-        <p>Buscando...</p>
-      ) : results.length > 0 ? (
-        <ul>
-          {results.map(result => (
-            <li key={result.id}>
-              <h3>
-                <Link href={cleanInternalUrl(result.url)}>{getResultTitle(result)}</Link>
-              </h3>
-              <small>
-                {/* Construimos la URL absoluta del frontend combinando el origen actual con la ruta limpia */}
-                {typeof window !== 'undefined' && `${window.location.origin}${cleanInternalUrl(result.url)}`}
-              </small>
-              {result._embedded?.self?.[0]?.excerpt?.rendered && (
-                <div className="search-result-excerpt" dangerouslySetInnerHTML={{ __html: result._embedded.self[0].excerpt.rendered }} />
-              )}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No se encontraron resultados para tu búsqueda.</p>
-      )}
-    </div>
+      
+      <div className="search-results-container">
+        {isLoading ? (
+          <p>Buscando...</p>
+        ) : !isLoading && results.length > 0 ? (
+          <ul className="space-y-6">
+            {results.map((result, index) => (
+              <AnimatedFadeIn as="li" key={result.id} transition={{ delay: index * 0.033 }}>
+                <h3 className="text-xl font-semibold">
+                  <Link href={cleanInternalUrl(result.url)} className="hover:underline">{getResultTitle(result)}</Link>
+                </h3>
+                <small className="text-sm text-gray-500">
+                  {typeof window !== 'undefined' && `${window.location.origin}${cleanInternalUrl(result.url)}`}
+                </small>
+                {result._embedded?.self?.[0]?.excerpt?.rendered && (
+                  <div className="search-result-excerpt mt-2" dangerouslySetInnerHTML={{ __html: result._embedded.self[0].excerpt.rendered }} />
+                )}
+              </AnimatedFadeIn>
+            ))}
+          </ul>
+        ) : !isLoading && (
+          <p>No se encontraron resultados para tu búsqueda.</p>
+        )}
+      </div>
+    </AnimatedFadeIn>
   );
 }
