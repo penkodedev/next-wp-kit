@@ -6,7 +6,9 @@ import 'swiper/css/bundle';
 import "@/styles/sass/main.scss";
 import type { ReactNode } from "react";
 import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import HeaderHome from "@/components/layout/HeaderHome";
+
+import HeaderConditional from "@/components/layout/HeaderConditional";
 
 import Breadcrumbs from "@/components/navigation/Breadcrumbs";
 import CookieConsent from "@/components/cookies/CookieConsent";
@@ -15,6 +17,7 @@ import ScrollToTop from "@/components/navigation/ScrollToTop";
 import ModalController from '@/components/ui/ModalController';
 import AdvertisingPopup from '@/components/ui/AdvertisingPopup';
 import LightboxController from '@/components/ui/LightboxController';
+import Footer from "@/components/layout/Footer";
 
 import BodyClass from "@/utils/BodyClass";
 import WpStyles from "@/components/wordpress/WpStyles";
@@ -58,6 +61,7 @@ function GlobalUI() {
   );
 }
 
+
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="es">
@@ -67,11 +71,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body>
         <WpPageIdProvider>
           <BodyClass>
-            <Header />
+            <HeaderConditional />
             {/* <Breadcrumbs /> */}
             <main>{children}</main>
             <Footer />
-            <GlobalUI /> 
+            <GlobalUI />
           </BodyClass>
         </WpPageIdProvider>
       </body>

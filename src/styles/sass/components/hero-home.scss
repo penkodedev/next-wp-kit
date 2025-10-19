@@ -1,0 +1,197 @@
+// ********** HERO SECTION ********************//
+
+.hero-section {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  //margin-top:-140px; // When we want Header over Hero
+
+  .hero-background {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    z-index: -1;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 0;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: white;
+    max-width: 800px;
+    padding: 0 2rem;
+    width: 100%;
+
+    .hero-slide {
+      width: 100%;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    p {
+      font-size: clamp(1.2rem, 2vw, 1.5rem);
+      margin-bottom: 2rem;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    .hero-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50px;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      svg {
+        transition: transform 0.3s ease;
+      }
+
+      &:hover svg {
+        transform: translateX(4px);
+      }
+    }
+  }
+
+  // Navegación
+  .hero-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    &.hero-nav-prev {
+      left: 2rem;
+    }
+
+    &.hero-nav-next {
+      right: 2rem;
+    }
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  // Indicadores (comentados - quitar si no se usan)
+  // .hero-indicators {
+  //   position: absolute;
+  //   bottom: 2rem;
+  //   left: 50%;
+  //   transform: translateX(-50%);
+  //   z-index: 2;
+  //   display: flex;
+  //   gap: 0.5rem;
+  // }
+
+  // .hero-indicator {
+  //   width: 12px;
+  //   height: 12px;
+  //   border-radius: 50%;
+  //   border: 2px solid rgba(255, 255, 255, 0.5);
+  //   background: transparent;
+  //   cursor: pointer;
+  //   transition: all 0.3s ease;
+
+  //   &.active {
+  //     background: white;
+  //     border-color: white;
+  //   }
+
+  //   &:hover {
+  //     border-color: white;
+  //     transform: scale(1.2);
+  //   }
+  // }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .hero-section {
+    height: 90vh;
+
+    .hero-content {
+      padding: 0 1rem;
+
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      p {
+        font-size: 1.2rem;
+      }
+    }
+
+    .hero-nav {
+      width: 40px;
+      height: 40px;
+
+      &.hero-nav-prev {
+        left: 1rem;
+      }
+
+      &.hero-nav-next {
+        right: 1rem;
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+}

@@ -52,14 +52,12 @@ export default async function CatchAllPage({ params }: PageProps) {
 **********************************************/
   return (
     <main>
-      {/* <div className="container"> */}
         <article className="page-content" >
           <h1 className='page-title'>{page.title.rendered}</h1>
           <AnimatedArticle>
             <div dangerouslySetInnerHTML={{ __html: page.content.rendered }} />
           </AnimatedArticle>
         </article>
-      {/* </div> */}
     </main>
   );
 }

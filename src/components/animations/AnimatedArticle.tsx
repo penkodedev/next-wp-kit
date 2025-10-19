@@ -1,4 +1,4 @@
-    "use client";
+"use client";
 
 import { useRef, type ReactNode, ElementType } from 'react';
 import { motion, useInView, type MotionProps } from "framer-motion";
@@ -27,8 +27,7 @@ export default function AnimatedArticle({
       ref={ref}
       className={className}
       initial={{ opacity: 0, scale: 0.25 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: false, amount }}
+      animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
       {...motionProps}
     >

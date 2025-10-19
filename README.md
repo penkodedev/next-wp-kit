@@ -45,7 +45,10 @@ This is where the kit truly shines, offering solutions to common headless challe
 ### Frontend & UI
 
 - **Swiper.js Integration:** Includes a ready-to-use, server-rendered slider component (`SliderRecursos.tsx`) for showcasing posts or CPTs.
-- **Component-Based Architecture:** A clean and organized component structure (`layout`, `ui`, `navigation`, `cookies`).
+- **Component-Based Architecture:** A clean and organized component structure (`layout`, `ui`, `navigation`, `cookies`, `animations`).
+- **Animations Library:** Reusable animation components (`AnimatedFadeIn`, `AnimatedArticle`) with Framer Motion for smooth, performant animations. Includes support for staggered animations and viewport-triggered effects.
+- **Hero Component:** Dynamic hero section with multiple slides, auto-play, navigation controls, and gradient backgrounds. Fully customizable and WordPress-ready.
+- **Conditional Headers:** Smart header switching between home page (transparent) and internal pages (opaque) for better UX.
 - **Cookie Consent Management:** Built-in components for handling cookie consent banners and management.
 - **UI Helpers:** Includes common utilities like a "Scroll to Top" button, a `ModalController` for managing popups, and an `AdvertisingPopup` component.
 - **SEO-Ready:** Uses Next.js's `generateMetadata` to dynamically create page titles, descriptions, and Open Graph tags for better SEO.
@@ -55,6 +58,9 @@ This is where the kit truly shines, offering solutions to common headless challe
 - **Git Ready:** The project is set up for version control.
 - **Linting & Formatting:** Pre-configured with ESLint and Prettier to ensure code quality and consistency.
 - **Organized SASS Structure:** A clean, ITCSS-like SASS architecture for scalable styling.
+- **Modular Animations:** Easy-to-use animation system with consistent patterns and performance optimizations.
+- **Responsive Design:** Mobile-first approach with fluid typography and adaptive layouts.
+- **Type-Safe Development:** Full TypeScript integration for reliable, maintainable code.
 
 ## 🏁 Getting Started
 
@@ -104,6 +110,37 @@ npm run dev
 ```
 
 Open http://localhost:3000 in your browser to see the result.
+
+## 📁 Project Structure
+
+```
+next-wp-kit/
+├── src/
+│   ├── animations/          # Reusable animation components
+│   │   ├── AnimatedFadeIn.tsx
+│   │   ├── AnimatedArticle.tsx
+│   │   └── StaggeredArticle.tsx
+│   ├── app/                 # Next.js App Router pages
+│   │   ├── layout.tsx       # Root layout with conditional headers
+│   │   ├── page.tsx         # Home page with Hero component
+│   │   └── [...slug]/       # Dynamic pages for WordPress content
+│   ├── components/
+│   │   ├── layout/          # Header, Footer, Sidebar components
+│   │   ├── ui/              # Reusable UI components (Hero, PostCard, etc.)
+│   │   ├── wordpress/       # WordPress-specific components
+│   │   └── animations/      # Animation library
+│   ├── styles/sass/         # SCSS architecture (ITCSS)
+│   └── api/                 # WordPress API integration
+├── public/                  # Static assets
+└── README.md
+```
+
+## 🎨 Recent Updates
+
+- **Hero Component:** Dynamic multi-slide hero with auto-play, navigation, and gradient backgrounds
+- **Animation Library:** Organized reusable animations with Framer Motion
+- **Conditional Headers:** Smart header switching for home vs. internal pages
+- **Enhanced UI:** Improved responsive design and component architecture
 
 ## 🤝 Contributing
 
