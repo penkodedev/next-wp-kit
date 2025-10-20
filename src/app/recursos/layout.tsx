@@ -1,10 +1,11 @@
 // src/app/recursos/layout.tsx
 
 /**
- * Este es el layout para la sección de "Recursos".
- * Envuelve tanto la página de archivo (page.tsx) como las páginas individuales ([slug]/page.tsx).
- * No necesita definir <html> o <body>, ya que hereda del layout raíz.
+ * This is the layout for the "Resources" section.
+ * It wraps both the archive page (page.tsx) and individual pages ([slug]/page.tsx).
+ * No need to define <html> or <body>, as it inherits from the root layout.
  */
+
 export default function RecursosLayout({
   children,
 }: {

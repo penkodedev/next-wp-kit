@@ -205,6 +205,30 @@ export default async function WpStyles() {
     .has-text-align-center { text-align: center; }
     .has-text-align-right { text-align: right; }
     .has-text-align-justify { text-align: justify; }
+
+
+    /* Alineaciones de imagen - Editor Clásico */
+      .alignleft {
+        float: left;
+        margin-right: 1rem;
+      }
+
+      .aligncenter {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        clear: both;
+      }
+
+      .alignright {
+        float: right;
+        margin-left: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .alignjustify {
+        text-align: justify;
+      } 
   `;
 
   return (

@@ -11,7 +11,7 @@ export default function LogoHeader() {
         {(siteInfo) => (
           <Link href="/" aria-label="Ir a la página principal">
             <Image
-              src="/framework-logo.png"
+              src="/images/framework-logo.png"
               alt={siteInfo?.title || "Logo del sitio"}
               width={90}
               height={55}

@@ -12,12 +12,13 @@ export default function Footer() {
           <>
             <LogoFooter />
             {siteInfo && (
-              <div>
+              <div className="footer-copy">
                 &copy; {new Date().getFullYear()} {siteInfo.title}
                 <br></br>
                 {siteInfo.description}
                 <br></br>
-                {siteInfo.site_icon_url && (
+
+                {/* {siteInfo.site_icon_url && (
                   <Image
                     src={siteInfo.site_icon_url}
                     alt="Icono del sitio"
@@ -25,7 +26,8 @@ export default function Footer() {
                     height={32}
                     style={{ margin: '20px auto', display: 'flex', verticalAlign: 'middle' }}
                   />
-                )}
+                )} */}
+                
               </div>
             )}
           </>

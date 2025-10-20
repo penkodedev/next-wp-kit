@@ -8,6 +8,7 @@ import { getContentBySlug } from '@/api/wordpressApi';
 import type { Modal as ModalType } from '@/types/wordpressTypes';
 import { processContent } from '@/utils/processContent';
 import { Icons } from '@/components/ui/Icons';
+import LoadingWrapper from './LoadingWrapper';
 
 const backdrop = {
   visible: {
@@ -112,15 +113,18 @@ export default function Modals() {
             onClick={(e) => e.stopPropagation()}
             role="document"
           >
-            {isLoading && <div className="modal-loader">Cargando...</div>}
-
-            {!isLoading && modalContent && (
-              <div className="modal-scroll-wrapper">
-                <div className="modal-body" dangerouslySetInnerHTML={{ __html: processContent(modalContent.content.rendered) }} />
-              </div>
-            )}
-
-            {!isLoading && !modalContent && <div className="modal-error"><h2>Error</h2><p>No se pudo cargar el contenido del modal.</p></div>}
+            <LoadingWrapper isLoading={isLoading}>
+              {modalContent ? (
+                <div className="modal-scroll-wrapper">
+                  <div className="modal-body" dangerouslySetInnerHTML={{ __html: processContent(modalContent.content.rendered) }} />
+                </div>
+              ) : (
+                <div className="modal-error">
+                  <h2>Error</h2>
+                  <p>No se pudo cargar el contenido del modal.</p>
+                </div>
+              )}
+            </LoadingWrapper>
           </motion.div>
         </motion.div>
       )}

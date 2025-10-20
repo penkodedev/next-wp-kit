@@ -1,10 +1,15 @@
-"use client"; // Convertir a Componente de Cliente para manejar estado e interactividad
+// src/app/recursos/page.tsx
+// Like an archiv.php page on a WP theme
+// 
+
+"use client"; 
 
 import { useState, useEffect } from 'react';
 import { getAllContent } from '@/api/wordpressApi';
 import PostCard from '@/components/ui/PostCard';
-import PostCardSkeleton from '@/components/ui/PostCardSkeleton';
 import type { Recurso } from '@/types/wordpressTypes';
+import LoadingWrapper from '@/components/ui/LoadingWrapper'
+import LoadingSpinner from '@/components/ui/LoadingSpiner'
 
 const POSTS_PER_PAGE = 9;
 
@@ -46,48 +51,39 @@ export default function RecursosArchivePage() {
     setIsLoading(false);
   };
 
-  // Muestra los esqueletos de carga solo en la carga inicial.
-  if (isLoading && recursos.length === 0) {
-    return (
-      <div className="container">
-        <h1>Recursos</h1>
-        <div className="post-grid">
-          {/* Muestra 8 esqueletos para coincidir con POSTS_PER_PAGE */}
-          {Array.from({ length: POSTS_PER_PAGE }).map((_, index) => (
-            <PostCardSkeleton key={index} />
-          ))}
-        </div>
-      </div>
-    );
-  }
 
-  if (recursos.length === 0) {
-    return (
-      <article className='form-container'>
-        <h1>Recursos</h1>
-        <p>No se encontraron recursos en este momento.</p>
-      </article>
-    );
-  }
-
-
-  return(
-    <div className="container">
+/**********************************************
+      START BUILDING THE PAGE CONTENT HTML
+**********************************************/
+  return (
+    <div className="main-container">
       <section className='page-title'>
         <h1>Recursos</h1>
       </section>
-      
-      <div className="post-grid cols-2">
-        {recursos.map((recurso) => (
-          <PostCard key={recurso.id} item={recurso} basePath="/recursos" excerptLength={150} />
-        ))}
-      </div>
 
+      {recursos.length === 0 && !isLoading ? (
+        <article>
+          <p>No se encontraron recursos en este momento.</p>
+        </article>
+      ) : (
+        <div className="post-grid cols-2">
+          {recursos.map((recurso) => (
+            <PostCard key={recurso.id} item={recurso} basePath="/recursos" excerptLength={150} />
+          ))}
+        </div>
+      )}
+
+      {/* Spinner overlay durante carga inicial */}
+      {isLoading && recursos.length === 0 && (
+        <LoadingSpinner overlay={true} text="Cargando recursos..." />
+      )}
+      
       {hasMore && (
-        <div className="load-more-container" style={{ textAlign: 'center', marginTop: '2rem' }}>
+        <div className="load-more-container" style={{ textAlign: 'center', marginTop: '3rem' }}>
           <button onClick={handleLoadMore} disabled={isLoading} className="button">
             {isLoading ? 'Cargando...' : 'cargar más'}
-          </button>
+            </button>
+            
         </div>
       )}
     </div>
