@@ -5,9 +5,10 @@
     padding: 20px 40px;
     background-color: #fff;
     border-bottom: 1px solid #d6d6d6;
-    height: 100px;
-    width:100vw;
+    height: 120px;
+    width:100%;
     margin: 0;
+    //box-sizing: border-box;
 
     .nav-header {
         display: flex;

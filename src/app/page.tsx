@@ -44,19 +44,23 @@ export default async function Home() {
             title: "Bienvenido a Next WP Kit",
             subtitle: "Un kit moderno para integrar Next.js con WordPress headless",
             buttonText: "Explorar Recursos",
-            buttonLink: "/recursos"
+            buttonLink: "/recursos",
+            backgroundType: "gradient"
           },
           {
             title: "Animaciones Suaves",
             subtitle: "Componentes de animación reutilizables con Framer Motion",
             buttonText: "Ver Animaciones",
-            buttonLink: "/animaciones"
+            buttonLink: "/animaciones",
+            backgroundType: "image",
+            backgroundImage: "/images/hero-bg.jpg"
           },
           {
             title: "WordPress Headless",
             subtitle: "Integra fácilmente tu contenido de WordPress con Next.js",
             buttonText: "Más Info",
-            buttonLink: "/acerca"
+            buttonLink: "/acerca",
+            backgroundType: "gradient"
           }
         ]}
         autoPlay={true}
@@ -74,3 +78,4 @@ export default async function Home() {
     </>
   );
 }
+

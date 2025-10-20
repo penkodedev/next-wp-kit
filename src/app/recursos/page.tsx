@@ -77,9 +77,9 @@ export default function RecursosArchivePage() {
         <h1>Recursos</h1>
       </section>
       
-      <div className="post-grid cols-3">
+      <div className="post-grid cols-2">
         {recursos.map((recurso) => (
-          <PostCard key={recurso.id} item={recurso} basePath="/recursos" excerptLength={80} />
+          <PostCard key={recurso.id} item={recurso} basePath="/recursos" excerptLength={150} />
         ))}
       </div>
 

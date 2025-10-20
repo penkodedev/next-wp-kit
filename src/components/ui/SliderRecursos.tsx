@@ -34,8 +34,8 @@ export default async function SliderLatestRecursos() {
 
   // 3. Definimos la configuración.
   const sliderOptions: SwiperOptions = {
-    spaceBetween: 0,
-    slidesPerView: 3.4, // Permite que los slides fluyan con su ancho natural
+    spaceBetween: 20,
+    slidesPerView: 3.7, // Permite que los slides fluyan con su ancho natural
     speed: 7000, // Aumentamos la duración para un movimiento lento y suave
     freeMode: true,
     navigation: false,
@@ -47,8 +47,6 @@ export default async function SliderLatestRecursos() {
       delay: 0, disableOnInteraction: false,
       
     },
-
-
 
 // =================================================================
 //                      Responsive Breakpoints
@@ -63,7 +61,7 @@ export default async function SliderLatestRecursos() {
           // Cuando el ancho de la ventana es >= 1024px
           1024: {
             slidesPerView: 3,
-            spaceBetween: 40,
+            spaceBetween: 20,
           },
     },
          };

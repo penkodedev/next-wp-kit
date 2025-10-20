@@ -1,18 +1,18 @@
 // src/app/recursos/[slug]/page.tsx
 // Like a single.php page on a WP theme
 
-import { getContentBySlug, getAllContent } from '@/api/wordpressApi';
-import { notFound } from 'next/navigation';
-import type { Metadata } from 'next';
-import Sidebar from '@/components/layout/Sidebar';
-import { generateSeoMetadata } from '@/utils/seo';
-import type { Recurso } from '@/types/wordpressTypes';
-import { processContent } from '@/utils/processContent';
-import { WpPageId } from '@/utils/WpPageId';
-import PostNav from '@/components/navigation/PostNav';
-import { Icons } from '@/components/ui/Icons';
-import Link from 'next/link';
-import AnimatedArticle from '@/components/animations/AnimatedArticle';
+import { getContentBySlug, getAllContent } from "@/api/wordpressApi";
+import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import Sidebar from "@/components/layout/Sidebar";
+import { generateSeoMetadata } from "@/utils/seo";
+import type { Recurso } from "@/types/wordpressTypes";
+import { processContent } from "@/utils/processContent";
+import { WpPageId } from "@/utils/WpPageId";
+import PostNav from "@/components/navigation/PostNav";
+import { Icons } from "@/components/ui/Icons";
+import Link from "next/link";
+import AnimatedArticle from "@/components/animations/AnimatedArticle";
 
 type RecursoPageProps = {
   params: {
@@ -23,8 +23,10 @@ type RecursoPageProps = {
 /**
  * Genera los metadatos para la página de un recurso específico.
  */
-export async function generateMetadata({ params }: RecursoPageProps): Promise<Metadata> {
-  const recurso = await getContentBySlug<Recurso>('recursos', params.slug);
+export async function generateMetadata({
+  params,
+}: RecursoPageProps): Promise<Metadata> {
+  const recurso = await getContentBySlug<Recurso>("recursos", params.slug);
   if (!recurso) {
     return {};
   }
@@ -37,7 +39,7 @@ export async function generateMetadata({ params }: RecursoPageProps): Promise<Me
  */
 export async function generateStaticParams() {
   // Usamos la función genérica y optimizamos pidiendo solo los slugs
-  const allRecursos = await getAllContent<Recurso>('recursos', '?_fields=slug');
+  const allRecursos = await getAllContent<Recurso>("recursos", "?_fields=slug");
   if (!allRecursos) {
     return [];
   }
@@ -47,46 +49,60 @@ export async function generateStaticParams() {
 }
 
 export default async function RecursoPage({ params }: RecursoPageProps) {
-  const recurso = await getContentBySlug<Recurso>('recursos', params.slug);
+  const recurso = await getContentBySlug<Recurso>("recursos", params.slug);
 
   // Si no se encuentra el recurso, muestra la página 404 de Next.js
   if (!recurso) {
     notFound();
   }
 
-
-
 /**********************************************
       START BUILDING THE PAGE CONTENT HTML
 **********************************************/
   return (
-      <div className="main-container">
-        <Link href="/recursos" className="back-to-archive-link">← Volver a Recursos</Link>
-            {/* Este componente establece el ID de la página en el contexto para BodyClass */}
-            <WpPageId id={recurso.id} />
-            <div className="container with-sidebar">
-                <main className="main-content">
-                    <article className="entry-content">
-                    <section className='page-title'>
-                       <h1>{recurso.title.rendered}</h1>
+    <div className="main-container">
+      <Link href="/recursos" className="back-to-archive-link">
+        <Icons.ArrowLeft size={26} strokeWidth={1} className="arrow-left" />
+        Volver a Recursos
+      </Link>
+      {/* Este componente establece el ID de la página en el contexto para BodyClass */}
+      <WpPageId id={recurso.id} />
+      <div className="container with-sidebar">
+        <main className="main-content">
+          <article className="entry-content">
+            <section className="page-title">
+              <h1>{recurso.title.rendered}</h1>
 
-                      <div className="icons-wrap">
-                        <Icons.Share2 size={21} strokeWidth={1.5} className="icons-page-title icon-share" />
-                        <Icons.Heart size={21} strokeWidth={1.5} className="icons-page-title icon-heart" />
-                      </div>
-                    </section>
-                        {/* We process the content to fix potential issues like missing block wrappers */}
-                        <AnimatedArticle
-                          className="custom-article-class"
-                          amount={0.5}
-                        >
-                          <div dangerouslySetInnerHTML={{ __html: processContent(recurso.content.rendered) }} />
-                        </AnimatedArticle>
-                    </article>
-                </main>
-                <Sidebar />
-            </div>
-            <PostNav postId={recurso.id} postType={recurso.type} basePath="/recursos" />
-        </div>
-    );
+              <div className="icons-wrap">
+                <Icons.Share2
+                  size={21}
+                  strokeWidth={1.5}
+                  className="icons-page-title icon-share"
+                />
+                <Icons.Heart
+                  size={21}
+                  strokeWidth={1.5}
+                  className="icons-page-title icon-heart"
+                />
+              </div>
+            </section>
+            {/* We process the content to fix potential issues like missing block wrappers */}
+            <AnimatedArticle className="custom-article-class" amount={0.5}>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: processContent(recurso.content.rendered),
+                }}
+              />
+            </AnimatedArticle>
+          </article>
+          <PostNav
+            postId={recurso.id}
+            postType={recurso.type}
+            basePath="/recursos"
+          />
+        </main>
+        <Sidebar />
+      </div>
+    </div>
+  );
 }

@@ -5,13 +5,18 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
+import { Icons } from "./Icons";
 
 type HeroSlide = {
   title?: string;
   subtitle?: string;
   buttonText?: string;
   buttonLink?: string;
+  backgroundType?: 'gradient' | 'image' | 'video' | 'none';
+  backgroundImage?: string;
+  backgroundVideo?: string;
+  backgroundColor?: string;
 };
 
 type HeroProps = {
@@ -92,10 +97,36 @@ export default function Hero({
     exit: { opacity: 0, x: -100 },
   };
 
+  const currentSlideData = heroSlides[currentSlide];
+  const backgroundType = currentSlideData?.backgroundType || 'gradient';
+
   return (
     <section className="hero-section">
-      {/* Capa de fondo con gradiente animado */}
-      <div className="hero-background" />
+      {/* Capa de fondo dinámica */}
+      <div className={`hero-background hero-background-${backgroundType}`}>
+        {backgroundType === 'image' && currentSlideData?.backgroundImage && (
+          <Image
+            src={currentSlideData.backgroundImage}
+            alt="Hero background"
+            fill
+            style={{ objectFit: 'cover' }}
+            priority
+          />
+        )}
+        {backgroundType === 'video' && currentSlideData?.backgroundVideo && (
+          <video
+            src={currentSlideData.backgroundVideo}
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+        )}
+        {backgroundType === 'none' && currentSlideData?.backgroundColor && (
+          <div style={{ backgroundColor: currentSlideData.backgroundColor, width: '100%', height: '100%' }} />
+        )}
+      </div>
       <div className="hero-overlay" />
 
       {/* Contenido animado con slides */}
@@ -128,7 +159,7 @@ export default function Hero({
               {heroSlides[currentSlide]?.buttonText && heroSlides[currentSlide]?.buttonLink && (
                 <motion.div variants={itemVariants}>
                   <Link href={heroSlides[currentSlide].buttonLink!} className="button hero-button">
-                    {heroSlides[currentSlide].buttonText} <ArrowRight size={21} strokeWidth={1.5} />
+                    {heroSlides[currentSlide].buttonText} <Icons.ArrowRight size={21} strokeWidth={1.5} />
                   </Link>
                 </motion.div>
               )}
@@ -145,14 +176,14 @@ export default function Hero({
             className="hero-nav hero-nav-prev"
             aria-label="Slide anterior"
           >
-            <ChevronLeft size={18} />
+            <Icons.ChevronLeft size={18} />
           </a>
           <a
             onClick={nextSlide}
             className="hero-nav hero-nav-next"
             aria-label="Slide siguiente"
           >
-            <ChevronRight size={18} />
+            <Icons.ChevronRight size={18} />
           </a>
         </>
       )}

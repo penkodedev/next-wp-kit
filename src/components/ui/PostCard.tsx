@@ -1,9 +1,10 @@
 "use client";
 
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import type { WpContent } from "@/types/wordpressTypes";
-import AnimatedFadeIn from '@/components/animations/AnimatedFadeIn';
+import { useInView } from "framer-motion";
 
 interface PostCardProps {
   item: WpContent;
@@ -44,20 +45,29 @@ export default function PostCard({
     featuredMedia?.source_url;
   const excerptText = createExcerpt(item, excerptLength);
 
+  // Estado para controlar cuándo animar (permite re-animación)
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Hook para detectar cuando el card entra/sale de vista
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: false, amount: 0.1 });
+
+  useEffect(() => {
+    setIsVisible(inView);
+  }, [inView]);
+
 /**********************************************
       START BUILDING THE PAGE CONTENT HTML
 **********************************************/
   return (
-    <AnimatedFadeIn
-      as="article"
+    <article
+      ref={ref}
       className="post-card"
-      whileHover={{ scale: 1.056 }}
-      // TODO: Animación personalizada para PostCard - scale inicial reducido para efecto de "crecimiento"
-      // Si quieres cambiar esto, edita aquí o en AnimatedFadeIn por defecto
-      initial={{ opacity: 0, y: 20, scale: 0.95 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      amount={0.1}
+      style={{
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.95)',
+        transition: 'opacity 0.6s ease-out, transform 0.6s ease-out'
+      }}
     >
       <Link href={`${basePath}/${item.slug}`} className="post-card-link">
         {imageUrl && (
@@ -91,6 +101,6 @@ export default function PostCard({
           </div>
         </div>
 
-    </AnimatedFadeIn>
+    </article>
   );
 }

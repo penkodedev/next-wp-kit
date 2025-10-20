@@ -20,9 +20,9 @@ export default function AnimatedFadeIn({
   ...motionProps
 }: AnimatedFadeInProps) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once, amount });
+  const inView = useInView(ref, { once: false, amount });
 
-  const MotionTag = motion(Tag);
+  const MotionTag = motion.create(Tag);
 
   return (
     <MotionTag

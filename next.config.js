@@ -20,7 +20,7 @@ const nextConfig = {
         protocol: 'http',
         hostname: 'localhost',
         // Si tu WP local usa un puerto, añádelo aquí. Ej: port: '10003'
-        // port: '', 
+        // port: '',
       },
       {
         protocol: 'http',

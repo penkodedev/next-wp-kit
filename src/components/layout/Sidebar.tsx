@@ -10,9 +10,9 @@ export default async function Sidebar() {
   const params = `?per_page=5&page=1&_embed&orderby=date&order=desc`;
   const latestRecursos = await getAllContent<Recurso>('recursos', params);
 
+  
   return (
     <aside className="sidebar">
-
       <div className="sidebox">
         <h2>Ultimos recursos</h2>
         {(!latestRecursos || latestRecursos.length === 0) ? (
