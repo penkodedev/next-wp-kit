@@ -6,6 +6,8 @@
 
 ![Next-WP-Kit Preview](public/images/screen-next-kit.jpg)
 
+**⚡ Works best with [Penkode WP Headless Theme](https://github.com/penkodev/penkode-wp-headless) - Our complementary WordPress theme designed specifically for headless setups with optimized REST API endpoints and custom shortcodes.**
+
 Transform your WordPress content into lightning-fast, SEO-optimized websites with our enterprise-grade starter kit. Built for agencies, developers, and businesses who demand performance, scalability, and developer experience.
 
 **🚀 Deploy production-ready websites in hours, not weeks**
@@ -105,16 +107,16 @@ Transform your WordPress content into lightning-fast, SEO-optimized websites wit
 - **Atomic Design** - Component organization for large teams
 
 #### 🚀 **Performance & Optimization**
-- **Core Web Vitals** - Lighthouse 100/100 optimized
+- **Core Web Vitals** - Lighthouse 95+ optimized
 - **Image Optimization** - Next.js automatic image optimization
 - **Code Splitting** - Automatic route-based code splitting
 - **Bundle Analysis** - Built-in bundle size monitoring
 
-#### 🔧 **Advanced Features**
-- **Custom WordPress Endpoints** - Full control over data exposure
+#### 🔧 **WordPress Integration Features**
+- **Custom REST Endpoints** - Optimized data fetching from WordPress
 - **Shortcode Processing** - Server-side rendering of WordPress shortcodes
-- **Modal Routing** - WordPress content in Next.js modals
-- **Lucide Icons** - Custom Gutenberg shortcodes for icons
+- **Modal System** - WordPress content in Next.js modals
+- **Dynamic Content Sync** - Real-time updates from WordPress
 
 ## 🚀 Quick Start - 5 Minutes to Launch
 
@@ -165,10 +167,11 @@ npm run dev
 - Blog platforms with advanced SEO features
 - Multi-language corporate sites with WordPress translation plugins
 
-### 🛍️ **E-commerce Integration**
-- Product catalogs powered by WooCommerce
-- Custom post types for products, categories, and reviews
-- Headless commerce with WordPress as CMS
+### 🛍️ **Content-Heavy Applications**
+- Advanced blogging platforms with custom post types
+- Magazine websites with rich media galleries
+- Educational platforms with course management
+- Portfolio sites with dynamic project showcases
 
 ### 📰 **Content-Heavy Sites**
 - News portals with real-time content updates
@@ -192,7 +195,7 @@ npm run dev
 
 ## 🏗️ Enterprise Architecture
 
-### 📂 **Scalable Project Structure**
+### 📂 **Actual Project Structure**
 ```
 next-wp-kit/
 ├── 📁 src/
@@ -200,18 +203,28 @@ next-wp-kit/
 │   ├── 🌐 app/             # Next.js 14 App Router
 │   │   ├── layout.tsx      # Root layout with providers
 │   │   ├── page.tsx        # Home with dynamic hero
-│   │   └── [...slug]/      # Dynamic WordPress routes
+│   │   ├── [...slug]/      # Dynamic WordPress routes
+│   │   ├── blog/           # Blog archive and posts
+│   │   └── modales/        # Modal pages
 │   ├── 🧩 components/
 │   │   ├── 📐 layout/      # Header, Footer, Navigation
+│   │   │   ├── header/     # Header components
+│   │   │   └── footer/     # Footer components
 │   │   ├── 🎨 ui/          # Reusable UI components
 │   │   ├── 🔗 wordpress/   # WordPress integrations
+│   │   ├── 🍪 cookies/     # Cookie management
+│   │   ├── 🧭 navigation/  # Navigation components
 │   │   └── ✨ animations/  # Animation library
 │   ├── 🎯 styles/          # ITCSS SASS architecture
 │   ├── 🔌 api/             # Type-safe WordPress API
-│   └── 🪝 hooks/           # Custom React hooks
-├── 🚀 public/              # Optimized static assets
-├── 📋 docs/                # Implementation guides
-└── ⚙️ config/              # Environment configurations
+│   ├── 🪝 hooks/           # Custom React hooks
+│   ├── 🌍 i18n/            # Internationalization
+│   ├── 📊 store/           # Zustand state management
+│   ├── 🛠️ types/           # TypeScript definitions
+│   └── 🔧 utils/           # Utility functions
+├── 🚀 public/              # Static assets & fonts
+├── 📋 *.php                # WordPress integration files
+└── ⚙️ *.config.*           # Configuration files
 ```
 
 ### 🔧 **WordPress Integration Files**
@@ -243,15 +256,6 @@ next-wp-kit/
 
 ---
 
-## 🎉 Success Stories
-
-*"Next-WP-Kit reduced our development time by 70% and improved our Core Web Vitals score from 45 to 95. Our clients love the editing experience in WordPress while getting the performance of Next.js."*
-
-**— Digital Agency, 50+ client websites**
-
-*"The shortcode processing and modal system work flawlessly. We can now embed complex WordPress content in our Next.js frontend without any performance issues."*
-
-**— E-commerce Platform, 10k+ products**
 
 ---
 
@@ -268,9 +272,14 @@ next-wp-kit/
 
 Ready to transform your WordPress development workflow?
 
-- 📧 **Email:** hello@penkode.dev
+- 📧 **Email:** email@penkode.dev
+- 📧 **LinkedIn:** https://www.linkedin.com/in/pauloramalho/
 - 💬 **Discord:** Join our community
 - 📚 **Documentation:** Comprehensive implementation guides
-- 🎯 **Demo:** Live preview environment
+- 🎯 **Demo front:** www.penkode.com/next-wp-kit
+- 🎯 **Demo WP back:** www.penkode.com/next-wp-kit-admin
+
+---
+
 
 **Transform your WordPress workflow with Next-WP-Kit - where content management meets modern performance.** 🚀

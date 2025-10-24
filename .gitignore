@@ -19,3 +19,7 @@ out
 # Editor
 .vscode/
 .idea/
+
+# Internal documentation
+RECOMENDACIONES.md
+RECOMENDACIONES.txt
