@@ -1,4 +1,4 @@
-# Next-WP-Kit: Enterprise-Grade Headless WordPress Starter
+# Next-WP-Kit: Enterprise-Grade Next.js Starter for WordPress Headless
 
 ![Next-WP-Kit](https://img.shields.io/badge/Next.js-14.2-black?style=for-the-badge&logo=next.js) ![WordPress](https://img.shields.io/badge/WordPress-Headless-blue?style=for-the-badge&logo=wordpress) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript) ![SASS](https://img.shields.io/badge/Sass-SCSS-hotpink?style=for-the-badge&logo=sass) ![Framer Motion](https://img.shields.io/badge/Framer-Motion-purple?style=for-the-badge&logo=framer)
 
