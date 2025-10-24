@@ -4,7 +4,7 @@
 
 **The Ultimate Headless WordPress Solution for Modern Web Development**
 
-![Next-WP-Kit Preview](./public/images/screen-next-kit.jpg)
+![Next-WP-Kit Preview](./public/images/screen-next-kit.jpg?v=2)
 
 **👨‍💻 Created by [Paulo Ramalho (penkode.com)](https://www.penkode.com)** - WordPress specialist with 15+ years crafting custom websites from scratch (Custom Post Types, custom metas, themes). Now specializing in headless architectures, custom REST APIs, and React/Next.js integrations. Penkode represents Paulo's personal brand and expertise in building bespoke digital solutions.
 
