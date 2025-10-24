@@ -289,13 +289,13 @@ This project represents Paulo's commitment to sharing knowledge and best practic
 
 Ready to transform your WordPress development workflow?
 
-- 📧 **Email:** [hello@penkode.dev](mailto:hello@penkode.dev){:target="_blank"}
-- 🌐 **Paulo's Website:** [https://www.penkode.com](https://www.penkode.com){:target="_blank"}
-- 💼 **LinkedIn:** [https://www.linkedin.com/in/pauloramalho/](https://www.linkedin.com/in/pauloramalho/){:target="_blank"}
-- 💬 **Discord:** [Join our community](https://discord.gg/pauloramalho){:target="_blank"}
-- 📚 **Documentation:** [Comprehensive implementation guides](https://docs.penkode.dev){:target="_blank"}
-- 🎯 **Demo Front:** [www.penkode.com/next-wp-kit](https://www.penkode.com/next-wp-kit){:target="_blank"}
-- 🎯 **Demo WP Admin:** [www.penkode.com/next-wp-kit-admin](https://www.penkode.com/next-wp-kit-admin){:target="_blank"}
+- 📧 **Email:** hello@penkode.dev
+- 🌐 **Paulo's Website:** https://www.penkode.com
+- 💼 **LinkedIn:** https://www.linkedin.com/in/pauloramalho/
+- 💬 **Discord:** Join our community
+- 📚 **Documentation:** Comprehensive implementation guides
+- 🎯 **Demo Front:** www.penkode.com/next-wp-kit
+- 🎯 **Demo WP Admin:** www.penkode.com/next-wp-kit-admin
 
 ---
 
