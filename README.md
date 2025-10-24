@@ -4,9 +4,9 @@
 
 **The Ultimate Headless WordPress Solution for Modern Web Development**
 
-![Next-WP-Kit Preview](public/images/screen-next-kit.jpg)
+![Next-WP-Kit Preview](./public/images/screen-next-kit.jpg)
 
-**👨‍💻 Created by Paulo Ramalho** - WordPress specialist with 15+ years crafting headless architectures, custom REST APIs, and React integrations. Penkode represents Paulo's personal brand and expertise in building bespoke digital solutions.
+**👨‍💻 Created by Paulo Ramalho (penkode.com)** - Web Developer and WordPress specialist with 15+ years crafting headless architectures, custom REST APIs, and modern frontend integrations. Currently specializing in React/Next.js ecosystems. Penkode represents Paulo's personal brand and expertise in building bespoke digital solutions.
 
 **⚡ Works best with [Penkode WP Headless Theme](https://github.com/penkodev/penkode-wp-headless) - Our complementary WordPress theme with custom meta fields, optimized REST API endpoints, advanced shortcode processing, and seamless integration for the perfect headless WordPress experience.**
 
@@ -16,9 +16,9 @@ Transform your WordPress content into lightning-fast, SEO-optimized websites wit
 
 ---
 
-## 🎯 Why Choose Next-WP-Kit?
+## 🎯 What Makes Next-WP-Kit Special?
 
-**For Agencies & Developers:**
+**For Developers & Agencies:**
 - ⚡ **10x Faster Development** - Pre-built components for common WordPress integrations
 - 💰 **Reduce Project Costs** - 60% less development time vs. building from scratch
 - 🚀 **Enterprise Performance** - Core Web Vitals optimized out of the box
@@ -37,6 +37,7 @@ Transform your WordPress content into lightning-fast, SEO-optimized websites wit
 ### 🚀 Core Technologies & Performance
 
 - **Next.js 14.2** with App Router, Server Components, and advanced ISR
+- **React 18** with modern hooks and concurrent features
 - **TypeScript 5** for type-safe, scalable development
 - **WordPress REST API** with custom endpoints for optimal performance
 - **SCSS/SASS** with ITCSS architecture for maintainable styling
@@ -252,25 +253,23 @@ next-wp-kit/
 
 ---
 
-## 💰 Pricing & Business Model
+## 💡 Open Source Philosophy
 
-### 🎯 **For Agencies**
-- **White-label Solution** - Rebrand as your own product
-- **Client Projects** - 60% faster development time
-- **Team Training** - Comprehensive documentation included
-- **Support Package** - Priority technical support
+**Built for the community, by the community.**
 
-### 🏢 **For Enterprises**
-- **Custom Development** - Tailored implementations
-- **Migration Services** - Legacy WordPress to headless
-- **Performance Audit** - Core Web Vitals optimization
-- **Training Programs** - Team onboarding and workshops
+This project represents Paulo's commitment to sharing knowledge and best practices in headless WordPress development. While commercial opportunities are welcome, the primary goal is to demonstrate expertise and contribute to the developer ecosystem.
 
-### 💡 **Open Source Benefits**
-- **Community Driven** - Continuous improvements
-- **No Vendor Lock-in** - Full control of your code
-- **Extensible** - Add any WordPress plugin or custom functionality
-- **Future-Proof** - Built on modern, maintained technologies
+### 🤝 **How It Helps You**
+- **Portfolio Piece** - Showcase advanced WordPress/React integration skills
+- **Learning Resource** - Study production-ready headless architecture
+- **Starting Point** - Accelerate your own headless WordPress projects
+- **Industry Standard** - See how enterprise-level headless is implemented
+
+### 🎯 **Professional Showcase**
+- **Code Quality** - Enterprise-grade TypeScript and architecture
+- **Best Practices** - Modern development workflows and patterns
+- **Performance Focus** - Core Web Vitals optimization
+- **Scalability** - Built to handle high-traffic WordPress sites
 
 ---
 
