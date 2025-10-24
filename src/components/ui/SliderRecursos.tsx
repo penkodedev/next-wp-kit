@@ -23,7 +23,7 @@ export default async function SliderLatestRecursos() {
   // Si no hay recursos, no mostramos nada.
   if (!latestRecursos || latestRecursos.length === 0) {
       return <p>No se encontraron recursos recientes.</p>;
-      
+
   }
 
   // 2. Filtramos solo los recursos que tienen imagen destacada para asegurar que el PostCard se vea bien.

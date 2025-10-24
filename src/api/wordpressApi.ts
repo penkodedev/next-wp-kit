@@ -1,6 +1,8 @@
 // src/api/wordpress.ts
 
 import type { WpContent, SiteInfo, MenuItem, SearchResult, PostNavigation, Post, Page, Proyecto, Modal } from '@/types/wordpressTypes';
+import { unstable_cache } from 'next/cache';
+
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
 
@@ -34,8 +36,8 @@ async function fetchAPI<T>(
         ...customHeaders,
       },
       body: body ? JSON.stringify(body) : null,
-      // Next.js cache options (revalidates every hour by default, but can be overridden)
-      next: next || { revalidate: 3600 }, 
+      // Next.js cache options (cache for 5 minutes in production, no cache in development)
+      next: next || { revalidate: process.env.NODE_ENV === 'production' ? 300 : 0 },
     });
 
     if (!res.ok) {
@@ -67,6 +69,7 @@ async function fetchAPI<T>(
 }
 
 
+
 /**
  * Fetches basic site information from a custom endpoint.
  * EXAMPLE: This function assumes you have created a custom endpoint in your
@@ -95,11 +98,22 @@ export async function getAllContent<T extends WpContent>(postType: string, param
 export async function getContentBySlug<T extends WpContent>(postType: string, slug: string): Promise<T | null> {
   // We add `&_fields=...,blocks` to explicitly request the parsed Gutenberg blocks structure.
   // This is needed to reconstruct block wrappers that the REST API might strip out.
+  // We also request rendered content to ensure shortcodes are processed.
   const data = await fetchAPI<T[]>(`/wp/v2/${postType}?slug=${slug}&_embed&_fields=id,slug,title,content,excerpt,date,modified,author,featured_media,_links,_embedded,blocks,yoast_head_json`);
   return data?.[0] ?? null;
 }
 
 /**
+ * Fetches content by ID with shortcodes processed.
+ * @param postType The CPT slug (e.g., 'posts', 'pages', 'recursos').
+ * @param id The item's ID.
+ */
+export async function getContentById<T extends WpContent>(postType: string, id: number): Promise<T | null> {
+  // Use custom endpoint that processes shortcodes
+  const data = await fetchAPI<T>(`/custom/v1/content/${postType}/${id}`);
+  return data;
+}
+
 /******************** (HOME PAGE CONTENT) ****************************
  * This implementation assumes the home page has the slug 'inicio'.
  */
@@ -140,12 +154,21 @@ export async function getMenuItems(slug: string): Promise<MenuItem[] | null> {
 }
 
 /**
- * Fetches menu items by their THEME LOCATION.
+ * Fetches menu items by their THEME LOCATION (cached version).
  * @param location The menu location slug (e.g., 'mainnav').
  */
 export async function getMenuItemsByLocation(location: string): Promise<MenuItem[] | null> {
-  return await fetchAPI<MenuItem[]>(`/custom/v1/menu-location/${location}`);
+  return await getCachedMenuItemsByLocation(location);
 }
+
+// Cached menu fetching function
+const getCachedMenuItemsByLocation = unstable_cache(
+  async (location: string): Promise<MenuItem[] | null> => {
+    return await fetchAPI<MenuItem[]>(`/custom/v1/menu-location/${location}`);
+  },
+  ['menu-items-by-location'],
+  { revalidate: 300 } // Cache for 5 minutes
+);
 
 /******************** WORDPRESS POST NAVIGATION ****************************/
 /**
@@ -155,7 +178,7 @@ export async function getMenuItemsByLocation(location: string): Promise<MenuItem
  */
 export async function getPostNavigation(postId: number, postType: string): Promise<PostNavigation | null> {
   // We force revalidation on every request for navigation data to ensure it's always up-to-date.
-  return await fetchAPI<PostNavigation>(`/custom/v1/post-navigation?post_id=${postId}&post_type=${postType}`, { next: { revalidate: 0 } });
+  return await fetchAPI<PostNavigation>(`/custom/v1/post-navigation?post_id=${postId}&post_type=${postType}`, { next: { revalidate: process.env.NODE_ENV === 'production' ? 60 : 0 } });
 }
 
 

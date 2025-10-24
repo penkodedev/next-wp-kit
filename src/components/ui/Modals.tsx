@@ -11,14 +11,8 @@ import { Icons } from '@/components/ui/Icons';
 import LoadingWrapper from './LoadingWrapper';
 
 const backdrop = {
-  visible: {
-    opacity: 1,
-    transition: { duration: 0.3, ease: "easeOut" }
-  },
-  hidden: {
-    opacity: 0,
-    transition: { duration: 0.3, ease: "easeIn" }
-  },
+  visible: { opacity: 1 },
+  hidden: { opacity: 0 },
 };
 
 /**
@@ -39,15 +33,10 @@ export default function Modals() {
     visible: { // Estado visible (animación de entrada)
       scale: 1,
       opacity: 1,
-      transition: {
-        duration: 0.9,
-        ease: "easeOut",
-      },
     },
     exit: { // Estado de salida
       scale: 0.95,
       opacity: 0,
-      transition: { duration: 0.2, ease: "easeIn" },
     },
   };
 
@@ -113,18 +102,21 @@ export default function Modals() {
             onClick={(e) => e.stopPropagation()}
             role="document"
           >
-            <LoadingWrapper isLoading={isLoading}>
-              {modalContent ? (
-                <div className="modal-scroll-wrapper">
-                  <div className="modal-body" dangerouslySetInnerHTML={{ __html: processContent(modalContent.content.rendered) }} />
-                </div>
-              ) : (
-                <div className="modal-error">
-                  <h2>Error</h2>
-                  <p>No se pudo cargar el contenido del modal.</p>
-                </div>
-              )}
-            </LoadingWrapper>
+            {/* {isLoading ? (
+              <div className="modal-loading">
+                <div className="spinner spinner-md spinner-spinner"></div>
+              </div>
+            ) : modalContent ? ( */}
+            {modalContent ? (
+              <div className="modal-scroll-wrapper">
+                <div className="modal-body" dangerouslySetInnerHTML={{ __html: processContent(modalContent.content.rendered) }} />
+              </div>
+            ) : (
+              <div className="modal-error">
+                <h2>Error</h2>
+                <p>No se pudo cargar el contenido del modal.</p>
+              </div>
+            )}
           </motion.div>
         </motion.div>
       )}

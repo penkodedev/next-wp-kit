@@ -11,13 +11,13 @@ export default function LogoHeaderHome() {
         {(siteInfo) => (
           <Link href="/" aria-label="Ir a la página principal">
             <Image
-              src="/images/framework-logo-white.png"
-              alt={siteInfo?.title || "Logo del sitio"}
+              src={siteInfo.light_logo}
+              alt={siteInfo.title}
               width={90}
               height={55}
               priority
               className="logo-header"
-              style={{ width: '100%', height: 'auto' }} // Ocupa el 100% del ancho del contenedor, altura automática
+              unoptimized // Disable Next.js image optimization for now
             />
           </Link>
         )}

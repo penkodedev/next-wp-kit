@@ -25,7 +25,8 @@ export const WpPageIdProvider = ({ children }: { children: ReactNode }) => {
 export const useWpPageId = () => {
   const context = useContext(WpPageIdContext);
   if (!context) {
-    throw new Error('useWpPageId must be used within a WpPageIdProvider');
+    // Return safe defaults instead of throwing error
+    return { pageId: null, setPageId: () => {} };
   }
   return context;
 };

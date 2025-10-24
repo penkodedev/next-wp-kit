@@ -1,3 +1,4 @@
+
 .page-home header {
     position: absolute;
     background-color: transparent;
@@ -5,12 +6,23 @@
     z-index: 1;
 }
 
-.page-home header .main-menu ul li a,
+.page-home header .main-menu  a,
 .page-home .search-open-button {
    color:#fff;
-}
 
+   &:hover {
+    color: aqua;
+   }
+}
 
 .page-home .main-menu ul li a::after {
     background: #fff;
+}
+
+.page-home ul.submenu a {
+    color: #000;
+}
+
+.page-home #logo-container img {
+    filter: invert(1);
 }

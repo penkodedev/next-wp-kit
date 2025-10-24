@@ -17,11 +17,20 @@ export interface MenuItem {
 export interface SiteInfo {
   title: string;
   description: string;
-  site_url: string;
-  wp_url: string;
+  back_url: string;
+  front_url: string;
+  light_logo: string;
+  dark_logo: string;
   site_icon_url: string;
   date_format: string;
   language: string;
+  social: any[];
+  contact: any[];
+  analytics: any;
+  i18n: {
+    default_locale: string;
+    locales: string[];
+  };
 }
 
 /**

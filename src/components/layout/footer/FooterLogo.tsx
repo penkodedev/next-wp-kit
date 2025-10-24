@@ -1,14 +1,14 @@
-// src/components/layout/LogoFooter.tsx
+// src/components/layout/footer/FooterLogo.tsx
 import Image from "next/image";
 import SiteInfo from "@/components/wordpress/SiteInfo";
 
-export default function LogoFooter() {
+export default function FooterLogo() {
   return (
     <div className="logo-footer-wrapper">
       <SiteInfo>
         {(siteInfo) => (
           <Image
-            src="/framework-logo.png"
+            src="/images/framework-logo.png"
             alt={siteInfo?.title || "Logo del sitio"} // Usamos el título del sitio o un fallback
             width={90}
             height={55}

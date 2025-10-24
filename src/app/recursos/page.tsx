@@ -8,7 +8,6 @@ import { useState, useEffect } from 'react';
 import { getAllContent } from '@/api/wordpressApi';
 import PostCard from '@/components/ui/PostCard';
 import type { Recurso } from '@/types/wordpressTypes';
-import LoadingWrapper from '@/components/ui/LoadingWrapper'
 import LoadingSpinner from '@/components/ui/LoadingSpiner'
 
 const POSTS_PER_PAGE = 9;
@@ -73,10 +72,10 @@ export default function RecursosArchivePage() {
         </div>
       )}
 
-      {/* Spinner overlay durante carga inicial */}
-      {isLoading && recursos.length === 0 && (
-        <LoadingSpinner overlay={true} text="Cargando recursos..." />
-      )}
+      {/* Spinner inline durante carga inicial */}
+      {/* {isLoading && recursos.length === 0 && (
+        <LoadingSpinner />
+      )} */}
       
       {hasMore && (
         <div className="load-more-container" style={{ textAlign: 'center', marginTop: '3rem' }}>

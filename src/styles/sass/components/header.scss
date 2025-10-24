@@ -8,13 +8,14 @@
     height: 120px;
     width:100%;
     margin: 0;
+    position: relative;
+    z-index: 1000;
     //box-sizing: border-box;
 
     .nav-header {
         display: flex;
     }
 }
-
 
 #header-container {
     padding: 0 25px 0 25px;
@@ -48,14 +49,4 @@
     // border-left: 1px solid rgb(204, 204, 204);
     // padding-left: 30px;
     height: 60px;
-}
-
-
-.logo-xamle-header {
-    margin-right: 25px;
-}
-
-.logo-mad-header {
-    border-left: 1px solid rgb(204, 204, 204);
-    padding-left: 14px;
 }

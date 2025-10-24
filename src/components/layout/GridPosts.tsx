@@ -1,4 +1,4 @@
-// src/components/layout/SingleContentLayout.tsx
+// src/components/layout/GridPosts.tsx
 
 import type { WpContent } from '@/types/wordpressTypes';
 import DOMPurify from 'isomorphic-dompurify';
@@ -8,7 +8,7 @@ type SingleContentProps = {
 };
 
 export default function SingleContent({ content }: SingleContentProps) {
-  // Limpiamos el HTML para evitar ataques XSS
+  // Clean HTML to prevent XSS attacks
   const cleanContent = DOMPurify.sanitize(content.content.rendered);
   
 

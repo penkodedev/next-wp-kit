@@ -8,26 +8,43 @@
 // Función para obtener los estilos globales usando el endpoint oficial de WordPress
 async function getWpGlobalStyles() {
   try {
+    const apiUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
+    if (!apiUrl) {
+      console.error("NEXT_PUBLIC_WORDPRESS_API_URL no está configurada");
+      return null;
+    }
+
     const response = await fetch(
-      `${process.env.WORDPRESS_API_URL}/wp/v2/global-styles/themes/${process.env.WP_THEME_SLUG || 'twentytwentyfour'}`,
-      { next: { revalidate: 3600 } }
+      `${apiUrl.replace(/\/$/, '')}/wp/v2/global-styles/themes/${process.env.WP_THEME_SLUG || 'twentytwentyfour'}`,
+      {
+        next: { revalidate: 3600 },
+        // Add timeout to prevent hanging
+        signal: AbortSignal.timeout(3000)
+      }
     );
-    
+
     if (!response.ok) {
       // Fallback: intentar obtener los estilos globales del tema activo
       const fallbackResponse = await fetch(
-        `${process.env.WORDPRESS_API_URL}/wp/v2/global-styles`,
-        { next: { revalidate: 3600 } }
+        `${apiUrl.replace(/\/$/, '')}/wp/v2/global-styles`,
+        {
+          next: { revalidate: 3600 },
+          // Add timeout to prevent hanging
+          signal: AbortSignal.timeout(3000)
+        }
       );
-      
+
       if (!fallbackResponse.ok) return null;
       const fallbackData = await fallbackResponse.json();
       return fallbackData[0] || null; // Tomar el primer elemento (tema activo)
     }
-    
+
     return await response.json();
   } catch (error) {
-    console.error("Error fetching WordPress global styles:", error);
+    // Don't log timeout errors as they are expected
+    if (error instanceof Error && error.name !== 'TimeoutError') {
+      console.error("Error fetching WordPress global styles:", error);
+    }
     return null;
   }
 }
@@ -79,21 +96,35 @@ function generateCSSFromGlobalStyles(globalStyles: any) {
 // Función mejorada para obtener estilos del tema
 async function getWpThemeStyles() {
   try {
+    const apiUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
+    if (!apiUrl) {
+      console.error("NEXT_PUBLIC_WORDPRESS_API_URL no está configurada");
+      return null;
+    }
+
     // Primero intentar el endpoint mejorado
     const enhancedResponse = await fetch(
-      `${process.env.WORDPRESS_API_URL}/wp/v2/theme-styles-enhanced`,
-      { next: { revalidate: 3600 } }
+      `${apiUrl.replace(/\/$/, '')}/wp/v2/theme-styles-enhanced`,
+      {
+        next: { revalidate: 3600 },
+        // Add timeout to prevent hanging
+        signal: AbortSignal.timeout(5000)
+      }
     );
-    
+
     if (enhancedResponse.ok) {
       const data = await enhancedResponse.json();
       return data.styles || '';
     }
-    
+
     // Fallback al endpoint original
     const response = await fetch(
-      `${process.env.WORDPRESS_API_URL}/wp/v2/theme-styles`,
-      { next: { revalidate: 3600 } }
+      `${apiUrl.replace(/\/$/, '')}/wp/v2/theme-styles`,
+      {
+        next: { revalidate: 3600 },
+        // Add timeout to prevent hanging
+        signal: AbortSignal.timeout(5000)
+      }
     );
     if (!response.ok) return null;
     const data = await response.json();
@@ -103,13 +134,16 @@ async function getWpThemeStyles() {
 
     return globalStyles + elementStyles;
   } catch (error) {
-    console.error("Error fetching WordPress theme styles:", error);
+    // Don't log timeout errors as they are expected
+    if (error instanceof Error && error.name !== 'TimeoutError') {
+      console.error("Error fetching WordPress theme styles:", error);
+    }
     return null;
   }
 }
 
 export default async function WpStyles() {
-  const wpUrl = process.env.WORDPRESS_API_URL?.replace("/wp-json", "");
+  const wpUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL?.replace("/wp-json", "");
 
   if (!wpUrl) {
     return null;
@@ -118,7 +152,7 @@ export default async function WpStyles() {
   // 1. Obtener los estilos globales usando la API oficial de WordPress
   const globalStyles = await getWpGlobalStyles();
   const generatedCSS = generateCSSFromGlobalStyles(globalStyles);
-  
+
   // 2. Fallback: obtener estilos del tema usando tu endpoint custom
   const themeStyles = await getWpThemeStyles();
 
@@ -237,15 +271,15 @@ export default async function WpStyles() {
       <link rel="stylesheet" href={blockLibraryUrl} />
       <link rel="stylesheet" href={themeLibraryUrl} />
       <link rel="stylesheet" href={editorLibraryUrl} />
-      
+
       {/* Estilos esenciales (incluyendo variables CSS base) */}
       <style dangerouslySetInnerHTML={{ __html: essentialStyles }} />
-      
+
       {/* CSS generado desde los estilos globales de WordPress */}
       {generatedCSS && (
         <style dangerouslySetInnerHTML={{ __html: generatedCSS }} />
       )}
-      
+
       {/* Estilos del tema (fallback) */}
       {themeStyles && (
         <style dangerouslySetInnerHTML={{ __html: themeStyles }} />

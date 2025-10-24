@@ -1,5 +1,13 @@
-import type { WpBlock } from "@/types/wordpressTypes";
+import type { WpContent } from "@/types/wordpressTypes";
 // src/utils/processContent.ts
+
+// Define WpBlock interface locally since it's not exported from wordpressTypes
+interface WpBlock {
+  blockName: string;
+  attrs: any;
+  innerBlocks?: WpBlock[];
+  innerHTML: string;
+}
 
 /**
  * Processes HTML content from WordPress to make it compatible with the Next.js frontend.
@@ -9,6 +17,7 @@ import type { WpBlock } from "@/types/wordpressTypes";
  *    `ModalController` to handle it.
  * 3. Re-wraps `wp-block-group` elements with their original classes (like background
  *    colors) that are often stripped by the WordPress REST API.
+ * 4. Processes shortcodes that weren't handled by the backend.
  *
  * @param {string} content - The HTML content string from the WordPress API.
  * @param {WpBlock[]} [blocks] - The array of block data from the API.
@@ -23,27 +32,61 @@ export function processContent(content: string, blocks?: WpBlock[]): string {
   if (blocks && blocks.length > 0) {
     processedContent = fixBlockGroupHTML(processedContent, blocks);
   }
-  
+
   const backendUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL?.replace('/wp-json', '');
-  
+
   // 1. Replace backend URLs with relative paths
   if (backendUrl) {
     const backendUrlRegex = new RegExp(backendUrl.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g');
     processedContent = processedContent.replace(backendUrlRegex, '');
   }
-  
+
   // 2. Add data-next-ignore to modal links
   // This regex finds all <a> tags whose href starts with /modals/
   // and adds the data-next-ignore="true" attribute.
   // It's careful not to modify links that already have this attribute.
   const modalLinkRegex = /<a\s+(?!.*\bdata-next-ignore\s*=\s*["']true["'])([^>]*\bhref\s*=\s*["']\/modales\/[^"']+["'][^>]*)>/g;
-  
+
   processedContent = processedContent.replace(
     modalLinkRegex,
     '<a data-next-ignore="true" $1>'
   );
-  
+
+  // 3. Add sizes attribute to img tags that don't have it (for Next.js Image optimization warnings)
+  const imgRegex = /<img\s+(?!.*\bsizes\s*=\s*["'][^"']*["'])([^>]*)>/g;
+  processedContent = processedContent.replace(
+    imgRegex,
+    '<img sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" $1>'
+  );
+
+  // 4. Process any remaining shortcodes (fallback for frontend processing)
+  processedContent = processShortcodes(processedContent);
+
   return processedContent;
+}
+
+/**
+ * Processes shortcodes in content. This is a fallback for shortcodes that weren't
+ * processed on the backend. For proper shortcode processing, they should be handled
+ * by WordPress's do_shortcode() function on the backend.
+ * @param content The HTML content containing shortcodes
+ */
+function processShortcodes(content: string): string {
+  // Process [modales id="X"] shortcode
+  const modalesRegex = /\[modales\s+id=["'](\d+)["']\]/g;
+  content = content.replace(modalesRegex, (match, id) => {
+    // Return a placeholder that indicates the shortcode should be processed on backend
+    return `<div class="shortcode-placeholder" data-shortcode="modales" data-id="${id}">Modal content for ID ${id} should be processed on backend</div>`;
+  });
+
+  // Process [page id="X"] shortcode
+  const pageRegex = /\[page\s+id=["'](\d+)["']\]/g;
+  content = content.replace(pageRegex, (match, id) => {
+    // Return a placeholder that indicates the shortcode should be processed on backend
+    return `<div class="shortcode-placeholder" data-shortcode="page" data-id="${id}">Page content for ID ${id} should be processed on backend</div>`;
+  });
+
+  return content;
 }
 
 /**

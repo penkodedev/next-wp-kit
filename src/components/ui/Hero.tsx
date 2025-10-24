@@ -109,6 +109,7 @@ export default function Hero({
             src={currentSlideData.backgroundImage}
             alt="Hero background"
             fill
+            sizes="100vw"
             style={{ objectFit: 'cover' }}
             priority
           />
