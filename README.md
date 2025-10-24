@@ -2,24 +2,24 @@
 
 ![Next-WP-Kit](https://img.shields.io/badge/Next.js-14.2-black?style=for-the-badge&logo=next.js) ![WordPress](https://img.shields.io/badge/WordPress-Headless-blue?style=for-the-badge&logo=wordpress) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript) ![SASS](https://img.shields.io/badge/Sass-SCSS-hotpink?style=for-the-badge&logo=sass) ![Framer Motion](https://img.shields.io/badge/Framer-Motion-purple?style=for-the-badge&logo=framer)
 
-**The Ultimate Headless WordPress Solution for Modern Web Development**
+**Enterprise-Grade Next.js/React.js Starter Kit for WordPress Headless**
 
 <!-- Social Media Preview -->
 <meta property="og:title" content="Next-WP-Kit: Enterprise-Grade Next.js Starter for WordPress Headless" />
 <meta property="og:description" content="Transform your WordPress content into lightning-fast, SEO-optimized websites. Built by Paulo Ramalho with 15+ years of headless architecture expertise." />
-<meta property="og:image" content="./public/images/screen-next-kit.jpg" />
+<meta property="og:image" content="https://raw.githubusercontent.com/penkodedev/next-wp-kit/main/public/images/screen-next-kit.jpg?v=3" />
 <meta property="og:url" content="https://github.com/penkodedev/next-wp-kit" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Next-WP-Kit: Enterprise-Grade Next.js Starter for WordPress Headless" />
 <meta name="twitter:description" content="Transform your WordPress content into lightning-fast, SEO-optimized websites. Built by Paulo Ramalho with 15+ years of headless architecture expertise." />
-<meta name="twitter:image" content="./public/images/screen-next-kit.jpg" />
+<meta name="twitter:image" content="https://raw.githubusercontent.com/penkodedev/next-wp-kit/main/public/images/screen-next-kit.jpg?v=3" />
 
 ![Next-WP-Kit Preview](./public/images/screen-next-kit.jpg?v=2)
 
 **👨‍💻 Created by [Paulo Ramalho (penkode.com)](https://www.penkode.com)** - WordPress specialist with 15+ years crafting custom websites from scratch (Custom Post Types, custom metas, themes). Now specializing in headless architectures, custom REST APIs, and React/Next.js integrations. Penkode represents Paulo's personal brand and expertise in building bespoke digital solutions.
 
-**⚡ Works best with [Penkode WP Headless Theme](https://github.com/penkodev/penkode-wp-headless){:target="_blank"} - Our complementary WordPress theme with custom meta fields, optimized REST API endpoints, advanced shortcode processing, and seamless integration for the perfect headless WordPress experience.**
+**⚡ Works best with [Penkode WP Headless Theme](https://github.com/penkodev/penkode-wp-headless) - Our complementary WordPress theme with custom meta fields, optimized REST API endpoints, advanced shortcode processing, and seamless integration for the perfect headless WordPress experience.**
 
 Transform your WordPress content into lightning-fast, SEO-optimized websites with our enterprise-grade starter kit. Built for agencies, developers, and businesses who demand performance, scalability, and developer experience.
 
