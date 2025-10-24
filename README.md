@@ -6,7 +6,7 @@
 
 ![Next-WP-Kit Preview](./public/images/screen-next-kit.jpg)
 
-**👨‍💻 Created by Paulo Ramalho (penkode.com)** - Web Developer and WordPress specialist with 15+ years crafting headless architectures, custom REST APIs, and modern frontend integrations. Currently specializing in React/Next.js ecosystems. Penkode represents Paulo's personal brand and expertise in building bespoke digital solutions.
+**👨‍💻 Created by Paulo Ramalho (penkode.com)** - WordPress specialist with 15+ years crafting custom websites from scratch (Custom Post Types, custom metas, themes). Now specializing in headless architectures, custom REST APIs, and React/Next.js integrations. Penkode represents Paulo's personal brand and expertise in building bespoke digital solutions.
 
 **⚡ Works best with [Penkode WP Headless Theme](https://github.com/penkodev/penkode-wp-headless) - Our complementary WordPress theme with custom meta fields, optimized REST API endpoints, advanced shortcode processing, and seamless integration for the perfect headless WordPress experience.**
 
@@ -290,6 +290,7 @@ This project represents Paulo's commitment to sharing knowledge and best practic
 Ready to transform your WordPress development workflow?
 
 - 📧 **Email:** email@penkode.dev
+- 📧 **Paulo's Website:** https://www.penkode.com
 - 📧 **LinkedIn:** https://www.linkedin.com/in/pauloramalho/
 - 💬 **Discord:** Join our community
 - 📚 **Documentation:** Comprehensive implementation guides
