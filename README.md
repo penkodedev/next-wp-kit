@@ -300,4 +300,4 @@ Ready to transform your WordPress development workflow?
 ---
 
 
-**Transform your WordPress workflow with Next-WP-Kit - where content management meets modern performance.** 🚀
+** - Next-WP-Kit: An advanced starter kit for building websites with Next.js and WordPress as a headless CMS. Crafted by Paulo Ramalho (Penkode)** 🚀
