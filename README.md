@@ -77,7 +77,7 @@ Transform your WordPress content into lightning-fast, SEO-optimized websites wit
 
 ---
 
-## ✨ Enterprise Features
+## ✨ Penkode Next WP kit Enterprise Features
 
 ### 🚀 Core Technologies & Performance
 
