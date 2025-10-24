@@ -4,9 +4,6 @@
 
 **Enterprise-Grade Next.js/React.js Starter Kit for WordPress Headless**
 
-<!-- Social Media Preview Image -->
-[![](https://raw.githubusercontent.com/penkodedev/next-wp-kit/main/public/images/screen-next-kit.jpg)](https://github.com/penkodedev/next-wp-kit)
-
 ![Next-WP-Kit Preview](./public/images/screen-next-kit.jpg?v=2)
 
 **👨‍💻 Created by [Paulo Ramalho (penkode.com)](https://www.penkode.com)** - WordPress specialist with 15+ years crafting custom websites from scratch (Custom Post Types, custom metas, themes). Now specializing in headless architectures, custom REST APIs, and React/Next.js integrations. Penkode represents Paulo's personal brand and expertise in building bespoke digital solutions.
