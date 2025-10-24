@@ -8,7 +8,7 @@
 
 **👨‍💻 Created by Paulo Ramalho (penkode.com)** - WordPress specialist with 15+ years crafting custom websites from scratch (Custom Post Types, custom metas, themes). Now specializing in headless architectures, custom REST APIs, and React/Next.js integrations. Penkode represents Paulo's personal brand and expertise in building bespoke digital solutions.
 
-**⚡ Works best with [Penkode WP Headless Theme](https://github.com/penkodev/penkode-wp-headless) - Our complementary WordPress theme with custom meta fields, optimized REST API endpoints, advanced shortcode processing, and seamless integration for the perfect headless WordPress experience.**
+**⚡ Works best with [Penkode WP Headless Theme](https://github.com/penkodev/penkode-wp-headless){:target="_blank"} - Our complementary WordPress theme with custom meta fields, optimized REST API endpoints, advanced shortcode processing, and seamless integration for the perfect headless WordPress experience.**
 
 Transform your WordPress content into lightning-fast, SEO-optimized websites with our enterprise-grade starter kit. Built for agencies, developers, and businesses who demand performance, scalability, and developer experience.
 
@@ -289,13 +289,13 @@ This project represents Paulo's commitment to sharing knowledge and best practic
 
 Ready to transform your WordPress development workflow?
 
-- 📧 **Email:** email@penkode.dev
-- 📧 **Paulo's Website:** https://www.penkode.com
-- 📧 **LinkedIn:** https://www.linkedin.com/in/pauloramalho/
-- 💬 **Discord:** Join our community
-- 📚 **Documentation:** Comprehensive implementation guides
-- 🎯 **Demo front:** www.penkode.com/next-wp-kit
-- 🎯 **Demo WP back:** www.penkode.com/next-wp-kit-admin
+- 📧 **Email:** [hello@penkode.dev](mailto:hello@penkode.dev){:target="_blank"}
+- 🌐 **Paulo's Website:** [https://www.penkode.com](https://www.penkode.com){:target="_blank"}
+- 💼 **LinkedIn:** [https://www.linkedin.com/in/pauloramalho/](https://www.linkedin.com/in/pauloramalho/){:target="_blank"}
+- 💬 **Discord:** [Join our community](https://discord.gg/pauloramalho){:target="_blank"}
+- 📚 **Documentation:** [Comprehensive implementation guides](https://docs.penkode.dev){:target="_blank"}
+- 🎯 **Demo Front:** [www.penkode.com/next-wp-kit](https://www.penkode.com/next-wp-kit){:target="_blank"}
+- 🎯 **Demo WP Admin:** [www.penkode.com/next-wp-kit-admin](https://www.penkode.com/next-wp-kit-admin){:target="_blank"}
 
 ---
 
