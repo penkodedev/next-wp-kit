@@ -7,13 +7,13 @@
 <!-- Social Media Preview -->
 <meta property="og:title" content="Next-WP-Kit: Enterprise-Grade Next.js Starter for WordPress Headless" />
 <meta property="og:description" content="Transform your WordPress content into lightning-fast, SEO-optimized websites. Built by Paulo Ramalho with 15+ years of headless architecture expertise." />
-<meta property="og:image" content="https://raw.githubusercontent.com/penkodedev/next-wp-kit/main/public/images/screen-next-kit.jpg" />
+<meta property="og:image" content="./public/images/screen-next-kit.jpg" />
 <meta property="og:url" content="https://github.com/penkodedev/next-wp-kit" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Next-WP-Kit: Enterprise-Grade Next.js Starter for WordPress Headless" />
 <meta name="twitter:description" content="Transform your WordPress content into lightning-fast, SEO-optimized websites. Built by Paulo Ramalho with 15+ years of headless architecture expertise." />
-<meta name="twitter:image" content="https://raw.githubusercontent.com/penkodedev/next-wp-kit/main/public/images/screen-next-kit.jpg" />
+<meta name="twitter:image" content="./public/images/screen-next-kit.jpg" />
 
 ![Next-WP-Kit Preview](./public/images/screen-next-kit.jpg?v=2)
 
