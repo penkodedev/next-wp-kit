@@ -6,7 +6,9 @@
 
 ![Next-WP-Kit Preview](public/images/screen-next-kit.jpg)
 
-**⚡ Works best with [Penkode WP Headless Theme](https://github.com/penkodev/penkode-wp-headless) - Our complementary WordPress theme designed specifically for headless setups with optimized REST API endpoints and custom shortcodes.**
+**👨‍💻 Created by Paulo Ramalho** - WordPress specialist with 15+ years crafting headless architectures, custom REST APIs, and React integrations. Penkode represents Paulo's personal brand and expertise in building bespoke digital solutions.
+
+**⚡ Works best with [Penkode WP Headless Theme](https://github.com/penkodev/penkode-wp-headless) - Our complementary WordPress theme with custom meta fields, optimized REST API endpoints, advanced shortcode processing, and seamless integration for the perfect headless WordPress experience.**
 
 Transform your WordPress content into lightning-fast, SEO-optimized websites with our enterprise-grade starter kit. Built for agencies, developers, and businesses who demand performance, scalability, and developer experience.
 
@@ -38,9 +40,9 @@ Transform your WordPress content into lightning-fast, SEO-optimized websites wit
 - **TypeScript 5** for type-safe, scalable development
 - **WordPress REST API** with custom endpoints for optimal performance
 - **SCSS/SASS** with ITCSS architecture for maintainable styling
-- **Zustand** for lightweight state management
-- **Framer Motion** for smooth, performant animations
-- **Swiper.js** for touch-friendly carousels
+- **Zustand** for lightweight state management (no Redux boilerplate)
+- **Framer Motion** for smooth, performant animations (60fps guaranteed)
+- **Swiper.js** for touch-friendly carousels (mobile-optimized)
 
 ### 🎨 WordPress Integration Excellence
 
@@ -65,6 +67,22 @@ Transform your WordPress content into lightning-fast, SEO-optimized websites wit
 - **Body Classes** - Dynamic CSS classes like `page-home`, `single-recurso`, `postid-123`
 - **URL Processing** - Automatic backend-to-frontend URL conversion
 - **Menu Integration** - WordPress menus with Next.js routing
+
+#### 📚 **Essential Libraries Included**
+
+**Core Dependencies & Their Value:**
+- **`axios`** - HTTP client for WordPress API calls (better error handling than fetch)
+- **`clsx`** - Utility for conditional CSS classes (lightweight, no dependencies)
+- **`framer-motion`** - Production-ready animations (60fps, battle-tested)
+- **`html-react-parser`** - Safe HTML parsing from WordPress content
+- **`isomorphic-dompurify`** - XSS protection for WordPress content
+- **`lucide-react`** - Beautiful, consistent icons (tree-shakeable, accessible)
+- **`next-intl`** - Internationalization for multi-language sites
+- **`rss`** - Generate RSS feeds for blogs and content
+- **`sass`** - Professional CSS preprocessing with ITCSS architecture
+- **`swiper`** - Touch-optimized carousels (mobile-first)
+- **`yet-another-react-lightbox`** - Professional image galleries
+- **`zustand`** - Lightweight state management (no Redux complexity)
 
 ### 🎨 Premium UI Components & Animations
 
