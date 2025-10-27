@@ -8,6 +8,7 @@ node_modules
 .env
 .env.local
 .env.example
+.gitignore
 
 # macOS / Windows trash
 .DS_Store
