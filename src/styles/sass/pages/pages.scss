@@ -7,6 +7,7 @@ main {
   margin: 0px auto 40px auto;
   gap: 30px;
 }
+
 .page-title {
   background-color: rgb(238, 238, 238);
   border: 1px solid #b3b3b3;
@@ -22,6 +23,6 @@ main {
   position: relative;
   left: 50%;
   right: 50%;
-  margin: 0 -50vw 0 -50vw;
-  width: 100vw;
+  margin: 0 calc(-50vw + var(--scrollbar-width) / 2) 0 calc(-50vw + var(--scrollbar-width) / 2);
+  width: calc(100vw - var(--scrollbar-width));
 }

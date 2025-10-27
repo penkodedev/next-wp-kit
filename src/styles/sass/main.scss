@@ -2,14 +2,16 @@
  * Archivo principal de SASS
  * Este archivo importa todos los parciales en el orden correcto.
  * Sigue una arquitectura similar a ITCSS (Inverted Triangle CSS).
-*/
+ */
 
-@use 'abstracts';
+// Importar abstracts globalmente para que estén disponibles en todos los archivos
+@use 'abstracts' as *;
+
 @use 'base';
 @use 'components';
 @use 'nav';
 @use 'pages';
+@use 'plugins/wordpress';
+@use 'plugins/yet-another-react-lightbox';
 @use 'responsive';
-@use 'vendors';
-@import 'vendors/wordpress';
-@import 'vendors/yet-another-react-lightbox';
+@use 'typography';

@@ -1,23 +1,18 @@
-@use './fonts' as *; // O './fonts' si la variable está ahí
+@use 'var-colors' as *;
+@use 'var-layout' as *;
+@use 'var-tables' as *;
+@use 'var-typography' as *;
 
-
-@mixin center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
-
-@mixin copy-text ($text-margin:0px 0px 1.8em 0px) {
-    font: $text-size $text-font;
+@mixin copy-text ($text-margin:0px 0px 1.4em 0px) {
+    font-family: $text-font;
 	font-weight: 300;
+    font-size: $text-size;
     line-height: $text-lh;
-	letter-spacing: .01em;
     color: $text-color;
 	margin: $text-margin;
 }
 
-@mixin copy-text-strong ($text-margin:0px 0px 1.8em 0px) {
+@mixin copy-text-strong ($text-margin:0px 0px 1.4em 0px) {
     font: $text-size $text-font-strong;
     line-height: $text-lh;
 	letter-spacing: .01em;
@@ -30,14 +25,14 @@
     font-weight: $normal;
     color: $heading-color;
     margin: $heading-margin;
-    letter-spacing: $heading-letter-spacing;
+    //letter-spacing: $heading-letter-spacing;
 }
 
 @mixin page-title () {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 0 20px 0;
+    margin: 0 0 30px 0;
     background: $page-title-bg-color;
     
 }
@@ -45,7 +40,7 @@
 @mixin page-title-h1 {
     font: $normal $page-title-font-size $page-title-font;
     color: $page-title-color;
-    letter-spacing: $heading-letter-spacing;
+    //letter-spacing: $heading-letter-spacing;
     line-height: $page-title-lh;
     margin: 0;
     padding: 0;

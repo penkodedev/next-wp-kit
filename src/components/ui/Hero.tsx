@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { Icons } from "./Icons";
+import { useHeroConfig } from "./HeroConfig";
 
 type HeroSlide = {
   title?: string;
@@ -48,16 +49,22 @@ export default function Hero({
   const heroSlides = slides || (title || subtitle || buttonText ? [{ title, subtitle, buttonText, buttonLink }] : []);
 
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isClient, setIsClient] = useState(false);
 
-  // Auto-play functionality
+  // Detectar cuando estamos en el cliente
   useEffect(() => {
-    if (autoPlay && heroSlides.length > 1) {
+    setIsClient(true);
+  }, []);
+
+  // Auto-play functionality - solo en cliente para evitar hydration mismatch
+  useEffect(() => {
+    if (isClient && autoPlay && heroSlides.length > 1) {
       const interval = setInterval(() => {
         setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
       }, autoPlayInterval);
       return () => clearInterval(interval);
     }
-  }, [autoPlay, autoPlayInterval, heroSlides.length]);
+  }, [isClient, autoPlay, autoPlayInterval, heroSlides.length]);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
@@ -67,66 +74,53 @@ export default function Hero({
     setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
   };
 
-  // Variantes de animación para Framer Motion
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut" as const,
-      },
-    },
-  };
-
-  const slideVariants = {
-    enter: { opacity: 0, x: 100 },
-    center: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: -100 },
-  };
+  // Use centralized animation variants from HeroConfig
+  const { variants: heroVariants } = useHeroConfig();
+  const containerVariants = heroVariants.containerVariants;
+  const itemVariants = heroVariants.itemVariants;
+  const slideVariants = heroVariants.slideVariants;
 
   const currentSlideData = heroSlides[currentSlide];
   const backgroundType = currentSlideData?.backgroundType || 'gradient';
 
   return (
     <section className="hero-section">
-      {/* Capa de fondo dinámica */}
+      {/* Capa de fondo dinámica con crossfade */}
       <div className={`hero-background hero-background-${backgroundType}`}>
-        {backgroundType === 'image' && currentSlideData?.backgroundImage && (
-          <Image
-            src={currentSlideData.backgroundImage}
-            alt="Hero background"
-            fill
-            sizes="100vw"
-            style={{ objectFit: 'cover' }}
-            priority
-          />
-        )}
-        {backgroundType === 'video' && currentSlideData?.backgroundVideo && (
-          <video
-            src={currentSlideData.backgroundVideo}
-            autoPlay
-            loop
-            muted
-            playsInline
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
-        )}
-        {backgroundType === 'none' && currentSlideData?.backgroundColor && (
-          <div style={{ backgroundColor: currentSlideData.backgroundColor, width: '100%', height: '100%' }} />
-        )}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentSlide}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
+            className="hero-background-slide"
+          >
+            {backgroundType === 'image' && currentSlideData?.backgroundImage && (
+              <Image
+                src={currentSlideData.backgroundImage}
+                alt="Hero background"
+                fill
+                sizes="100vw"
+                style={{ objectFit: 'cover' }}
+                priority
+              />
+            )}
+            {backgroundType === 'video' && currentSlideData?.backgroundVideo && (
+              <video
+                src={currentSlideData.backgroundVideo}
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            )}
+            {backgroundType === 'none' && currentSlideData?.backgroundColor && (
+              <div style={{ backgroundColor: currentSlideData.backgroundColor, width: '100%', height: '100%' }} />
+            )}
+          </motion.div>
+        </AnimatePresence>
       </div>
       <div className="hero-overlay" />
 
@@ -139,7 +133,12 @@ export default function Hero({
             initial="enter"
             animate="center"
             exit="exit"
-            transition={{ duration: 0.5, ease: "easeInOut" }}
+            transition={{
+              duration: 0.8,
+              ease: [0.25, 0.46, 0.45, 0.94], // Cubic bezier para más suavidad
+              scale: { duration: 0.6 },
+              opacity: { duration: 0.4 }
+            }}
             className="hero-slide"
           >
             <motion.div

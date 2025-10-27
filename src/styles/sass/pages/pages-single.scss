@@ -1,9 +1,15 @@
 .single .page-title {
   background-color: rgb(66, 66, 66);
-  color: white;
-  margin-bottom: 44px;
+  margin: 20px 0 30px 0;
+  padding: 40px 20px;
+
+  h1 {
+    color: white;
+    margin: 0;
+  }
 
   .icons-wrap {
+    color: white;
     display: flex;
     position: absolute;
     bottom: 15px;
@@ -11,4 +17,28 @@
     gap: 15px;
   }
 
+}
+
+a.back-to-archive-link {
+  font-size: 0.88em;
+  color: #000;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  margin: 20px 0 0 0;
+  gap: 7px;
+
+  svg {
+    width: 1.3em; // Arrow size
+    height: 1.3em; // Arrow size
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    text-decoration: underline;
+
+    svg {
+      transform: translateX(-4px); // Hover animation
+    }
+  }
 }

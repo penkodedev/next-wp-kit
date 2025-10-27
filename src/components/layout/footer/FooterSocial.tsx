@@ -30,7 +30,7 @@ export default function FooterSocial({ social }: FooterSocialProps) {
 
   return (
     <div className="footer-social">
-      <h2>Redes Sociales</h2>
+      {/* <h2>Redes Sociales</h2> */}
       <ul className="social-links">
         {social.map((socialItem, index) => {
           const IconComponent = getSocialIcon(socialItem.name);

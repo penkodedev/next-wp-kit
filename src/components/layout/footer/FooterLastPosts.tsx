@@ -57,7 +57,7 @@ function FooterLastPostsSkeleton() {
 export default function FooterLastPosts(props: FooterLastPostsProps) {
   return (
     <div className="footer-resources">
-      <h2>Últimos {props.postType || 'recursos'}</h2>
+      {/* <h2>Últimos {props.postType || 'recursos'}</h2> */}
       <Suspense fallback={<FooterLastPostsSkeleton />}>
         <FooterLastPostsContent {...props} />
       </Suspense>

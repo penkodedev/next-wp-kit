@@ -1,0 +1,209 @@
+@use '../abstracts' as *;
+
+//************************ COPY TEXT ***************************
+p,
+a,
+article p
+ {
+  @include copy-text;
+}
+
+article p b,
+article p strong,
+article ul li strong,
+article ol li strong{
+	font-family: $text-font-strong;
+}
+
+
+//************************ HEADINGS ************************
+h1,h2,h3,h4,h5,h6 {@include heading;}
+
+main h1 {
+    margin: 0 0 30px 0;
+    padding: 7px 0 0 10px;
+}
+
+h1.page-title {
+    position: relative;
+    //text-shadow: 1px 1px 2px #ffffff;
+}
+
+//******************** LISTS ARTICLE ************************
+.wp-block-list {
+    padding-left:0 !important;
+}
+
+article ul {
+    font-family: $text-font;
+    font-size: $text-size;
+    color: $text-color;
+    list-style-type: none;
+    margin: 25px 0 0 20px;
+
+    li {
+        max-width: 800px;
+        line-height: $text-lh;
+        margin-bottom: 0;
+    }
+
+    li:before {
+        content: "✓";
+        font-size: 1.3em;
+        font-weight: 700;
+        color: $branding-color1;
+        padding: 0 10px 0 0;
+        
+        a {
+            color: $article-link-color;
+        }
+    }
+}
+
+
+article ol {  
+    list-style: none;
+    counter-reset: my-awesome-counter;
+
+    li {
+        font-family: $text-font;
+        counter-increment: my-awesome-counter;
+        margin-bottom: 2rem;
+        font-size: $text-size;
+        max-width: 1000px;
+    }
+
+    li::before {
+        content: counter(my-awesome-counter);
+        color: rgb(255, 255, 255);
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        background: $branding-color1;
+        width: 1.8em;
+        height: 1.8em;
+        border-radius: 50%;
+        margin-right: 0.5em;
+    }
+
+    ol ol li::before {
+        background: $branding-color2;
+    }
+
+    ol ol ol li::before {
+        background: $branding-color3;
+    }
+}
+
+//******************** BLOCKQUOTE ************************
+
+blockquote {
+    display: flex;
+    flex-direction: column;
+    border-left: 6px solid $quote-border-color;
+    margin: 40px auto 40px 20px;
+    padding: 28px;
+    max-width: 600px;
+	
+	cite {
+		margin: 36px 0 0 0;
+	}
+	
+	@media screen and (max-width: 800px) {
+		max-width: 100%;
+		margin: 40px auto 40px 0;
+		padding: 10px;
+	}
+}
+
+blockquote p {
+    font: italic $text-size "Georgia", Times, Times New Roman, Palatino, serif;
+    font-size: 1.4em;
+    line-height: 1.5em;
+    color: $black;
+    text-indent: 1.7em; /*Text indent to fit quote icon size*/
+    position: relative;
+	margin: 0;
+	
+	@media screen and (max-width: 800px) {
+		font-size: 1.3em;
+    	line-height: 1.24em;
+	}
+
+    &:before {
+        position: absolute;
+        content: open-quote;
+        font: italic $text-size "Georgia", Times, Times New Roman, Palatino, serif;
+        font-size: 3em;
+        font-weight: bold;
+        color: $branding-color1;
+        top: -10px;
+        left: -40px; /*To match text indent position*/
+    }
+	
+	&:after {
+        content: close-quote;  
+	}
+}
+
+//******************** CITE ************************
+cite {
+    font-family: $text-font;
+    font-size: 1em;
+    font-style: normal;
+    color:$black;
+    padding: 2px 8px;
+    margin-bottom: 0px;
+}
+
+
+//******************** PRE ************************
+
+pre {
+	font:$pre;
+	color: $text-color;
+	background:$branding-color3;
+	border: 1px solid $border-color-medium;
+	margin: 40px 0px 40px 0px !important;
+	padding:$padding40;
+    white-space: pre-wrap;
+}
+pre a {
+	color: $link-color;
+}
+pre a:hover {
+	color: $link-color-hover;
+}
+
+//******************** CODE ************************
+
+pre.wp-block-code {
+    color: #3ef538;
+    font-size: 1.1rem;
+    line-height: 1.6rem;
+    background: #2d342a; 
+    margin: 10px 0 30px 0 !important;
+    padding: 28px;
+}
+
+//******************** SUMMARY ************************
+
+.wp-block-details {
+    border: 1px solid #ccc;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+summary {
+    @include heading;
+    padding-bottom: 20px;
+    font-size: 1.5em;
+}
+
+//******************** CAPTIONS ************************
+captions,
+figcaption,
+p.wp-caption-text,
+.wp-block-image {
+    @include caption;
+}

@@ -13,6 +13,7 @@ import PostNav from "@/components/navigation/PostNav";
 import { Icons } from "@/components/ui/Icons";
 import Link from "next/link";
 import AnimatedArticle from "@/components/animations/AnimatedArticle";
+import Breadcrumbs from '@/components/navigation/Breadcrumbs';
 
 type RecursoPageProps = {
   params: {
@@ -61,15 +62,21 @@ export default async function RecursoPage({ params }: RecursoPageProps) {
 **********************************************/
   return (
     <div className="main-container">
-      <Link href="/recursos" className="back-to-archive-link">
-        <Icons.ArrowLeft size={26} strokeWidth={1} className="arrow-left" />
-        Volver a Recursos
-      </Link>
+      
       {/* Este componente establece el ID de la página en el contexto para BodyClass */}
       <WpPageId id={recurso.id} />
       <div className="container with-sidebar">
         <main className="main-content">
+
+          
           <article className="entry-content">
+
+            <Link href="/recursos" className="back-to-archive-link">
+        <Icons.ArrowLeft size={26} strokeWidth={1} className="arrow-left" />
+        Volver a Recursos
+      </Link>
+
+            
             <section className="page-title">
               <h1>{recurso.title.rendered}</h1>
 
@@ -86,6 +93,7 @@ export default async function RecursoPage({ params }: RecursoPageProps) {
                 />
               </div>
             </section>
+            <Breadcrumbs />
             {/* We process the content to fix potential issues like missing block wrappers */}
             <AnimatedArticle className="custom-article-class" amount={0.5}>
               <div

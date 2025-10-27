@@ -1,5 +1,5 @@
-@forward 'colors';
-@forward '_fonts';
-@forward 'layout';
-@forward 'mixins';
-@forward 'tables';
+@forward '_mixins';
+@forward 'var-typography';  // ← Mover arriba
+@forward 'var-colors';      // ← Después de typography
+@forward 'var-layout';
+@forward 'var-tables';

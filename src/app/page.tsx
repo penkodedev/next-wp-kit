@@ -6,7 +6,7 @@ import { processContent } from '@/utils/processContent';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import SliderRecursos from '@/components/ui/SliderRecursos';
-import Hero from '@/components/ui/Hero';
+import HeroConfig from '@/components/ui/HeroConfig';
 
 /**
  * Connects to WordPress to get the title and description.
@@ -38,34 +38,7 @@ export default async function Home() {
   // Build the main page content
   return (
     <>
-      <Hero
-        slides={[
-          {
-            title: "Bienvenido a Next WP Kit",
-            subtitle: "Un kit moderno para integrar Next.js con WordPress headless",
-            buttonText: "Explorar Recursos",
-            buttonLink: "/recursos",
-            backgroundType: "gradient"
-          },
-          {
-            title: "Animaciones Suaves",
-            subtitle: "Componentes de animación reutilizables con Framer Motion",
-            buttonText: "Ver Animaciones",
-            buttonLink: "/animaciones",
-            backgroundType: "image",
-            backgroundImage: "/images/hero-bg.jpg"
-          },
-          {
-            title: "WordPress Headless",
-            subtitle: "Integra fácilmente tu contenido de WordPress con Next.js",
-            buttonText: "Más Info",
-            buttonLink: "/acerca",
-            backgroundType: "gradient"
-          }
-        ]}
-        autoPlay={true}
-        autoPlayInterval={6000}
-      />
+      <HeroConfig />
 
       <article className="container">
         {/* <h1 dangerouslySetInnerHTML={{ __html: processContent(homePage.title.rendered) }} /> */}

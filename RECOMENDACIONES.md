@@ -147,3 +147,79 @@ graph TB
 ---
 
 *Estas recomendaciones se basan en el análisis del código actual y mejores prácticas de la industria para aplicaciones Next.js + WordPress headless.*
+
+
+
+
+ Plan para CPT Hero dinámico:
+📊 Situación actual:
+HeroConfig.tsx tiene slides hardcodeados
+Es perfecto para desarrollo rápido y testing
+Fácil de modificar manualmente
+🔄 Cuando tengas CPT Hero:
+1. Crear API endpoint en WordPress:
+// En functions.php o plugin custom
+add_action('rest_api_init', function () {
+    register_rest_route('custom/v1', '/heroes', array(
+        'methods' => 'GET',
+        'callback' => 'get_hero_slides',
+        'permission_callback' => '__return_true',
+    ));
+});
+2. Función que obtiene slides del CPT:
+function get_hero_slides() {
+    $args = array(
+        'post_type' => 'hero',
+        'posts_per_page' => -1,
+        'orderby' => 'menu_order',
+        'order' => 'ASC'
+    );
+    
+    $slides = array();
+    $query = new WP_Query($args);
+    
+    while ($query->have_posts()) {
+        $query->the_post();
+        $slides[] = array(
+            'title' => get_the_title(),
+            'subtitle' => get_field('subtitle'), // ACF field
+            'buttonText' => get_field('button_text'),
+            'buttonLink' => get_field('button_link'),
+            'backgroundType' => get_field('background_type'),
+            'backgroundImage' => get_field('background_image'),
+        );
+    }
+    
+    return $slides;
+}
+3. Modificar HeroConfig para ser dinámico:
+// HeroConfig.tsx - versión futura
+export const heroSlides = await fetchHeroSlides(); // De WordPress API
+
+async function fetchHeroSlides(): Promise<HeroSlide[]> {
+  try {
+    const response = await fetch('/wp-json/custom/v1/heroes');
+    return await response.json();
+  } catch (error) {
+    // Fallback a slides por defecto
+    return defaultSlides;
+  }
+}
+4. Arquitectura híbrida:
+Desarrollo: Usar slides hardcodeados (como ahora)
+Producción: Cargar dinámicamente desde WordPress
+Fallback: Si falla la API, usar slides por defecto
+🎨 Campos ACF para CPT Hero:
+titulo (text)
+subtitulo (textarea)
+texto_boton (text)
+enlace_boton (url)
+tipo_fondo (select: gradient/image/video)
+imagen_fondo (image)
+video_fondo (file)
+orden (number para menu_order)
+🔧 Ventajas del approach:
+✅ Contenido editable desde WordPress admin
+✅ Múltiples heroes para diferentes páginas
+✅ Fallback automático si hay problemas
+✅ Mantiene animaciones y configuraciones actuales

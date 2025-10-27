@@ -7,6 +7,7 @@ import { generateSeoMetadata } from '@/utils/seo';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import type { Page } from '@/types/wordpressTypes';
+import Breadcrumbs from '@/components/navigation/Breadcrumbs';
 
 type PageProps = {
   params: {
@@ -52,9 +53,11 @@ export default async function CatchAllPage({ params }: PageProps) {
 **********************************************/
   return (
     <main>
-        <article className="page-content" >
+      <article className="page-content" >
+        
           <h1 className='page-title'>{page.title.rendered}</h1>
-          <AnimatedArticle>
+        <AnimatedArticle>
+          <Breadcrumbs />
             <div dangerouslySetInnerHTML={{ __html: page.content.rendered }} />
           </AnimatedArticle>
         </article>

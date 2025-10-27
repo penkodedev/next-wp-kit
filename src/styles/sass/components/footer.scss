@@ -1,13 +1,18 @@
+@use 'abstracts' as *;
+
 footer {
     display: flex;
     background-color: #ffffff;
     flex-direction: column;
     align-items: center;
-    color: black;
-    //min-height: 300px;
-    padding: 70px 20px;
+    padding: 80px 20px 14px 20px;
     margin-top: 0;
     border-top: 1px solid rgb(207, 207, 207);
+
+    p, ul {
+        font-family: $text-font, sans-serif;
+        font-size: $text-size;
+    }
 }
 
 .footer-content {
@@ -23,13 +28,16 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: center;
+    font-family: $text-font, sans-serif;
+    color: #908f8f;
+    margin-bottom: 10px;
 
     .logo-footer-wrapper {
         margin: 40px 0 10px 0
     }
 
     small {
-        color: #908f8f;
+        
         margin: 0;
         padding: 0;
         text-align: center;
@@ -52,7 +60,7 @@ footer {
     h3,
     h4,
     h5 {
-        margin: 0;
+        margin: 0 0 15px 0;
     }
 
     p {
@@ -68,7 +76,7 @@ footer {
         display: flex;
         align-items: flex-start;
         gap: 8px;
-        margin-bottom: 8px;
+        margin-bottom: 23px;
 
         .contact-icon {
             flex-shrink: 0;
@@ -87,15 +95,16 @@ footer {
         margin: 0;
 
         li {
-            margin-bottom: 8px;
+            
 
             a {
                 display: flex;
                 align-items: center;
+                font-size: 0.9em;
+                color: inherit;
                 gap: 8px;
                 text-decoration: none;
-                color: inherit;
-                font-size: 0.9em;
+                margin-bottom: 4px;
                 transition: color 0.2s ease;
 
                 &:hover {

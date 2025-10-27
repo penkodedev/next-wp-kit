@@ -1,5 +1,5 @@
 // src/app/recursos/page.tsx
-// Like an archiv.php page on a WP theme
+// Like an archive.php page on a WP theme
 // 
 
 "use client"; 
@@ -9,8 +9,9 @@ import { getAllContent } from '@/api/wordpressApi';
 import PostCard from '@/components/ui/PostCard';
 import type { Recurso } from '@/types/wordpressTypes';
 import LoadingSpinner from '@/components/ui/LoadingSpiner'
+import Breadcrumbs from '@/components/navigation/Breadcrumbs';
 
-const POSTS_PER_PAGE = 9;
+const POSTS_PER_PAGE = 8; // Number of posts for the archive page
 
 // Función auxiliar para generar los parámetros de la API
 const getApiParams = (page: number) => {
@@ -58,14 +59,15 @@ export default function RecursosArchivePage() {
     <div className="main-container">
       <section className='page-title'>
         <h1>Recursos</h1>
+        
       </section>
-
       {recursos.length === 0 && !isLoading ? (
         <article>
           <p>No se encontraron recursos en este momento.</p>
         </article>
       ) : (
-        <div className="post-grid cols-2">
+          <div className="post-grid cols-2">
+            
           {recursos.map((recurso) => (
             <PostCard key={recurso.id} item={recurso} basePath="/recursos" excerptLength={150} />
           ))}
@@ -78,7 +80,7 @@ export default function RecursosArchivePage() {
       )} */}
       
       {hasMore && (
-        <div className="load-more-container" style={{ textAlign: 'center', marginTop: '3rem' }}>
+        <div className="load-more-container" style={{ textAlign: 'center', marginTop: '3rem',marginBottom: '6rem' }}>
           <button onClick={handleLoadMore} disabled={isLoading} className="button">
             {isLoading ? 'Cargando...' : 'cargar más'}
             </button>

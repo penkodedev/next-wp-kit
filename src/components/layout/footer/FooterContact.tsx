@@ -1,4 +1,7 @@
 // src/components/layout/footer/FooterContact.tsx
+"use client";
+
+import { useState, useEffect } from "react";
 import type { SiteInfo } from "@/types/wordpressTypes";
 import { Icons } from "@/components/ui/Icons";
 
@@ -21,19 +24,32 @@ const getContactIcon = (type: string) => {
 };
 
 export default function FooterContact({ contact }: FooterContactProps) {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   if (!contact || Object.keys(contact).length === 0) {
     return null;
   }
 
   return (
     <div className="footer-contact">
-      <h2>Contacto</h2>
+      {/* <h2>Contacto</h2> */}
       {Object.values(contact).map((contactItem: any, index) => {
         const IconComponent = getContactIcon(contactItem.type);
         return (
           <p key={index} className="contact-item">
             <IconComponent size={22} strokeWidth={1.5} className="contact-icon" />
-            <span dangerouslySetInnerHTML={{ __html: `<strong>${contactItem.type}:</strong> ${contactItem.value}` }} />
+            <span>
+              <strong>{contactItem.type}:</strong>{' '}
+              {isClient ? (
+                <span dangerouslySetInnerHTML={{ __html: contactItem.value || '' }} />
+              ) : (
+                <span>{contactItem.value || ''}</span>
+              )}
+            </span>
           </p>
         );
       })}
