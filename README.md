@@ -174,6 +174,7 @@ Transform your WordPress content into lightning-fast, SEO-optimized websites wit
 - **Component Library** - Reusable, typed React components
 - **Custom Hooks** - Business logic extraction for reusability
 - **Atomic Design** - Component organization for large teams
+- **Simple Layout System** - 4 layout classes for all page types
 
 #### 🚀 **Performance & Optimization**
 - **Core Web Vitals** - Lighthouse 95+ optimized
@@ -186,6 +187,14 @@ Transform your WordPress content into lightning-fast, SEO-optimized websites wit
 - **Shortcode Processing** - Server-side rendering of WordPress shortcodes
 - **Modal System** - WordPress content in Next.js modals
 - **Dynamic Content Sync** - Real-time updates from WordPress
+
+#### 📐 **Smart Layout System**
+- **CSS Grid for Macro Layouts** - Page-level layouts use modern CSS Grid
+- **Flexbox for Micro Layouts** - Component-level layouts use Flexbox
+- **4 Layout Classes** - `.page-one-col`, `.page-sidebar`, `.page-fullwidth`, `.page-centered`
+- **Responsive Automatic** - Mobile-first with CSS Grid media queries
+- **HTML5 Semantic** - Proper `<main>`, `<article>`, `<header>` structure
+- **Zero Configuration** - Just add class to page wrapper
 
 ## 🚀 Quick Start - 5 Minutes to Launch
 
@@ -285,6 +294,8 @@ next-wp-kit/
 │   │   ├── 🧭 navigation/  # Navigation components
 │   │   └── ✨ animations/  # Animation library
 │   ├── 🎯 styles/          # ITCSS SASS architecture
+│   │   ├── base/
+│   │   │   └── _grid-layout.scss  # Simple layout system
 │   ├── 🔌 api/             # Type-safe WordPress API
 │   ├── 🪝 hooks/           # Custom React hooks
 │   ├── 🌍 i18n/            # Internationalization

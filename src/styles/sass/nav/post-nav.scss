@@ -1,9 +1,14 @@
+@use '../abstracts' as *;
+
 .post-navigation {
+    font-family: $text-font;
+    font-size: $text-size - 0.1;
+    color: $text-color;
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    margin: 55px 0 55px 0;
+    margin: 75px 0 55px 0;
     padding: 0 20px;
 
     a {
@@ -27,6 +32,11 @@
             text-decoration: underline;
         }
     }
+}
+
+.arrow-left,
+.arrow-right {
+    flex-shrink: 0;
 }
 
 .post-navigation .next-link {

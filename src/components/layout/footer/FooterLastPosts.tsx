@@ -28,7 +28,7 @@ async function FooterLastPostsContent({
           {latestPosts.map((post) => (
             <li key={post.id}>
               <Link href={`/${postType}/${post.slug}`}>
-                <Icons.CheckCheck size={20} strokeWidth={3} className="list-icon" />
+                <Icons.Check size={20} strokeWidth={3} className="list-icon" />
                 {post.title.rendered}
               </Link>
             </li>
@@ -57,7 +57,7 @@ function FooterLastPostsSkeleton() {
 export default function FooterLastPosts(props: FooterLastPostsProps) {
   return (
     <div className="footer-resources">
-      {/* <h2>Últimos {props.postType || 'recursos'}</h2> */}
+      <h3>Últimos {props.postType || 'recursos'}</h3>
       <Suspense fallback={<FooterLastPostsSkeleton />}>
         <FooterLastPostsContent {...props} />
       </Suspense>

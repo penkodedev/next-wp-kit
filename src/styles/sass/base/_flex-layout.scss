@@ -1,0 +1,89 @@
+// ==========================================================================
+// Simple Page Layout System
+// ==========================================================================
+
+/*
+------------------------------------------------------
+              PAGE HOME
+------------------------------------------------------
+*/
+// .page-home-one-col {
+//   display: grid;
+//   grid-template-columns: 12% 1fr 12%;
+//   grid-template-rows: 130px auto 1fr auto;
+//   min-height: 100vh;
+//   grid-template-areas:
+//     "header header header"
+//     "slider slider slider"
+//     "main main main"
+//     "footer footer footer";
+// }
+
+
+/*
+------------------------------------------------------
+              PAGE ONE COL
+------------------------------------------------------
+*/
+.page-one-col {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+
+/*
+------------------------------------------------------
+              PAGE TWO COL (SIDEBAR)
+------------------------------------------------------
+*/
+.page-sidebar {
+  display: flex;
+  gap: 2rem;
+  max-width: 1240px;
+  margin: 0 auto;
+  // padding: 0 2rem;
+
+  main {
+    flex: 1;
+  }
+
+  aside {
+    flex: 0 0 300px;
+  }
+
+  // Responsive settings
+  @media (max-width: 768px) {
+    flex-direction: column;
+
+    aside {
+      order: 2;
+    }
+  }
+}
+
+/*
+------------------------------------------------------
+              PAGE FULL WIDTH
+------------------------------------------------------
+*/
+.page-fullwidth {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+
+/*
+------------------------------------------------------
+              PAGE CENTERED
+------------------------------------------------------
+*/
+.page-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 1440px;
+  margin: 0 auto;
+  min-height: 70vh;
+}

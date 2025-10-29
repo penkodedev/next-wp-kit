@@ -1,10 +1,8 @@
 @use 'abstracts' as *;
 
 .main-menu {
-  font-family: $menu-font;
   display: flex;
   align-items: center;
-  margin: 0;
 
   ul {
     list-style: none;
@@ -16,10 +14,13 @@
       position: relative; // Necesario para posicionar la línea ::after
 
       a {
+        font-family: $menu-font;
+        font-size: $menu-size;
         color: #000;
         text-decoration: none;
         margin: 10px;
-        position: relative; // Para que funcione el ::after
+        position: relative; // For ::after works
+        padding-bottom: 5px;
 
         &::after {
           content: '';
@@ -63,16 +64,16 @@
   .submenu {
     display: none;
     position: absolute;
-    top: 24px; // TOP POSITION FROM MAIN NAV
+    top: 30px; // TOP POSITION FROM MAIN NAV
     //left: -50%;
     background: #fff;
     padding: 0.5rem 0;
     border: 1px solid #ddd;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     z-index: 10;
-    min-width:220px; // Sub menu width
+    min-width: 220px; // Sub menu width
 
-    li  {
+    li {
       padding: 5px 0 5px 10px;
     }
   }

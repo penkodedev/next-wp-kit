@@ -13,7 +13,7 @@ import PostNav from "@/components/navigation/PostNav";
 import { Icons } from "@/components/ui/Icons";
 import Link from "next/link";
 import AnimatedArticle from "@/components/animations/AnimatedArticle";
-import Breadcrumbs from '@/components/navigation/Breadcrumbs';
+import Breadcrumbs from "@/components/navigation/Breadcrumbs";
 
 type RecursoPageProps = {
   params: {
@@ -57,60 +57,54 @@ export default async function RecursoPage({ params }: RecursoPageProps) {
     notFound();
   }
 
+
 /**********************************************
       START BUILDING THE PAGE CONTENT HTML
 **********************************************/
   return (
-    <div className="main-container">
-      
+    <div className="page-sidebar">
       {/* Este componente establece el ID de la página en el contexto para BodyClass */}
       <WpPageId id={recurso.id} />
-      <div className="container with-sidebar">
-        <main className="main-content">
+      <main>
+        <article className="entry-content">
+          <Link href="/recursos" className="back-to-archive-link">
+            <Icons.ArrowLeft size={26} strokeWidth={1} className="arrow-left" />
+            Volver a Recursos
+          </Link>
 
-          
-          <article className="entry-content">
+          <section className="page-title">
+            <h1>{recurso.title.rendered}</h1>
 
-            <Link href="/recursos" className="back-to-archive-link">
-        <Icons.ArrowLeft size={26} strokeWidth={1} className="arrow-left" />
-        Volver a Recursos
-      </Link>
-
-            
-            <section className="page-title">
-              <h1>{recurso.title.rendered}</h1>
-
-              <div className="icons-wrap">
-                <Icons.Share2
-                  size={21}
-                  strokeWidth={1.5}
-                  className="icons-page-title icon-share"
-                />
-                <Icons.Heart
-                  size={21}
-                  strokeWidth={1.5}
-                  className="icons-page-title icon-heart"
-                />
-              </div>
-            </section>
-            <Breadcrumbs />
-            {/* We process the content to fix potential issues like missing block wrappers */}
-            <AnimatedArticle className="custom-article-class" amount={0.5}>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: processContent(recurso.content.rendered),
-                }}
+            <div className="icons-wrap">
+              <Icons.Share2
+                size={21}
+                strokeWidth={1.5}
+                className="icons-page-title icon-share"
               />
-            </AnimatedArticle>
-          </article>
-          <PostNav
-            postId={recurso.id}
-            postType={recurso.type}
-            basePath="/recursos"
-          />
-        </main>
+              <Icons.Heart
+                size={21}
+                strokeWidth={1.5}
+                className="icons-page-title icon-heart"
+              />
+            </div>
+          </section>
+          <Breadcrumbs />
+          {/* We process the content to fix potential issues like missing block wrappers */}
+          <AnimatedArticle className="custom-article-class" amount={0.5}>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: processContent(recurso.content.rendered),
+              }}
+            />
+          </AnimatedArticle>
+        </article>
+        <PostNav
+          postId={recurso.id}
+          postType={recurso.type}
+          basePath="/recursos"
+        />
+      </main>
         <Sidebar />
-      </div>
     </div>
   );
 }

@@ -6,10 +6,10 @@ footer {
     flex-direction: column;
     align-items: center;
     padding: 80px 20px 14px 20px;
-    margin-top: 0;
     border-top: 1px solid rgb(207, 207, 207);
 
-    p, ul {
+    p,
+    ul {
         font-family: $text-font, sans-serif;
         font-size: $text-size;
     }
@@ -37,7 +37,7 @@ footer {
     }
 
     small {
-        
+
         margin: 0;
         padding: 0;
         text-align: center;
@@ -84,23 +84,28 @@ footer {
             color: #666;
         }
 
+        .contact-type {
+            display: none // OPTIONAL DISPLAY;
+        }
+
         span {
             line-height: 1.4;
         }
     }
 
     ul {
+        font-family: $text-font;
+        font-size: $text-size - 0.1;
+        color: $text-color;
         list-style: none;
         padding: 0;
         margin: 0;
 
         li {
-            
+
             a {
                 display: flex;
                 align-items: center;
-                font-size: 0.9em;
-                color: inherit;
                 gap: 8px;
                 text-decoration: none;
                 margin-bottom: 4px;
@@ -184,9 +189,12 @@ footer {
 }
 
 @keyframes pulse {
-    0%, 100% {
+
+    0%,
+    100% {
         opacity: 1;
     }
+
     50% {
         opacity: 0.5;
     }
@@ -223,6 +231,4 @@ footer {
             color: #fff;
         }
     }
-    }
-
-    
+}

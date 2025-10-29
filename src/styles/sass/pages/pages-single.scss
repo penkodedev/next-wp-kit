@@ -1,11 +1,14 @@
+@use '../abstracts' as *;
+
 .single .page-title {
   background-color: rgb(66, 66, 66);
   margin: 20px 0 30px 0;
-  padding: 40px 20px;
+  padding: 40px;
 
   h1 {
     color: white;
     margin: 0;
+    max-width: 80%;
   }
 
   .icons-wrap {
@@ -20,7 +23,9 @@
 }
 
 a.back-to-archive-link {
-  font-size: 0.88em;
+  font-family: $text-font;
+  font-size: $text-size - 0.1;
+  color: $text-color;
   color: #000;
   text-decoration: none;
   display: flex;

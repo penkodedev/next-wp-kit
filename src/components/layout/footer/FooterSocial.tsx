@@ -30,14 +30,14 @@ export default function FooterSocial({ social }: FooterSocialProps) {
 
   return (
     <div className="footer-social">
-      {/* <h2>Redes Sociales</h2> */}
+      <h3>Redes Sociales</h3>
       <ul className="social-links">
         {social.map((socialItem, index) => {
           const IconComponent = getSocialIcon(socialItem.name);
           return (
             <li key={index}>
               <a href={socialItem.url} target="_blank" rel="noopener noreferrer" title={socialItem.name}>
-                <IconComponent size={22} strokeWidth={1.3} />
+                <IconComponent size={22} strokeWidth={1.6} />
                 {/* <span className="sr-only">{socialItem.name}</span> */}
               </a>
             </li>

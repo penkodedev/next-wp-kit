@@ -3,6 +3,7 @@
 import { getAllContent } from '@/api/wordpressApi';
 import Link from 'next/link';
 import type { Recurso } from '@/types/wordpressTypes';
+import { Icons } from "@/components/ui/Icons";
 
 export default async function Sidebar() {
 
@@ -12,7 +13,7 @@ export default async function Sidebar() {
 
   
   return (
-    <aside className="sidebar">
+    <aside>
       <div className="sidebox">
         <h2>Ultimos recursos</h2>
         {(!latestRecursos || latestRecursos.length === 0) ? (
@@ -22,6 +23,7 @@ export default async function Sidebar() {
             {latestRecursos.map((recurso) => (
               <li key={recurso.id}>
                 <Link href={`/recursos/${recurso.slug}`}>
+                  <Icons.Check size={20} strokeWidth={3} className="list-icon" />
                   {recurso.title.rendered}
                 </Link>
               </li>

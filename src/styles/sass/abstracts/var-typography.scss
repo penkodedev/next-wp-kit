@@ -1,3 +1,8 @@
+@use 'var-colors' as *;
+@use 'var-layout' as *;
+@use 'var-tables' as *;
+
+
 ///////////////////////////////////
 //                      
 //    TYPOGRAPHY VARIABLES 
@@ -28,13 +33,7 @@ $copy-text-strong: 'Poppins-Bold', sans-serif;
 //
 $heading-font: 'Poppins-Bold', Helvetica, Arial, sans-serif;
 $heading-weight: normal;
-$heading-margin: 0px 0px 0px 0px;
-$h1-size: calc(2.8rem + 0.1vw);
-$h2-size: calc(2.1rem + 0.5vw);
-$h3-size: calc(1.5rem + 0.5vw);
-$h4-size: calc(1.2rem + 0.5vw);
-$h5-size: calc(1rem + 0.5vw);
-$h6-size: calc(0.8rem + 0.5vw);
+$heading-margin: 0 0 10px 0;
 $heading-letter-spacing: -0.08rem; //****** BIG headings letter spacing *****//
 
 
@@ -52,15 +51,7 @@ $page-title-lh:calc(2.4rem + 3.5vmin);
 // MENU FONTS
 //
 $menu-font: 'Poppins-Regular', Helvetica, Arial, sans-serif;
-$menu-size: 1.2rem;
-
-
-//
-// ARTICLE LINK
-//
-$article-link-font-weight: 300;
-$article-link-decoration:underline;
-
+$menu-size: 1.08rem;
 
 //
 // SECOND LEVEL LINK SIZE and HEIGHT
@@ -68,6 +59,11 @@ $article-link-decoration:underline;
 $second-level-link-size: (0.90em);
 $second-level-link-height: (1em);
 
+//
+// ARTICLE LINK
+//
+$article-link-font-weight: 300;
+$article-link-decoration:underline;
 
 //
 // CAPTIONS

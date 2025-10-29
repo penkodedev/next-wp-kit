@@ -36,14 +36,14 @@ export default function FooterContact({ contact }: FooterContactProps) {
 
   return (
     <div className="footer-contact">
-      {/* <h2>Contacto</h2> */}
+      <h3>Contacto</h3> {/* OPTIONAL DISPLAY */}
       {Object.values(contact).map((contactItem: any, index) => {
         const IconComponent = getContactIcon(contactItem.type);
         return (
           <p key={index} className="contact-item">
             <IconComponent size={22} strokeWidth={1.5} className="contact-icon" />
             <span>
-              <strong>{contactItem.type}:</strong>{' '}
+              <strong className="contact-type">{contactItem.type}:</strong>{' '}
               {isClient ? (
                 <span dangerouslySetInnerHTML={{ __html: contactItem.value || '' }} />
               ) : (

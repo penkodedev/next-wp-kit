@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 // src/styles/sass/components/search-modal.scss
 
 .search-open-button {
@@ -95,6 +97,9 @@
   max-height: 60vh; // Para que no ocupe toda la pantalla si hay muchos resultados
 
   ul {
+    font-family: $text-font;
+    font-size: $text-size;
+    color: $text-color;
     list-style: none;
     padding-bottom: 2em;
 

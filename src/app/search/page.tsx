@@ -52,32 +52,40 @@ export default function SearchPage() {
       START BUILDING THE PAGE CONTENT HTML
 **********************************************/
   return (
-    <AnimatedFadeIn>
-      <h1>Resultados de búsqueda para: "{query}"</h1>
-      
-      <div className="search-results-container">
-        {isLoading ? (
-          <p>Buscando...</p>
-        ) : !isLoading && results.length > 0 ? (
-          <ul className="space-y-6">
-            {results.map((result, index) => (
-              <AnimatedFadeIn as="li" key={result.id} transition={{ delay: index * 0.033 }}>
-                <h3 className="text-xl font-semibold">
-                  <Link href={cleanInternalUrl(result.url)} className="hover:underline">{getResultTitle(result)}</Link>
-                </h3>
-                <small className="text-sm text-gray-500">
-                  {typeof window !== 'undefined' && `${window.location.origin}${cleanInternalUrl(result.url)}`}
-                </small>
-                {result._embedded?.self?.[0]?.excerpt?.rendered && (
-                  <div className="search-result-excerpt mt-2" dangerouslySetInnerHTML={{ __html: result._embedded.self[0].excerpt.rendered }} />
-                )}
-              </AnimatedFadeIn>
-            ))}
-          </ul>
-        ) : !isLoading && (
-          <p>No se encontraron resultados para tu búsqueda.</p>
-        )}
-      </div>
-    </AnimatedFadeIn>
+    <div className="page-one-col">
+      <main>
+        <article className="page-content">
+          <header className="page-header">
+            <h1>Resultados de búsqueda para: "{query}"</h1>
+          </header>
+
+          <AnimatedFadeIn>
+            <div className="search-results-container">
+              {isLoading ? (
+                <p>Buscando...</p>
+              ) : !isLoading && results.length > 0 ? (
+                <ul className="space-y-6">
+                  {results.map((result, index) => (
+                    <AnimatedFadeIn as="li" key={result.id} transition={{ delay: index * 0.033 }}>
+                      <h3 className="text-xl font-semibold">
+                        <Link href={cleanInternalUrl(result.url)} className="hover:underline">{getResultTitle(result)}</Link>
+                      </h3>
+                      <small className="text-sm text-gray-500">
+                        {typeof window !== 'undefined' && `${window.location.origin}${cleanInternalUrl(result.url)}`}
+                      </small>
+                      {result._embedded?.self?.[0]?.excerpt?.rendered && (
+                        <div className="search-result-excerpt mt-2" dangerouslySetInnerHTML={{ __html: result._embedded.self[0].excerpt.rendered }} />
+                      )}
+                    </AnimatedFadeIn>
+                  ))}
+                </ul>
+              ) : !isLoading && (
+                <p>No se encontraron resultados para tu búsqueda.</p>
+              )}
+            </div>
+          </AnimatedFadeIn>
+        </article>
+      </main>
+    </div>
   );
 }

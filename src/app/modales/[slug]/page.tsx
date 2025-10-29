@@ -28,15 +28,19 @@ export default async function ModalPage({ params }: ModalPageProps) {
     notFound();
   }
 
-  return (
-    // Usamos un div como contenedor principal para aplicar clases de layout
-    <div className="container mx-auto my-8 max-w-4xl px-4">
-      <article className="entry-content">
-        <h1 dangerouslySetInnerHTML={{ __html: processContent(modal.title.rendered) }} />
-      <div
-        dangerouslySetInnerHTML={{ __html: processContent(modal.content.rendered) }}
-      />
-      </article>
-    </article>
+ return (
+   <div className="page-one-col">
+     <main>
+       <article className="page-content">
+         <header className="page-header">
+           <h1 dangerouslySetInnerHTML={{ __html: processContent(modal.title.rendered) }} />
+         </header>
+
+         <div
+           dangerouslySetInnerHTML={{ __html: processContent(modal.content.rendered) }}
+         />
+       </article>
+     </main>
+  </div>
   );
 }

@@ -6,46 +6,56 @@ import type { Recurso } from "@/types/wordpressTypes";
 import dynamic from "next/dynamic";
 import type { SwiperOptions } from "swiper/types";
 
-// Importamos SliderBase de forma dinámica y deshabilitamos el SSR para él.
+// Dynamically import SliderBase and disable SSR for it
 const SliderBase = dynamic(() => import("@/components/ui/SliderBase"), {
   ssr: false,
 });
 
-/**
- * Un componente de servidor que obtiene los últimos recursos
- * y los muestra en un carrusel.
- */
-export default async function SliderLatestRecursos() {
-  // 1. Obtenemos los 8 últimos recursos desde la API de WordPress.
-  const params = `?per_page=8&page=1&_embed&orderby=date&order=desc`;
-  const latestRecursos = await getAllContent<Recurso>('recursos', params);
+interface SliderRecursosProps {
+  title?: string;
+  postType?: string;
+  perPage?: number;
+}
 
-  // Si no hay recursos, no mostramos nada.
+/**
+ * A server component that fetches the latest resources
+ * and displays them in a carousel.
+ */
+export default async function SliderLatestRecursos({
+  title = "Latest Resources",
+  postType = 'recursos', /* WordPress CUSTOM POST TYPE */
+  perPage = 6
+}: SliderRecursosProps) {
+
+  // 1. Get the latest resources from WordPress API
+  const params = `?per_page=${perPage}&page=1&_embed&orderby=date&order=desc`;
+  const latestRecursos = await getAllContent<Recurso>(postType, params);
+
+  // If no resources, don't show anything
   if (!latestRecursos || latestRecursos.length === 0) {
-      return <p>No se encontraron recursos recientes.</p>;
+      return <p>No recent resources found.</p>;
 
   }
 
-  // 2. Filtramos solo los recursos que tienen imagen destacada para asegurar que el PostCard se vea bien.
+  // 2. Filter only resources that have featured images to ensure PostCard looks good
   const recursosConImagen = latestRecursos.filter(
     (recurso) => recurso._embedded?.["wp:featuredmedia"]?.[0]?.source_url
   );
 
 
-  // 3. Definimos la configuración.
+  // 3. Define configuration
   const sliderOptions: SwiperOptions = {
-    spaceBetween: 20,
-    slidesPerView: 3.7, // Permite que los slides fluyan con su ancho natural
-    speed: 7000, // Aumentamos la duración para un movimiento lento y suave
+    slidesPerView: 3.7, // Allows slides to flow with their natural width
+    speed: 7000, // Increase duration for smooth slow movement
     freeMode: true,
     navigation: false,
     pagination: { clickable: true },
     loop: true,
-    loopAdditionalSlides: 1, // ¡Importante! Ayuda a que el bucle sea fluido y sin saltos.
-    allowTouchMove: true, // Desactiva el arrastre manual para un efecto de marquesina puro.
+    loopAdditionalSlides: 1, // Important! Helps make the loop fluid without jumps
+    allowTouchMove: true, // Disables manual drag for pure marquee effect
     autoplay: {
       delay: 0, disableOnInteraction: false,
-      
+
     },
 
 // =================================================================
@@ -53,26 +63,44 @@ export default async function SliderLatestRecursos() {
 // =================================================================
 
         breakpoints: {
-          // Cuando el ancho de la ventana es >= 640px
-          640: {
-            slidesPerView: 1,
-            spaceBetween: 10,
+          // Large desktop (1920px+)
+          1920: {
+            slidesPerView: 3.6,
           },
-          // Cuando el ancho de la ventana es >= 1024px
+          // Normal desktop (1440px+)
+          1440: {
+            slidesPerView: 4,
+          },
+          // Small desktop (1024px+)
           1024: {
-            slidesPerView: 3,
-            spaceBetween: 20,
+            slidesPerView: 3.5,
+          },
+          // Tablet (768px+)
+          768: {
+            slidesPerView: 2.5,
+          },
+          // Large mobile (640px+)
+          640: {
+            slidesPerView: 1.8,
+          },
+          // Small mobile (base)
+          320: {
+            slidesPerView: 1.2,
           },
     },
          };
 
-  // 3. Renderizamos el componente de cliente SliderBase con los datos ya cargados.
-  // Creamos los PostCards aquí y los pasamos como hijos a SliderBase.
+  // 3. Render the client SliderBase component with pre-loaded data
+  // Create PostCards here and pass them as children to SliderBase
   return (
-    <SliderBase swiperOptions={sliderOptions}>
-      {recursosConImagen.map((recurso) => (
-        <PostCard key={recurso.id} item={recurso} basePath="/recursos" />
-      ))}
-    </SliderBase>
+    <div className="slider-recursos">
+      {title && <h2 className="slider-title">{title}</h2>}
+      <SliderBase swiperOptions={sliderOptions}>
+        {recursosConImagen.map((recurso) => (
+          <PostCard key={recurso.id} item={recurso} basePath={`/${postType}`} />
+        ))}
+      </SliderBase>
+    </div>
   );
 }
+

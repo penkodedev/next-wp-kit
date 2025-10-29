@@ -2,7 +2,6 @@
 
 //************************ COPY TEXT ***************************
 p,
-a,
 article p
  {
   @include copy-text;
@@ -17,11 +16,18 @@ article ol li strong{
 
 
 //************************ HEADINGS ************************
+h1 { font-size: clamp(1.5rem, 1.6vw, 3rem);}
+h2 { font-size: clamp(1.2rem, 1.4vw, 2.5rem);}
+h3 { font-size: clamp(1rem,   1vw, 2rem);}
+h4 { font-size: clamp(0.9rem, 1vw,   1.6rem);}
+h5 { font-size: clamp(0.8rem, 0.8vw, 1.4rem);}
+h6 { font-size: clamp(0.7rem, 0.6vw, 1.2rem);}
 h1,h2,h3,h4,h5,h6 {@include heading;}
 
+
 main h1 {
-    margin: 0 0 30px 0;
-    padding: 7px 0 0 10px;
+    margin: 0 0 20px 0;
+    padding: 7px 0 0 0;
 }
 
 h1.page-title {
@@ -39,12 +45,12 @@ article ul {
     font-size: $text-size;
     color: $text-color;
     list-style-type: none;
-    margin: 25px 0 0 20px;
+    margin: 25px 0 15px 0;
 
     li {
         max-width: 800px;
         line-height: $text-lh;
-        margin-bottom: 0;
+        margin-bottom: 10px;
     }
 
     li:before {
@@ -189,15 +195,14 @@ pre.wp-block-code {
 //******************** SUMMARY ************************
 
 .wp-block-details {
-    border: 1px solid #ccc;
+    // border: 1px solid #ccc;
     padding: 25px;
     margin-bottom: 25px;
 }
 
 summary {
     @include heading;
-    padding-bottom: 20px;
-    font-size: 1.5em;
+    font-size: 1.4em;
 }
 
 //******************** CAPTIONS ************************

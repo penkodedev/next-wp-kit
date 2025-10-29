@@ -53,10 +53,10 @@ export default function RecursosArchivePage() {
 
 
 /**********************************************
-      START BUILDING THE PAGE CONTENT HTML
+      START BUILDING THE PAGE CONTENT
 **********************************************/
   return (
-    <div className="main-container">
+    <div className="page-one-col">
       <section className='page-title'>
         <h1>Recursos</h1>
         

@@ -40,7 +40,7 @@ const ScrollToTop = () => {
       className={`scroll-top-btn ${visible ? 'visible' : ''}`}
       aria-label="Volver arriba"
     >
-      <Icons.ArrowUp size={26} strokeWidth={1.5} />
+      <Icons.ArrowUp size={22} strokeWidth={1.5} />
     </button>
   );
 };

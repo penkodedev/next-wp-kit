@@ -87,7 +87,7 @@ export default function Hero({
     <section className="hero-section">
       {/* Capa de fondo dinámica con crossfade */}
       <div className={`hero-background hero-background-${backgroundType}`}>
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="sync">
           <motion.div
             key={currentSlide}
             initial={{ opacity: 0 }}

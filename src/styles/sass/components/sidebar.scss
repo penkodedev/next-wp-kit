@@ -1,22 +1,63 @@
+@use 'abstracts' as *;
+
 // ****************** SIDEBAR *******************//
 
-.container.with-sidebar {
-    display: flex;
-    gap: 20px;
-}
-
-.sidebar {
-    background-color: #f5f5f5;
-}
-
 aside {
-    width: 350px;
+    background-color: #fff;
+    border-left: 1px solid rgb(207, 207, 207);
+    padding: 60px 0 0 2rem;
     opacity: 1;
     visibility: visible;
     transition: opacity 0.4s ease, visibility 0.4s ease;
+    min-height: 100vh;
+    top: 2rem;
+    order: 2; // Sidebar goes below main on mobile
+
+    .sidebox {
+        position: sticky;
+        top: 2rem;
+    }
 
     &.hidden {
         opacity: 0;
         visibility: hidden;
+    }
+}
+
+aside ul {
+    font-family: $text-font;
+    font-size: $text-size - 0.06;
+    color: $text-color;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+
+        a {
+            display: flex;
+            align-items: center;
+            font-size: 0.9em;
+            color: inherit;
+            gap: 8px;
+            text-decoration: none;
+            margin-bottom: 4px;
+            transition: color 0.2s ease;
+
+            &:hover {
+                color: #666;
+            }
+
+            .list-icon {
+                flex-shrink: 0;
+                color: #707070;
+                transition: color 0.2s ease, transform 0.2s ease;
+            }
+
+            &:hover .list-icon {
+                color: #666;
+                transform: translateX(4px);
+            }
+        }
     }
 }

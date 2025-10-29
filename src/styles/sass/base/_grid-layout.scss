@@ -1,0 +1,95 @@
+// ==========================================================================
+// Simple Page Layout System - CSS Grid Version
+// ==========================================================================
+
+/*
+------------------------------------------------------
+              PAGE HOME (FULL LAYOUT)
+------------------------------------------------------
+*/
+// .page-home-one-col {
+//   display: grid;
+//   grid-template-columns: 12% 1fr 12%;
+//   grid-template-rows: 130px auto 1fr auto;
+//   min-height: 100vh;
+//   grid-template-areas:
+//     "header header header"
+//     "slider slider slider"
+//     "main main main"
+//     "footer footer footer";
+// }
+
+
+/*
+------------------------------------------------------
+              PAGE ONE COL
+------------------------------------------------------
+*/
+.page-one-col {
+  display: grid;
+  grid-template-columns: minmax(0, 1240px);
+  justify-content: center;
+  padding: 0 2rem;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+
+/*
+------------------------------------------------------
+              PAGE TWO COL (SIDEBAR)
+------------------------------------------------------
+*/
+.page-sidebar {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  max-width: 1340px;
+  grid-gap: 2rem;
+  padding: 0 2rem;
+  margin: 0 auto;
+  
+
+  main {
+    min-width: 0; // Previene overflow en grid items
+  }
+
+  aside {
+    min-width: 0;
+  }
+
+  // Responsive settings
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    
+    aside {
+      order: 2;
+    }
+  }
+}
+
+
+/*
+------------------------------------------------------
+              PAGE FULL WIDTH
+------------------------------------------------------
+*/
+.page-fullwidth {
+  display: grid;
+  grid-template-columns: 1fr;
+  max-width: 100%;
+  padding: 0 2rem;
+}
+
+
+/*
+------------------------------------------------------
+              PAGE CENTERED
+------------------------------------------------------
+*/
+.page-centered {
+  display: grid;
+  place-items: center; // Centra horizontal y verticalmente
+  max-width: 1440px;
+  margin: 0 auto;
+  min-height: 70vh;
+}

@@ -3,7 +3,7 @@
    ========================================================================== */
 
 .page-home .slider-container {
-    padding: 40px 0 50px 0;
+  padding: 40px 0;
   margin-bottom: 25px;
 }
 
@@ -15,12 +15,18 @@
 .swiper {
   overflow: hidden;
   width: 100vw;
-  height: 540px;
+  padding-bottom: 40px; // Adjust dots distance from cards
 
   .post-card {
     margin: 0 auto; // Asegura que cada tarjeta llene el contenedor del slider
     width: 500px;
     transition: transform 0.3s ease-in-out; // Añadimos una transición suave
+    height: auto;
+
+    .post-card-excerpt {
+      font-size: 1rem;
+      line-height: 1.4rem;
+    }
 
     a.button {
       display: none;
@@ -42,3 +48,9 @@
 .swiper-pagination-bullet-active {
   background: #000;
 }
+
+.slider-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
