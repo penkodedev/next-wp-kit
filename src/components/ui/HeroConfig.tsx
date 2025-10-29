@@ -60,24 +60,28 @@ export const heroAnimationVariants = {
 // - backgroundType: "gradient" | "image" | "video" | "none"
 // - backgroundImage: Path to image (only for backgroundType: "image")
 // - backgroundVideo: Path to video (only for backgroundType: "video")
+// - videoPlaybackRate: Video speed multiplier (e.g., 0.5 = half speed, 2 = double speed)
 
 export const heroSlides = [
   {
-    title: "Bienvenido a Next WP Kit",
+    title: "Next WP Kit",
     subtitle: "Un kit moderno para integrar Next.js con WordPress headless",
     buttonText: "Explorar Recursos",
     buttonLink: "/recursos",
-    backgroundType: "image" as const,
-    backgroundImage: "/images/hero-bg2.jpg"
+    backgroundType: "video" as const,
+    backgroundVideo: "/videos/hero-video-01.mp4",
+    videoPlaybackRate: 1 // Velocity set for slow-motion effects. 1= normal speed
   },
+
   {
     title: "Animaciones Suaves",
     subtitle: "Componentes de animación reutilizables con Framer Motion",
     buttonText: "Ver Animaciones",
     buttonLink: "/animaciones",
     backgroundType: "image" as const,
-    backgroundImage: "/images/hero-bg.jpg"
+    backgroundImage: "/images/hero-bg2.jpg"
   },
+
   // {
   //   title: "WordPress Headless",
   //   subtitle: "Integra fácilmente tu contenido de WordPress con Next.js",
@@ -93,9 +97,9 @@ export const heroSlides = [
 export const heroSettings = {
   // Auto-play settings
   autoPlay: true,
-  autoPlayInterval: 8000, // 8 seconds between slides
+  autoPlayInterval: 8000, // SECONDS (1= 1000) BETWEEN SLIDE CHANGES
 
-  // Animation timing (in seconds)
+  // Animation timing (in seconds)puse 
   slideTransitionDuration: 0.8,
   backgroundFadeDuration: 0.8,
 

@@ -1,0 +1,77 @@
+@use '../abstracts' as *;
+@use '../base' as *;
+
+/*
+--------------------------------------------------------------------
+                          @BUTTONS AND INPUTS
+--------------------------------------------------------------------
+*/
+:root {
+  --primary: #353535;
+  --primary-hover: #eee6e6;
+  --black: #000;
+  --gray: #5E5C5C;
+  --gray-light: #e7e7e7;
+  --radius: 5px;
+  --radius-large: 40px;
+}
+
+
+/**************************** Buttons ****************************/
+button,
+a.button,
+.wp-block-button__link,
+input[type="submit"]
+{
+  display: flex;
+  font-family: $text-font, sans-serif;
+  font-size: 1em;
+  text-decoration: none;
+  text-align: left;
+  color: #000;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2.4rem;
+  background-color: white;
+  border: 1px solid #bdbdbd;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  
+
+  &:hover {
+    background-color: var(--primary-hover);
+    color: #000;
+    border: 1px solid #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  // Iconos con Lucide system
+  &.button-with-icon {
+    @include icon-after(arrow-right, 1em);
+  }
+
+  &.button-check {
+    @include icon-after(check, 1em);
+  }
+
+  // Fallback para iconos existentes
+  svg {
+    transition: transform 0.3s ease;
+  }
+
+  &:hover svg {
+    transform: translateX(4px);
+  }
+}
+
+.page-ui-components a.wp-block-button__link {
+  @include icon-after(arrow-right, 1em);
+}

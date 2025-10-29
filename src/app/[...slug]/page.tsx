@@ -54,7 +54,7 @@ export default async function CatchAllPage({ params }: PageProps) {
       START BUILDING THE PAGE CONTENT HTML
 **********************************************/
   return (
-    <div  className="page-one-col">
+    <div className="page-one-col">
       <main>
         <section className="page-title">
           <h1>{page.title.rendered}</h1>

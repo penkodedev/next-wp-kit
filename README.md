@@ -350,7 +350,7 @@ This project represents Paulo's commitment to sharing knowledge and best practic
 
 Ready to transform your WordPress development workflow?
 
-- 📧 **Email:** hello@penkode.dev
+- 📧 **Email:** email@penkode.dev
 - 🌐 **Paulo's Website:** https://www.penkode.com
 - 💼 **LinkedIn:** https://www.linkedin.com/in/pauloramalho/
 - 💬 **Discord:** Join our community

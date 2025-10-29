@@ -1,0 +1,72 @@
+// =========================================
+// 🎨 LUCIDE ICONS SYSTEM FOR SASS
+// =========================================
+// All 1640+ Lucide icons available as individual SVG files
+// Located in /public/icons/ for optimal performance
+
+$icon-path: '/icons/';
+
+// =========================================
+// 🎯 HELPER FUNCTIONS
+// =========================================
+
+@function get-lucide-icon($name) {
+  @return url('#{$icon-path}#{$name}.svg');
+}
+
+// =========================================
+// 🎨 MIXINS FOR EASY ICON USAGE
+// =========================================
+
+@mixin icon-after($icon-name, $size: 1.3em, $color: currentColor) {
+  &::after {
+    content: '';
+    display: inline-block;
+    width: $size;
+    height: $size;
+    mask-image: get-lucide-icon($icon-name);
+    mask-size: contain;
+    background-color: $color;
+    margin-left: 0.5rem;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover::after {
+    transform: translateX(6px);
+  }
+}
+
+@mixin icon-before($icon-name, $size: 1em, $color: currentColor) {
+  &::before {
+    content: '';
+    display: inline-block;
+    width: $size;
+    height: $size;
+    mask-image: get-lucide-icon($icon-name);
+    mask-size: contain;
+    background-color: $color;
+    margin-right: 0.5rem;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover::before {
+    transform: translateX(-4px);
+  }
+}
+
+// =========================================
+// 📝 USAGE EXAMPLES
+// =========================================
+/*
+.my-button {
+  @include icon-after(arrow-right);
+}
+
+.link-with-icon {
+  @include icon-before(check, 1em, #28a745);
+}
+
+.social-link {
+  @include icon-after(facebook);
+}
+*/

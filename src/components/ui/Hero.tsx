@@ -18,6 +18,7 @@ type HeroSlide = {
   backgroundImage?: string;
   backgroundVideo?: string;
   backgroundColor?: string;
+  videoPlaybackRate?: number;
 };
 
 type HeroProps = {
@@ -108,12 +109,23 @@ export default function Hero({
             )}
             {backgroundType === 'video' && currentSlideData?.backgroundVideo && (
               <video
+                ref={(video) => {
+                  if (video && currentSlideData.videoPlaybackRate) {
+                    video.playbackRate = currentSlideData.videoPlaybackRate;
+                  }
+                }}
                 src={currentSlideData.backgroundVideo}
                 autoPlay
                 loop
                 muted
                 playsInline
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  minHeight: '100vh',
+                  minWidth: '100vw'
+                }}
               />
             )}
             {backgroundType === 'none' && currentSlideData?.backgroundColor && (
@@ -187,6 +199,40 @@ export default function Hero({
           </a>
         </>
       )}
+
+      {/* Botón de scroll hacia abajo */}
+      <a
+        href="#index-home"
+        className="hero-nav hero-nav-down"
+        aria-label="Scroll hacia abajo"
+        onClick={(e) => {
+          e.preventDefault();
+          const target = document.getElementById('index-home');
+          if (target) {
+            const start = window.scrollY;
+            const targetTop = target.offsetTop;
+            const distance = targetTop - start;
+            const duration = 1000; // Más alto = más lento
+            const startTime = performance.now();
+
+            const animateScroll = (currentTime: number) => {
+              const elapsed = currentTime - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              const ease = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+
+              window.scrollTo(0, start + distance * ease);
+
+              if (progress < 1) {
+                requestAnimationFrame(animateScroll);
+              }
+            };
+
+            requestAnimationFrame(animateScroll);
+          }
+        }}
+      >
+        <Icons.ChevronRight size={18} className="rotate-90" />
+      </a>
     </section>
   );
 }

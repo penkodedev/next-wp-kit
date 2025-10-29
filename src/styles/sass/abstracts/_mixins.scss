@@ -108,7 +108,6 @@
     //box-shadow: 0 .19em rgba(0, 0, 0, .2);
     cursor: pointer;
     
-    @include transition (background .6s ease);
     background-size: 210% 100%;
     background-position: 99% center;
     background-image: linear-gradient(100deg, white 50%, $button-bg-color 50%);
