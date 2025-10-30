@@ -1,0 +1,27 @@
+@use 'var-colors' as *;
+@use 'var-layout' as *;
+@use 'var-tables' as *;
+@use 'var-typography' as *;
+
+
+@mixin inputs() {
+    font-size: $text-size/1.2;
+    color: $input-text-color;
+    background-color: $input-bg-color;
+    border-bottom: 1px solid $black;
+    border-top: 0;
+    border-right: 0;
+    border-left: 0;
+    padding: 15px;
+    width: 100%;
+
+
+    &:hover,&:focus,&:active {
+        //color: $input-text-color-focus;
+        background-color:$input-bg-color-focus;
+        border-color: $input-border-active-color;
+        box-shadow: none;
+        border-color: $branding-color1;
+    }
+}
+

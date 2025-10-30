@@ -135,6 +135,63 @@ Transform your WordPress content into lightning-fast, SEO-optimized websites wit
 - **`yet-another-react-lightbox`** - Professional image galleries
 - **`zustand`** - Lightweight state management (no Redux complexity)
 
+### 🎨 **Icon System - Two Ways to Use Icons**
+
+Next-WP-Kit includes a comprehensive icon system with **1640+ Lucide icons** available in two complementary approaches:
+
+#### 🎯 **CSS/SASS Approach (Static Elements)**
+Perfect for buttons, navigation, and decorative elements that don't need JavaScript interaction.
+
+```scss
+// Add icons via SASS mixins
+.my-button {
+  @include icon-after(arrow-right, 1em);
+}
+
+.my-link {
+  @include icon-before(check);
+}
+```
+
+**When to use:**
+- Static UI elements (buttons, navigation)
+- Elements that should work without JavaScript
+- Better performance for simple use cases
+- CSS-controlled styling (color, size, animations)
+
+#### ⚛️ **React Components Approach (Dynamic Elements)**
+Perfect for interactive elements, conditional rendering, and programmatic control.
+
+```tsx
+import { Icons } from '@/components/ui/Icons';
+
+// Dynamic icon usage
+<button onClick={handleClick}>
+  Contact <Icons.ArrowRight size={18} strokeWidth={1.5} />
+</button>
+
+// Conditional icons
+{isLoading ? <Icons.Loader className="spin" /> : <Icons.Check />}
+```
+
+**When to use:**
+- Interactive elements with hover/focus states
+- Conditional icon rendering
+- Programmatic control (size, color, animation)
+- TypeScript autocompletion and type safety
+- Complex animations or state-based styling
+
+#### 🚀 **Performance Comparison**
+
+| Feature | CSS Approach | React Approach |
+|---------|--------------|----------------|
+| **Bundle Size** | Smaller (no JS) | Larger (includes React) |
+| **Performance** | Faster (pure CSS) | Good (optimized tree-shaking) |
+| **JavaScript Required** | ❌ No | ✅ Yes |
+| **Dynamic Control** | ❌ Limited | ✅ Full |
+| **TypeScript Support** | ⚠️ Manual | ✅ Full |
+| **Best For** | Static UI | Interactive UI |
+
 ### 🎨 Premium UI Components & Animations
 
 #### 🎭 **Animation System**

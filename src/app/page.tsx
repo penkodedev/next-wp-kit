@@ -6,7 +6,7 @@ import { processContent } from "@/utils/processContent";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import SliderRecursos from "@/components/ui/SliderRecursos";
-import HeroConfig from "@/components/ui/HeroConfig";
+import HeroConfig from "@/components/sections/HeroConfig";
 
 /**
  * Connects to WordPress to get the title and description.

@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { Icons } from "./Icons";
+import { Icons } from "../ui/Icons";
 import { useHeroConfig } from "./HeroConfig";
 
 type HeroSlide = {
@@ -119,13 +119,7 @@ export default function Hero({
                 loop
                 muted
                 playsInline
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  minHeight: '100vh',
-                  minWidth: '100vw'
-                }}
+                // Styles moved to hero-home.scss for consistency
               />
             )}
             {backgroundType === 'none' && currentSlideData?.backgroundColor && (
@@ -231,7 +225,7 @@ export default function Hero({
           }
         }}
       >
-        <Icons.ChevronRight size={18} className="rotate-90" />
+        <Icons.ChevronDown size={18} />
       </a>
     </section>
   );

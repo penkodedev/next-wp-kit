@@ -1,0 +1,25 @@
+@use 'var-colors' as *;
+@use 'var-layout' as *;
+@use 'var-tables' as *;
+@use 'var-typography' as *;
+
+@mixin pagination {
+    background-color: $button-bg-color;
+    font-family:$text-font;
+    text-transform: uppercase;
+    color:$black;
+    margin-bottom: 30px;
+    border: $border-l solid $black;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 0.2em 0.8em;
+    margin: 0px 2px;
+    @include transition (background-color .5s ease);
+    
+ 
+    &:hover {
+        background-color: $button-bg-color-hover;
+        color: $button-link-color-hover;
+
+    }
+}

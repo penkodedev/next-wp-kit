@@ -1,5 +1,10 @@
-@forward '_mixins';
-@forward 'var-typography';  // ← Mover arriba
-@forward 'var-colors';      // ← Después de typography
+@forward 'mixins';
+@forward 'mixins-animations';
+@forward 'mixins-buttons';
+@forward 'mixins-nav';
+@forward 'mixins-typography';
+
+@forward 'var-typography';  
+@forward 'var-colors';      
 @forward 'var-layout';
 @forward 'var-tables';

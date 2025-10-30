@@ -34,6 +34,8 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+        min-height: 100vh;
+        min-width: 100vw;
       }
     }
 
@@ -150,13 +152,10 @@
       width: 28px;
       height: 28px;
 
-      &.rotate-90 {
-        transform: rotate(90deg);
-      }
     }
   }
 
-  // Indicadores (comentados - quitar si no se usan)
+  // INDICATORS (Commented if not needed)
   // .hero-indicators {
   //   position: absolute;
   //   bottom: 2rem;
@@ -209,7 +208,7 @@
 // Responsive
 @media (max-width: 768px) {
   .hero-section {
-    height: 90vh;
+    height: 100vh;
 
     .hero-content {
       padding: 0 1rem;

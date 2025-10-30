@@ -1,0 +1,51 @@
+@use 'var-colors' as *;
+@use 'var-layout' as *;
+@use 'var-tables' as *;
+@use 'var-typography' as *;
+
+@mixin button-base {
+    font-family: $text-font;
+    background: $button-bg-color;
+    color: $black;
+    margin: 20px 0;
+    border: 1px solid $black;
+    text-decoration: none;
+    text-transform: uppercase;
+    text-align: center;
+    //box-shadow: 0 .19em rgba(0, 0, 0, .2);
+    cursor: pointer;
+    
+    background-size: 210% 100%;
+    background-position: 99% center;
+    background-image: linear-gradient(100deg, white 50%, $button-bg-color 50%);
+
+
+    &:hover {
+        background: $button-bg-color-hover;
+        color: $button-link-color-hover;
+        //box-shadow: 0 .19em rgba(0, 0, 0, .5);
+
+
+    }
+}
+
+@mixin button-little {
+    @include button-base();
+    font-size: ($text-size/1.9);
+    padding: 0.5em 1.3em;
+    //border-radius: $border-radius-l; //on theme-layout.scss
+}
+
+@mixin button-medium {
+    @include button-base();
+    font-size: ($text-size/1);
+    padding: 0.68em 2em;
+    //border-radius: $border-radius-m; //on theme-layout.scss
+}
+
+@mixin button-big {
+    @include button-base();
+    font-size: ($text-size+0.4);
+    padding: 0.88em 3.7em;
+    //border-radius: $border-radius-x; //on theme-layout.scss
+}

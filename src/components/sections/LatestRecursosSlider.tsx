@@ -1,7 +1,7 @@
 // src/components/sliders/LatestRecursosSlider.tsx
 
 import { getLatestRecursos } from '@/api/wordpressApi';
-import ImageSlider from '@/components/ui/ImageSlider';
+import ImageSlider from './ImageSlider';
 import type { Recurso } from '@/types/wordpressTypes';
 
 /**

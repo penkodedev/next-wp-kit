@@ -13,7 +13,7 @@ import CookieConsent from "@/components/cookies/CookieConsent";
 import CookieManager from "@/components/cookies/CookieManager";
 import ScrollToTop from "@/components/navigation/ScrollToTop";
 import ModalController from '@/components/ui/ModalController';
-import AdvertisingPopup from '@/components/ui/AdvertisingPopup';
+import AdvertisingPopup from '@/components/features/AdvertisingPopup';
 import LightboxController from '@/components/ui/LightboxController';
 import Footer from "@/components/layout/footer/Footer";
 
