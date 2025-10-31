@@ -1,88 +1,57 @@
-@use 'var-colors' as *;
-@use 'var-layout' as *;
-@use 'var-tables' as *;
+// ------------------------------------------------------------------
+// ✍️ CORE TYPOGRAPHY SYSTEM
+// ------------------------------------------------------------------
+// Simplified, maintainable typography variables
 
 
-///////////////////////////////////
-//                      
-//    TYPOGRAPHY VARIABLES 
-//
-///////////////////////////////////
-
-//
-// TEXT WEIGHTS
-//
-$light: 300;
-$normal: 400;
-$semibold: 500;
-$bold: 800;
-$bolder: 900;
+// ************************* Font Families *************************** //
+$font-family-base: 'Poppins-Regular', sans-serif;
+$font-family-heading: 'Poppins-Bold', Helvetica, Arial, sans-serif;
+$font-family-mono: "Courier", Courier, monospace;
 
 
-//
-// MAIN TEXT
-//
-$text-font: 'Poppins-Regular', sans-serif;
+// ************************* Font Sizes *************************** //
+$font-size-base: 1.125rem;
+$font-size-menu: 1.08rem;
+
+
+// ************************* Line Heights *************************** //
+$line-height-base: 1.75rem;
+
+
+// ************************* Font Weights *************************** //
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-semibold: 500;
+$font-weight-bold: 800;
+$font-weight-bolder: 900;
+
+
+// ************ Legacy support (used in specific contexts) ********** //
+$light: $font-weight-light;
+$normal: $font-weight-normal;
+$semibold: $font-weight-semibold;
+$bold: $font-weight-bold;
+$bolder: $font-weight-bolder;
+
+$text-font: $font-family-base;
 $text-font-strong: 'Poppins-Bold', sans-serif;
-$text-size: 1.125rem;
-$text-lh: 1.75rem;
-$copy-text-strong: 'Poppins-Bold', sans-serif;
+$text-size: $font-size-base;
+$text-lh: $line-height-base;
 
-//
-// HEADINGS
-//
-$heading-font: 'Poppins-Bold', Helvetica, Arial, sans-serif;
-$heading-weight: normal;
+$heading-font: $font-family-heading;
+$heading-weight: $font-weight-normal;
 $heading-margin: 0 0 10px 0;
-$heading-letter-spacing: -0.08rem; //****** BIG headings letter spacing *****//
+
+$menu-font: $font-family-base;
+$menu-size: $font-size-menu;
+
+$pre: $font-family-mono;
+$mono: $font-family-mono;
 
 
-//
-// PAGE TITLES
-//
-$page-title-font: 'Poppins-Bold', Helvetica, Arial, sans-serif;
-$page-title-font-size:calc(2rem + 2.5vmin);
-$page-title-weight: normal;
-$page-title-margin: 0px;
-$page-title-letter-spacing: -0.27rem;
-$page-title-lh:calc(2.4rem + 3.5vmin);
-
-//
-// MENU FONTS
-//
-$menu-font: 'Poppins-Regular', Helvetica, Arial, sans-serif;
-$menu-size: 1.08rem;
-
-//
-// SECOND LEVEL LINK SIZE and HEIGHT
-//
-$second-level-link-size: (0.90em);
-$second-level-link-height: (1em);
-
-//
-// ARTICLE LINK
-//
-$article-link-font-weight: 300;
-$article-link-decoration:underline;
-
-//
-// CAPTIONS
-//
+// Caption variables (used in mixins)
 $caption-color: #000;
 $caption-weight: bold;
 $caption-margin: -5px 0px 10px 0px;
-$caption-letter-spacing: -0.06rem;
 $caption-align: left;
-
-//
-// MONO
-//
-$mono: "Source Code Pro", Courier, mono;
-
-
-//
-// PREFORMATED TEXT
-//
-$pre: "Courier", Courier, monospace;
-
-

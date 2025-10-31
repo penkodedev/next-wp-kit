@@ -1,6 +1,6 @@
-export { FadeIn } from './FadeIn';
 
-// Agrega más exports aquí
+// export type { AnimationProps } from './types';
 
-
-export type { AnimationProps } from './types';
+// export { default as FadeIn } from './FadeIn';
+// export { default as AnimatedArticle } from './AnimatedArticle';
+// export { default as StaggeredArticle } from './StaggeredArticle';

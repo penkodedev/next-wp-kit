@@ -1,6 +1,5 @@
 @use 'var-colors' as *;
 @use 'var-layout' as *;
-@use 'var-tables' as *;
 @use 'var-typography' as *;
 
 @mixin copy-text ($text-margin:0px 0px 1.4em 0px) {
@@ -49,7 +48,7 @@
 @mixin caption () {
     font: $normal $text-size $text-font ;
     font-size: ($text-size/1.3);
-    color: $caption-color !important;
+    color: $caption-color;
     margin: $caption-margin;
     text-align: $caption-align;
 }

@@ -1,3 +1,10 @@
+//------------------------------------------------------------------------
+// PAGE (app/cpt-slug)
+//
+// These are like single page templates for custom post types
+// We have the word "single" on body class for these pages
+// -----------------------------------------------------------------------
+
 @use '../abstracts' as *;
 
 .single .page-title {

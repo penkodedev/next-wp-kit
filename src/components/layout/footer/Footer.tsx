@@ -29,7 +29,7 @@ export default function Footer() {
             </div>
 
             <div className="footer-menu">
-              {/* <FooterMenu /> */}
+              <FooterMenu />
             </div>
 
             <div className="copyright">

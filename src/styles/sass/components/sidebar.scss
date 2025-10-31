@@ -3,7 +3,7 @@
 // ****************** SIDEBAR *******************//
 
 aside {
-    background-color: #fff;
+    //background-color: #fff;
     border-left: 1px solid rgb(207, 207, 207);
     padding: 60px 0 0 2rem;
     opacity: 1;
@@ -14,6 +14,10 @@ aside {
     order: 2; // Sidebar goes below main on mobile
 
     .sidebox {
+        background-color: $white;
+        border: 1px solid rgb(207, 207, 207);
+        border-radius: $radius-md;
+        padding: 20px;
         position: sticky;
         top: 2rem;
     }

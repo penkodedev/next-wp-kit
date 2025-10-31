@@ -9,6 +9,7 @@ import type { Metadata } from "next";
 import type { Page } from "@/types/wordpressTypes";
 import Breadcrumbs from "@/components/navigation/Breadcrumbs";
 import { ContactForm7Content } from "@/components/forms";
+import { WpPageIdSetter } from "@/utils/WpPageIdContext";
 
 type PageProps = {
   params: {
@@ -50,23 +51,32 @@ export default async function CatchAllPage({ params }: PageProps) {
     notFound();
   }
 
-  /**********************************************
+  // Set page ID for body classes
+  const pageId = page.id;
+
+
+/**********************************************
       START BUILDING THE PAGE CONTENT HTML
 **********************************************/
   return (
-    <div className="page-one-col">
-      <main>
-        <section className="page-title">
-          <h1>{page.title.rendered}</h1>
-        </section>
-        <article className="page-content">
-          <Breadcrumbs />
-          <ContactForm7Content
-            content={page.content.rendered}
-            hasForm={page.content.rendered.includes('wpcf7-form')}
-          />
-        </article>
-      </main>
-    </div>
+    <>
+      <WpPageIdSetter pageId={pageId} />
+      <div className="page-one-col">
+        <main>
+          <section className="page-title">
+            <h1>{page.title.rendered}</h1>
+          </section>
+          <article className="page-content">
+            <AnimatedArticle>
+            <Breadcrumbs />
+            <ContactForm7Content
+              content={page.content.rendered}
+              hasForm={page.content.rendered.includes('wpcf7-form')}
+              />
+              </AnimatedArticle>
+          </article>
+        </main>
+      </div>
+    </>
   );
 }

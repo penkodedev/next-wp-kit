@@ -28,7 +28,7 @@ export default function AnimatedArticle({
       className={className}
       initial={{ opacity: 0, scale: 0.25 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
       {...motionProps}
     >
       {children}

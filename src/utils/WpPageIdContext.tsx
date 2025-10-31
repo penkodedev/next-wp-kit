@@ -1,4 +1,5 @@
 // src/utils/WpPageIdContext.tsx
+
 "use client";
 
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
@@ -21,7 +22,19 @@ export const WpPageIdProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// 3. Crear el hook para usar el contexto
+// 3. Component to set page ID
+export const WpPageIdSetter = ({ pageId }: { pageId: number }) => {
+  const { setPageId } = useWpPageId();
+
+  useEffect(() => {
+    setPageId(pageId);
+    return () => setPageId(null); // Clean up on unmount
+  }, [pageId, setPageId]);
+
+  return null; // This component doesn't render anything
+};
+
+// 4. Hook to use the context
 export const useWpPageId = () => {
   const context = useContext(WpPageIdContext);
   if (!context) {

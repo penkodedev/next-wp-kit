@@ -1,10 +1,12 @@
 /*
- * Archivo principal de SASS
- * Este archivo importa todos los parciales en el orden correcto.
- * Sigue una arquitectura similar a ITCSS (Inverted Triangle CSS).
+ * Main SASS file
+ * This file imports all partials in the correct order.
+ * Follows an architecture similar to ITCSS (Inverted Triangle CSS).
  */
 
-// Importar abstracts globalmente para que estén disponibles en todos los archivos
+// Import abstracts globally so they are available in all files
+
+
 @use 'abstracts' as *;
 
 
