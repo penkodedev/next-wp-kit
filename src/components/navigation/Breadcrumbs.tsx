@@ -14,7 +14,7 @@ const HIDE_LAST_ITEM = false;
 
 export default function Breadcrumbs() {
   const pathname = usePathname();
-  const segments = pathname.split('/').filter(Boolean); // Ej: ['recursos', 'mi-recurso']
+  const segments = pathname.split('/').filter(Boolean); // Dividir y filtrar segmentos vacíos
 
   if (segments.length === 0) {
     return null; // No mostrar breadcrumbs en la página de inicio
