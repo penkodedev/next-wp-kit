@@ -6,7 +6,7 @@
  * No need to define <html> or <body>, as it inherits from the root layout.
  */
 
-export default function RecursosLayout({
+export default function CptLayout({
   children,
 }: {
   children: React.ReactNode

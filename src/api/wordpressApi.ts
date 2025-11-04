@@ -82,7 +82,7 @@ export async function getSiteInfo(): Promise<SiteInfo | null> {
 
 /**
  * GENERIC: Fetches a collection of items from any CPT.
- * @param postType The CPT slug (e.g., 'posts', 'pages', 'recursos').
+ * @param postType The CPT slug (e.g., 'posts', 'pages').
  * @param params Optional query string (e.g., '?per_page=10&_embed').
  */
 export async function getAllContent<T extends WpContent>(postType: string, params: string = ''): Promise<T[] | null> {
@@ -92,7 +92,7 @@ export async function getAllContent<T extends WpContent>(postType: string, param
 
 /**
  * GENERIC: Fetches a content item by its slug.
- * @param postType The CPT slug (e.g., 'posts', 'pages', 'recursos').
+ * @param postType The CPT slug (e.g., 'posts', 'pages').
  * @param slug The item's slug.
  */
 export async function getContentBySlug<T extends WpContent>(postType: string, slug: string): Promise<T | null> {
@@ -105,7 +105,7 @@ export async function getContentBySlug<T extends WpContent>(postType: string, sl
 
 /**
  * Fetches content by ID with shortcodes processed.
- * @param postType The CPT slug (e.g., 'posts', 'pages', 'recursos').
+ * @param postType The CPT slug (e.g., 'posts', 'pages').
  * @param id The item's ID.
  */
 export async function getContentById<T extends WpContent>(postType: string, id: number): Promise<T | null> {
@@ -174,7 +174,7 @@ const getCachedMenuItemsByLocation = unstable_cache(
 /**
  * Fetches the previous and next post for navigation.
  * @param postId The ID of the current post.
- * @param postType The post type (e.g., 'posts', 'recursos').
+ * @param postType The post type (e.g., 'posts').
  */
 export async function getPostNavigation(postId: number, postType: string): Promise<PostNavigation | null> {
   // We force revalidation on every request for navigation data to ensure it's always up-to-date.

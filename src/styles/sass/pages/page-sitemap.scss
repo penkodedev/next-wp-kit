@@ -33,8 +33,10 @@
   position: relative;
 
   &::before {
+    font-family: system-ui, monospace;
     content: "├── ";
-    color: #b3b3b3;
+    color: #858585;
+    font-weight: 100;
     //margin-right: 0.2rem;
   }
 

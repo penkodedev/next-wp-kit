@@ -5,6 +5,7 @@
 import { useEffect, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { useWpPageId } from "@/utils/WpPageIdContext";
+import { getActiveCptSlugs } from "@/utils/cptConfig";
 
 interface BodyClassProps {
   children: React.ReactNode;
@@ -19,7 +20,7 @@ const BodyClass = ({ children }: BodyClassProps) => {
     const pathSegments = (pathname || '').split('/').filter(Boolean);
 
     // CPT slugs that should be treated as archive pages
-    const archivePostTypes = ['recursos', 'proyectos'];
+    const archivePostTypes = getActiveCptSlugs();
     let classes: string[] = [];
 
     if (pathSegments.length === 1 && archivePostTypes.includes(pathSegments[0])) {
@@ -28,9 +29,18 @@ const BodyClass = ({ children }: BodyClassProps) => {
     } else if (pathname === '/') {
       classes = ["page-home"];
     } else if (pathSegments.length === 2) {
-      // Single post/page (e.g., /recursos/my-resource)
+      // Single post/page (e.g., /cpt_slug/my-cpt)
       const postType = pathSegments[0];
-      classes = [`single`, `single-${postType}`];
+      const archivePostTypes = getActiveCptSlugs();
+
+      if (archivePostTypes.includes(postType)) {
+        // It's a CPT single page
+        classes = [`single`, `single-${postType}`];
+      } else {
+        // It's a regular page
+        classes = [`single`, `single-${postType}`];
+      }
+
       if (pageId) {
         classes.push(`postid-${pageId}`);
       }

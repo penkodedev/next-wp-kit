@@ -1,15 +1,14 @@
 // src/app/recursos/page.tsx
 // Like an archive.php page on a WP theme
-// 
 
-"use client"; 
+"use client";
 
-import { useState, useEffect } from 'react';
-import { getAllContent } from '@/api/wordpressApi';
-import PostCard from '@/components/ui/PostCard';
-import type { Recurso } from '@/types/wordpressTypes';
-import LoadingSpinner from '@/components/ui/LoadingSpiner'
-import Breadcrumbs from '@/components/navigation/Breadcrumbs';
+import { useState, useEffect } from "react";
+import { getAllContent } from "@/api/wordpressApi";
+import PostCard from "@/components/ui/PostCard";
+import type { Recurso } from "@/types/wordpressTypes";
+import LoadingSpinner from "@/components/ui/LoadingSpiner";
+import Breadcrumbs from "@/components/navigation/Breadcrumbs";
 
 const POSTS_PER_PAGE = 8; // Number of posts for the archive page
 
@@ -28,7 +27,10 @@ export default function RecursosArchivePage() {
   useEffect(() => {
     const fetchInitialRecursos = async () => {
       setIsLoading(true);
-      const initialRecursos = await getAllContent<Recurso>('recursos', getApiParams(1));
+      const initialRecursos = await getAllContent<Recurso>(
+        "recursos",
+        getApiParams(1)
+      );
       setRecursos(initialRecursos || []);
       setHasMore((initialRecursos || []).length === POSTS_PER_PAGE);
       setIsLoading(false);
@@ -39,7 +41,10 @@ export default function RecursosArchivePage() {
   const handleLoadMore = async () => {
     setIsLoading(true);
     const nextPage = page + 1;
-    const newRecursos = await getAllContent<Recurso>('recursos', getApiParams(nextPage));
+    const newRecursos = await getAllContent<Recurso>(
+      "recursos",
+      getApiParams(nextPage)
+    );
 
     if (newRecursos && newRecursos.length > 0) {
       setRecursos((prevRecursos) => [...prevRecursos, ...newRecursos]);
@@ -51,42 +56,53 @@ export default function RecursosArchivePage() {
     setIsLoading(false);
   };
 
-
-/**********************************************
+  /**********************************************
       START BUILDING THE PAGE CONTENT
 **********************************************/
   return (
-    <div className="page-one-col">
-      <section className='page-title'>
+    <div className="page-fullwidth">
+      <section className="page-title">
         <h1>Recursos</h1>
-        
       </section>
+
       {recursos.length === 0 && !isLoading ? (
         <article>
           <p>No se encontraron recursos en este momento.</p>
         </article>
       ) : (
-          <div className="post-grid cols-2">
-            
+        <div className="post-grid cols-4">
           {recursos.map((recurso) => (
-            <PostCard key={recurso.id} item={recurso} basePath="/recursos" excerptLength={150} />
+            <PostCard
+              key={recurso.id}
+              item={recurso}
+              basePath="/recursos"
+              excerptLength={150}
+            />
           ))}
         </div>
       )}
 
-      {/* Spinner inline durante carga inicial */}
-      {/* {isLoading && recursos.length === 0 && (
-        <LoadingSpinner />
-      )} */}
-      
-      {hasMore && (
-        <div className="load-more-container" style={{ textAlign: 'center', marginTop: '3rem',marginBottom: '6rem' }}>
-          <button onClick={handleLoadMore} disabled={isLoading} className="button">
-            {isLoading ? 'Cargando...' : 'cargar más'}
-            </button>
-            
+      {/* Spinner durante carga inicial */}
+      {isLoading && recursos.length === 0 && <LoadingSpinner />}
+
+      {/* Botón cargar más - solo cuando hay recursos y no está cargando */}
+      {recursos.length > 0 && hasMore && !isLoading && (
+        <div
+          className="load-more-container"
+          style={{
+            textAlign: "center",
+            marginTop: "3rem",
+            marginBottom: "6rem",
+          }}
+        >
+          <button onClick={handleLoadMore} className="button">
+            cargar más
+          </button>
         </div>
       )}
+
+      {/* Spinner durante carga de más recursos */}
+      {isLoading && recursos.length > 0 && <LoadingSpinner />}
     </div>
-  )
+  );
 }

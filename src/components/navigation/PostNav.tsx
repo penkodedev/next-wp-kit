@@ -7,7 +7,7 @@ import { Icons } from '@/components/ui/Icons';
 type PostNavigationProps = {
   postId: number;
   postType: string;
-  basePath: string; // Añadimos la ruta base del CPT (ej: "/recursos")
+  basePath: string; // Añadimos la ruta base del CPT (ej: "/cpt_slug")
 };
 
 /**

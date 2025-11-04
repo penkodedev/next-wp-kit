@@ -1,7 +1,7 @@
 // src/types/index.ts
 
 /**
- * Representa un Recurso (post de WordPress) una vez que ha sido
+ * Representa un post de WordPress una vez que ha sido
  * limpiado y procesado por nuestra capa de /lib.
  * Esta es la forma que nuestros componentes React esperan.
  */

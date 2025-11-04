@@ -61,17 +61,17 @@ export interface Post extends WpContent {}
 /**
  * Interfaz para una Página de WordPress.
  */
-export interface Page extends WpContent {}
+export interface Page extends WpContent {
+  parent: number;
+}
 
 /**
- * Interfaz para el CPT 'Proyecto'.
+ * Tipos genéricos para Custom Post Types
+ *
+ * Todos los CPTs usan la interfaz base WpContent.
+ * Para type safety específico, usa WpContent directamente
+ * o crea tipos específicos en tus componentes si es necesario.
  */
-export interface Proyecto extends WpContent {}
-
-/**
- * Interfaz para el CPT 'Recursos'.
- */
-export interface Recurso extends WpContent {}
 
 /**
  * Interfaz para el CPT 'Modal'.
@@ -95,7 +95,7 @@ export interface SearchResult {
   // Lo manejamos como un tipo de unión para ser robustos.
   title: string | { rendered: string };
   url: string;
-  type: 'post' | 'page'  | 'recursos' | string; // Puede ser 'post', 'page' o el slug de un CPT.
+  type: 'post' | 'page' | string; // Can be 'post', 'page' or any CPT slug.
   _embedded?: {
     self: [{
       excerpt: {
