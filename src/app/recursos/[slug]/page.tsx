@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Sidebar from "@/components/layout/Sidebar";
 import { generateSeoMetadata } from "@/utils/seo";
-import type { Recurso } from "@/types/wordpressTypes";
+import type { WpContent } from "@/types/wordpressTypes";
 import { processContent } from "@/utils/processContent";
 import { WpPageId } from "@/utils/WpPageId";
 import PostNav from "@/components/navigation/PostNav";
@@ -14,6 +14,7 @@ import { Icons } from "@/components/ui/Icons";
 import Link from "next/link";
 import AnimatedArticle from "@/components/animations/AnimatedArticle";
 import Breadcrumbs from "@/components/navigation/Breadcrumbs";
+import { getPostTypeForNavigation } from "@/utils/cptConfig";
 
 type RecursoPageProps = {
   params: {
@@ -27,7 +28,7 @@ type RecursoPageProps = {
 export async function generateMetadata({
   params,
 }: RecursoPageProps): Promise<Metadata> {
-  const recurso = await getContentBySlug<Recurso>("recursos", params.slug);
+  const recurso = await getContentBySlug<WpContent>("recursos", params.slug);
   if (!recurso) {
     return {};
   }
@@ -40,7 +41,7 @@ export async function generateMetadata({
  */
 export async function generateStaticParams() {
   // Usamos la función genérica y optimizamos pidiendo solo los slugs
-  const allRecursos = await getAllContent<Recurso>("recursos", "?_fields=slug");
+  const allRecursos = await getAllContent<WpContent>("recursos", "?_fields=slug");
   if (!allRecursos) {
     return [];
   }
@@ -50,7 +51,7 @@ export async function generateStaticParams() {
 }
 
 export default async function RecursoPage({ params }: RecursoPageProps) {
-  const recurso = await getContentBySlug<Recurso>("recursos", params.slug);
+  const recurso = await getContentBySlug<WpContent>("recursos", params.slug);
 
   // Si no se encuentra el recurso, muestra la página 404 de Next.js
   if (!recurso) {
@@ -100,7 +101,7 @@ export default async function RecursoPage({ params }: RecursoPageProps) {
         </article>
         <PostNav
           postId={recurso.id}
-          postType={recurso.type}
+          postType="recursos"
           basePath="/recursos"
         />
       </main>

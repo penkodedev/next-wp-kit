@@ -9,9 +9,10 @@
  */
 
 
-  // *******  Add new CPTs here: 'proyectos', 'productos', etc.  *******//
+  // *******  Add new CPTs here: *******//
 export const ACTIVE_CPTS = [
   'recursos',
+  'modales',
   'news',
 ] as const;
 

@@ -57,7 +57,7 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const path = getPathFromParams(params);
-  const routeType = detectRouteType(params.slug);
+  const routeType = await detectRouteType(params.slug);
 
   if (routeType.type === 'cpt-single') {
     const post = await getContentBySlug<WpContent>(routeType.cpt, routeType.slug);
@@ -93,7 +93,7 @@ export async function generateStaticParams() {
   }
 
   // Add CPT archives
-  const activeCpts = getActiveCptSlugs();
+  const activeCpts = await getActiveCptSlugs();
   activeCpts.forEach(cpt => {
     staticParams.push({ slug: [cpt] });
   });
@@ -113,7 +113,7 @@ export async function generateStaticParams() {
 
 export default async function CatchAllPage({ params }: PageProps) {
   const path = getPathFromParams(params);
-  const routeType = detectRouteType(params.slug);
+  const routeType = await detectRouteType(params.slug);
 
   if (routeType.type === 'cpt-archive') {
     // Render CPT Archive
@@ -160,7 +160,7 @@ export default async function CatchAllPage({ params }: PageProps) {
           <article className="entry-content">
             <Link href={`/${routeType.cpt}`} className="back-to-archive-link">
               <Icons.ArrowLeft size={26} strokeWidth={1} className="arrow-left" />
-              Back to {routeType.cpt.charAt(0).toUpperCase() + routeType.cpt.slice(1)}
+              Volver a {routeType.cpt.charAt(0).toUpperCase() + routeType.cpt.slice(1)}
             </Link>
 
             <section className="page-title">
@@ -190,7 +190,7 @@ export default async function CatchAllPage({ params }: PageProps) {
           </article>
           <PostNav
             postId={post.id}
-            postType={post.type}
+            postType={routeType.cpt}
             basePath={`/${routeType.cpt}`}
           />
         </main>

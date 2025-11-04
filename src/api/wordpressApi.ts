@@ -1,6 +1,6 @@
 // src/api/wordpress.ts
 
-import type { WpContent, SiteInfo, MenuItem, SearchResult, PostNavigation, Post, Page, Proyecto, Modal } from '@/types/wordpressTypes';
+import type { WpContent, SiteInfo, MenuItem, SearchResult, PostNavigation, Post, Page, Modal } from '@/types/wordpressTypes';
 import { unstable_cache } from 'next/cache';
 
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
@@ -67,8 +67,6 @@ async function fetchAPI<T>(
     return null;
   }
 }
-
-
 
 /**
  * Fetches basic site information from a custom endpoint.
@@ -200,4 +198,18 @@ export async function searchSite(term: string): Promise<SearchResult[] | null> {
   // The fetchAPI function can now return null on error, or an empty array on 404.
   // We ensure to always return an array so that components don't fail.
   return data || [];
+}
+
+/******************** WORDPRESS CPT TYPES ****************************/
+/**
+ * Fetches all available post types from WordPress
+ */
+export async function getAllPostTypes(): Promise<string[]> {
+  const data = await fetchAPI<{slug: string}[]>('/wp/v2/types');
+  if (!data) return [];
+
+  // Filter out built-in types, keep only custom post types
+  return data
+    .filter(type => !['post', 'page', 'attachment', 'nav_menu_item', 'wp_block'].includes(type.slug))
+    .map(type => type.slug);
 }

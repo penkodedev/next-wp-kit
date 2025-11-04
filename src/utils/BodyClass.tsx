@@ -36,9 +36,16 @@ const BodyClass = ({ children }: BodyClassProps) => {
       if (archivePostTypes.includes(postType)) {
         // It's a CPT single page
         classes = [`single`, `single-${postType}`];
+        if (pageId) {
+          classes.push(`postid-${pageId}`);
+        }
       } else {
-        // It's a regular page
-        classes = [`single`, `single-${postType}`];
+        // It's a regular page (like parent/child pages)
+        const className = `page-${pathSegments.join('-')}`;
+        classes = ["page", className];
+        if (pageId) {
+          classes.push(`page-id-${pageId}`);
+        }
       }
 
       if (pageId) {
