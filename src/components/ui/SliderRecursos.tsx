@@ -2,7 +2,7 @@
 
 import { getAllContent } from "@/api/wordpressApi";
 import PostCard from "@/components/ui/PostCard";
-import type { Recurso } from "@/types/wordpressTypes";
+import type { WpContent } from "@/types/wordpressTypes";
 import dynamic from "next/dynamic";
 import type { SwiperOptions } from "swiper/types";
 
@@ -29,7 +29,7 @@ export default async function SliderLatestRecursos({
 
   // 1. Get the latest resources from WordPress API
   const params = `?per_page=${perPage}&page=1&_embed&orderby=date&order=desc`;
-  const latestRecursos = await getAllContent<Recurso>(postType, params);
+  const latestRecursos = await getAllContent<WpContent>(postType, params);
 
   // If no resources, don't show anything
   if (!latestRecursos || latestRecursos.length === 0) {

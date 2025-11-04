@@ -1,7 +1,7 @@
 // src/app/[...slug]/page.tsx
-// Intelligent catch-all route to handle pages, CPT archives, and CPT singles from WordPress.
+// Intelligent catch-all route to handle pages and CPTs from WordPress.
 
-import { getContentBySlug, getAllContent } from "@/api/wordpressApi";
+import { getContentBySlug, getAllContent, getAllPostTypes } from "@/api/wordpressApi";
 import AnimatedArticle from "@/components/animations/AnimatedArticle";
 import { generateSeoMetadata } from "@/utils/seo";
 import { notFound } from "next/navigation";
@@ -10,9 +10,8 @@ import type { Page, WpContent } from "@/types/wordpressTypes";
 import Breadcrumbs from "@/components/navigation/Breadcrumbs";
 import { ContactForm7Content } from "@/components/forms";
 import { WpPageIdSetter } from "@/utils/WpPageIdContext";
-import { isActiveCpt, getActiveCptSlugs } from "@/utils/cptConfig";
 import Sidebar from "@/components/layout/Sidebar";
-import PostCard from "@/components/ui/PostCard";
+import GridPosts from "@/components/layout/GridPosts";
 import PostNav from "@/components/navigation/PostNav";
 import { Icons } from "@/components/ui/Icons";
 import Link from "next/link";
@@ -21,7 +20,6 @@ import { WpPageId } from "@/utils/WpPageId";
 
 type PageProps = {
   params: {
-    // The `slug` is an array because this is a catch-all route.
     slug: string[];
   };
 };
@@ -35,20 +33,37 @@ type RouteType =
   | { type: 'cpt-archive'; cpt: string }
   | { type: 'cpt-single'; cpt: string; slug: string };
 
-function detectRouteType(slug: string[]): RouteType {
+async function detectRouteType(slug: string[]): Promise<RouteType> {
   if (slug.length === 1) {
     const singleSlug = slug[0];
-    if (isActiveCpt(singleSlug)) {
-      return { type: 'cpt-archive', cpt: singleSlug };
+    try {
+      const allTypes = await getAllPostTypes();
+      const validCpts = allTypes?.filter(type =>
+        !['post', 'page', 'attachment', 'nav_menu_item', 'wp_block'].includes(type)
+      ) || [];
+
+      if (validCpts.includes(singleSlug)) {
+        return { type: 'cpt-archive', cpt: singleSlug };
+      }
+    } catch (error) {
+      // Continue to page handling if API fails
     }
   } else if (slug.length === 2) {
     const [cptSlug, postSlug] = slug;
-    if (isActiveCpt(cptSlug)) {
-      return { type: 'cpt-single', cpt: cptSlug, slug: postSlug };
+    try {
+      const allTypes = await getAllPostTypes();
+      const validCpts = allTypes?.filter(type =>
+        !['post', 'page', 'attachment', 'nav_menu_item', 'wp_block'].includes(type)
+      ) || [];
+
+      if (validCpts.includes(cptSlug)) {
+        return { type: 'cpt-single', cpt: cptSlug, slug: postSlug };
+      }
+    } catch (error) {
+      // Continue to page handling if API fails
     }
   }
 
-  // Default to page
   return { type: 'page', path: slug.join('/') };
 }
 
@@ -63,12 +78,10 @@ export async function generateMetadata({
     const post = await getContentBySlug<WpContent>(routeType.cpt, routeType.slug);
     return generateSeoMetadata(post);
   } else if (routeType.type === 'cpt-archive') {
-    // For archives, we could return custom metadata or default
     return {
       title: `${routeType.cpt.charAt(0).toUpperCase() + routeType.cpt.slice(1)} Archive`,
     };
   } else {
-    // Default page handling - try full path first, then last segment for child pages
     let page = await getContentBySlug<Page>("pages", path).catch(() => null);
 
     if (!page && params.slug.length > 1) {
@@ -82,33 +95,44 @@ export async function generateMetadata({
 
 // Generate Static Routes at build time.
 export async function generateStaticParams() {
-  const staticParams: { slug: string[] }[] = [];
+  const params: { slug: string[] }[] = [];
 
   // Add pages
   const pages = await getAllContent<Page>("pages");
   if (pages) {
-    staticParams.push(...pages.map((page) => ({
+    params.push(...pages.map((page) => ({
       slug: page.slug.split("/").filter(Boolean),
     })));
   }
 
-  // Add CPT archives
-  const activeCpts = await getActiveCptSlugs();
-  activeCpts.forEach(cpt => {
-    staticParams.push({ slug: [cpt] });
-  });
+  // Add CPT archives and singles
+  try {
+    const allTypes = await getAllPostTypes();
+    if (allTypes) {
+      const customTypes = allTypes.filter(type =>
+        !['post', 'page', 'attachment', 'nav_menu_item', 'wp_block'].includes(type)
+      );
 
-  // Add CPT singles (first few posts for each CPT)
-  for (const cpt of activeCpts) {
-    const posts = await getAllContent<WpContent>(cpt, '?per_page=10&_embed');
-    if (posts) {
-      posts.forEach(post => {
-        staticParams.push({ slug: [cpt, post.slug] });
-      });
+      for (const cpt of customTypes) {
+        params.push({ slug: [cpt] });
+
+        try {
+          const posts = await getAllContent<WpContent>(cpt, '?per_page=10&_embed');
+          if (posts) {
+            posts.forEach(post => {
+              params.push({ slug: [cpt, post.slug] });
+            });
+          }
+        } catch (error) {
+          // Skip CPTs that fail to load
+        }
+      }
     }
+  } catch (error) {
+    // Continue without CPT params if API fails
   }
 
-  return staticParams;
+  return params;
 }
 
 export default async function CatchAllPage({ params }: PageProps) {
@@ -116,9 +140,13 @@ export default async function CatchAllPage({ params }: PageProps) {
   const routeType = await detectRouteType(params.slug);
 
   if (routeType.type === 'cpt-archive') {
-    // Render CPT Archive
+
     const posts = await getAllContent<WpContent>(routeType.cpt, '?per_page=12&_embed&orderby=date&order=desc');
 
+
+/**********************************************
+      START BUILDING CPT ARCHIVE HTML
+**********************************************/
     return (
       <div className="page-fullwidth">
         <section className="page-title">
@@ -126,16 +154,10 @@ export default async function CatchAllPage({ params }: PageProps) {
         </section>
 
         {posts && posts.length > 0 ? (
-          <div className="post-grid cols-3">
-            {posts.map((post) => (
-              <PostCard
-                key={post.id}
-                item={post}
-                basePath={`/${routeType.cpt}`}
-                excerptLength={150}
-              />
-            ))}
-          </div>
+          <GridPosts
+            posts={posts}
+            basePath={`/${routeType.cpt}`}
+          />
         ) : (
           <article>
             <p>No content found in this section.</p>
@@ -146,13 +168,16 @@ export default async function CatchAllPage({ params }: PageProps) {
   }
 
   if (routeType.type === 'cpt-single') {
-    // Render CPT Single
     const post = await getContentBySlug<WpContent>(routeType.cpt, routeType.slug);
 
     if (!post) {
       notFound();
     }
 
+
+/**********************************************
+          START BUILDING CPT SINGLE HTML
+**********************************************/
     return (
       <div className="page-sidebar">
         <WpPageId id={post.id} />
@@ -160,7 +185,7 @@ export default async function CatchAllPage({ params }: PageProps) {
           <article className="entry-content">
             <Link href={`/${routeType.cpt}`} className="back-to-archive-link">
               <Icons.ArrowLeft size={26} strokeWidth={1} className="arrow-left" />
-              Volver a {routeType.cpt.charAt(0).toUpperCase() + routeType.cpt.slice(1)}
+              Back to {routeType.cpt.charAt(0).toUpperCase() + routeType.cpt.slice(1)}
             </Link>
 
             <section className="page-title">
@@ -216,8 +241,10 @@ export default async function CatchAllPage({ params }: PageProps) {
   // Set page ID for body classes
   const pageId = page.id;
 
+
+
 /**********************************************
-      START BUILDING THE PAGE CONTENT HTML
+      START BUILDING STATIC PAGE HTML
 **********************************************/
   return (
     <>
@@ -241,4 +268,3 @@ export default async function CatchAllPage({ params }: PageProps) {
     </>
   );
 }
-

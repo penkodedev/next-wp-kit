@@ -1,7 +1,7 @@
 // src/components/layout/SingleContentSidebar.tsx
 
 import type { WpContent } from '@/types/wordpressTypes';
-import SingleContent from '@/components/layout/SingleContent';
+import SingleContent from '@/components/layout/_SingleContent';
 import Sidebar from '@/components/layout/Sidebar';
 
 type LayoutProps = {

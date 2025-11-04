@@ -205,11 +205,11 @@ export async function searchSite(term: string): Promise<SearchResult[] | null> {
  * Fetches all available post types from WordPress
  */
 export async function getAllPostTypes(): Promise<string[]> {
-  const data = await fetchAPI<{slug: string}[]>('/wp/v2/types');
-  if (!data) return [];
+  const data = await fetchAPI<Record<string, any>>('/wp/v2/types');
+  if (!data || typeof data !== 'object') return [];
 
   // Filter out built-in types, keep only custom post types
-  return data
-    .filter(type => !['post', 'page', 'attachment', 'nav_menu_item', 'wp_block'].includes(type.slug))
-    .map(type => type.slug);
+  return Object.keys(data).filter(type =>
+    !['post', 'page', 'attachment', 'nav_menu_item', 'wp_block'].includes(type)
+  );
 }

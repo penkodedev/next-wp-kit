@@ -102,12 +102,11 @@ export default function Modals() {
             onClick={(e) => e.stopPropagation()}
             role="document"
           >
-            {/* {isLoading ? (
+            {isLoading ? (
               <div className="modal-loading">
                 <div className="spinner spinner-md spinner-spinner"></div>
               </div>
-            ) : modalContent ? ( */}
-            {modalContent ? (
+            ) : modalContent ? (
               <div className="modal-scroll-wrapper">
                 <div className="modal-body" dangerouslySetInnerHTML={{ __html: processContent(modalContent.content.rendered) }} />
               </div>

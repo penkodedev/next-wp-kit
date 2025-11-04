@@ -6,9 +6,8 @@
 import { useState, useEffect } from "react";
 import { getAllContent } from "@/api/wordpressApi";
 import PostCard from "@/components/ui/PostCard";
-import type { Recurso } from "@/types/wordpressTypes";
+import type { WpContent } from "@/types/wordpressTypes";
 import LoadingSpinner from "@/components/ui/LoadingSpiner";
-import Breadcrumbs from "@/components/navigation/Breadcrumbs";
 
 const POSTS_PER_PAGE = 8; // Number of posts for the archive page
 
@@ -18,7 +17,7 @@ const getApiParams = (page: number) => {
 };
 
 export default function RecursosArchivePage() {
-  const [recursos, setRecursos] = useState<Recurso[]>([]);
+  const [recursos, setRecursos] = useState<WpContent[]>([]);
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
@@ -27,7 +26,7 @@ export default function RecursosArchivePage() {
   useEffect(() => {
     const fetchInitialRecursos = async () => {
       setIsLoading(true);
-      const initialRecursos = await getAllContent<Recurso>(
+      const initialRecursos = await getAllContent<WpContent>(
         "recursos",
         getApiParams(1)
       );
@@ -41,7 +40,7 @@ export default function RecursosArchivePage() {
   const handleLoadMore = async () => {
     setIsLoading(true);
     const nextPage = page + 1;
-    const newRecursos = await getAllContent<Recurso>(
+    const newRecursos = await getAllContent<WpContent>(
       "recursos",
       getApiParams(nextPage)
     );

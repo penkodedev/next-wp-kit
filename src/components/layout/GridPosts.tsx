@@ -1,39 +1,38 @@
 // src/components/layout/GridPosts.tsx
+// Reusable component for displaying posts in a grid layout
 
 import type { WpContent } from '@/types/wordpressTypes';
-import DOMPurify from 'isomorphic-dompurify';
+import PostCard from '@/components/ui/PostCard';
 
-type SingleContentProps = {
-  content: WpContent;
+type GridPostsProps = {
+  posts: WpContent[];
+  basePath: string;
+  excerptLength?: number;
+  cols?: number;
 };
 
-export default function SingleContent({ content }: SingleContentProps) {
-  // Clean HTML to prevent XSS attacks
-  const cleanContent = DOMPurify.sanitize(content.content.rendered);
-  
+export default function GridPosts({
+  posts,
+  basePath,
+  excerptLength,
+  cols
+}: GridPostsProps) {
+  const finalExcerptLength = excerptLength ?? 150; // Excerpt sizee
+  const finalCols = cols ?? 3; // Number of columns
 
 /**********************************************
-      START BUILDING THE PAGE CONTENT HTML
+        START BUILDING GRID POSTS HTML
 **********************************************/
   return (
-    <>
-      <section className="post-grid">
-        <div className="post-col col-5">
-          <div className="grid-item">
-
-            <div className="grid-item-content">
-              <h5>
-                <a href="#">Título del recurso</a></h5>
-                          
-                  <p className="grid-item-excerpt"></p>
-
-              <div className="post-links">
-                <a href="#" className="button">Ver y descargar</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </>
+    <div className={`post-grid cols-${finalCols}`}>
+      {posts.map((post) => (
+        <PostCard
+          key={post.id}
+          item={post}
+          basePath={basePath}
+          excerptLength={finalExcerptLength}
+        />
+      ))}
+    </div>
   );
 }

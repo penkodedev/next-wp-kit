@@ -14,7 +14,6 @@ import { Icons } from "@/components/ui/Icons";
 import Link from "next/link";
 import AnimatedArticle from "@/components/animations/AnimatedArticle";
 import Breadcrumbs from "@/components/navigation/Breadcrumbs";
-import { getPostTypeForNavigation } from "@/utils/cptConfig";
 
 type RecursoPageProps = {
   params: {

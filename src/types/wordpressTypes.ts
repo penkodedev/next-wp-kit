@@ -1,18 +1,18 @@
-// src/types/wordpress.ts
+// src/types/wordpressTypes.ts
 
 /**
- * Interfaz para un elemento de menú, potencialmente con hijos (submenús).
+ * Interface for a menu item, potentially with children (submenus).
  */
 export interface MenuItem {
   id: number;
   parent: string;
   title: string;
   url: string;
-  children?: MenuItem[]; // Los hijos son opcionales y recursivos
+  children?: MenuItem[]; // Children are optional and recursive
 }
 
 /**
- * Interfaz para la información básica del sitio.
+ * Interface for basic site information.
  */
 export interface SiteInfo {
   title: string;
@@ -34,7 +34,7 @@ export interface SiteInfo {
 }
 
 /**
- * Interfaz base para cualquier tipo de contenido de WordPress.
+ * Base interface for any type of WordPress content.
  */
 export interface WpContent {
   id: number;
@@ -45,36 +45,36 @@ export interface WpContent {
     rendered: string;
   };
   content: {
-    rendered:string;
+    rendered: string;
   };
   excerpt: {
     rendered: string;
   };
-  _embedded: any; // Para datos embebidos como autor, imagen destacada, etc.
+  _embedded: any; // For embedded data like author, featured image, etc.
 }
 
 /**
- * Interfaz para un Post de WordPress.
+ * Interface for a WordPress Post.
  */
 export interface Post extends WpContent {}
 
 /**
- * Interfaz para una Página de WordPress.
+ * Interface for a WordPress Page.
  */
 export interface Page extends WpContent {
   parent: number;
 }
 
 /**
- * Tipos genéricos para Custom Post Types
+ * Generic types for Custom Post Types
  *
- * Todos los CPTs usan la interfaz base WpContent.
- * Para type safety específico, usa WpContent directamente
- * o crea tipos específicos en tus componentes si es necesario.
+ * All CPTs use the base WpContent interface.
+ * For specific type safety, use WpContent directly
+ * or create specific types in your components if needed.
  */
 
 /**
- * Interfaz para el CPT 'Modal'.
+ * Interface for the 'Modal' CPT.
  */
 export interface Modal extends WpContent {
   popup_settings?: {
@@ -86,13 +86,13 @@ export interface Modal extends WpContent {
 }
 
 /**
- * Interfaz para un resultado del endpoint de búsqueda de WordPress.
+ * Interface for a WordPress search endpoint result.
  */
 export interface SearchResult {
   id: number;
-  // El endpoint de búsqueda devuelve 'title' como un string simple,
-  // pero a veces puede venir como un objeto { rendered: string }.
-  // Lo manejamos como un tipo de unión para ser robustos.
+  // The search endpoint returns 'title' as a simple string,
+  // but sometimes it comes as an object { rendered: string }.
+  // We handle it as a union type to be robust.
   title: string | { rendered: string };
   url: string;
   type: 'post' | 'page' | string; // Can be 'post', 'page' or any CPT slug.
@@ -106,7 +106,7 @@ export interface SearchResult {
 }
 
 /**
- * Interfaz para los datos de navegación de un post (anterior/siguiente).
+ * Interface for post navigation data (previous/next).
  */
 export interface PostNavigation {
   previous: {
