@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 interface BreadcrumbItem {
   label: string;
@@ -14,17 +15,27 @@ const HIDE_LAST_ITEM = false;
 
 export default function Breadcrumbs() {
   const pathname = usePathname();
+  const t = useTranslations('Navigation');
   const segments = pathname.split('/').filter(Boolean); // Dividir y filtrar segmentos vacíos
 
-  if (segments.length === 0) {
+  // Detect if we're in a localized route
+  const isLocalized = segments.length > 0 && ['es', 'en'].includes(segments[0]);
+  const locale = isLocalized ? segments[0] : null; // null for default (Spanish) routes
+  const actualSegments = isLocalized ? segments.slice(1) : segments;
+
+  if (actualSegments.length === 0) {
     return null; // No mostrar breadcrumbs en la página de inicio
   }
 
   let breadcrumbItems: BreadcrumbItem[] = [
-    { label: 'Inicio', href: '/' },
-    ...segments.map((segment, index) => {
-      const href = `/${segments.slice(0, index + 1).join('/')}`;
-      // Como fallback, capitalizamos el slug. Un sistema más avanzado podría obtener el título real.
+    { label: locale === 'en' ? 'Home' : 'Inicio', href: locale ? `/${locale}` : '/' },
+    ...actualSegments.map((segment, index) => {
+      const href = locale
+        ? `/${locale}/${actualSegments.slice(0, index + 1).join('/')}`
+        : `/${actualSegments.slice(0, index + 1).join('/')}`;
+
+      // For breadcrumbs, show the segment as-is but formatted
+      // The actual translation happens at the page level, not breadcrumb level
       const label = segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
       return { label, href };
     }),

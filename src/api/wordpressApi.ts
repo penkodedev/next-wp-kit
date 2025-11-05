@@ -7,7 +7,7 @@ const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
 
 // ********************** Core Fetch API Function **********************
-async function fetchAPI<T>( 
+export async function fetchAPI<T>(
   query = '', 
   options: { 
     method?: string, 
@@ -68,6 +68,7 @@ async function fetchAPI<T>(
   }
 }
 
+
 /**
  * Fetches basic site information from a custom endpoint.
  * EXAMPLE: This function assumes you have created a custom endpoint in your
@@ -112,10 +113,21 @@ export async function getContentById<T extends WpContent>(postType: string, id: 
   return data;
 }
 
-/******************** (HOME PAGE CONTENT) ****************************
- * This implementation assumes the home page has the slug 'inicio'.
+/******************** (HOME PAGE CONTENT) ****************************/
+/**
+ * Fetches the home page content, with optional language support
+ * @param lang Optional language code (es, en) for WPML support
  */
-export async function getHomePage(): Promise<Page | null> {
+export async function getHomePage(lang?: string): Promise<Page | null> {
+  if (lang && lang !== 'es') {
+    // Use the dedicated WPML endpoint for getting translated home page
+    const translatedPage = await fetchAPI<Page>(`/custom/v1/home-page?lang=${lang}`);
+    if (translatedPage) {
+      return translatedPage;
+    }
+  }
+
+  // Default: get the Spanish version
   return await getContentBySlug<Page>('pages', 'inicio');
 }
 
@@ -212,4 +224,43 @@ export async function getAllPostTypes(): Promise<string[]> {
   return Object.keys(data).filter(type =>
     !['post', 'page', 'attachment', 'nav_menu_item', 'wp_block'].includes(type)
   );
+}
+
+/******************** WORDPRESS LANGUAGES (WPML) ****************************/
+/**
+ * Fetches available languages from WordPress (WPML plugin)
+ */
+export async function getAvailableLanguages(): Promise<Array<{
+  code: string;
+  name: string;
+  native_name: string;
+  url: string;
+  active: boolean;
+}>> {
+  const data = await fetchAPI<Array<{
+    code: string;
+    name: string;
+    native_name: string;
+    url: string;
+    active: boolean;
+  }>>('/custom/v1/languages');
+  return data || [];
+}
+
+/**
+ * Fetches translated slug for a page from WordPress (WPML plugin)
+ */
+export async function getTranslatedSlug(pageSlug: string, lang: string): Promise<{
+  original_slug: string;
+  translated_slug: string;
+  translated_title: string;
+  has_translation: boolean;
+} | null> {
+  const data = await fetchAPI<{
+    original_slug: string;
+    translated_slug: string;
+    translated_title: string;
+    has_translation: boolean;
+  }>(`/custom/v1/translated-slug?page_slug=${encodeURIComponent(pageSlug)}&lang=${lang}`);
+  return data;
 }

@@ -1,4 +1,7 @@
 {
+  "Navigation": {
+    "home": "Home"
+  },
   "Sidebar": {
     "latestResources": "Latest resources",
     "noRecentResources": "No recent resources found."
@@ -12,5 +15,9 @@
   "RecursosPage": {
     "loadMore": "Load more",
     "loading": "Loading..."
+  },
+  "LanguageSwitcher": {
+    "changeLanguage": "Change language",
+    "switchTo": "Switch to {{language}}"
   }
 }

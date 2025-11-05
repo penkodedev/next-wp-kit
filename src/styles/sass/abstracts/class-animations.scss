@@ -1,0 +1,117 @@
+// =========================================
+// 🎨 ANIMATION CLASSES FOR GUTENBERG
+// =========================================
+// Importa los mixins directamente para poder usarlos sin namespace
+@use './mixins-animations' as *;
+
+// =========================================
+// 🎯 FADE ANIMATIONS
+// =========================================
+
+.fade-in {
+  @include fade-in;
+}
+
+.fade-out {
+  @include fade-out;
+}
+
+.fade-in-up {
+  @include fade-in-up;
+}
+
+.fade-in-down {
+  @include fade-in-down;
+}
+
+// =========================================
+// 🎯 SLIDE ANIMATIONS
+// =========================================
+
+.slide-up {
+  @include slide-up;
+}
+
+.slide-down {
+  @include slide-down;
+}
+
+.slide-left {
+  @include slide-left;
+}
+
+.slide-right {
+  @include slide-right;
+}
+
+.slide-fade-up {
+  @include slide-fade-up;
+}
+
+.slide-fade-down {
+  @include slide-fade-down;
+}
+
+// =========================================
+// 🎯 SCALE ANIMATIONS
+// =========================================
+
+.scale-in {
+  @include scale-in;
+}
+
+.scale-hover {
+  @include scale-hover;
+}
+
+.scale-pulse {
+  @include scale-pulse;
+}
+
+.scale-bounce {
+  @include scale-bounce;
+}
+
+// =========================================
+// 🎯 ROTATION ANIMATIONS
+// =========================================
+
+.rotate-in {
+  @include rotate-in;
+}
+
+.rotate-hover {
+  @include rotate-hover;
+}
+
+.rotate-continuous {
+  @include rotate-continuous;
+}
+
+// =========================================
+// 🎯 BOUNCE ANIMATIONS
+// =========================================
+
+.bounce-infinite {
+  @include bounce-infinite;
+}
+
+.bounce-in {
+  @include bounce-in;
+}
+
+.bounce-left {
+  @include bounce-left;
+}
+
+.bounce-right {
+  @include bounce-right;
+}
+
+.bounce-up {
+  @include bounce-up;
+}
+
+.bounce-down {
+  @include bounce-down;
+}

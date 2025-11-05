@@ -3,6 +3,8 @@
 import type { Metadata } from 'next';
 import 'swiper/css/bundle';
 import { headers } from 'next/headers';
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 
 import "@/styles/sass/main.scss";
 import type { ReactNode } from "react";
@@ -61,21 +63,27 @@ function GlobalUI() {
 
 
 export default async function RootLayout({ children }: RootLayoutProps) {
+  // Providing all messages to the client
+  // side is the easiest way to get started
+  const messages = await getMessages();
+
   return (
     <html lang="es">
       <head>
         <WpStyles />
       </head>
       <body>
-        <WpPageIdProvider>
-          <BodyClass>
-            <HeaderConditional />
-            {/* <Breadcrumbs /> */}
-            <main>{children}</main>
-            <Footer />
-            <GlobalUI />
-          </BodyClass>
-        </WpPageIdProvider>
+        <NextIntlClientProvider messages={messages}>
+          <WpPageIdProvider>
+            <BodyClass>
+              <HeaderConditional />
+              {/* <Breadcrumbs /> */}
+              <main>{children}</main>
+              <Footer />
+              <GlobalUI />
+            </BodyClass>
+          </WpPageIdProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

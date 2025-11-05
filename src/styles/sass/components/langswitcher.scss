@@ -1,0 +1,43 @@
+@use 'abstracts' as *;
+
+.lang-switcher-simple {
+    // background-color: #efefef;
+    padding: 5px 10px;
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 98px;
+
+    svg.lang-icon {
+        color: #000;
+        margin-right: 6px;
+    }
+
+    a {
+        @include copy-text;
+        font-size: 0.9em;
+        color: rgb(173, 173, 173);
+        line-height: normal;
+        padding: 0 2px 3px 2px;
+        margin: 0;
+
+        &:hover {
+            color: rgb(0, 0, 0);
+        }
+
+        &.active {
+            color: rgb(0, 0, 0);
+            border-bottom: 1px solid #000;
+            padding-bottom: 2px;
+        }
+    }
+}
+
+.page-home {
+    .lang-switcher-simple {
+    background-color: #efefef;
+    border: none;
+}
+}

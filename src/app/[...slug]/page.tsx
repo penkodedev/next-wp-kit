@@ -1,7 +1,8 @@
 // src/app/[...slug]/page.tsx
 // Intelligent catch-all route to handle pages and CPTs from WordPress.
 
-import { getContentBySlug, getAllContent, getAllPostTypes } from "@/api/wordpressApi";
+import { getContentBySlug, getAllContent, getAllPostTypes, getHomePage } from "@/api/wordpressApi";
+import { fetchAPI } from "@/api/wordpressApi";
 import AnimatedArticle from "@/components/animations/AnimatedArticle";
 import { generateSeoMetadata } from "@/utils/seo";
 import { notFound } from "next/navigation";
@@ -34,38 +35,50 @@ type RouteType =
   | { type: 'cpt-single'; cpt: string; slug: string };
 
 async function detectRouteType(slug: string[]): Promise<RouteType> {
-  if (slug.length === 1) {
-    const singleSlug = slug[0];
-    try {
-      const allTypes = await getAllPostTypes();
-      const validCpts = allTypes?.filter(type =>
-        !['post', 'page', 'attachment', 'nav_menu_item', 'wp_block'].includes(type)
-      ) || [];
+   // Check if first segment is a locale (es, en)
+   const firstSegment = slug[0];
+   const isLocale = ['es', 'en'].includes(firstSegment);
 
-      if (validCpts.includes(singleSlug)) {
-        return { type: 'cpt-archive', cpt: singleSlug };
-      }
-    } catch (error) {
-      // Continue to page handling if API fails
-    }
-  } else if (slug.length === 2) {
-    const [cptSlug, postSlug] = slug;
-    try {
-      const allTypes = await getAllPostTypes();
-      const validCpts = allTypes?.filter(type =>
-        !['post', 'page', 'attachment', 'nav_menu_item', 'wp_block'].includes(type)
-      ) || [];
+   // If it's a locale, remove it from slug for processing
+   const actualSlug = isLocale ? slug.slice(1) : slug;
 
-      if (validCpts.includes(cptSlug)) {
-        return { type: 'cpt-single', cpt: cptSlug, slug: postSlug };
-      }
-    } catch (error) {
-      // Continue to page handling if API fails
-    }
-  }
+   // If it's just a locale (like /en), treat as home page
+   if (actualSlug.length === 0 && isLocale) {
+     return { type: 'page', path: '' };
+   }
 
-  return { type: 'page', path: slug.join('/') };
-}
+   if (actualSlug.length === 1) {
+     const singleSlug = actualSlug[0];
+     try {
+       const allTypes = await getAllPostTypes();
+       const validCpts = allTypes?.filter(type =>
+         !['post', 'page', 'attachment', 'nav_menu_item', 'wp_block'].includes(type)
+       ) || [];
+
+       if (validCpts.includes(singleSlug)) {
+         return { type: 'cpt-archive', cpt: singleSlug };
+       }
+     } catch (error) {
+       // Continue to page handling if API fails
+     }
+   } else if (actualSlug.length === 2) {
+     const [cptSlug, postSlug] = actualSlug;
+     try {
+       const allTypes = await getAllPostTypes();
+       const validCpts = allTypes?.filter(type =>
+         !['post', 'page', 'attachment', 'nav_menu_item', 'wp_block'].includes(type)
+       ) || [];
+
+       if (validCpts.includes(cptSlug)) {
+         return { type: 'cpt-single', cpt: cptSlug, slug: postSlug };
+       }
+     } catch (error) {
+       // Continue to page handling if API fails
+     }
+   }
+
+   return { type: 'page', path: actualSlug.join('/') };
+ }
 
 // Generate Dynamic Metadata for SEO.
 export async function generateMetadata({
@@ -97,12 +110,21 @@ export async function generateMetadata({
 export async function generateStaticParams() {
   const params: { slug: string[] }[] = [];
 
+  // Add locale-only routes (like /en for home page)
+  params.push({ slug: ['es'] });
+  params.push({ slug: ['en'] });
+
   // Add pages
   const pages = await getAllContent<Page>("pages");
   if (pages) {
-    params.push(...pages.map((page) => ({
-      slug: page.slug.split("/").filter(Boolean),
-    })));
+    pages.forEach((page) => {
+      const pageSlugs = page.slug.split("/").filter(Boolean);
+      // Add without locale prefix (default)
+      params.push({ slug: pageSlugs });
+      // Add with locale prefixes
+      params.push({ slug: ['es', ...pageSlugs] });
+      params.push({ slug: ['en', ...pageSlugs] });
+    });
   }
 
   // Add CPT archives and singles
@@ -114,13 +136,19 @@ export async function generateStaticParams() {
       );
 
       for (const cpt of customTypes) {
+        // Add archive pages
         params.push({ slug: [cpt] });
+        params.push({ slug: ['es', cpt] });
+        params.push({ slug: ['en', cpt] });
 
         try {
           const posts = await getAllContent<WpContent>(cpt, '?per_page=10&_embed');
           if (posts) {
             posts.forEach(post => {
+              // Add single CPT pages
               params.push({ slug: [cpt, post.slug] });
+              params.push({ slug: ['es', cpt, post.slug] });
+              params.push({ slug: ['en', cpt, post.slug] });
             });
           }
         } catch (error) {
@@ -224,9 +252,56 @@ export default async function CatchAllPage({ params }: PageProps) {
     );
   }
 
-  // Default: Render Page
+  // Default: Render Page or Home
+  // Check if this is a locale-only route (like /en) that should show home page
+  const firstSegment = params.slug[0];
+  const isLocaleOnly = params.slug.length === 1 && ['es', 'en'].includes(firstSegment);
+
+  if (isLocaleOnly) {
+    // Load home page with language support
+    const lang = firstSegment === 'es' ? undefined : firstSegment; // es is default, so no lang param
+    const homePage = await getHomePage(lang);
+
+    if (!homePage) {
+      notFound();
+    }
+
+    return (
+      <>
+        <WpPageIdSetter pageId={homePage.id} />
+        <div className="page-one-col">
+          <article>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: processContent(homePage.content.rendered),
+              }}
+            />
+          </article>
+        </div>
+
+        <section className="slider-container">
+          {/* You might want to import and use SliderRecursos here */}
+        </section>
+      </>
+    );
+  }
+
   // For nested pages, try the full path first, then just the last segment
   let page = await getContentBySlug<Page>("pages", path);
+
+  // If page not found and we have a locale prefix, try to get the translated version
+  if (!page && params.slug.length > 1 && ['es', 'en'].includes(params.slug[0])) {
+    const lang = params.slug[0];
+    const actualPath = params.slug.slice(1).join('/');
+
+    // Try to get the translated page using the new endpoint
+    if (lang !== 'es') {
+      const translatedPage = await fetchAPI<Page>(`/custom/v1/page-by-lang?lang=${lang}&page_slug=${actualPath}`);
+      if (translatedPage) {
+        page = translatedPage;
+      }
+    }
+  }
 
   if (!page && params.slug.length > 1) {
     // Try with just the last segment for child pages

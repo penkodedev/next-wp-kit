@@ -12,5 +12,9 @@
   "RecursosPage": {
     "loadMore": "Carregar mais",
     "loading": "Carregando..."
+  },
+  "LanguageSwitcher": {
+    "changeLanguage": "Alterar idioma",
+    "switchTo": "Mudar para {{language}}"
   }
 }
