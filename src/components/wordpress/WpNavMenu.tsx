@@ -7,6 +7,7 @@ import type { MenuItem, AllMenus } from '@/types/wordpressTypes';
 import { cleanInternalUrl } from '@/utils/url';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { logger } from '@/utils/logger';
 
 /**
  * Props para el componente WpNavMenu.
@@ -67,7 +68,7 @@ export default function WpNavMenu({ slug, location, className, locale }: WpNavMe
           setMenuItems([]);
         }
       } catch (error) {
-        console.error(`WpNavMenu: Error fetching menu from ${apiUrl}`, error);
+        logger.error(`WpNavMenu: Error fetching menu from ${apiUrl}`, error);
         setMenuItems([]); // Evita que se quede en estado de carga infinito
       }
     }

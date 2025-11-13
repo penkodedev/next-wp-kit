@@ -1,5 +1,7 @@
 // src/components/WpStyles.tsx
 
+import { logger } from '@/utils/logger';
+
 /**
  * Obtiene dinámicamente los estilos de bloques y los estilos globales/del tema
  * desde la instalación de WordPress y los inyecta en el <head>.
@@ -10,7 +12,7 @@ async function getWpGlobalStyles() {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
     if (!apiUrl) {
-      console.error("NEXT_PUBLIC_WORDPRESS_API_URL no está configurada");
+      logger.error("NEXT_PUBLIC_WORDPRESS_API_URL no está configurada");
       return null;
     }
 
@@ -43,7 +45,7 @@ async function getWpGlobalStyles() {
   } catch (error) {
     // Don't log timeout errors as they are expected
     if (error instanceof Error && error.name !== 'TimeoutError') {
-      console.error("Error fetching WordPress global styles:", error);
+      logger.error("Error fetching WordPress global styles:", error);
     }
     return null;
   }
@@ -98,7 +100,7 @@ async function getWpThemeStyles() {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
     if (!apiUrl) {
-      console.error("NEXT_PUBLIC_WORDPRESS_API_URL no está configurada");
+      logger.error("NEXT_PUBLIC_WORDPRESS_API_URL no está configurada");
       return null;
     }
 
@@ -136,7 +138,7 @@ async function getWpThemeStyles() {
   } catch (error) {
     // Don't log timeout errors as they are expected
     if (error instanceof Error && error.name !== 'TimeoutError') {
-      console.error("Error fetching WordPress theme styles:", error);
+      logger.error("Error fetching WordPress theme styles:", error);
     }
     return null;
   }

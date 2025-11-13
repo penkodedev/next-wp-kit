@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { searchSite } from '@/api/wordpressApi';
 import { cleanInternalUrl } from '@/utils/url';
 import AnimatedFadeIn from '@/components/animations/AnimatedFadeIn';
+import { logger } from '@/utils/logger';
 
 // La API de búsqueda devuelve un 'subtype' que es más útil
 interface SearchResultWithSubtype {
@@ -34,7 +35,7 @@ export default function SearchPage() {
           setIsLoading(false);
         })
         .catch(error => {
-          console.error("Error durante la búsqueda:", error);
+          logger.error("Error durante la búsqueda:", error);
           setIsLoading(false);
         });
     } else {

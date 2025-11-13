@@ -9,6 +9,7 @@ import type { Modal as ModalType } from '@/types/wordpressTypes';
 import { processContent } from '@/utils/processContent';
 import { Icons } from '@/components/ui/Icons';
 import LoadingWrapper from './LoadingWrapper';
+import { logger } from '@/utils/logger';
 
 const backdrop = {
   visible: { opacity: 1 },
@@ -50,7 +51,7 @@ export default function Modals() {
         const content = await getContentBySlug<ModalType>('modales', slug);
         setModalContent(content);
       } catch (error) {
-        console.error("Failed to fetch modal content:", error);
+        logger.error("Failed to fetch modal content:", error);
         // Optionally, set an error state to show a message
       } finally {
         setIsLoading(false);

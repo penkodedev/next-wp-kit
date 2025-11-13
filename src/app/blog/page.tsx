@@ -2,6 +2,7 @@
 import { getAllPosts } from '@/api/wordpressApi';
 import PostCard from '@/components/ui/PostCard';
 import type { Post } from '@/types/wordpressTypes';
+import { logger } from '@/utils/logger';
 
 export default async function BlogIndexPage() {
   let posts: Post[] = [];
@@ -9,7 +10,7 @@ export default async function BlogIndexPage() {
   try {
     posts = await getAllPosts();
   } catch (error) {
-    console.error('Error fetching posts:', error);
+    logger.error('Error fetching posts:', error);
     return (
       <div className="container">
         <h1>Blog</h1>

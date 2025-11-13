@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { logger } from '@/utils/logger'
 
 export type CookieCategory = 'necessary' | 'performance' | 'marketing' | 'functionality'
 
@@ -69,7 +70,7 @@ export const useCookieConsent = () => {
 
       return true
     } catch (error) {
-      console.error('Error saving cookie preferences:', error)
+      logger.error('Error saving cookie preferences:', error)
       return false
     }
   }, [])

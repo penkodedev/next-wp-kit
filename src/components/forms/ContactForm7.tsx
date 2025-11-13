@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, ReactNode } from 'react';
+import { logger } from '@/utils/logger';
 
 interface ContactForm7Props {
   children: ReactNode;
@@ -24,14 +25,14 @@ export default function ContactForm7({ children }: ContactForm7Props) {
       const formId = form.querySelector('input[name="_wpcf7"]')?.getAttribute('value');
 
       if (!formId) {
-        console.error('Contact Form 7: Form ID not found');
+        logger.error('Contact Form 7: Form ID not found');
         return;
       }
 
       // Get the WordPress API URL
       const wpApiUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
       if (!wpApiUrl) {
-        console.error('Contact Form 7: WordPress API URL not configured');
+        logger.error('Contact Form 7: WordPress API URL not configured');
         return;
       }
 
@@ -68,7 +69,7 @@ export default function ContactForm7({ children }: ContactForm7Props) {
         }
 
       } catch (error) {
-        console.error('Contact Form 7 submission error:', error);
+        logger.error('Contact Form 7 submission error:', error);
         showMessage(form, 'Error de conexión. Por favor, inténtalo de nuevo.', 'error');
       } finally {
         // Reset loading state

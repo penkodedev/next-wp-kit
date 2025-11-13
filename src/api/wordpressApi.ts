@@ -2,6 +2,7 @@
 
 import type { WpContent, SiteInfo, MenuItem, SearchResult, Page, Modal, PostNavigation, AllMenus } from '@/types/wordpressTypes';
 import { unstable_cache } from 'next/cache';
+import { logger } from '@/utils/logger';
 
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
@@ -24,7 +25,7 @@ export async function fetchAPI<T>(
 ): Promise<T | null> {
   // Security check: if the API URL is not configured, we cannot proceed.
   if (!API_URL) {
-    console.error("La variable de entorno NEXT_PUBLIC_WORDPRESS_API_URL no está configurada.");
+    logger.error("La variable de entorno NEXT_PUBLIC_WORDPRESS_API_URL no está configurada.");
     return null;
   }
 
@@ -56,9 +57,9 @@ export async function fetchAPI<T>(
       // For any other error, log it and return null.
       try {
         const errorBody = await res.json();
-        console.error(`API Error for ${query}:`, errorBody);
+        logger.error(`API Error for ${query}:`, errorBody);
       } catch {
-        console.error(`API Error for ${query}: ${res.status} ${res.statusText}`);
+        logger.error(`API Error for ${query}: ${res.status} ${res.statusText}`);
       }
       // We return null so the calling component can handle it.
       return null;
@@ -68,7 +69,7 @@ export async function fetchAPI<T>(
     return json;
   } catch (error) {
     // If the fetch fails (e.g., WP is unavailable), we catch the error.
-    console.error(`Fetch failed for ${requestUrl}:`, error instanceof Error ? error.message : String(error));
+    logger.error(`Fetch failed for ${requestUrl}:`, error instanceof Error ? error.message : String(error));
     // We return null to prevent the app from crashing on the server.
     return null;
   }
