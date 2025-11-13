@@ -6,8 +6,27 @@ import FooterSocial from "@/components/layout/footer/FooterSocial";
 import FooterContact from "@/components/layout/footer/FooterContact";
 import FooterMenuClient from "@/components/layout/footer/FooterMenuClient";
 import FooterLastPosts from "@/components/layout/footer/FooterLastPosts";
+import { fetchAPI } from "@/api/wordpressApi";
+import type { MenuItem } from "@/types/wordpressTypes";
+import { logger } from "@/utils/logger";
 
-export default function Footer() {
+export default async function Footer() {
+  // Pre-fetch both menu versions (Spanish and English) on the server
+  let menuES: MenuItem[] = [];
+  let menuEN: MenuItem[] = [];
+
+  try {
+    const [menuESData, menuENData] = await Promise.all([
+      fetchAPI<MenuItem[]>('/custom/v1/menus?lang=es&slug=menu-footer'),
+      fetchAPI<MenuItem[]>('/custom/v1/menus?lang=en&slug=menu-footer-ingles'),
+    ]);
+    
+    // Handle null responses (fallback to empty arrays)
+    menuES = menuESData || [];
+    menuEN = menuENData || [];
+  } catch (error) {
+    logger.error('Footer: Error pre-fetching menus', error);
+  }
 
   return (
     <footer className="footer">
@@ -29,7 +48,7 @@ export default function Footer() {
               </div>
             </div>
 
-            <FooterMenuClient />
+            <FooterMenuClient menuES={menuES} menuEN={menuEN} />
 
             <div className="copyright">
               <FooterLogo />

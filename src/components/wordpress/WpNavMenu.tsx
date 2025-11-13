@@ -10,16 +10,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { logger } from '@/utils/logger';
 
 /**
- * Props para el componente WpNavMenu.
- * Debes proporcionar 'slug' o 'location'.
+ * Props for the WpNavMenu component.
+ * You must provide either 'slug' or 'location'.
+ * Optional: Pass pre-fetched menuItems to avoid client-side fetch.
  */
 type WpNavMenuProps = {
   className?: string;
-  locale: string; // Hacemos que el locale sea obligatorio
+  locale: string; // Make locale required
+  menuItems?: MenuItem[]; // Optional: Pre-fetched menu data
 } & ({ slug: string; location?: never } | { slug?: never; location: string });
 
 /**
- * Componente recursivo para renderizar un elemento individual del menú y sus hijos.
+ * Recursive component to render an individual menu item and its children.
  */
 function NavItem({ item }: { item: MenuItem }) {
   const wpDomain = process.env.NEXT_PUBLIC_WORDPRESS_API_URL ? new URL(process.env.NEXT_PUBLIC_WORDPRESS_API_URL).origin : '';
@@ -45,38 +47,42 @@ function NavItem({ item }: { item: MenuItem }) {
 }
 
 /**
- * Componente de navegación universal que renderiza un menú de WordPress
- * identificado por su 'slug' o su 'location'.
+ * Universal navigation component that renders a WordPress menu
+ * identified by its 'slug' or 'location'.
+ * If menuItems are passed as props, it skips the fetch (server-rendered).
  */
-export default function WpNavMenu({ slug, location, className, locale }: WpNavMenuProps) {
-  const [menuItems, setMenuItems] = useState<MenuItem[] | null>(null);
+export default function WpNavMenu({ slug, location, className, locale, menuItems: prefetchedMenuItems }: WpNavMenuProps) {
+  const [menuItems, setMenuItems] = useState<MenuItem[] | null>(prefetchedMenuItems || null);
 
   useEffect(() => {
-    // No hacer nada hasta que el locale esté definido.
+    // Skip fetch if data was pre-fetched (server-side)
+    if (prefetchedMenuItems) return;
+
+    // Do nothing until locale is defined
     if (!locale) return;
 
     async function getMenu() {
-      // Construimos la URL de la API con el parámetro 'lang'
+      // Build the API URL with the 'lang' parameter
       const apiUrl = `/custom/v1/menus?lang=${locale}&${location ? `location=${location}` : `slug=${slug}`}`;
       try {
-        // La API devuelve directamente el array de items, no un objeto { items: [...] }
+        // The API returns the array of items directly, not an object { items: [...] }
         const menuItemsData = await fetchAPI<MenuItem[]>(apiUrl);
         if (Array.isArray(menuItemsData)) {
           setMenuItems(menuItemsData);
         } else {
-          // Si la API no devuelve el formato esperado, no mostramos nada.
+          // If the API doesn't return the expected format, show nothing
           setMenuItems([]);
         }
       } catch (error) {
         logger.error(`WpNavMenu: Error fetching menu from ${apiUrl}`, error);
-        setMenuItems([]); // Evita que se quede en estado de carga infinito
+        setMenuItems([]); // Prevent infinite loading state
       }
     }
     getMenu();
-  }, [locale, location, slug]); // Se vuelve a ejecutar si cambia el idioma o las props
+  }, [locale, location, slug, prefetchedMenuItems]); // Re-run if language or props change
 
   if (!menuItems) {
-    // Muestra un placeholder o nada mientras carga.
+    // Show placeholder or nothing while loading
     return null;
   }
 
@@ -87,7 +93,7 @@ export default function WpNavMenu({ slug, location, className, locale }: WpNavMe
   return (
     <AnimatePresence mode="wait">
       <motion.nav
-        key={`${locale}-${slug || location}`} // Key única por idioma y slug/location
+        key={`${locale}-${slug || location}`} // Unique key per language and slug/location
         className={className}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

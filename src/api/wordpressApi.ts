@@ -25,7 +25,7 @@ export async function fetchAPI<T>(
 ): Promise<T | null> {
   // Security check: if the API URL is not configured, we cannot proceed.
   if (!API_URL) {
-    logger.error("La variable de entorno NEXT_PUBLIC_WORDPRESS_API_URL no está configurada.");
+    logger.error("NEXT_PUBLIC_WORDPRESS_API_URL environment variable is not configured.");
     return null;
   }
 

@@ -1,25 +1,25 @@
 // src/utils/logger.ts
 
 /**
- * Sistema de logging profesional que solo muestra mensajes en desarrollo.
- * En producción, los logs se silencian para no exponer información sensible.
+ * Professional logging system that only displays messages in development.
+ * In production, logs are silenced to avoid exposing sensitive information.
  */
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
 export const logger = {
   /**
-   * Logs de error críticos (problemas que afectan funcionalidad)
+   * Critical error logs (issues that affect functionality)
    */
   error: (...args: any[]) => {
     if (isDevelopment) {
       console.error('🔴 [ERROR]', ...args);
     }
-    // TODO: En producción, enviar a servicio de monitoreo (Sentry, LogRocket, etc.)
+    // TODO: In production, send to monitoring service (Sentry, LogRocket, etc.)
   },
 
   /**
-   * Warnings (problemas potenciales que no rompen la app)
+   * Warnings (potential issues that don't break the app)
    */
   warn: (...args: any[]) => {
     if (isDevelopment) {
@@ -28,7 +28,7 @@ export const logger = {
   },
 
   /**
-   * Información general (debugging)
+   * General information (debugging)
    */
   info: (...args: any[]) => {
     if (isDevelopment) {
@@ -37,7 +37,7 @@ export const logger = {
   },
 
   /**
-   * Logs de éxito
+   * Success logs
    */
   success: (...args: any[]) => {
     if (isDevelopment) {

@@ -1,8 +1,9 @@
 // src/components/layout/header/HeaderServer.tsx
 
 import HeaderClient from "./HeaderClient";
-import { getSiteInfo } from "@/api/wordpressApi";
-import type { SiteInfo } from "@/types/wordpressTypes";
+import { getSiteInfo, fetchAPI } from "@/api/wordpressApi";
+import type { SiteInfo, MenuItem } from "@/types/wordpressTypes";
+import { logger } from "@/utils/logger";
 
 interface HeaderServerProps {
   variant?: "default" | "home";
@@ -32,7 +33,32 @@ export default async function HeaderServer({
     },
   };
 
-  const siteInfo = (await getSiteInfo()) || defaultSiteInfo;
+  // Pre-fetch both SiteInfo and both menu versions (Spanish and English) on the server
+  let siteInfo: SiteInfo = defaultSiteInfo;
+  let menuES: MenuItem[] = [];
+  let menuEN: MenuItem[] = [];
 
-  return <HeaderClient variant={variant} initialLocale={initialLocale} siteInfo={siteInfo} />;
+  try {
+    const [siteInfoData, menuESData, menuENData] = await Promise.all([
+      getSiteInfo(),
+      fetchAPI<MenuItem[]>('/custom/v1/menus?lang=es&location=mainnav'),
+      fetchAPI<MenuItem[]>('/custom/v1/menus?lang=en&location=mainnav'),
+    ]);
+    
+    siteInfo = siteInfoData || defaultSiteInfo;
+    menuES = menuESData || [];
+    menuEN = menuENData || [];
+  } catch (error) {
+    logger.error('HeaderServer: Error pre-fetching data', error);
+  }
+
+  return (
+    <HeaderClient 
+      variant={variant} 
+      initialLocale={initialLocale} 
+      siteInfo={siteInfo}
+      menuES={menuES}
+      menuEN={menuEN}
+    />
+  );
 }

@@ -3,16 +3,16 @@
 import { logger } from '@/utils/logger';
 
 /**
- * Obtiene dinámicamente los estilos de bloques y los estilos globales/del tema
- * desde la instalación de WordPress y los inyecta en el <head>.
+ * Dynamically fetches block styles and global/theme styles
+ * from the WordPress installation and injects them into the <head>.
  */
 
-// Función para obtener los estilos globales usando el endpoint oficial de WordPress
+// Function to get global styles using the official WordPress endpoint
 async function getWpGlobalStyles() {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
     if (!apiUrl) {
-      logger.error("NEXT_PUBLIC_WORDPRESS_API_URL no está configurada");
+      logger.error("NEXT_PUBLIC_WORDPRESS_API_URL is not configured");
       return null;
     }
 
@@ -26,7 +26,7 @@ async function getWpGlobalStyles() {
     );
 
     if (!response.ok) {
-      // Fallback: intentar obtener los estilos globales del tema activo
+      // Fallback: try to get global styles from the active theme
       const fallbackResponse = await fetch(
         `${apiUrl.replace(/\/$/, '')}/wp/v2/global-styles`,
         {
@@ -38,7 +38,7 @@ async function getWpGlobalStyles() {
 
       if (!fallbackResponse.ok) return null;
       const fallbackData = await fallbackResponse.json();
-      return fallbackData[0] || null; // Tomar el primer elemento (tema activo)
+      return fallbackData[0] || null; // Take the first element (active theme)
     }
 
     return await response.json();
@@ -51,13 +51,13 @@ async function getWpGlobalStyles() {
   }
 }
 
-// Función para generar CSS desde los estilos globales de WordPress
+// Function to generate CSS from WordPress global styles
 function generateCSSFromGlobalStyles(globalStyles: any) {
   if (!globalStyles) return '';
   
   let css = ':root {\n';
   
-  // Extraer configuración de colores
+  // Extract color configuration
   const colorSettings = globalStyles.settings?.color;
   if (colorSettings?.palette?.theme) {
     colorSettings.palette.theme.forEach((color: any) => {
@@ -65,9 +65,9 @@ function generateCSSFromGlobalStyles(globalStyles: any) {
     });
   }
   
-  // Gradientes omitidos - no se utilizan
+  // Gradients omitted - not used
   
-  // Tipografías omitidas - se manejan por SASS
+  // Typography omitted - handled by SASS
   
   css += '}\n\n';
   
@@ -95,16 +95,16 @@ function generateCSSFromGlobalStyles(globalStyles: any) {
   return css;
 }
 
-// Función mejorada para obtener estilos del tema
+// Improved function to get theme styles
 async function getWpThemeStyles() {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
     if (!apiUrl) {
-      logger.error("NEXT_PUBLIC_WORDPRESS_API_URL no está configurada");
+      logger.error("NEXT_PUBLIC_WORDPRESS_API_URL is not configured");
       return null;
     }
 
-    // Primero intentar el endpoint mejorado
+    // First try the enhanced endpoint
     const enhancedResponse = await fetch(
       `${apiUrl.replace(/\/$/, '')}/wp/v2/theme-styles-enhanced`,
       {
@@ -119,7 +119,7 @@ async function getWpThemeStyles() {
       return data.styles || '';
     }
 
-    // Fallback al endpoint original
+    // Fallback to the original endpoint
     const response = await fetch(
       `${apiUrl.replace(/\/$/, '')}/wp/v2/theme-styles`,
       {
@@ -158,14 +158,14 @@ export default async function WpStyles() {
   // 2. Fallback: obtener estilos del tema usando tu endpoint custom
   const themeStyles = await getWpThemeStyles();
 
-  // 3. URLs de las hojas de estilo estándar de Gutenberg
+  // 3. URLs for standard Gutenberg stylesheets
   const blockLibraryUrl = `${wpUrl}/wp-includes/css/dist/block-library/style.css`;
   const themeLibraryUrl = `${wpUrl}/wp-includes/css/dist/block-library/theme.css`;
   const editorLibraryUrl = `${wpUrl}/wp-includes/css/dist/block-editor/style.css`;
 
-  // 4. CSS base esencial para Gutenberg
+  // 4. Essential base CSS for Gutenberg
   const essentialStyles = `
-    /* Variables CSS base por si no se cargan desde WordPress */
+    /* Base CSS variables in case they don't load from WordPress */
     :root {
       --wp--preset--color--black: #000000;
       --wp--preset--color--cyan-bluish-gray: #abb8c3;
@@ -181,7 +181,7 @@ export default async function WpStyles() {
       --wp--preset--color--vivid-purple: #9b51e0;
     }
 
-    /* Clases esenciales para colores de texto */
+    /* Essential classes for text colors */
     .has-text-color {
       color: inherit;
     }
@@ -194,7 +194,7 @@ export default async function WpStyles() {
       color: inherit;
     }
 
-    /* Clases de color de texto y fondo que a veces faltan */
+    /* Text and background color classes that are sometimes missing */
     .has-black-color { color: var(--wp--preset--color--black) !important; }
     .has-white-color { color: var(--wp--preset--color--white) !important; }
     .has-cyan-bluish-gray-color { color: var(--wp--preset--color--cyan-bluish-gray) !important; }
@@ -220,30 +220,30 @@ export default async function WpStyles() {
     .has-vivid-cyan-blue-background-color { background-color: var(--wp--preset--color--vivid-cyan-blue) !important; }
     .has-vivid-purple-background-color { background-color: var(--wp--preset--color--vivid-purple) !important; }
     
-    /* Asegurar que los elementos con fondo tengan padding */
+    /* Ensure elements with background have padding */
     .has-background {
       padding: 1.25em 2.375em;
     }
     
-    /* Estilos para párrafos con fondo */
+    /* Styles for paragraphs with background */
     p.has-background {
       padding: 1em 1.5em;
     }
     
-    /* Botones con colores */
+    /* Buttons with colors */
     .wp-block-button__link.has-background {
       border: none;
       text-decoration: none;
     }
     
-    /* Alineaciones de texto */
+    /* Text alignments */
     .has-text-align-left { text-align: left; }
     .has-text-align-center { text-align: center; }
     .has-text-align-right { text-align: right; }
     .has-text-align-justify { text-align: justify; }
 
 
-    /* Alineaciones de imagen - Editor Clásico */
+    /* Image alignments - Classic Editor */
       .alignleft {
         float: left;
         margin-right: 1rem;
@@ -269,20 +269,20 @@ export default async function WpStyles() {
 
   return (
     <>
-      {/* Hojas de estilo estándar de WordPress/Gutenberg */}
+      {/* Standard WordPress/Gutenberg stylesheets */}
       <link rel="stylesheet" href={blockLibraryUrl} />
       <link rel="stylesheet" href={themeLibraryUrl} />
       <link rel="stylesheet" href={editorLibraryUrl} />
 
-      {/* Estilos esenciales (incluyendo variables CSS base) */}
+      {/* Essential styles (including base CSS variables) */}
       <style dangerouslySetInnerHTML={{ __html: essentialStyles }} />
 
-      {/* CSS generado desde los estilos globales de WordPress */}
+      {/* CSS generated from WordPress global styles */}
       {generatedCSS && (
         <style dangerouslySetInnerHTML={{ __html: generatedCSS }} />
       )}
 
-      {/* Estilos del tema (fallback) */}
+      {/* Theme styles (fallback) */}
       {themeStyles && (
         <style dangerouslySetInnerHTML={{ __html: themeStyles }} />
       )}
