@@ -1,26 +1,32 @@
-// src/components/layout/Header.tsx
+// src/components/layout/header/Header.tsx
+"use client";
 
-import LogoHeader from "@/components/layout/header/LogoHeader";
-import LogoHeaderHome from "@/components/layout/header/LogoHeaderHome";
-import LangSwitcher from "@/components/layout/header/LangSwitcher";
-import { getMenuItemsByLocation } from '@/api/wordpressApi';
-import WpNavMain from '@/components/wordpress/WpNavMain';
+import { usePathname } from 'next/navigation';
+import LogoHeaderServer from "@/components/layout/header/LogoHeaderServer";
+import LangSwitcher from "@/components/layout/header/LangSwitcher"; 
+import WpNavMenu from '@/components/wordpress/WpNavMenu';
 import SearchTrigger from '@/components/ui/SearchTrigger';
-
+import type { SiteInfo } from "@/types/wordpressTypes";
 
 interface HeaderProps {
   variant?: 'default' | 'home';
+  initialLocale?: string;
+  siteInfo: SiteInfo;
 }
 
-export default async function Header({ variant = 'default' }: HeaderProps) {
-  // Obtenemos los items del menú por su UBICACIÓN (ahora cacheado).
-  const menuItems = await getMenuItemsByLocation('mainnav') || [];
+export default function Header({ variant = 'default', initialLocale = 'es', siteInfo }: HeaderProps) {
+  const pathname = usePathname();
+
+  // Detectar el locale actual del pathname
+  // Si la ruta comienza con /en, es inglés; de lo contrario, es español
+  const segments = pathname.split('/').filter(Boolean);
+  const currentLocale = (segments.length > 0 && segments[0] === 'en') ? 'en' : 'es';
 
   return (
     <header className={`header ${variant === 'home' ? 'header-home' : ''}`}>
-      {variant === 'home' ? <LogoHeaderHome /> : <LogoHeader />}
-      <WpNavMain menuItems={menuItems} />
-      <LangSwitcher />
+      {variant === 'home' ? <LogoHeaderServer siteInfo={siteInfo} /> : <LogoHeaderServer siteInfo={siteInfo} />}
+      <WpNavMenu location="mainnav" className="main-menu" locale={currentLocale} />
+      <LangSwitcher currentLocale={currentLocale} />
       <SearchTrigger />
     </header>
   );

@@ -12,9 +12,15 @@
     }
 
     h3.post-card-title {
+        font-size: 1.5em;
         color: black;
         line-height: 1.4em;
         text-decoration: none;
+    }
+
+    .post-card-excerpt {
+        font-size: 0.96em;
+        line-height: 1.4em;
     }
 
     // Responsive: reduce margin and padding on small screens

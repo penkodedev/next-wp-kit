@@ -4,10 +4,11 @@ import FooterLogo from "@/components/layout/footer/FooterLogo";
 import FooterCopyright from "@/components/layout/footer/FooterCopyright";
 import FooterSocial from "@/components/layout/footer/FooterSocial";
 import FooterContact from "@/components/layout/footer/FooterContact";
-import FooterMenu from "@/components/layout/footer/FooterMenu";
+import FooterMenuClient from "@/components/layout/footer/FooterMenuClient";
 import FooterLastPosts from "@/components/layout/footer/FooterLastPosts";
 
 export default function Footer() {
+
   return (
     <footer className="footer">
       {/* Usamos el componente SiteInfo como un proveedor de datos */}
@@ -28,9 +29,7 @@ export default function Footer() {
               </div>
             </div>
 
-            <div className="footer-menu">
-              <FooterMenu />
-            </div>
+            <FooterMenuClient />
 
             <div className="copyright">
               <FooterLogo />

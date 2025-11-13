@@ -42,10 +42,18 @@ export default function SearchPage() {
     }
   }, [query]);
 
-  const getResultTitle = (result: SearchResultWithSubtype): string => {
-    if (typeof result.title === 'string') return result.title;
-    return result.title.rendered;
-  }
+  // Función auxiliar para resaltar la query en un texto dado
+  const highlightQuery = (text: string | null | undefined, query: string): string => {
+    if (!text || !query) return text || ''; // Retorna el texto original o cadena vacía si es null/undefined
+    // Use a regular expression for case-insensitive and global replacement
+    const regex = new RegExp(`(${query})`, 'gi');
+    return text.replace(regex, '<span class="bg-query">$1</span>');
+  };
+
+  const getResultTitle = (result: SearchResultWithSubtype, query: string): string => {
+    const titleText = typeof result.title === 'string' ? result.title : result.title.rendered;
+    return highlightQuery(titleText, query);
+  };
 
 
 /**********************************************
@@ -54,36 +62,39 @@ export default function SearchPage() {
   return (
     <div className="page-one-col">
       <main>
-        <article className="page-content">
+        <article className="page-content search-page-content">
           <header className="page-header">
-            <h1>Resultados de búsqueda para: "{query}"</h1>
+            <h1>Resultados de búsqueda para: <span className="bg-query">{query}</span></h1>
           </header>
 
-          <AnimatedFadeIn>
-            <div className="search-results-container">
-              {isLoading ? (
-                <p>Buscando...</p>
-              ) : !isLoading && results.length > 0 ? (
-                <ul className="space-y-6">
-                  {results.map((result, index) => (
-                    <AnimatedFadeIn as="li" key={result.id} transition={{ delay: index * 0.033 }}>
-                      <h3 className="text-xl font-semibold">
-                        <Link href={cleanInternalUrl(result.url)} className="hover:underline">{getResultTitle(result)}</Link>
+          <div className="search-results-container">
+            {isLoading ? (
+              <p>Buscando...</p>
+            ) : !isLoading && results.length > 0 ? (
+              <ul className="space-y-6">
+                {results.map((result, index) => (
+                  <AnimatedFadeIn as="li" key={result.id} transition={{ delay: index * 0.033 }}>
+                    <Link href={cleanInternalUrl(result.url)} className="search-result-link hover:underline">
+                      <h3
+                        className="text-xl font-semibold"
+                        dangerouslySetInnerHTML={{ __html: getResultTitle(result, query) }}
+                      >
                       </h3>
-                      <small className="text-sm text-gray-500">
-                        {typeof window !== 'undefined' && `${window.location.origin}${cleanInternalUrl(result.url)}`}
-                      </small>
-                      {result._embedded?.self?.[0]?.excerpt?.rendered && (
-                        <div className="search-result-excerpt mt-2" dangerouslySetInnerHTML={{ __html: result._embedded.self[0].excerpt.rendered }} />
-                      )}
-                    </AnimatedFadeIn>
-                  ))}
-                </ul>
-              ) : !isLoading && (
-                <p>No se encontraron resultados para tu búsqueda.</p>
-              )}
-            </div>
-          </AnimatedFadeIn>
+                      <small 
+                        className="text-sm text-gray-500"
+                        dangerouslySetInnerHTML={{ __html: highlightQuery(typeof window !== 'undefined' ? `${window.location.origin}${cleanInternalUrl(result.url)}` : cleanInternalUrl(result.url), query) }}
+                      />
+                    </Link>
+                    {result._embedded?.self?.[0]?.excerpt?.rendered && ( // Check if excerpt exists
+                      <div className="search-result-excerpt mt-2" dangerouslySetInnerHTML={{ __html: highlightQuery(result._embedded.self[0].excerpt.rendered, query) }} />
+                    )}
+                  </AnimatedFadeIn>
+                ))}
+              </ul>
+            ) : !isLoading && (
+              <p>No se encontraron resultados para tu búsqueda.</p>
+            )}
+          </div>
         </article>
       </main>
     </div>

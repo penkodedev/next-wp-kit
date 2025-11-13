@@ -1,26 +1,27 @@
 // src/app/layout.tsx
 
 import type { Metadata } from 'next';
+import type { ReactNode } from "react";
+
 import 'swiper/css/bundle';
 import { headers } from 'next/headers';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 
 import "@/styles/sass/main.scss";
-import type { ReactNode } from "react";
-import HeaderConditional from "@/components/layout/header/HeaderConditional";
 
-import Breadcrumbs from "@/components/navigation/Breadcrumbs";
+import HeaderServer from '@/components/layout/header/HeaderServer';
+import Footer from "@/components/layout/footer/Footer";
+
 import CookieConsent from "@/components/cookies/CookieConsent";
 import CookieManager from "@/components/cookies/CookieManager";
 import ScrollToTop from "@/components/navigation/ScrollToTop";
 import ModalController from '@/components/ui/ModalController';
 import AdvertisingPopup from '@/components/features/AdvertisingPopup';
 import LightboxController from '@/components/ui/LightboxController';
-import Footer from "@/components/layout/footer/Footer";
+import WpStyles from "@/components/wordpress/WpStyles";
 
 import BodyClass from "@/utils/BodyClass";
-import WpStyles from "@/components/wordpress/WpStyles";
 import { WpPageIdProvider } from '@/utils/WpPageIdContext';
 
 
@@ -64,19 +65,26 @@ function GlobalUI() {
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   // Providing all messages to the client
-  // side is the easiest way to get started
+  // side is the easiest way to get started.
   const messages = await getMessages();
+  const headersList = headers();
+  
+  // Get the locale from the middleware header (set in middleware.ts)
+  // The middleware extracts the locale from the URL and sets it as 'x-locale' header
+  const currentLocale = (headersList.get('x-locale') || 'es') as string;
 
+
+  
   return (
-    <html lang="es">
+    <html lang={currentLocale} suppressHydrationWarning>
       <head>
         <WpStyles />
       </head>
       <body>
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider locale={currentLocale} messages={messages}>
           <WpPageIdProvider>
-            <BodyClass>
-              <HeaderConditional />
+            <BodyClass> {/* BodyClass needs to be a client component to read pageId from context */}
+              <HeaderServer />
               {/* <Breadcrumbs /> */}
               <main>{children}</main>
               <Footer />
@@ -84,6 +92,22 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             </BodyClass>
           </WpPageIdProvider>
         </NextIntlClientProvider>
+        {/* Global locale sync for pages that don't use [...slug] layout */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                function updateLang() {
+                  const path = window.location.pathname;
+                  const locale = path.startsWith('/en') ? 'en' : 'es';
+                  document.documentElement.lang = locale;
+                }
+                updateLang();
+                window.addEventListener('popstate', updateLang);
+              })();
+            `
+          }}
+        />
       </body>
     </html>
   );

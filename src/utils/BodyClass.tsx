@@ -5,7 +5,7 @@
 import { useEffect, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { useWpPageId } from "@/utils/WpPageIdContext";
-import { getActiveCptSlugs } from "@/utils/cptConfig";
+import { CPT_SLUG_MAP } from "@/utils/cptConfig";
 
 interface BodyClassProps {
   children: React.ReactNode;
@@ -19,41 +19,27 @@ const BodyClass = ({ children }: BodyClassProps) => {
   const bodyClasses = useMemo(() => {
     const pathSegments = (pathname || '').split('/').filter(Boolean);
 
-    // CPT slugs that should be treated as archive pages
-    const archivePostTypes = getActiveCptSlugs();
+    // Remove locale from path segments for class generation
+    const slugWithoutLocale = (pathSegments.length > 0 && ['es', 'en'].includes(pathSegments[0])) ? pathSegments.slice(1) : pathSegments;
+
     let classes: string[] = [];
 
-    if (pathSegments.length === 1 && archivePostTypes.includes(pathSegments[0])) {
-      const postType = pathSegments[0];
-      classes = ['archive', `archive-${postType}`];
-    } else if (pathname === '/') {
+    if (slugWithoutLocale.length === 1 && CPT_SLUG_MAP[slugWithoutLocale[0]]) {
+      const internalCpt = CPT_SLUG_MAP[slugWithoutLocale[0]];
+      classes = ['archive', `archive-${internalCpt}`];
+    } else if (slugWithoutLocale.length === 0) {
+      // Handle home page for all locales
       classes = ["page-home"];
-    } else if (pathSegments.length === 2) {
-      // Single post/page (e.g., /cpt_slug/my-cpt)
-      const postType = pathSegments[0];
-      const archivePostTypes = getActiveCptSlugs();
-
-      if (archivePostTypes.includes(postType)) {
-        // It's a CPT single page
-        classes = [`single`, `single-${postType}`];
-        if (pageId) {
-          classes.push(`postid-${pageId}`);
-        }
-      } else {
-        // It's a regular page (like parent/child pages)
-        const className = `page-${pathSegments.join('-')}`;
-        classes = ["page", className];
-        if (pageId) {
-          classes.push(`page-id-${pageId}`);
-        }
-      }
-
+    } else if (slugWithoutLocale.length === 2 && CPT_SLUG_MAP[slugWithoutLocale[0]]) {
+      // It's a CPT single page
+      const internalCpt = CPT_SLUG_MAP[slugWithoutLocale[0]];
+      classes = [`single`, `single-${internalCpt}`];
       if (pageId) {
         classes.push(`postid-${pageId}`);
       }
     } else {
-      // Convert "/my-route/sub-route" to "page-my-route-sub-route"
-      const className = `page-${pathSegments.join('-')}`;
+      // It's a regular page
+      const className = `page-${slugWithoutLocale.join('-')}`;
       classes = ["page", className];
       if (pageId) {
         classes.push(`page-id-${pageId}`);
@@ -66,12 +52,19 @@ const BodyClass = ({ children }: BodyClassProps) => {
   useEffect(() => {
     const body = document.body;
 
-    // Add classes
+    // Clean up previous classes before adding new ones
+    const existingClasses = Array.from(body.classList).filter(cls => 
+      cls.startsWith('page-') || cls.startsWith('archive') || cls.startsWith('single') || cls.startsWith('postid-')
+    );
+    body.classList.remove(...existingClasses);
+
+    // Add new classes
     bodyClasses.forEach((cls) => body.classList.add(cls));
 
-    // Clean up on unmount or route change
+    // The cleanup function in useEffect is not strictly necessary with this approach,
+    // but we keep it as a good practice in case the component unmounts.
     return () => {
-      bodyClasses.forEach((cls) => body.classList.remove(cls));
+      body.classList.remove(...bodyClasses);
     };
   }, [bodyClasses]);
 

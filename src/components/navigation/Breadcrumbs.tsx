@@ -46,8 +46,8 @@ export default function Breadcrumbs() {
     breadcrumbItems.pop();
   }
 
-  // Determinar la URL base de forma segura en el cliente para el JSON-LD.
-  const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+  // Obtener la URL base desde las variables de entorno
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || ''; // Fallback a vacío si no está definida
 
   // Generar los datos estructurados para SEO (JSON-LD)
   const jsonLd = {

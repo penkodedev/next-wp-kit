@@ -1,10 +1,16 @@
 // src/api/wordpress.ts
 
-import type { WpContent, SiteInfo, MenuItem, SearchResult, PostNavigation, Post, Page, Modal } from '@/types/wordpressTypes';
+import type { WpContent, SiteInfo, MenuItem, SearchResult, Page, Modal, PostNavigation, AllMenus } from '@/types/wordpressTypes';
 import { unstable_cache } from 'next/cache';
 
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
+/*--------------------------------------------------------------------------------------
+    WORDPRESS API CONSUMPTION
+    This file is the central place for fetching data from the WordPress REST API.
+    All custom endpoints consumed here are defined in the headless theme, specifically
+    in the file: /inc/api/api-endpoints.php
+--------------------------------------------------------------------------------------*/
 
 // ********************** Core Fetch API Function **********************
 export async function fetchAPI<T>(
@@ -69,16 +75,23 @@ export async function fetchAPI<T>(
 }
 
 
-/**
- * Fetches basic site information from a custom endpoint.
- * EXAMPLE: This function assumes you have created a custom endpoint in your
- * WordPress functions.php that returns the site title and description.
- */
+/*--------------------------------------------------------------------------------------
+    🍔 GET SITE INFO
+    Route: /custom/v1/site-info
+    e.g. /custom/v1/site-info
+--------------------------------------------------------------------------------------*/
+/** Fetches basic site information from a custom endpoint. */
 export async function getSiteInfo(): Promise<SiteInfo | null> {
   const data = await fetchAPI<SiteInfo>('/custom/v1/site-info');
   return data;
 }
 
+
+/*--------------------------------------------------------------------------------------
+    🍔 GET ALL CONTENT (GENERIC)
+    Route: /wp/v2/{postType}{params}
+    e.g. /wp/v2/posts?per_page=10&_embed
+--------------------------------------------------------------------------------------*/
 /**
  * GENERIC: Fetches a collection of items from any CPT.
  * @param postType The CPT slug (e.g., 'posts', 'pages').
@@ -89,51 +102,50 @@ export async function getAllContent<T extends WpContent>(postType: string, param
   return data || [];
 }
 
+
+/*--------------------------------------------------------------------------------------
+    🍔 GET CONTENT BY SLUG (GENERIC)
+    Route: /wp/v2/{postType}?slug={slug}&_embed&_fields=...
+    e.g. /wp/v2/pages?slug=sample-page&_embed
+--------------------------------------------------------------------------------------*/
 /**
  * GENERIC: Fetches a content item by its slug.
  * @param postType The CPT slug (e.g., 'posts', 'pages').
  * @param slug The item's slug.
+ * @param lang Optional language code (e.g., 'en') for WPML support.
  */
-export async function getContentBySlug<T extends WpContent>(postType: string, slug: string): Promise<T | null> {
+export async function getContentBySlug<T extends WpContent>(postType: string, slug: string, lang?: string): Promise<T | null> {
   // We add `&_fields=...,blocks` to explicitly request the parsed Gutenberg blocks structure.
   // This is needed to reconstruct block wrappers that the REST API might strip out.
   // We also request rendered content to ensure shortcodes are processed.
-  const data = await fetchAPI<T[]>(`/wp/v2/${postType}?slug=${slug}&_embed&_fields=id,slug,title,content,excerpt,date,modified,author,featured_media,_links,_embedded,blocks,yoast_head_json`);
+  let query = `/wp/v2/${postType}?slug=${slug}&_embed&_fields=id,slug,title,content,excerpt,date,modified,author,featured_media,_links,_embedded,blocks,yoast_head_json`;
+  if (lang && lang !== 'es') { // 'es' is default, no need to add param
+    query += `&lang=${lang}`;
+  }
+  const data = await fetchAPI<T[]>(query);
   return data?.[0] ?? null;
 }
+ 
 
-/**
- * Fetches content by ID with shortcodes processed.
- * @param postType The CPT slug (e.g., 'posts', 'pages').
- * @param id The item's ID.
- */
-export async function getContentById<T extends WpContent>(postType: string, id: number): Promise<T | null> {
-  // Use custom endpoint that processes shortcodes
-  const data = await fetchAPI<T>(`/custom/v1/content/${postType}/${id}`);
-  return data;
-}
-
-/******************** (HOME PAGE CONTENT) ****************************/
-/**
- * Fetches the home page content, with optional language support
- * @param lang Optional language code (es, en) for WPML support
- */
+/*--------------------------------------------------------------------------------------
+    🍔 GET HOME PAGE CONTENT
+    Route: /custom/v1/home-page?lang={lang} (or /wp/v2/pages?slug=inicio)
+    e.g. /custom/v1/home-page?lang=en
+--------------------------------------------------------------------------------------*/
+/** Fetches the home page content, with optional language support. */
 export async function getHomePage(lang?: string): Promise<Page | null> {
-  if (lang && lang !== 'es') {
-    // Use the dedicated WPML endpoint for getting translated home page
-    const translatedPage = await fetchAPI<Page>(`/custom/v1/home-page?lang=${lang}`);
-    if (translatedPage) {
-      return translatedPage;
-    }
-  }
-
-  // Default: get the Spanish version
-  return await getContentBySlug<Page>('pages', 'inicio');
+  // Use getContentBySlug directly to fetch the home page content
+  const slug = lang === 'en' ? 'home' : 'inicio'; // Adjust slug based on language
+  return await getContentBySlug<Page>('pages', slug, lang);
 }
 
-/**
- * Fetches hero data from the customizer endpoint.
- */
+
+/*--------------------------------------------------------------------------------------
+    🍔 GET HERO DATA
+    Route: /custom/v1/hero-data
+    e.g. /custom/v1/hero-data
+--------------------------------------------------------------------------------------*/
+/** Fetches hero data from the customizer endpoint. */
 export async function getHeroData(): Promise<{
   title?: string;
   subtitle?: string;
@@ -141,46 +153,42 @@ export async function getHeroData(): Promise<{
   backgroundVideo?: string;
   buttonText?: string;
   buttonLink?: string;
+  // Add other hero-specific fields if needed
 } | null> {
   return await fetchAPI('/custom/v1/hero-data');
 }
 
-/******************** (MODALES/POPUPS CPT) ****************************/
-/**
- * Fetches all modals that are configured as active popups.
- */
+
+/*--------------------------------------------------------------------------------------
+    🍔 GET ACTIVE POPUPS (MODALES CPT)
+    Route: /custom/v1/active-popups
+    e.g. /custom/v1/active-popups
+--------------------------------------------------------------------------------------*/
+/** Fetches all modals that are configured as active popups. */
 export async function getActivePopups(): Promise<Modal[] | null> {
   return await fetchAPI<Modal[]>('/custom/v1/active-popups');
 }
 
 
-/******************** WORDPRESS MENUS ****************************/
-/**
- * Fetches menu items by their slug from the custom endpoint.
- * @param slug The menu slug to fetch (e.g., 'main-menu').
- */
-export async function getMenuItems(slug: string): Promise<MenuItem[] | null> {
-  return await fetchAPI<MenuItem[]>(`/custom/v1/menus/${slug}`);
-}
-
-/**
- * Fetches menu items by their THEME LOCATION (cached version).
- * @param location The menu location slug (e.g., 'mainnav').
- */
-export async function getMenuItemsByLocation(location: string): Promise<MenuItem[] | null> {
-  return await getCachedMenuItemsByLocation(location);
-}
-
-// Cached menu fetching function
-const getCachedMenuItemsByLocation = unstable_cache(
-  async (location: string): Promise<MenuItem[] | null> => {
-    return await fetchAPI<MenuItem[]>(`/custom/v1/menu-location/${location}`);
+/*--------------------------------------------------------------------------------------
+    🍔 GET ALL MENUS (cached)
+    Route: /custom/v1/menus
+    Fetches a comprehensive object of all registered menus and their items.
+--------------------------------------------------------------------------------------*/
+/** Fetches all menus from WordPress and caches the result. */
+export const getAllMenus = unstable_cache(
+  async (): Promise<AllMenus | null> => {
+    return await fetchAPI<AllMenus>('/custom/v1/menus');
   },
-  ['menu-items-by-location'],
-  { revalidate: 300 } // Cache for 5 minutes
+  ['all-menus'], // Cache key
+  { revalidate: 300 } // Revalidate every 5 minutes
 );
 
-/******************** WORDPRESS POST NAVIGATION ****************************/
+/*--------------------------------------------------------------------------------------
+    🍔 GET POST NAVIGATION (PREVIOUS/NEXT)
+    Route: /custom/v1/post-navigation?post_id={id}&post_type={type}
+    e.g. /custom/v1/post-navigation?post_id=123&post_type=posts
+--------------------------------------------------------------------------------------*/
 /**
  * Fetches the previous and next post for navigation.
  * @param postId The ID of the current post.
@@ -192,75 +200,37 @@ export async function getPostNavigation(postId: number, postType: string): Promi
 }
 
 
-/******************** WORDPRESS SEARCH ****************************/
+/*--------------------------------------------------------------------------------------
+    � GET TRANSLATIONS (WPML)
+    Route: /custom/v1/translations/{post_type}/{slug}
+    e.g. /custom/v1/translations/pages/about
+    Returns a map of all translated URLs for a piece of content.
+--------------------------------------------------------------------------------------*/
 /**
- * Searches the site using a custom search endpoint.
- * @param term The search term.
+ * Fetches all translated URLs for a post, page, or CPT item.
+ * @param postType The post type (e.g., 'pages', 'posts', 'hero').
+ * @param slug The slug of the content.
+ * @returns A map of language codes to URLs, e.g., { es: '/about', en: '/en/about' }
  */
+export async function getTranslations(postType: string, slug: string): Promise<Record<string, string> | null> {
+  return await fetchAPI<Record<string, string>>(`/custom/v1/translations/${postType}/${slug}`, { next: { revalidate: 300 } });
+}
 
+
+/*--------------------------------------------------------------------------------------
+    �🍔 SEARCH SITE
+    Route: /custom/v1/search?term={term}
+    e.g. /custom/v1/search?term=example
+--------------------------------------------------------------------------------------*/
+/** Searches the site using a custom search endpoint. */
 export async function searchSite(term: string): Promise<SearchResult[] | null> {
   if (!term) return [];
 
   // We use our custom endpoint which gives us full control over the search.
   // This avoids the issues of the native WP REST API search.
   const searchQuery = `/custom/v1/search?term=${encodeURIComponent(term)}`;
-
   const data = await fetchAPI<SearchResult[]>(searchQuery);
-
   // The fetchAPI function can now return null on error, or an empty array on 404.
   // We ensure to always return an array so that components don't fail.
   return data || [];
-}
-
-/******************** WORDPRESS CPT TYPES ****************************/
-/**
- * Fetches all available post types from WordPress
- */
-export async function getAllPostTypes(): Promise<string[]> {
-  const data = await fetchAPI<Record<string, any>>('/wp/v2/types');
-  if (!data || typeof data !== 'object') return [];
-
-  // Filter out built-in types, keep only custom post types
-  return Object.keys(data).filter(type =>
-    !['post', 'page', 'attachment', 'nav_menu_item', 'wp_block'].includes(type)
-  );
-}
-
-/******************** WORDPRESS LANGUAGES (WPML) ****************************/
-/**
- * Fetches available languages from WordPress (WPML plugin)
- */
-export async function getAvailableLanguages(): Promise<Array<{
-  code: string;
-  name: string;
-  native_name: string;
-  url: string;
-  active: boolean;
-}>> {
-  const data = await fetchAPI<Array<{
-    code: string;
-    name: string;
-    native_name: string;
-    url: string;
-    active: boolean;
-  }>>('/custom/v1/languages');
-  return data || [];
-}
-
-/**
- * Fetches translated slug for a page from WordPress (WPML plugin)
- */
-export async function getTranslatedSlug(pageSlug: string, lang: string): Promise<{
-  original_slug: string;
-  translated_slug: string;
-  translated_title: string;
-  has_translation: boolean;
-} | null> {
-  const data = await fetchAPI<{
-    original_slug: string;
-    translated_slug: string;
-    translated_title: string;
-    has_translation: boolean;
-  }>(`/custom/v1/translated-slug?page_slug=${encodeURIComponent(pageSlug)}&lang=${lang}`);
-  return data;
 }

@@ -1,33 +1,56 @@
 // src/utils/cptConfig.ts
 /**
- * Centralized configuration for Custom Post Types (CPTs)
- *
- * To add a new CPT to the kit:
- * 1. Add the slug to ACTIVE_CPTS
- * 2. Create pages in app/[slug]/page.tsx and app/[slug]/[slug]/page.tsx
- * 3. The system will automatically detect it in BodyClass, sitemap, etc.
+ * Configuración centralizada para Custom Post Types (CPTs).
+ * Esta es la ÚNICA fuente de verdad para los CPTs y sus traducciones.
  */
 
+// Define la estructura de la configuración de un CPT
+type CptConfig = {
+  slug: string; // El slug interno usado en WordPress (ej. 'noticias')
+  translations: {
+    [locale: string]: string; // Mapeo de locale a slug traducido (ej. { es: 'noticias', en: 'news' })
+  };
+};
 
-  // *******  Add new CPTs here: *******//
-export const ACTIVE_CPTS = [
-  'recursos',
-  'modales',
-  'news',
-] as const;
+// *******  Añade y configura nuevos CPTs aquí: *******//
+export const CPT_CONFIG: CptConfig[] = [
+  {
+    slug: 'noticias',
+    translations: {
+      es: 'noticias',
+      en: 'news',
+    },
+  },
+  {
+    slug: 'recursos',
+    translations: {
+      es: 'recursos',
+      en: 'resorts',
+    },
+  },
+  {
+    slug: 'modales',
+    translations: {
+      es: 'modales',
+      en: 'modals',
+    },
+  },
+  {
+    slug: 'hero',
+    translations: {
+      es: 'hero',
+      en: 'hero',
+    },
+  },
+];
 
-export type CptSlug = typeof ACTIVE_CPTS[number];
-
-/**
- * Verifica si un slug es un CPT activo
- */
-export function isActiveCpt(slug: string): slug is CptSlug {
-  return ACTIVE_CPTS.includes(slug as CptSlug);
-}
-
-/**
- * Obtiene todos los slugs de CPTs activos
- */
-export function getActiveCptSlugs(): readonly string[] {
-  return ACTIVE_CPTS;
-}
+// Genera un mapa de todos los slugs traducidos a su slug interno de WP.
+// Esto es lo que usará detectRouteType para saber qué es un CPT.
+// Resultado: { noticias: 'noticias', news: 'noticias', recursos: 'recursos', resorts: 'recursos', ... }
+export const CPT_SLUG_MAP: Record<string, string> = CPT_CONFIG.reduce((acc, cpt) => {
+  for (const locale in cpt.translations) {
+    const translatedSlug = cpt.translations[locale];
+    acc[translatedSlug] = cpt.slug;
+  }
+  return acc;
+}, {} as Record<string, string>);

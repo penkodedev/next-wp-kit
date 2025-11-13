@@ -1,21 +1,5 @@
 /*** BEGIN UNUSED FONTS
 
-font-face {
-	font-family: 'OpenSans-Regular';
-	src: url('assets/fonts/opensans-regular/OpenSans-Regular.woff');
-	src: local('☺'), url('assets/fonts/opensans-regular/OpenSans-Regular.woff') format('woff'), url('assets/fonts/opensans-regular/OpenSans-Regular.ttf') format('truetype'), url('assets/fonts/opensans-regular/OpenSans-Regular.svg') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: 'Muli-ExtraBold';
-	src: url('assets/fonts/muli-extrabold/Muli-ExtraBold.woff');
-	src: local('☺'), url('assets/fonts/muli-extrabold/Muli-ExtraBold.woff') format('woff'), url('assets/fonts/muli-extrabold/Muli-ExtraBold.ttf') format('truetype'), url('assets/fonts/muli-extrabold/Muli-ExtraBold.svg') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-
 @font-face {
 	font-family: 'Poppins-Thin';
 	src: url('assets/fonts/poppins-thin/Poppins-Thin.woff');
@@ -80,6 +64,24 @@ font-face {
 	font-style: normal;
 }
 
+
+@font-face {
+	font-family: 'OpenSans-Regular';
+	src: url('/fonts/poppins-regular/Poppins-Regular.woff') format('woff'),
+		 url('/fonts/poppins-regular/Poppins-Regular.ttf') format('truetype'),
+		 url('/fonts/poppins-regular/Poppins-Regular.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Muli-ExtraBold';
+	src: url('assets/fonts/muli-extrabold/Muli-ExtraBold.woff');
+	src: local('☺'), url('assets/fonts/muli-extrabold/Muli-ExtraBold.woff') format('woff'), url('assets/fonts/muli-extrabold/Muli-ExtraBold.ttf') format('truetype'), url('assets/fonts/muli-extrabold/Muli-ExtraBold.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
 END UNUSED FONTS ***/
 
 
@@ -104,5 +106,3 @@ END UNUSED FONTS ***/
 	font-weight: normal;
 	font-style: normal;
 }
-
-

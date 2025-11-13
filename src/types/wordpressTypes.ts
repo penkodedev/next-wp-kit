@@ -1,15 +1,31 @@
 // src/types/wordpressTypes.ts
 
 /**
- * Interface for a menu item, potentially with children (submenus).
+ * Interfaz para un elemento de menú, potencialmente con hijos (submenús).
+ * Esta interfaz refleja la estructura devuelta por la función `clean_menu_items` en PHP.
  */
 export interface MenuItem {
   id: number;
-  parent: string;
+  parent: string | number; // El parent puede ser 0
   title: string;
   url: string;
-  children?: MenuItem[]; // Children are optional and recursive
+  target?: string; // Ej: '_blank'
+  classes?: string[]; // Clases CSS asignadas en el menú de WP
+  children?: MenuItem[]; // Los hijos son opcionales y recursivos
 }
+
+/**
+ * Objeto que contiene todos los menús del sitio, indexados por su slug.
+ * Refleja la estructura devuelta por `get_all_menus_data` en PHP.
+ */
+export type AllMenus = {
+  [slug: string]: {
+    slug: string;
+    name: string;
+    location: string | null; // La ubicación del tema, si la tiene
+    items: MenuItem[];
+  };
+};
 
 /**
  * Interface for basic site information.

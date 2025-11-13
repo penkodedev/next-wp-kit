@@ -1,0 +1,45 @@
+.page-search .page-content {
+    margin: 46px 0 0 0;
+}
+
+.page-search .page-content ul {
+    margin: 40px 0 140px 0;
+    padding: 0;
+
+    li {
+        list-style: none;
+        margin-bottom: 33px;
+
+        &:before {
+            content: none;
+        }
+
+        h3 {
+            margin: 0;
+        }
+
+        small.text-sm {
+            font-size: 0.8em;
+            color: blue;
+            line-height: 1.5;
+            display: block;
+            margin-bottom: 10px;
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline;
+                color: rgb(132, 132, 253);
+            }
+        }
+    }
+
+    .search-result-excerpt {
+        font-size: 0.8em;
+        color: rgb(102, 102, 102);
+        line-height: 1.3em;
+    }
+}
+
+.bg-query {
+    background-color: yellow;
+}

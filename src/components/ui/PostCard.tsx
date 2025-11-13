@@ -75,7 +75,7 @@ export default function PostCard({
             className="post-card-image"
             style={{
               position: "relative",
-              aspectRatio: "16 / 9",
+              aspectRatio: "16 / 10",
             }}
           >
             <Image
@@ -83,7 +83,10 @@ export default function PostCard({
               alt={featuredMedia?.alt_text || item.title.rendered}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              style={{ objectFit: "cover" }}
+              style={{
+                objectFit: "cover",
+                objectPosition: "center center",
+               }}
             />
 
           </div>

@@ -23,6 +23,8 @@ export default function NotFound() {
             <h1>404 - Página No Encontrada</h1>
           </header>
 
+          <div className='image-404'></div>
+
           <p>Lo sentimos, la página que buscas no existe.</p>
 
           <Link href="/">

@@ -4,16 +4,19 @@
 // -----------------------------------------------------------------------
 
 
-.page article{
+.page article {
   min-height: 500px;
 }
 
-.article-content{
+.article-content {
   padding-bottom: 120px;
 }
 
 .page-title {
-  background-color: rgb(238, 238, 238);
+  background: rgba(121, 121, 121, 0.1);
+  backdrop-filter: blur(10px) saturate(120%);
+
+
   border: 1px solid #b3b3b3;
   position: relative;
   padding: 36px;
@@ -28,11 +31,34 @@
 }
 
 .full-width {
-    display: flex;
-    position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
-    width: 100vw;
+  display: flex;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+}
+
+body.page-id-279 {
+  background-image: url("/images/18.webp");
+  background-size: contain;
+
+  .breadcrumb {
+    display: none;
+  }
+
+  header {
+    background: none;
+    border: none;
+  }
+
+  footer {
+    background-color: white;
+  }
+
+  .page-title {
+    border:none;
+    margin-bottom: 55px;
+  }
 }

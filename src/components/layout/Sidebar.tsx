@@ -36,28 +36,6 @@ export default async function Sidebar() {
         )}
       </div>
 
-      <div className="sidebox">
-        <h2>Últimas News</h2>
-        {!latestNews || latestNews.length === 0 ? (
-          <p>No se encontraron news recientes.</p>
-        ) : (
-          <ul>
-            {latestNews.map((newsItem) => (
-              <li key={newsItem.id}>
-                <Link href={`/news/${newsItem.slug}`}>
-                  <Icons.Check
-                    size={20}
-                    strokeWidth={3}
-                    className="list-icon"
-                  />
-                  {newsItem.title.rendered}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
       {/* You can add more .sidebox divs here for other widgets like search, categories, etc. */}
     </aside>
   );

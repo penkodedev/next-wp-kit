@@ -1,6 +1,4 @@
-// src/app/[...slug]/page.tsx
 // Intelligent catch-all route to handle pages and CPTs from WordPress.
-
 import { getContentBySlug, getAllContent, getAllPostTypes, getHomePage } from "@/api/wordpressApi";
 import { fetchAPI } from "@/api/wordpressApi";
 import AnimatedArticle from "@/components/animations/AnimatedArticle";
@@ -18,6 +16,8 @@ import { Icons } from "@/components/ui/Icons";
 import Link from "next/link";
 import { processContent } from "@/utils/processContent";
 import { WpPageId } from "@/utils/WpPageId";
+import { CPT_SLUG_MAP } from "@/utils/cptConfig";
+import HeroConfig from '@/components/sections/HeroConfig';
 
 type PageProps = {
   params: {
@@ -34,51 +34,42 @@ type RouteType =
   | { type: 'cpt-archive'; cpt: string }
   | { type: 'cpt-single'; cpt: string; slug: string };
 
-async function detectRouteType(slug: string[]): Promise<RouteType> {
-   // Check if first segment is a locale (es, en)
-   const firstSegment = slug[0];
-   const isLocale = ['es', 'en'].includes(firstSegment);
+export async function detectRouteType(slug: string[]): Promise<RouteType> {
+  console.log('Detecting route type for slug:', slug);
 
-   // If it's a locale, remove it from slug for processing
-   const actualSlug = isLocale ? slug.slice(1) : slug;
+  const firstSegment = slug[0];  
+  const isLocale = ['es', 'en'].includes(firstSegment);
+  const slugWithoutLocale = isLocale ? slug.slice(1) : slug;
 
-   // If it's just a locale (like /en), treat as home page
-   if (actualSlug.length === 0 && isLocale) {
-     return { type: 'page', path: '' };
-   }
+  // Case 1: Home page (e.g., / or /en)
+  if (slugWithoutLocale.length === 0) {
+    console.log('Route type: home page');
+    return { type: 'page', path: '' };
+  }
 
-   if (actualSlug.length === 1) {
-     const singleSlug = actualSlug[0];
-     try {
-       const allTypes = await getAllPostTypes();
-       const validCpts = allTypes?.filter(type =>
-         !['post', 'page', 'attachment', 'nav_menu_item', 'wp_block'].includes(type)
-       ) || [];
+  const firstSlugSegment = slugWithoutLocale[0];
+  const secondSlugSegment = slugWithoutLocale[1];
 
-       if (validCpts.includes(singleSlug)) {
-         return { type: 'cpt-archive', cpt: singleSlug };
-       }
-     } catch (error) {
-       // Continue to page handling if API fails
-     }
-   } else if (actualSlug.length === 2) {
-     const [cptSlug, postSlug] = actualSlug;
-     try {
-       const allTypes = await getAllPostTypes();
-       const validCpts = allTypes?.filter(type =>
-         !['post', 'page', 'attachment', 'nav_menu_item', 'wp_block'].includes(type)
-       ) || [];
+  // Case 2: CPT Archive (e.g., /noticias or /en/news)
+  if (slugWithoutLocale.length === 1 && CPT_SLUG_MAP[firstSlugSegment]) {
+    const internalCpt = CPT_SLUG_MAP[firstSlugSegment];
+    console.log(`Route type: cpt-archive for ${internalCpt} (from slug ${firstSlugSegment})`);
+    return { type: 'cpt-archive', cpt: internalCpt };
+  }
 
-       if (validCpts.includes(cptSlug)) {
-         return { type: 'cpt-single', cpt: cptSlug, slug: postSlug };
-       }
-     } catch (error) {
-       // Continue to page handling if API fails
-     }
-   }
+  // Case 3: CPT Single (e.g., /noticias/mi-noticia or /en/news/my-news)
+  if (slugWithoutLocale.length === 2 && CPT_SLUG_MAP[firstSlugSegment]) {
+    const internalCpt = CPT_SLUG_MAP[firstSlugSegment];
+    const postSlug = secondSlugSegment;
+    console.log(`Route type: cpt-single for ${internalCpt} (from slug ${firstSlugSegment}), post slug: ${postSlug}`);
+    return { type: 'cpt-single', cpt: internalCpt, slug: postSlug };
+  }
 
-   return { type: 'page', path: actualSlug.join('/') };
- }
+  // Case 4: Default to a page
+  const pagePath = slugWithoutLocale.join('/');
+  console.log('Route type: page with path', pagePath);
+  return { type: 'page', path: pagePath };
+}
 
 // Generate Dynamic Metadata for SEO.
 export async function generateMetadata({
@@ -136,19 +127,33 @@ export async function generateStaticParams() {
       );
 
       for (const cpt of customTypes) {
-        // Add archive pages
+        // Add archive pages - use translated slugs for English
         params.push({ slug: [cpt] });
         params.push({ slug: ['es', cpt] });
-        params.push({ slug: ['en', cpt] });
+
+        // For English, use translated slug if available (from our known translations)
+        const englishSlug = cpt === 'noticias' ? 'news' : (cpt === 'recursos' ? 'resorts' : cpt);
+        params.push({ slug: ['en', englishSlug] });
 
         try {
-          const posts = await getAllContent<WpContent>(cpt, '?per_page=10&_embed');
-          if (posts) {
-            posts.forEach(post => {
-              // Add single CPT pages
+          // Get posts in both languages to generate all possible routes
+          const spanishPosts = await getAllContent<WpContent>(cpt, '?per_page=10&_embed');
+          const englishPosts = await getAllContent<WpContent>(cpt, '?per_page=10&_embed&lang=en');
+
+          // Combine posts from both languages
+          const allPosts = [...(spanishPosts || []), ...(englishPosts || [])];
+          const uniquePosts = allPosts.filter((post, index, self) =>
+            index === self.findIndex(p => p.id === post.id)
+          );
+
+          if (uniquePosts.length > 0) {
+            uniquePosts.forEach(post => {
+              // Add single CPT pages in Spanish
               params.push({ slug: [cpt, post.slug] });
               params.push({ slug: ['es', cpt, post.slug] });
-              params.push({ slug: ['en', cpt, post.slug] });
+
+              // Add single CPT pages in English with translated archive slug
+              params.push({ slug: ['en', englishSlug, post.slug] });
             });
           }
         } catch (error) {
@@ -166,37 +171,60 @@ export async function generateStaticParams() {
 export default async function CatchAllPage({ params }: PageProps) {
   const path = getPathFromParams(params);
   const routeType = await detectRouteType(params.slug);
-
+  // Determine the current locale from the path
+  const locale = (params.slug.length > 0 && ['es', 'en'].includes(params.slug[0])) ? params.slug[0] : 'es';
+  console.log('Route type result:', routeType);
   if (routeType.type === 'cpt-archive') {
+    // Use WPML REST API filtering for translated content
+    const apiParams = locale === 'es'
+      ? '?per_page=12&_embed&orderby=date&order=desc'
+      : `?per_page=12&_embed&orderby=date&order=desc&lang=${locale}`;
 
-    const posts = await getAllContent<WpContent>(routeType.cpt, '?per_page=12&_embed&orderby=date&order=desc');
+    const posts = await getAllContent<WpContent>(routeType.cpt, apiParams);
 
+    // Check if this is an English route and translate the title
+    const isEnglishRoute = params.slug.length > 1 && params.slug[0] === 'en';
+    const displayTitle = isEnglishRoute
+      ? (routeType.cpt === 'noticias' ? 'News' : (routeType.cpt === 'recursos' ? 'Resorts' : routeType.cpt.charAt(0).toUpperCase() + routeType.cpt.slice(1)))
+      : routeType.cpt.charAt(0).toUpperCase() + routeType.cpt.slice(1);
+
+    // For English routes, use translated basePath
+    const basePath = isEnglishRoute
+      ? (routeType.cpt === 'noticias' ? '/en/news' : (routeType.cpt === 'recursos' ? '/en/resorts' : `/${routeType.cpt}`))
+      : `/${routeType.cpt}`;
 
 /**********************************************
       START BUILDING CPT ARCHIVE HTML
 **********************************************/
     return (
       <div className="page-fullwidth">
-        <section className="page-title">
-          <h1>{routeType.cpt.charAt(0).toUpperCase() + routeType.cpt.slice(1)}</h1>
-        </section>
+          <section className="page-title">
+            <h1>{displayTitle}</h1>
+          </section>
 
-        {posts && posts.length > 0 ? (
-          <GridPosts
-            posts={posts}
-            basePath={`/${routeType.cpt}`}
-          />
-        ) : (
-          <article>
-            <p>No content found in this section.</p>
-          </article>
-        )}
-      </div>
+          {posts && posts.length > 0 ? (
+            <GridPosts
+              posts={posts}
+              basePath={basePath}
+            />
+          ) : (
+            <article>
+              <p>No content found in this section.</p>
+            </article>
+          )}
+        </div>
     );
   }
 
   if (routeType.type === 'cpt-single') {
-    const post = await getContentBySlug<WpContent>(routeType.cpt, routeType.slug);
+    // For single posts, we need to find the translated slug if we're in a different locale
+    let slugToFetch = routeType.slug;
+
+    // For single posts, slugs are the same in both languages
+    // No translation needed - use the slug directly
+    console.log(`Fetching single post with slug: ${routeType.slug} for CPT: ${routeType.cpt} in locale: ${locale}`);
+
+    const post = await getContentBySlug<WpContent>(routeType.cpt, slugToFetch, locale);
 
     if (!post) {
       notFound();
@@ -204,7 +232,7 @@ export default async function CatchAllPage({ params }: PageProps) {
 
 
 /**********************************************
-          START BUILDING CPT SINGLE HTML
+           START BUILDING CPT SINGLE HTML
 **********************************************/
     return (
       <div className="page-sidebar">
@@ -213,7 +241,7 @@ export default async function CatchAllPage({ params }: PageProps) {
           <article className="entry-content">
             <Link href={`/${routeType.cpt}`} className="back-to-archive-link">
               <Icons.ArrowLeft size={26} strokeWidth={1} className="arrow-left" />
-              Back to {routeType.cpt.charAt(0).toUpperCase() + routeType.cpt.slice(1)}
+              Back to {routeType.cpt === 'noticias' ? 'Noticias' : (routeType.cpt === 'recursos' ? 'Recursos' : routeType.cpt.charAt(0).toUpperCase() + routeType.cpt.slice(1))}
             </Link>
 
             <section className="page-title">
@@ -245,6 +273,7 @@ export default async function CatchAllPage({ params }: PageProps) {
             postId={post.id}
             postType={routeType.cpt}
             basePath={`/${routeType.cpt}`}
+            locale={locale}
           />
         </main>
         <Sidebar />
@@ -269,6 +298,7 @@ export default async function CatchAllPage({ params }: PageProps) {
     return (
       <>
         <WpPageIdSetter pageId={homePage.id} />
+        <HeroConfig /> {/* Render HeroConfig here */}
         <div className="page-one-col">
           <article>
             <div
@@ -286,19 +316,20 @@ export default async function CatchAllPage({ params }: PageProps) {
     );
   }
 
-  // For nested pages, try the full path first, then just the last segment
-  let page = await getContentBySlug<Page>("pages", path);
+  // Default: Render Page
+  // For pages, we simply use the slug from the URL and the current locale
+  let page = await getContentBySlug<Page>("pages", path, locale);
 
   // If page not found and we have a locale prefix, try to get the translated version
   if (!page && params.slug.length > 1 && ['es', 'en'].includes(params.slug[0])) {
     const lang = params.slug[0];
     const actualPath = params.slug.slice(1).join('/');
 
-    // Try to get the translated page using the new endpoint
-    if (lang !== 'es') {
-      const translatedPage = await fetchAPI<Page>(`/custom/v1/page-by-lang?lang=${lang}&page_slug=${actualPath}`);
-      if (translatedPage) {
-        page = translatedPage;
+    // Try to get the translated page using WPML REST API
+    if (lang !== 'es') { // This check is redundant if getContentBySlug already uses locale
+      const translatedPage = await fetchAPI<Page>(`/wp/v2/pages?slug=${actualPath}&lang=${lang}&_embed`);
+      if (translatedPage && Array.isArray(translatedPage) && translatedPage.length > 0) {
+        page = translatedPage[0];
       }
     }
   }
@@ -319,27 +350,27 @@ export default async function CatchAllPage({ params }: PageProps) {
 
 
 /**********************************************
-      START BUILDING STATIC PAGE HTML
+       START BUILDING STATIC PAGE HTML
 **********************************************/
-  return (
-    <>
-      <WpPageIdSetter pageId={pageId} />
-      <div className="page-one-col">
-        <main>
-          <section className="page-title">
-            <h1>{page.title.rendered}</h1>
-          </section>
-          <article className="page-content">
-            <AnimatedArticle>
-            <Breadcrumbs />
-            <ContactForm7Content
-              content={page.content.rendered}
-              hasForm={page.content.rendered.includes('wpcf7-form')}
-              />
-              </AnimatedArticle>
-          </article>
-        </main>
-      </div>
-    </>
-  );
+   return (
+     <>
+       <WpPageIdSetter pageId={pageId} />
+       <div className="page-one-col">
+         <main>
+           <section className="page-title">
+             <h1>{page.title.rendered}</h1>
+           </section>
+           <article className="page-content">
+             <AnimatedArticle>
+             <Breadcrumbs />
+             <ContactForm7Content
+               content={page.content.rendered}
+               hasForm={page.content.rendered.includes('wpcf7-form')}
+               />
+               </AnimatedArticle>
+           </article>
+         </main>
+       </div>
+     </>
+   );
 }

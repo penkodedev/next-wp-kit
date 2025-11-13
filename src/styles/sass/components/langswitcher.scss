@@ -1,5 +1,9 @@
 @use 'abstracts' as *;
 
+
+/**********************************************
+      LANGUAGE SWITCHER SIMPLE
+**********************************************/
 .lang-switcher-simple {
     // background-color: #efefef;
     padding: 5px 10px;
@@ -17,10 +21,10 @@
 
     a {
         @include copy-text;
-        font-size: 0.9em;
+        font-size: 0.88em;
         color: rgb(173, 173, 173);
         line-height: normal;
-        padding: 0 2px 3px 2px;
+        padding: 0 5px 3px 5px;
         margin: 0;
 
         &:hover {
@@ -35,9 +39,32 @@
     }
 }
 
-.page-home {
-    .lang-switcher-simple {
-    background-color: #efefef;
+
+/*************** HOME PAGE OVERRIDE ***************/
+.page-home .lang-switcher-simple {
     border: none;
+
+    svg.lang-icon {
+        color: #ffffff;
+    }
+
+    a {
+        color: rgb(158, 158, 158);
+
+        &:hover {
+            color: rgb(126, 126, 126);
+        }
+
+        &.active {
+            color: rgb(255, 255, 255);
+            border-bottom: 1px solid #ffffff;
+        }
+    }
 }
-}
+
+
+/**********************************************
+      LANGUAGE SWITCHER DROPDOWN
+**********************************************/
+// USAGE: Change class on /components/layout/header/LangSwitcher.tsx
+// from lang-switcher-simple to lang-switcher-dropdown

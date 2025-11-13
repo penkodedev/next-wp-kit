@@ -29,9 +29,6 @@ import {
   Instagram,
   Linkedin,
   Twitter,
-  Youtube,
-  Github,
-  Globe,
   MessageCircle,
   Send,
   Video,
@@ -40,8 +37,10 @@ import {
   Phone,
   MapPin,
   Mail,
-  Pin
-
+  Pin,
+  Github,
+  Youtube,
+  Globe
 } from 'lucide-react';
 
 
@@ -69,9 +68,6 @@ export const Icons = {
   Instagram,
   Linkedin,
   Twitter,
-  Youtube,
-  Github,
-  Globe,
   MessageCircle,
   Send,
   Video,
@@ -80,6 +76,9 @@ export const Icons = {
   Phone,
   MapPin,
   Mail,
-  Pin
+  Pin,
+  Github,
+  Youtube,
+  Globe
 };
 

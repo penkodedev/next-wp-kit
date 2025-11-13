@@ -1,6 +1,10 @@
 import Header from '@/components/layout/header/Header';
 
-export default function HeaderConditional() {
+interface HeaderConditionalProps {
+  currentLocale?: string;
+}
+
+export default function HeaderConditional({ currentLocale = 'es' }: HeaderConditionalProps) {
   // For now, just use default header - we'll fix the conditional logic later
-  return <Header variant="default" />;
+  return <Header variant="default" currentLocale={currentLocale} />;
 }

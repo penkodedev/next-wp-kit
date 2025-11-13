@@ -7,12 +7,14 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import SliderRecursos from "@/components/ui/SliderRecursos";
 import HeroConfig from "@/components/sections/HeroConfig";
+import { headers } from "next/headers";
 
 /**
  * Connects to WordPress to get the title and description.
  */
 export async function generateMetadata(): Promise<Metadata> {
-  const homePage = await getHomePage();
+  const locale = headers().get("x-locale") || "es";
+  const homePage = await getHomePage(locale);
 
   if (!homePage) {
     return {
@@ -29,7 +31,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  const homePage = await getHomePage();
+  const locale = headers().get("x-locale") || "es";
+  const homePage = await getHomePage(locale);
 
   if (!homePage) {
     notFound();
