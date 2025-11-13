@@ -220,9 +220,9 @@ export const getAllMenus = unstable_cache(
  * @param postId The ID of the current post.
  * @param postType The post type (e.g., 'posts').
  */
-export async function getPostNavigation(postId: number, postType: string): Promise<PostNavigation | null> {
+export async function getPostNavigation(postId: number, postType: string, lang: string = 'es'): Promise<PostNavigation | null> {
   // We force revalidation on every request for navigation data to ensure it's always up-to-date.
-  return await fetchAPI<PostNavigation>(`/custom/v1/post-navigation?post_id=${postId}&post_type=${postType}`, { next: { revalidate: process.env.NODE_ENV === 'production' ? 60 : 0 } });
+  return await fetchAPI<PostNavigation>(`/custom/v1/post-navigation?post_id=${postId}&post_type=${postType}&lang=${lang}`, { next: { revalidate: process.env.NODE_ENV === 'production' ? 60 : 0 } });
 }
 
 
@@ -259,4 +259,64 @@ export async function searchSite(term: string): Promise<SearchResult[] | null> {
   // The fetchAPI function can now return null on error, or an empty array on 404.
   // We ensure to always return an array so that components don't fail.
   return data || [];
+}
+
+
+/*--------------------------------------------------------------------------------------
+    🌐 GET WPML TRANSLATION URL (NEW METHOD)
+    Route: /custom/v1/translation/{post_id}?lang={lang}
+    e.g. /custom/v1/translation/123?lang=en
+    Returns the translated URL for a specific post/page ID using wpml_object_id
+--------------------------------------------------------------------------------------*/
+export interface WpmlTranslation {
+  exists: boolean;
+  original_id: number;
+  translated_id?: number;
+  target_lang: string;
+  url?: string;
+  full_url?: string;
+  slug?: string;
+  title?: string;
+  post_type?: string;
+  fallback_url?: string;
+  message?: string;
+}
+
+/**
+ * Gets the translated URL for a post/page using WPML
+ * @param postId - The ID of the post/page in the current language
+ * @param targetLang - The target language code (e.g., 'en', 'es')
+ * @returns Translation data including the URL or fallback
+ */
+export async function getWpmlTranslation(postId: number, targetLang: string): Promise<WpmlTranslation | null> {
+  try {
+    const data = await fetchAPI<WpmlTranslation>(`/custom/v1/translation/${postId}?lang=${targetLang}`);
+    return data;
+  } catch (error) {
+    logger.error(`Error fetching WPML translation for post ${postId} (lang: ${targetLang})`, error);
+    return null;
+  }
+}
+
+/**
+ * Helper function to get translated URL or fallback to home
+ * @param postId - The ID of the post/page in the current language
+ * @param targetLang - The target language code (e.g., 'en', 'es')
+ * @returns The translated URL or home URL of target language
+ */
+export async function getTranslatedUrl(postId: number | undefined, targetLang: string): Promise<string> {
+  // If no postId provided, go to home of target language
+  if (!postId) {
+    return targetLang === 'en' ? '/en' : '/';
+  }
+
+  const translation = await getWpmlTranslation(postId, targetLang);
+  
+  // If translation exists, return its URL
+  if (translation?.exists && translation.url) {
+    return translation.url;
+  }
+  
+  // Fallback to home of target language
+  return translation?.fallback_url || (targetLang === 'en' ? '/en' : '/');
 }

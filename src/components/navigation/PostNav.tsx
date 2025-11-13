@@ -4,11 +4,12 @@
 import Link from 'next/link';
 import { getPostNavigation } from '@/api/wordpressApi';
 import { Icons } from '@/components/ui/Icons';
+import { getTranslatedCptSlug } from '@/utils/cptConfig';
 
 type PostNavigationProps = {
   postId: number;
   postType: string;
-  basePath: string; // Añadimos la ruta base del CPT (ej: "/cpt_slug")
+  basePath: string; // Base path of the CPT (e.g., "/cpt_slug") - deprecated, now calculated dynamically
   locale?: string; // Current locale for URL generation
 };
 
@@ -17,7 +18,7 @@ type PostNavigationProps = {
   * It fetches data on the server, providing better performance and SEO.
  */
 export default async function PostNav({ postId, postType, basePath, locale = 'es' }: PostNavigationProps) {
-  const navigation = await getPostNavigation(postId, postType);
+  const navigation = await getPostNavigation(postId, postType, locale);
 
   if (!navigation || (!navigation.previous && !navigation.next)) {
     return null; // Don't render anything if there's no previous or next post
@@ -27,10 +28,13 @@ export default async function PostNav({ postId, postType, basePath, locale = 'es
 /**********************************************
       START BUILDING THE PAGE CONTENT HTML
 **********************************************/
+  // Get translated CPT slug for the current locale
+  const translatedCptSlug = getTranslatedCptSlug(postType, locale);
+  
   // Generate locale-aware URLs
   const generateUrl = (slug: string) => {
     const localePrefix = locale === 'es' ? '' : `/${locale}`;
-    return `${localePrefix}${basePath}/${slug}`;
+    return `${localePrefix}/${translatedCptSlug}/${slug}`;
   };
 
   return (

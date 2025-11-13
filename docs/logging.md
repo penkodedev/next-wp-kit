@@ -61,3 +61,11 @@ Todos los `console.error`, `console.warn`, `console.log` del proyecto han sido r
 - ✅ `src/hooks/useCookieConsent.ts`
 - ✅ `src/app/search/page.tsx`
 - ✅ `src/app/blog/page.tsx`
+- ✅ `src/components/layout/header/HeaderServer.tsx`
+- ✅ `src/components/layout/footer/Footer.tsx`
+
+---
+
+## Relacionado
+
+- [SWR Implementation](./swr-implementation.md) - Client-side caching para menus

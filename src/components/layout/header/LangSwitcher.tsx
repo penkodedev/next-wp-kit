@@ -1,80 +1,58 @@
-// src/components/layout/header/LangSwitcher.tsx
 "use client";
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Icons } from '@/components/ui/Icons';
-import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import { getWpmlTranslation } from '@/api/wordpressApi';
+import { useWpPageId } from '@/utils/WpPageIdContext';
 
 interface LangSwitcherProps {
   currentLocale: string;
   availableLangs?: string[];
 }
 
-/**
- * Mapa de rutas traducidas conocidas.
- * Cuando navegas con el switcher, usa este mapa para ir a la ruta correcta.
- * 
- * Estructura: 
- * - Si es la home, no necesita mapeo (solo `/` vs `/en`)
- * - Si es una página traducida, mapea español -> inglés
- */
 const ROUTE_TRANSLATIONS: Record<string, Record<string, string>> = {
-  // Página: Quiénes somos -> About
-  'quienes-somos': {
-    'es': '/quienes-somos',
-    'en': '/en/about',
-  },
-  'about': {
-    'es': '/quienes-somos',
-    'en': '/en/about',
-  },
-  // Página: Acerca -> (si tiene traducción)
-  'acerca': {
-    'es': '/acerca',
-    'en': '/en/acerca',
-  },
-  // Agregar más rutas según sea necesario
+  'quienes-somos': { 'es': '/quienes-somos', 'en': '/en/about' },
+  'about': { 'es': '/quienes-somos', 'en': '/en/about' },
 };
 
-export default function LangSwitcher({ 
-  currentLocale, 
-  availableLangs = ['es', 'en'] 
-}: LangSwitcherProps) {
+export default function LangSwitcher({ currentLocale, availableLangs = ['es', 'en'] }: LangSwitcherProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { pageId } = useWpPageId();
+  const [translatedUrls, setTranslatedUrls] = useState<Record<string, string>>({});
 
-  /**
-   * Construir la URL del idioma alternativo.
-   * Intenta usar el mapa de rutas traducidas.
-   * Si no encontr, usa fallback simple.
-   */
+  useEffect(() => {
+    if (!pageId) return;
+    async function fetchTranslations() {
+      const urls: Record<string, string> = {};
+      for (const lang of availableLangs) {
+        if (lang === currentLocale) {
+          urls[lang] = pathname;
+        } else {
+          const translation = await getWpmlTranslation(pageId, lang);
+          urls[lang] = translation?.url || (lang === 'en' ? '/en' : '/');
+        }
+      }
+      setTranslatedUrls(urls);
+    }
+    fetchTranslations();
+  }, [pageId, currentLocale, pathname, availableLangs]);
+
   function buildLanguageUrl(targetLang: string): string {
-    // Caso especial: home
+    if (translatedUrls[targetLang]) return translatedUrls[targetLang];
     if (pathname === '/' || pathname === '/es' || pathname === '/en') {
       return targetLang === 'es' ? '/' : '/en';
     }
-
-    // Obtener la ruta sin prefijo de idioma
     const segments = pathname.split('/').filter(Boolean);
     const hasLocalePrefix = availableLangs.includes(segments[0]);
     const routeSegments = hasLocalePrefix ? segments.slice(1) : segments;
-    const baseRoute = '/' + routeSegments.join('/');
-
-    // Obtener el slug principal (primer segmento de la ruta)
     const mainSlug = routeSegments[0] || '';
-
-    // Intentar usar el mapa de traducciones
-    if (ROUTE_TRANSLATIONS[mainSlug] && ROUTE_TRANSLATIONS[mainSlug][targetLang]) {
+    if (ROUTE_TRANSLATIONS[mainSlug]?.[targetLang]) {
       return ROUTE_TRANSLATIONS[mainSlug][targetLang];
     }
-
-    // Fallback: construcción simple
-    if (targetLang === 'es') {
-      // ES no lleva prefijo
-      return baseRoute === '/' ? '/' : baseRoute;
-    } else {
-      // EN lleva prefijo
-      return `/en${baseRoute}`;
-    }
+    const baseRoute = '/' + routeSegments.join('/');
+    return targetLang === 'es' ? baseRoute : `/en${baseRoute}`;
   }
 
   return (
@@ -84,14 +62,15 @@ export default function LangSwitcher({
         const href = buildLanguageUrl(lang);
         const isActive = currentLocale === lang;
         return (
-          <Link 
+          <a
             key={lang} 
-            href={href} 
+            href={href}
+            onClick={(e) => { e.preventDefault(); router.push(href); }}
             className={`lang-link ${isActive ? 'active' : ''}`} 
-            aria-label={`Cambiar a ${lang.toUpperCase()}`}
+            aria-label={`Switch to ${lang.toUpperCase()}`}
           >
             {lang.toUpperCase()}
-          </Link>
+          </a>
         );
       })}
     </div>
