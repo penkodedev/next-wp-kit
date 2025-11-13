@@ -7,6 +7,7 @@ import 'swiper/css/bundle';
 import { headers } from 'next/headers';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
+import { SWRConfig } from 'swr';
 
 import "@/styles/sass/main.scss";
 
@@ -82,15 +83,24 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       </head>
       <body>
         <NextIntlClientProvider locale={currentLocale} messages={messages}>
-          <WpPageIdProvider>
-            <BodyClass> {/* BodyClass needs to be a client component to read pageId from context */}
-              <HeaderServer />
-              {/* <Breadcrumbs /> */}
-              <main>{children}</main>
-              <Footer />
-              <GlobalUI />
-            </BodyClass>
-          </WpPageIdProvider>
+          <SWRConfig
+            value={{
+              refreshInterval: 0, // Disable auto-refresh (manual revalidation only)
+              revalidateOnFocus: false, // Don't refetch when window gets focus
+              revalidateOnReconnect: true, // Refetch when coming back online
+              dedupingInterval: 60000, // Dedupe identical requests within 1 minute
+            }}
+          >
+            <WpPageIdProvider>
+              <BodyClass> {/* BodyClass needs to be a client component to read pageId from context */}
+                <HeaderServer />
+                {/* <Breadcrumbs /> */}
+                <main>{children}</main>
+                <Footer />
+                <GlobalUI />
+              </BodyClass>
+            </WpPageIdProvider>
+          </SWRConfig>
         </NextIntlClientProvider>
         {/* Global locale sync for pages that don't use [...slug] layout */}
         <script

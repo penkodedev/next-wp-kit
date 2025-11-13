@@ -2,10 +2,10 @@
 "use client";
 
 import Link from 'next/link';
-import { fetchAPI } from '@/api/wordpressApi';
+import { swrFetcher } from '@/api/wordpressApi';
 import type { MenuItem, AllMenus } from '@/types/wordpressTypes';
 import { cleanInternalUrl } from '@/utils/url';
-import { useEffect, useState } from 'react';
+import useSWR from 'swr';
 import { motion, AnimatePresence } from 'framer-motion';
 import { logger } from '@/utils/logger';
 
@@ -49,40 +49,31 @@ function NavItem({ item }: { item: MenuItem }) {
 /**
  * Universal navigation component that renders a WordPress menu
  * identified by its 'slug' or 'location'.
- * If menuItems are passed as props, it skips the fetch (server-rendered).
+ * Uses SWR for client-side caching with server-side pre-fetched data as fallback.
  */
 export default function WpNavMenu({ slug, location, className, locale, menuItems: prefetchedMenuItems }: WpNavMenuProps) {
-  const [menuItems, setMenuItems] = useState<MenuItem[] | null>(prefetchedMenuItems || null);
-
-  useEffect(() => {
-    // Skip fetch if data was pre-fetched (server-side)
-    if (prefetchedMenuItems) return;
-
-    // Do nothing until locale is defined
-    if (!locale) return;
-
-    async function getMenu() {
-      // Build the API URL with the 'lang' parameter
-      const apiUrl = `/custom/v1/menus?lang=${locale}&${location ? `location=${location}` : `slug=${slug}`}`;
-      try {
-        // The API returns the array of items directly, not an object { items: [...] }
-        const menuItemsData = await fetchAPI<MenuItem[]>(apiUrl);
-        if (Array.isArray(menuItemsData)) {
-          setMenuItems(menuItemsData);
-        } else {
-          // If the API doesn't return the expected format, show nothing
-          setMenuItems([]);
-        }
-      } catch (error) {
-        logger.error(`WpNavMenu: Error fetching menu from ${apiUrl}`, error);
-        setMenuItems([]); // Prevent infinite loading state
-      }
+  // Build the API URL with the 'lang' parameter
+  const apiUrl = locale ? `/custom/v1/menus?lang=${locale}&${location ? `location=${location}` : `slug=${slug}`}` : null;
+  
+  // Use SWR for client-side fetching with pre-fetched data as fallback
+  const { data: menuItems, error } = useSWR<MenuItem[]>(
+    apiUrl, // Key for cache (null disables fetching if locale is not ready)
+    swrFetcher<MenuItem[]>,
+    {
+      fallbackData: prefetchedMenuItems, // Use server-side data initially
+      revalidateOnFocus: false, // Don't refetch on window focus
+      revalidateOnReconnect: true, // Refetch when coming back online
+      dedupingInterval: 60000, // Dedupe requests within 1 minute
     }
-    getMenu();
-  }, [locale, location, slug, prefetchedMenuItems]); // Re-run if language or props change
+  );
 
+  // Log errors (development only)
+  if (error) {
+    logger.error(`WpNavMenu: Error fetching menu from ${apiUrl}`, error);
+  }
+
+  // Show nothing while loading (only on first mount without fallback)
   if (!menuItems) {
-    // Show placeholder or nothing while loading
     return null;
   }
 

@@ -13,6 +13,31 @@ const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
     in the file: /inc/api/api-endpoints.php
 --------------------------------------------------------------------------------------*/
 
+// ********************** SWR Fetcher Function **********************
+/**
+ * SWR-compatible fetcher function for client-side data fetching.
+ * Used with useSWR hook for caching and revalidation.
+ * 
+ * @param url - The REST API endpoint (relative path)
+ * @returns The fetched data
+ */
+export async function swrFetcher<T>(url: string): Promise<T> {
+  if (!API_URL) {
+    throw new Error('NEXT_PUBLIC_WORDPRESS_API_URL is not configured');
+  }
+  
+  const requestUrl = `${API_URL.replace(/\/$/, '')}/${url.replace(/^\//, '')}`;
+  const response = await fetch(requestUrl, {
+    headers: { 'Content-Type': 'application/json' },
+  });
+  
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  
+  return response.json();
+}
+
 // ********************** Core Fetch API Function **********************
 export async function fetchAPI<T>(
   query = '', 

@@ -3,6 +3,7 @@
 
 import { usePathname } from 'next/navigation';
 import { Icons } from '@/components/ui/Icons';
+import Link from 'next/link';
 
 interface LangSwitcherProps {
   currentLocale: string;
@@ -83,14 +84,14 @@ export default function LangSwitcher({
         const href = buildLanguageUrl(lang);
         const isActive = currentLocale === lang;
         return (
-          <a 
+          <Link 
             key={lang} 
             href={href} 
             className={`lang-link ${isActive ? 'active' : ''}`} 
             aria-label={`Cambiar a ${lang.toUpperCase()}`}
           >
             {lang.toUpperCase()}
-          </a>
+          </Link>
         );
       })}
     </div>
