@@ -55,7 +55,7 @@ export default function RecursosArchivePage() {
     setIsLoading(false);
   };
 
-  /**********************************************
+/**********************************************
       START BUILDING THE PAGE CONTENT
 **********************************************/
   return (

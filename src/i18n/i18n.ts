@@ -3,18 +3,38 @@
 
 import { notFound } from 'next/navigation';
 import { getRequestConfig } from 'next-intl/server';
+import { getWpmlLanguages } from '@/api/wordpressApi';
 
-// Supported locales in the system
-export const SUPPORTED_LOCALES = ['es', 'en'] as const; // This can be dynamic in the future if needed
-export type SupportedLocale = typeof SUPPORTED_LOCALES[number];
+// Type for supported locales
+export type SupportedLocale = string;
+
+/**
+ * Get supported locales dynamically from WordPress WPML
+ * Falls back to hardcoded values if WordPress is unavailable
+ */
+export async function getSupportedLocales(): Promise<string[]> {
+  const wpmlData = await getWpmlLanguages();
+  return wpmlData.languages.map(lang => lang.code);
+}
+
+/**
+ * Get default locale from WordPress WPML
+ */
+export async function getDefaultLocale(): Promise<string> {
+  const wpmlData = await getWpmlLanguages();
+  return wpmlData.default;
+}
 
 // Default configuration for next-intl
 export default getRequestConfig(async ({ locale: localeFromPath }) => {
-  // Use provided locale or default to Spanish
-  const locale = localeFromPath || 'es';
+  const defaultLocale = await getDefaultLocale();
+  const locale = localeFromPath || defaultLocale;
 
-  // Validate that the incoming `locale` parameter is valid
-  if (!SUPPORTED_LOCALES.includes(locale as any)) notFound();
+  // Validate that the incoming locale is valid
+  const supportedLocales = await getSupportedLocales();
+  if (!supportedLocales.includes(locale)) {
+    notFound();
+  }
 
   return {
     locale,

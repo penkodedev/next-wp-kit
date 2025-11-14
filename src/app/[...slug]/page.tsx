@@ -1,4 +1,5 @@
 // Intelligent catch-all route to handle pages and CPTs from WordPress.
+
 import { getContentBySlug, getAllContent, getAllPostTypes, getHomePage } from "@/api/wordpressApi";
 import { fetchAPI } from "@/api/wordpressApi";
 import AnimatedArticle from "@/components/animations/AnimatedArticle";
@@ -16,8 +17,9 @@ import { Icons } from "@/components/ui/Icons";
 import Link from "next/link";
 import { processContent } from "@/utils/processContent";
 import { WpPageId } from "@/utils/WpPageId";
-import { CPT_SLUG_MAP } from "@/utils/cptConfig";
+import { CPT_SLUG_MAP, getTranslatedCptSlug } from "@/utils/cptConfig";
 import HeroConfig from '@/components/sections/HeroConfig';
+import ContentSingle from '@/components/layout/content/ContentSingle';
 
 type PageProps = {
   params: {
@@ -131,8 +133,8 @@ export async function generateStaticParams() {
         params.push({ slug: [cpt] });
         params.push({ slug: ['es', cpt] });
 
-        // For English, use translated slug if available (from our known translations)
-        const englishSlug = cpt === 'noticias' ? 'news' : (cpt === 'recursos' ? 'resorts' : cpt);
+        // For English, use getTranslatedCptSlug (100% dynamic, no hardcoding)
+        const englishSlug = getTranslatedCptSlug(cpt, 'en');
         params.push({ slug: ['en', englishSlug] });
 
         try {
@@ -182,16 +184,10 @@ export default async function CatchAllPage({ params }: PageProps) {
 
     const posts = await getAllContent<WpContent>(routeType.cpt, apiParams);
 
-    // Check if this is an English route and translate the title
-    const isEnglishRoute = params.slug.length > 1 && params.slug[0] === 'en';
-    const displayTitle = isEnglishRoute
-      ? (routeType.cpt === 'noticias' ? 'News' : (routeType.cpt === 'recursos' ? 'Resorts' : routeType.cpt.charAt(0).toUpperCase() + routeType.cpt.slice(1)))
-      : routeType.cpt.charAt(0).toUpperCase() + routeType.cpt.slice(1);
-
-    // For English routes, use translated basePath
-    const basePath = isEnglishRoute
-      ? (routeType.cpt === 'noticias' ? '/en/news' : (routeType.cpt === 'recursos' ? '/en/resorts' : `/${routeType.cpt}`))
-      : `/${routeType.cpt}`;
+    // Use getTranslatedCptSlug for dynamic title and basePath (100% scalable)
+    const translatedCptSlug = getTranslatedCptSlug(routeType.cpt, locale);
+    const displayTitle = translatedCptSlug.charAt(0).toUpperCase() + translatedCptSlug.slice(1);
+    const basePath = locale === 'es' ? `/${translatedCptSlug}` : `/${locale}/${translatedCptSlug}`;
 
 /**********************************************
       START BUILDING CPT ARCHIVE HTML
@@ -230,54 +226,24 @@ export default async function CatchAllPage({ params }: PageProps) {
       notFound();
     }
 
+    // Build the correct "Back to Archive" URL based on current locale
+    const translatedCptSlug = getTranslatedCptSlug(routeType.cpt, locale);
+    const backToArchiveUrl = locale === 'es' ? `/${translatedCptSlug}` : `/${locale}/${translatedCptSlug}`;
+    
+    // Display name: capitalize the translated slug (fully dynamic, no hardcoding)
+    const archiveName = translatedCptSlug.charAt(0).toUpperCase() + translatedCptSlug.slice(1);
 
 /**********************************************
            START BUILDING CPT SINGLE HTML
 **********************************************/
     return (
-      <div className="page-sidebar">
-        <WpPageId id={post.id} />
-        <main>
-          <article className="entry-content">
-            <Link href={`/${routeType.cpt}`} className="back-to-archive-link">
-              <Icons.ArrowLeft size={26} strokeWidth={1} className="arrow-left" />
-              Back to {routeType.cpt === 'noticias' ? 'Noticias' : (routeType.cpt === 'recursos' ? 'Recursos' : routeType.cpt.charAt(0).toUpperCase() + routeType.cpt.slice(1))}
-            </Link>
-
-            <section className="page-title">
-              <h1>{post.title.rendered}</h1>
-
-              <div className="icons-wrap">
-                <Icons.Share2
-                  size={21}
-                  strokeWidth={1.5}
-                  className="icons-page-title icon-share"
-                />
-                <Icons.Heart
-                  size={21}
-                  strokeWidth={1.5}
-                  className="icons-page-title icon-heart"
-                />
-              </div>
-            </section>
-            <Breadcrumbs />
-            <AnimatedArticle className="custom-article-class" amount={0.5}>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: processContent(post.content.rendered),
-                }}
-              />
-            </AnimatedArticle>
-          </article>
-          <PostNav
-            postId={post.id}
-            postType={routeType.cpt}
-            basePath={`/${routeType.cpt}`}
-            locale={locale}
-          />
-        </main>
-        <Sidebar />
-      </div>
+      <ContentSingle 
+        post={post}
+        cpt={routeType.cpt}
+        backToArchiveUrl={backToArchiveUrl}
+        archiveName={archiveName}
+        locale={locale}
+      />
     );
   }
 

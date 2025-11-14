@@ -8,6 +8,7 @@ import { notFound } from "next/navigation";
 import SliderRecursos from "@/components/ui/SliderRecursos";
 import HeroConfig from "@/components/sections/HeroConfig";
 import { headers } from "next/headers";
+import { WpPageIdSetter } from "@/utils/WpPageIdContext";
 
 /**
  * Connects to WordPress to get the title and description.
@@ -44,6 +45,7 @@ export default async function Home() {
 **********************************************/
   return (
     <>
+      <WpPageIdSetter pageId={homePage.id} />
       <HeroConfig />
       <div className="page-one-col">
         <article>

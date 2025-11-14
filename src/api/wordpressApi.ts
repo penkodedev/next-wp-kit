@@ -227,23 +227,6 @@ export async function getPostNavigation(postId: number, postType: string, lang: 
 
 
 /*--------------------------------------------------------------------------------------
-    � GET TRANSLATIONS (WPML)
-    Route: /custom/v1/translations/{post_type}/{slug}
-    e.g. /custom/v1/translations/pages/about
-    Returns a map of all translated URLs for a piece of content.
---------------------------------------------------------------------------------------*/
-/**
- * Fetches all translated URLs for a post, page, or CPT item.
- * @param postType The post type (e.g., 'pages', 'posts', 'hero').
- * @param slug The slug of the content.
- * @returns A map of language codes to URLs, e.g., { es: '/about', en: '/en/about' }
- */
-export async function getTranslations(postType: string, slug: string): Promise<Record<string, string> | null> {
-  return await fetchAPI<Record<string, string>>(`/custom/v1/translations/${postType}/${slug}`, { next: { revalidate: 300 } });
-}
-
-
-/*--------------------------------------------------------------------------------------
     �🍔 SEARCH SITE
     Route: /custom/v1/search?term={term}
     e.g. /custom/v1/search?term=example
@@ -291,6 +274,17 @@ export interface WpmlTranslation {
 export async function getWpmlTranslation(postId: number, targetLang: string): Promise<WpmlTranslation | null> {
   try {
     const data = await fetchAPI<WpmlTranslation>(`/custom/v1/translation/${postId}?lang=${targetLang}`);
+    
+    // Clean up WordPress query params like ?page_id=657 when translation doesn't exist
+    // WPML returns home URL with page_id when no translation is available
+    if (data && data.url) {
+      const url = new URL(data.url, 'http://localhost:3000');
+      // If it has page_id param, it means no translation exists - return clean home URL
+      if (url.searchParams.has('page_id')) {
+        data.url = url.pathname; // Remove query params, keep only pathname
+      }
+    }
+    
     return data;
   } catch (error) {
     logger.error(`Error fetching WPML translation for post ${postId} (lang: ${targetLang})`, error);
@@ -319,4 +313,50 @@ export async function getTranslatedUrl(postId: number | undefined, targetLang: s
   
   // Fallback to home of target language
   return translation?.fallback_url || (targetLang === 'en' ? '/en' : '/');
+}
+
+
+/*--------------------------------------------------------------------------------------
+    🌐 GET WPML LANGUAGES
+    Route: /custom/v1/languages
+    Returns all active languages from WPML configuration
+--------------------------------------------------------------------------------------*/
+export interface WpmlLanguage {
+  code: string;
+  name: string;
+  native_name: string;
+  is_default: boolean;
+  url: string;
+}
+
+export interface WpmlLanguagesResponse {
+  languages: WpmlLanguage[];
+  default: string;
+  count: number;
+}
+
+// Fallback cuando WordPress no está disponible
+const FALLBACK_LANGUAGES: WpmlLanguagesResponse = {
+  languages: [
+    { code: 'es', name: 'Spanish', native_name: 'Español', is_default: true, url: '/' },
+    { code: 'en', name: 'English', native_name: 'English', is_default: false, url: '/en' }
+  ],
+  default: 'es',
+  count: 2
+};
+
+/**
+ * Gets active languages from WPML
+ * Cached for 1 hour in production, no cache in development
+ */
+export async function getWpmlLanguages(): Promise<WpmlLanguagesResponse> {
+  try {
+    const data = await fetchAPI<WpmlLanguagesResponse>('/custom/v1/languages', {
+      next: { revalidate: process.env.NODE_ENV === 'production' ? 3600 : 0 }
+    });
+    return data || FALLBACK_LANGUAGES;
+  } catch (error) {
+    logger.error('Error fetching WPML languages, using fallback', error);
+    return FALLBACK_LANGUAGES;
+  }
 }
