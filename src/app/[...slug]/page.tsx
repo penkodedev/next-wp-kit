@@ -1,25 +1,18 @@
 // Intelligent catch-all route to handle pages and CPTs from WordPress.
 
-import { getContentBySlug, getAllContent, getAllPostTypes, getHomePage } from "@/api/wordpressApi";
+import { getContentBySlug, getAllContent, getHomePage } from "@/api/wordpressApi";
 import { fetchAPI } from "@/api/wordpressApi";
-import AnimatedArticle from "@/components/animations/AnimatedArticle";
 import { generateSeoMetadata } from "@/utils/seo";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import type { Page, WpContent } from "@/types/wordpressTypes";
-import Breadcrumbs from "@/components/navigation/Breadcrumbs";
-import { ContactForm7Content } from "@/components/forms";
 import { WpPageIdSetter } from "@/utils/WpPageIdContext";
-import Sidebar from "@/components/layout/Sidebar";
-import GridPosts from "@/components/layout/GridPosts";
-import PostNav from "@/components/navigation/PostNav";
-import { Icons } from "@/components/ui/Icons";
-import Link from "next/link";
 import { processContent } from "@/utils/processContent";
-import { WpPageId } from "@/utils/WpPageId";
 import { CPT_SLUG_MAP, getTranslatedCptSlug } from "@/utils/cptConfig";
 import HeroConfig from '@/components/sections/HeroConfig';
 import ContentSingle from '@/components/layout/content/ContentSingle';
+import ContentArchive from '@/components/layout/content/ContentArchive';
+import ContentPages from '@/components/layout/content/ContentPages';
 
 type PageProps = {
   params: {
@@ -122,45 +115,43 @@ export async function generateStaticParams() {
 
   // Add CPT archives and singles
   try {
-    const allTypes = await getAllPostTypes();
-    if (allTypes) {
-      const customTypes = allTypes.filter(type =>
-        !['post', 'page', 'attachment', 'nav_menu_item', 'wp_block'].includes(type)
-      );
+    // Get all known CPTs from config (dynamic, no hardcoding individual CPTs)
+    const customTypes = Object.values(CPT_SLUG_MAP).filter((cpt, index, self) => 
+      self.indexOf(cpt) === index // Remove duplicates
+    );
 
-      for (const cpt of customTypes) {
-        // Add archive pages - use translated slugs for English
-        params.push({ slug: [cpt] });
-        params.push({ slug: ['es', cpt] });
+    for (const cpt of customTypes) {
+      // Add archive pages - use translated slugs for English
+      params.push({ slug: [cpt] });
+      params.push({ slug: ['es', cpt] });
 
-        // For English, use getTranslatedCptSlug (100% dynamic, no hardcoding)
-        const englishSlug = getTranslatedCptSlug(cpt, 'en');
-        params.push({ slug: ['en', englishSlug] });
+      // For English, use getTranslatedCptSlug (100% dynamic, no hardcoding)
+      const englishSlug = getTranslatedCptSlug(cpt, 'en');
+      params.push({ slug: ['en', englishSlug] });
 
-        try {
-          // Get posts in both languages to generate all possible routes
-          const spanishPosts = await getAllContent<WpContent>(cpt, '?per_page=10&_embed');
-          const englishPosts = await getAllContent<WpContent>(cpt, '?per_page=10&_embed&lang=en');
+      try {
+        // Get posts in both languages to generate all possible routes
+        const spanishPosts = await getAllContent<WpContent>(cpt, '?per_page=10&_embed');
+        const englishPosts = await getAllContent<WpContent>(cpt, '?per_page=10&_embed&lang=en');
 
-          // Combine posts from both languages
-          const allPosts = [...(spanishPosts || []), ...(englishPosts || [])];
-          const uniquePosts = allPosts.filter((post, index, self) =>
-            index === self.findIndex(p => p.id === post.id)
-          );
+        // Combine posts from both languages
+        const allPosts = [...(spanishPosts || []), ...(englishPosts || [])];
+        const uniquePosts = allPosts.filter((post, index, self) =>
+          index === self.findIndex(p => p.id === post.id)
+        );
 
-          if (uniquePosts.length > 0) {
-            uniquePosts.forEach(post => {
-              // Add single CPT pages in Spanish
-              params.push({ slug: [cpt, post.slug] });
-              params.push({ slug: ['es', cpt, post.slug] });
+        if (uniquePosts.length > 0) {
+          uniquePosts.forEach(post => {
+            // Add single CPT pages in Spanish
+            params.push({ slug: [cpt, post.slug] });
+            params.push({ slug: ['es', cpt, post.slug] });
 
-              // Add single CPT pages in English with translated archive slug
-              params.push({ slug: ['en', englishSlug, post.slug] });
-            });
-          }
-        } catch (error) {
-          // Skip CPTs that fail to load
+            // Add single CPT pages in English with translated archive slug
+            params.push({ slug: ['en', englishSlug, post.slug] });
+          });
         }
+      } catch (error) {
+        // Skip CPTs that fail to load
       }
     }
   } catch (error) {
@@ -193,22 +184,11 @@ export default async function CatchAllPage({ params }: PageProps) {
       START BUILDING CPT ARCHIVE HTML
 **********************************************/
     return (
-      <div className="page-fullwidth">
-          <section className="page-title">
-            <h1>{displayTitle}</h1>
-          </section>
-
-          {posts && posts.length > 0 ? (
-            <GridPosts
-              posts={posts}
-              basePath={basePath}
-            />
-          ) : (
-            <article>
-              <p>No content found in this section.</p>
-            </article>
-          )}
-        </div>
+      <ContentArchive 
+        posts={posts}
+        displayTitle={displayTitle}
+        basePath={basePath}
+      />
     );
   }
 
@@ -313,30 +293,8 @@ export default async function CatchAllPage({ params }: PageProps) {
   // Set page ID for body classes
   const pageId = page.id;
 
-
-
 /**********************************************
        START BUILDING STATIC PAGE HTML
 **********************************************/
-   return (
-     <>
-       <WpPageIdSetter pageId={pageId} />
-       <div className="page-one-col">
-         <main>
-           <section className="page-title">
-             <h1>{page.title.rendered}</h1>
-           </section>
-           <article className="page-content">
-             <AnimatedArticle>
-             <Breadcrumbs />
-             <ContactForm7Content
-               content={page.content.rendered}
-               hasForm={page.content.rendered.includes('wpcf7-form')}
-               />
-               </AnimatedArticle>
-           </article>
-         </main>
-       </div>
-     </>
-   );
+   return <ContentPages page={page} />;
 }

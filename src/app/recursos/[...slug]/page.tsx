@@ -1,24 +1,17 @@
-// src/app/recursos/[slug]/page.tsx
-// Like a single.php page on a WP theme
+// src/app/recursos/[...slug]/page.tsx
+// Custom layout for recursos CPT (if needed different from default)
 
 import { getContentBySlug, getAllContent } from "@/api/wordpressApi";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import Sidebar from "@/components/layout/Sidebar";
 import { generateSeoMetadata } from "@/utils/seo";
 import type { WpContent } from "@/types/wordpressTypes";
-import { processContent } from "@/utils/processContent";
-import { WpPageId } from "@/utils/WpPageId";
-import PostNav from "@/components/navigation/PostNav";
-import { Icons } from "@/components/ui/Icons";
-import Link from "next/link";
-import AnimatedArticle from "@/components/animations/AnimatedArticle";
-import Breadcrumbs from "@/components/navigation/Breadcrumbs";
 import { getTranslatedCptSlug } from "@/utils/cptConfig";
+import ContentSingle from '@/components/layout/content/ContentSingle';
 
 type RecursoPageProps = {
   params: {
-    slug: string[];  // Changed to array to support locale prefix
+    slug: string[];  // Array to support locale prefix
   };
 };
 
@@ -91,54 +84,18 @@ export default async function RecursoPage({ params }: RecursoPageProps) {
   const backToArchiveUrl = locale === 'es' ? `/${translatedCptSlug}` : `/${locale}/${translatedCptSlug}`;
   const archiveName = translatedCptSlug.charAt(0).toUpperCase() + translatedCptSlug.slice(1);
 
-/**********************************************
-      START BUILDING THE PAGE CONTENT HTML
-**********************************************/
+  /**********************************************
+   * USAR EL COMPONENTE ContentSingle
+   * Si necesitas un layout diferente para recursos, 
+   * crea un RecursosSingleCustom.tsx y úsalo aquí
+   **********************************************/
   return (
-    <div className="page-sidebar">
-      {/* Este componente establece el ID de la página en el contexto para BodyClass */}
-      <WpPageId id={recurso.id} />
-      <main>
-        <article className="entry-content">
-          <Link href={backToArchiveUrl} className="back-to-archive-link">
-            <Icons.ArrowLeft size={26} strokeWidth={1} className="arrow-left" />
-            {archiveName}
-          </Link>
-
-          <section className="page-title">
-            <h1>{recurso.title.rendered}</h1>
-
-            <div className="icons-wrap">
-              <Icons.Share2
-                size={21}
-                strokeWidth={1.5}
-                className="icons-page-title icon-share"
-              />
-              <Icons.Heart
-                size={21}
-                strokeWidth={1.5}
-                className="icons-page-title icon-heart"
-              />
-            </div>
-          </section>
-          <Breadcrumbs />
-          {/* We process the content to fix potential issues like missing block wrappers */}
-          <AnimatedArticle className="custom-article-class" amount={0.5}>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: processContent(recurso.content.rendered),
-              }}
-            />
-          </AnimatedArticle>
-        </article>
-        <PostNav
-          postId={recurso.id}
-          postType="recursos"
-          basePath={backToArchiveUrl}
-          locale={locale}
-        />
-      </main>
-        <Sidebar />
-    </div>
+    <ContentSingle 
+      post={recurso}
+      cpt="recursos"
+      backToArchiveUrl={backToArchiveUrl}
+      archiveName={archiveName}
+      locale={locale}
+    />
   );
 }
