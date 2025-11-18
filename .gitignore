@@ -1,6 +1,9 @@
 # Next.js build
 .next
 
+# TypeScript build cache
+*.tsbuildinfo
+
 # Node modules
 node_modules
 
