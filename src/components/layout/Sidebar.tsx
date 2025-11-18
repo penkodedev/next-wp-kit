@@ -1,6 +1,7 @@
 // src/components/layout/Sidebar.tsx
 
 import LatestPostsList from '@/components/ui/LatestPostsList';
+import SearchForm from '@/components/ui/SearchForm';
 import { headers } from 'next/headers';
 
 export default async function Sidebar() {
@@ -10,6 +11,7 @@ export default async function Sidebar() {
 
   return (
     <aside>
+      <SearchForm />
       <div className="sidebox">
         <LatestPostsList postType="recursos" perPage={5} locale={locale} />
       </div>

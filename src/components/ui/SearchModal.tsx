@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { searchSite } from '@/api/wordpressApi';
@@ -15,6 +16,7 @@ interface SearchModalProps {
 }
 
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
+  const t = useTranslations('Search');
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -106,32 +108,36 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
           >
             <a href="#" onClick={(e) => { e.preventDefault(); handleClose(); }}
               className="search-modal-close"
-              aria-label="Cerrar búsqueda">
+              aria-label={t('closeSearch')}>
               <Icons.X size={28} strokeWidth={1.2} />
             </a>
 
             <form onSubmit={handleSearchSubmit} className="search-modal-form">
-              <input
-                ref={inputRef}
-                type="search"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="¿Qué estás buscando?"
-                aria-label="Campo de búsqueda"
-              />
+              <div className="input-wrapper">
+                <input
+                  ref={inputRef}
+                  id="search-modal-input"
+                  type="search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder=" "
+                  aria-label={t('ariaLabel')}
+                />
+                <label htmlFor="search-modal-input">{t('modalPlaceholder')}</label>
+              </div>
               <div className="search-modal-buttons">
-                <button className="button" type="submit" disabled={!query.trim()}>Buscar </button>
-                <button className="button" type="button" onClick={resetSearch}>Limpiar</button>
+                <button className="button" type="submit" disabled={!query.trim()}>{t('searchButton')}</button>
+                <button className="button" type="button" onClick={resetSearch}>{t('clearButton')}</button>
               </div>
 
               <div className="search-modal-hint">
-              <p>¿Estabas buscando eso?</p>
+                <p>{t('searchHint')}</p>
               </div>
               
             </form>
 
             <motion.div layout className="search-modal-results">
-              {isLoading && <p>Buscando...</p>}
+              {isLoading && <p>{t('searching')}</p>}
               {!isLoading && results.length > 0 && (
                 
                 
@@ -146,7 +152,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 </ul>
               )}
               {!isLoading && query.length >= 3 && results.length === 0 && (
-                <p>No se encontraron resultados para "{query}"</p>
+                <p>{t('noResultsFor', { query })}</p>
               )}
             </motion.div>
           </motion.div>

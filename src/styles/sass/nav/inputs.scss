@@ -1,54 +1,78 @@
 @use '../abstracts' as *;
-@use '../base' as *;
-
-
-:root {
-  --primary: #353535;
-  --primary-hover: #eee6e6;
-  --black: #000;
-  --gray: #5E5C5C;
-  --gray-light: #bdbdbd;
-  --radius: 5px;
-  --radius-large: 40px;
-}
-
 
 /********************** Inputs & textarea **********************/
 input[type="text"],
 input[type="email"],
 input[type="password"],
+input[type="search"],
 textarea {
-  font: $text-font, sans-serif;
-  font-size: 0.88em;
-  color: var(--gray);
-  width: 100%;
-  padding: 18px 22px;
-  margin: 0 0 16px 0;
-  background-color: #fff;
-  border: 1px solid var(--gray-light);
-  border-radius: 28px;
-  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.07);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  @include inputs;
 }
 
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus,
-textarea:focus {
-  border-color: var(--primary);
-  outline: none;
-  background-color: #f1f1f1;
-  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.3);
-}
-
+// Placeholder styling
 input::placeholder,
 textarea::placeholder {
-  color: var(--gray);
+  color: $text-color;
   transition: opacity 0.3s ease;
 }
-
 
 input:focus::placeholder,
 textarea:focus::placeholder {
   opacity: 0;
+}
+
+
+/********************** Floating Labels Effect **********************/
+.input-wrapper,
+.form-group,
+.wpcf7-form-control-wrap {
+  position: relative;
+  display: block;
+  // margin-bottom: 16px;
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="search"],
+  textarea {
+    // Input already has mixin styles applied globally
+    // Only need to ensure it has placeholder=" " in HTML
+    margin: 0;
+  }
+
+  label {
+    font-family: $font-family-base;
+    font-size: $text-size / 1.2;
+    color: $text-color;
+    background: transparent;
+    position: absolute;
+    top: 50%;
+    left: 22px;
+    padding: 0;
+    transform: translateY(-50%);
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+  }
+
+  textarea ~ label {
+    top: 28px !important;
+  }
+
+  // When input has content or is focused, label floats up
+  input:focus~label,
+  input:not(:placeholder-shown)~label,
+  textarea:focus~label,
+  textarea:not(:placeholder-shown)~label {
+    font-size: 0.75rem;
+    color: $text-color;
+    top: 0;
+    left: 12px;
+    transform: translateY(-50%);
+    background: $input-bg-color-focus;
+    padding: 2px 9px;
+    border-radius: 4px;
+  }
 }

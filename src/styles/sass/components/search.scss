@@ -1,6 +1,8 @@
 @use '../abstracts' as *;
 
-// src/styles/sass/components/search-modal.scss
+/**********************************************
+      SEARCH MODAL
+**********************************************/
 
 .search-open-button {
   color: #000;
@@ -31,7 +33,7 @@
   margin: 36px;
   position: relative;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  max-width: none; // Eliminamos el ancho máximo
+  max-width: none; // Remove max-width
   //max-height: 70vh;
   //overflow-y: auto;
   border-radius: 12px;
@@ -59,18 +61,21 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  max-width: 800px; // Centramos el contenido del formulario
+  max-width: 800px; // Center form content
   margin: 0 auto;
 
+  .input-wrapper {
+    margin-bottom: 0; // Override global margin
+  }
+
   input[type="search"] {
-    @include inputs;
 
     &:focus {
       outline: none;
       border-color: var(--primary);
     }
 
-    // Oculta la 'X' que aparece por defecto en los inputs de tipo "search" en navegadores Webkit (Chrome, Safari)
+    // Hide the 'X' that appears by default in search inputs on Webkit browsers (Chrome, Safari)
     &::-webkit-search-decoration,
     &::-webkit-search-cancel-button,
     &::-webkit-search-results-button,
@@ -91,14 +96,14 @@
   max-width: 880px;
   margin-left: auto;
   margin-right: auto;
-  max-height: 60vh; // Para que no ocupe toda la pantalla si hay muchos resultados
+  max-height: 60vh; // Prevent taking full screen if many results
   overflow-y: auto;
 
-   // 👉 Colocar el scrollbar a la izquierda
-  direction: rtl;          // Cambia la dirección visual del contenido
-  text-align: left;        // Corrige el texto que se invierte
+   // 👉 Place scrollbar on the left
+  direction: rtl;          // Change visual direction of content
+  text-align: left;        // Fix text that gets inverted
 
-  // Estilo del scrollbar (para navegadores WebKit)
+  // Scrollbar styling (for WebKit browsers)
   &::-webkit-scrollbar {
     width: 14px;
   }
@@ -110,7 +115,7 @@
     background-color: #555;
   }
 
-  // Esto evita que el contenido se alinee a la derecha visualmente
+  // Prevent content from visually aligning to the right
   > * {
     direction: ltr;
   }
@@ -141,4 +146,103 @@
       background-color: #efefef;
     }
   }
+}
+
+
+/**********************************************
+      SEARCH SIMPLE INPUT
+**********************************************/
+
+.search-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 36px;
+
+  form {
+    width: 100%;
+  }
+
+  .input-wrapper {
+    margin-bottom: 0; // Override global margin
+  }
+
+  input[type="search"] {
+    width: 100%;
+
+    &:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    // Hide the 'X' that appears by default in search inputs on Webkit browsers (Chrome, Safari)
+    &::-webkit-search-decoration,
+    &::-webkit-search-cancel-button,
+    &::-webkit-search-results-button,
+    &::-webkit-search-results-decoration {
+      -webkit-appearance: none;
+    }
+  }
+}
+
+.search-results-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  max-height: 300px; // 👈 Maximum height
+  overflow-y: auto;  // 👈 Scroll when needed
+  margin-top: -1px;
+
+  // Scrollbar styling
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #999;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.search-result-item {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      color: var(--primary, #000);
+    }
+  }
+}
+
+.search-result-type {
+  font-size: 0.75rem;
+  color: #999;
+  text-transform: uppercase;
+  margin-left: 0.5rem;
 }

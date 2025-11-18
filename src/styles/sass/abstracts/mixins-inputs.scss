@@ -1,0 +1,30 @@
+@use 'var-colors' as *;
+@use 'var-layout' as *;
+@use 'var-typography' as *;
+
+@mixin inputs() {
+  // Typography
+  font-family: $font-family-base;
+  font-size: $text-size / 1;
+  color: $input-text-color;
+  // Layout
+  padding: 18px 22px;
+  margin: 0 0 12px 0;
+  width: 100%;
+  // Appearance
+  background-color: $input-bg-color;
+  border: 1px solid $gray500;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.07);
+  // Interaction
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  // Focus state
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: $input-bg-color-focus;
+    border-color: $branding-color1;
+    box-shadow: none;
+    outline: none;
+  }
+}

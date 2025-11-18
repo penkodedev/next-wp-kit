@@ -14,6 +14,43 @@ interface ContactForm7Props {
  */
 export default function ContactForm7({ children }: ContactForm7Props) {
   useEffect(() => {
+    // Initialize floating labels for CF7 inputs
+    const initFloatingLabels = () => {
+      const cf7Forms = document.querySelectorAll('.wpcf7-form');
+      
+      cf7Forms.forEach(form => {
+        // Find all CF7 form control wraps that don't have labels yet
+        const wraps = form.querySelectorAll('.wpcf7-form-control-wrap');
+        
+        wraps.forEach(wrap => {
+          const input = wrap.querySelector('input[type="text"], input[type="email"], input[type="tel"], input[type="url"], textarea') as HTMLInputElement | HTMLTextAreaElement;
+          
+          if (!input || wrap.querySelector('label')) return; // Skip if no input or label already exists
+          
+          // Get the label text from the wrap's attribute name or placeholder
+          const wrapName = wrap.getAttribute('data-name') || input.getAttribute('name') || '';
+          const placeholderText = input.getAttribute('placeholder') || wrapName;
+          
+          if (!placeholderText) return;
+          
+          // Create label element
+          const label = document.createElement('label');
+          label.setAttribute('for', input.id || wrapName);
+          label.textContent = placeholderText;
+          
+          // Set placeholder to empty space (required for CSS :placeholder-shown)
+          input.setAttribute('placeholder', ' ');
+          
+          // Add label to wrap
+          wrap.appendChild(label);
+        });
+      });
+    };
+
+    // Run on mount and after a short delay (CF7 might inject HTML asynchronously)
+    initFloatingLabels();
+    const timer = setTimeout(initFloatingLabels, 500);
+
     // Function to handle form submission
     const handleFormSubmit = async (event: Event) => {
       event.preventDefault();
@@ -44,7 +81,7 @@ export default function ContactForm7({ children }: ContactForm7Props) {
         const submitButton = form.querySelector('input[type="submit"], button[type="submit"]') as HTMLInputElement | HTMLButtonElement;
         if (submitButton) {
           submitButton.disabled = true;
-          submitButton.value = submitButton.tagName === 'INPUT' ? 'Enviando...' : 'Enviando...';
+          submitButton.value = submitButton.tagName === 'INPUT' ? 'Sending...' : 'Sending...';
         }
 
         // Send the form data
@@ -116,7 +153,7 @@ export default function ContactForm7({ children }: ContactForm7Props) {
         }
       });
 
-      showMessage(form, 'Hay errores en el formulario. Por favor, revisa los campos marcados.', 'error');
+      showMessage(form, 'There are errors in the form. Please review the marked fields.', 'error');
     };
 
     // Find all CF7 forms within this component and attach event listeners
@@ -132,6 +169,7 @@ export default function ContactForm7({ children }: ContactForm7Props) {
 
     // Cleanup function
     return () => {
+      clearTimeout(timer);
       cf7Forms.forEach(form => {
         form.removeEventListener('submit', handleFormSubmit);
         (form as any)._cf7HandlerAttached = false;

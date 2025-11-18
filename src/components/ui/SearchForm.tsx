@@ -3,12 +3,14 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { searchSite } from '@/api/wordpressApi';
 import type { SearchResult } from '@/types/wordpressTypes';
 import { cleanInternalUrl } from '@/utils/url';
 
 export default function SearchForm() {
+  const t = useTranslations('Search');
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -16,13 +18,13 @@ export default function SearchForm() {
   const router = useRouter();
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
-  // Función para obtener el título, ya sea un string o un objeto
+  // Get title as string from SearchResult (can be string or object)
   const getResultTitle = (result: SearchResult): string => {
     if (typeof result.title === 'string') return result.title;
     return result.title.rendered;
   }
 
-  // Efecto para el "debouncing" de la búsqueda
+  // Debounce search queries
   useEffect(() => {
     if (query.length < 3) {
       setResults([]);
@@ -36,12 +38,12 @@ export default function SearchForm() {
       setResults(searchResults || []);
       setIsLoading(false);
       setIsDropdownVisible(true);
-    }, 300); // Espera 300ms después de la última pulsación
+    }, 300); // Wait 300ms after last keystroke
 
     return () => clearTimeout(debounceTimer);
   }, [query]);
 
-  // Efecto para cerrar el dropdown si se hace clic fuera
+  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
@@ -52,7 +54,7 @@ export default function SearchForm() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [searchContainerRef]);
 
-  // Manejar el envío del formulario (al pulsar Enter)
+  // Handle form submission (on Enter key)
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
@@ -61,35 +63,40 @@ export default function SearchForm() {
     }
   };
 
+
+
   return (
     <div className="search-container" ref={searchContainerRef}>
       <form onSubmit={handleSearchSubmit} role="search">
-        <input
-          type="search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => query.length >= 3 && setIsDropdownVisible(true)}
-          placeholder="Buscar en el sitio..."
-          aria-label="Buscar en el sitio"
-        />
+        <div className="input-wrapper">
+          <input
+            type="search"
+            id="search-form-input"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onFocus={() => query.length >= 3 && setIsDropdownVisible(true)}
+            placeholder=" "
+            aria-label={t('ariaLabel')}
+          />
+          <label htmlFor="search-form-input">{t('placeholder')}</label>
+        </div>
       </form>
       {isDropdownVisible && (
         <div className="search-results-dropdown">
           {isLoading ? (
-            <div className="search-result-item">Cargando...</div>
+            <div className="search-result-item">{t('loading')}</div>
           ) : results.length > 0 ? (
             <ul>
               {results.map((result) => (
                 <li key={result.id} className="search-result-item">
                   <Link href={cleanInternalUrl(result.url)} onClick={() => setIsDropdownVisible(false)}>
                     {getResultTitle(result)}
-                    <span className="search-result-type">{result.type}</span>
                   </Link>
                 </li>
               ))}
             </ul>
           ) : (
-            <div className="search-result-item">No se encontraron resultados.</div>
+            <div className="search-result-item">{t('noResults')}</div>
           )}
         </div>
       )}

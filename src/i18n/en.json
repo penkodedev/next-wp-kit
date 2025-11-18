@@ -18,10 +18,17 @@
     "noRecentResources": "No recent resources found."
   },
   "Search": {
-    "placeholder": "What are you looking for?",
+    "placeholder": "Search the site...",
+    "ariaLabel": "Search the site",
+    "loading": "Loading...",
+    "noResults": "No results found.",
     "searchButton": "Search",
     "clearButton": "Clear",
-    "noResults": "No results found."
+    "closeSearch": "Close search",
+    "modalPlaceholder": "What are you looking for?",
+    "searchHint": "Were you looking for that?",
+    "searching": "Searching...",
+    "noResultsFor": "No results found for \"{query}\""
   },
   "RecursosPage": {
     "loadMore": "Load more",
