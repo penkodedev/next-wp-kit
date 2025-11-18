@@ -1,6 +1,9 @@
 // src/components/layout/footer/FooterSocial.tsx
+'use client';
+
 import type { SiteInfo } from "@/types/wordpressTypes";
 import { Icons } from "@/components/ui/Icons";
+import { useTranslations } from 'next-intl';
 
 interface FooterSocialProps {
   social: SiteInfo['social'];
@@ -24,13 +27,15 @@ const getSocialIcon = (name: string) => {
 };
 
 export default function FooterSocial({ social }: FooterSocialProps) {
+  const t = useTranslations('Footer');
+  
   if (!social || social.length === 0) {
     return null;
   }
 
   return (
     <div className="footer-social">
-      <h3>Redes Sociales</h3>
+      <h3>{t('socialMedia')}</h3>
       <ul className="social-links">
         {social.map((socialItem, index) => {
           const IconComponent = getSocialIcon(socialItem.name);

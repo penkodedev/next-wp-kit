@@ -26,7 +26,7 @@ export default function ContentArchive({
         <GridPosts posts={posts} basePath={basePath} />
       ) : (
         <article>
-          <p>No content found in this section.</p>
+          <p>No se encontró contenido en esta sección.</p>
         </article>
       )}
     </div>

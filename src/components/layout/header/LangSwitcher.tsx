@@ -111,7 +111,10 @@ export default function LangSwitcher({ currentLocale }: LangSwitcherProps) {
           <a
             key={lang.code} 
             href={href}
-            onClick={(e) => { e.preventDefault(); router.push(href); }}
+            onClick={(e) => { 
+              e.preventDefault(); 
+              window.location.href = href; // Force full page reload to update translations
+            }}
             className={`lang-link ${isActive ? 'active' : ''}`} 
             aria-label={`Switch to ${lang.name}`}
           >

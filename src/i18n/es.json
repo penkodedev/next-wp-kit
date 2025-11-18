@@ -2,6 +2,17 @@
   "Navigation": {
     "home": "Inicio"
   },
+  "Content": {
+    "noContentFound": "No se encontró contenido en esta sección.",
+    "share": "Compartir",
+    "like": "Me gusta"
+  },
+  "Footer": {
+    "contact": "Contacto",
+    "socialMedia": "Redes Sociales",
+    "latestPosts": "Últimos {postType}",
+    "noRecentPosts": "No se encontraron {postType} recientes."
+  },
   "Sidebar": {
     "latestResources": "Últimos recursos",
     "noRecentResources": "No se encontraron recursos recientes."

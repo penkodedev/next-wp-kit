@@ -1,7 +1,6 @@
 // src/i18n/i18n.ts
 // Internationalization configuration with dynamic translation support for WP headless
 
-import { notFound } from 'next/navigation';
 import { getRequestConfig } from 'next-intl/server';
 import { getWpmlLanguages } from '@/api/wordpressApi';
 
@@ -32,12 +31,12 @@ export default getRequestConfig(async ({ locale: localeFromPath }) => {
 
   // Validate that the incoming locale is valid
   const supportedLocales = await getSupportedLocales();
-  if (!supportedLocales.includes(locale)) {
-    notFound();
-  }
+  
+  // If locale is not supported, fallback to default instead of notFound()
+  const validLocale = supportedLocales.includes(locale) ? locale : defaultLocale;
 
   return {
-    locale,
-    messages: (await import(`./${locale}.json`)).default
+    locale: validLocale,
+    messages: (await import(`./${validLocale}.json`)).default
   };
 });

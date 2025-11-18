@@ -1,6 +1,6 @@
 // src/hooks/usePostLike.ts
 import { useState, useEffect } from 'react';
-import { likePost } from '@/api/api';
+import { likePost } from '@/api/wordpressApi';
 
 // Asumimos que el nonce se pasa desde el servidor o un contexto
 export function usePostLike(postId: number, initialLikes: number, nonce: string) {

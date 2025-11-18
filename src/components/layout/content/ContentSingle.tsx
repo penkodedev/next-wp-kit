@@ -4,6 +4,7 @@ import AnimatedArticle from '@/components/animations/AnimatedArticle';
 import Breadcrumbs from '@/components/navigation/Breadcrumbs';
 import PostNav from '@/components/navigation/PostNav';
 import Sidebar from '@/components/layout/Sidebar';
+import ShareLikeButtons from '@/components/ui/ShareLikeButtons';
 import { WpPageId } from '@/utils/WpPageId';
 import { processContent } from '@/utils/processContent';
 import type { WpContent } from '@/types/wordpressTypes';
@@ -20,6 +21,7 @@ type ContentSingleProps = {
  * Template para mostrar un post individual de cualquier CPT
  * Usado por el catch-all y por carpetas específicas de CPT
  */
+
 export default function ContentSingle({ 
   post, 
   cpt, 
@@ -40,18 +42,7 @@ export default function ContentSingle({
           <section className="page-title">
             <h1>{post.title.rendered}</h1>
 
-            <div className="icons-wrap">
-              <Icons.Share2
-                size={21}
-                strokeWidth={1.5}
-                className="icons-page-title icon-share"
-              />
-              <Icons.Heart
-                size={21}
-                strokeWidth={1.5}
-                className="icons-page-title icon-heart"
-              />
-            </div>
+            <ShareLikeButtons />
           </section>
           
           <Breadcrumbs />

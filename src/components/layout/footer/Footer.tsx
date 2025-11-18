@@ -1,16 +1,22 @@
 // src/components/layout/footer/Footer.tsx
+
 import SiteInfo from "@/components/wordpress/SiteInfo";
 import FooterLogo from "@/components/layout/footer/FooterLogo";
 import FooterCopyright from "@/components/layout/footer/FooterCopyright";
 import FooterSocial from "@/components/layout/footer/FooterSocial";
 import FooterContact from "@/components/layout/footer/FooterContact";
 import FooterMenuClient from "@/components/layout/footer/FooterMenuClient";
-import FooterLastPosts from "@/components/layout/footer/FooterLastPosts";
+import LatestPostsList from "@/components/ui/LatestPostsList";
 import { fetchAPI } from "@/api/wordpressApi";
 import type { MenuItem } from "@/types/wordpressTypes";
 import { logger } from "@/utils/logger";
+import { headers } from 'next/headers';
 
 export default async function Footer() {
+  // Get current locale from middleware header
+  const headersList = headers();
+  const locale = (headersList.get('x-locale') || 'es') as string;
+  
   // Pre-fetch both menu versions (Spanish and English) on the server
   let menuES: MenuItem[] = [];
   let menuEN: MenuItem[] = [];
@@ -40,7 +46,7 @@ export default async function Footer() {
               </div>
 
               <div className="footer-box footer-resources">
-                <FooterLastPosts />
+                <LatestPostsList postType="recursos" perPage={6} locale={locale} />
               </div>
 
               <div className="footer-box footer-contact">

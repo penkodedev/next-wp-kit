@@ -4,6 +4,7 @@
 import { useState, useEffect } from "react";
 import type { SiteInfo } from "@/types/wordpressTypes";
 import { Icons } from "@/components/ui/Icons";
+import { useTranslations } from 'next-intl';
 
 interface FooterContactProps {
   contact: SiteInfo['contact'];
@@ -24,6 +25,7 @@ const getContactIcon = (type: string) => {
 };
 
 export default function FooterContact({ contact }: FooterContactProps) {
+  const t = useTranslations('Footer');
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -36,7 +38,7 @@ export default function FooterContact({ contact }: FooterContactProps) {
 
   return (
     <div className="footer-contact">
-      <h3>Contacto</h3> {/* OPTIONAL DISPLAY */}
+      <h3>{t('contact')}</h3>
       {Object.values(contact).map((contactItem: any, index) => {
         const IconComponent = getContactIcon(contactItem.type);
         return (

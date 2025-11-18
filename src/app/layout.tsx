@@ -65,16 +65,14 @@ function GlobalUI() {
 
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  // Providing all messages to the client
-  // side is the easiest way to get started.
-  const messages = await getMessages();
   const headersList = headers();
   
   // Get the locale from the middleware header (set in middleware.ts)
   // The middleware extracts the locale from the URL and sets it as 'x-locale' header
   const currentLocale = (headersList.get('x-locale') || 'es') as string;
 
-
+  // Providing all messages to the client with the correct locale
+  const messages = await getMessages({ locale: currentLocale });
   
   return (
     <html lang={currentLocale} suppressHydrationWarning>
