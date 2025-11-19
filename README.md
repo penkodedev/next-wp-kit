@@ -8,7 +8,7 @@
 
 **👨‍💻 Created by [Paulo Ramalho (penkode.com)](https://www.penkode.com)** - WordPress specialist with 15+ years crafting custom websites from scratch (Custom Post Types, custom metas, themes). Now specializing in headless architectures, custom REST APIs, and React/Next.js integrations. Penkode represents Paulo's personal brand and expertise in building bespoke digital solutions.
 
-**⚡ Works best with [Penkode WP Headless Theme](https://github.com/penkodev/penkode-wp-headless) - Our complementary WordPress theme with custom meta fields, optimized REST API endpoints, advanced shortcode processing, and seamless integration for the perfect headless WordPress experience.**
+**⚡ Made to work with [Penkode WP Headless Theme](https://github.com/penkodev/penkode-wp-headless) - Our complementary WordPress theme with custom meta fields, optimized REST API endpoints, advanced shortcode processing, and seamless integration for the perfect headless WordPress experience.**
 
 Transform your WordPress content into lightning-fast, SEO-optimized websites with our enterprise-grade starter kit. Built for agencies, developers, and businesses who demand performance, scalability, and developer experience.
 
@@ -332,36 +332,209 @@ npm run dev
 
 ### 📂 **Actual Project Structure**
 ```
-next-wp-kit/
-├── 📁 src/
-│   ├── 🎭 animations/       # Framer Motion components
-│   ├── 🌐 app/             # Next.js 14 App Router
-│   │   ├── layout.tsx      # Root layout with providers
-│   │   ├── page.tsx        # Home with dynamic hero
-│   │   ├── [...slug]/      # Dynamic WordPress routes
-│   │   ├── blog/           # Blog archive and posts
-│   │   └── modales/        # Modal pages
-│   ├── 🧩 components/
-│   │   ├── 📐 layout/      # Header, Footer, Navigation
-│   │   │   ├── header/     # Header components
-│   │   │   └── footer/     # Footer components
-│   │   ├── 🎨 ui/          # Reusable UI components
-│   │   ├── 🔗 wordpress/   # WordPress integrations
-│   │   ├── 🍪 cookies/     # Cookie management
-│   │   ├── 🧭 navigation/  # Navigation components
-│   │   └── ✨ animations/  # Animation library
-│   ├── 🎯 styles/          # ITCSS SASS architecture
+src/
+├── api/
+│   └── wordpressApi.ts
+├── app/
+│   ├── api/
+│   ├── blog/
+│   │   ├── page.tsx
+│   │   └── [slug]/
+│   │       └── page.tsx
+│   ├── feed.xml/
+│   │   └── route.ts
+│   ├── layout.tsx
+│   ├── not-found.tsx
+│   ├── page.tsx
+│   ├── recursos/
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   └── [...slug]/
+│   │       └── page.tsx
+│   ├── robots.ts
+│   ├── search/
+│   │   └── page.tsx
+│   ├── sitemap/
+│   │   └── page.tsx
+│   ├── sitemap.ts
+│   ├── [...slug]/
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   └── [locale]/
+│       └── sitemap/
+│           └── page.tsx
+├── components/
+│   ├── animations/
+│   │   ├── AnimatedArticle.tsx
+│   │   ├── AnimatedFadeIn.tsx
+│   │   ├── index.ts
+│   │   ├── StaggeredArticle.tsx
+│   │   └── types.ts
+│   ├── cookies/
+│   │   ├── CookieConsent.tsx
+│   │   └── CookieManager.tsx
+│   ├── features/
+│   │   ├── lightbox/
+│   │   │   └── LightboxController.tsx
+│   │   ├── modals/
+│   │   │   ├── AdvertisingPopup.tsx
+│   │   │   ├── ModalController.tsx
+│   │   │   └── Modals.tsx
+│   │   └── search/
+│   │       ├── SearchModal.tsx
+│   │       └── SearchTrigger.tsx
+│   ├── forms/
+│   │   ├── ContactForm7.tsx
+│   │   ├── ContactForm7Content.tsx
+│   │   ├── index.ts
+│   │   └── SearchForm.tsx
+│   ├── layout/
+│   │   ├── content/
+│   │   │   ├── ContentArchive.tsx
+│   │   │   ├── ContentHome.tsx
+│   │   │   ├── ContentPages.tsx
+│   │   │   ├── ContentSingle.tsx
+│   │   │   └── GridPosts.tsx
+│   │   ├── footer/
+│   │   │   ├── Footer.tsx
+│   │   │   ├── FooterContact.tsx
+│   │   │   ├── FooterCopyright.tsx
+│   │   │   ├── FooterLogo.tsx
+│   │   │   ├── FooterMenuClient.tsx
+│   │   │   └── FooterSocial.tsx
+│   │   ├── header/
+│   │   │   ├── Header.tsx
+│   │   │   ├── HeaderClient.tsx
+│   │   │   ├── HeaderConditional.tsx
+│   │   │   ├── HeaderServer.tsx
+│   │   │   ├── LangSwitcher.tsx
+│   │   │   ├── LogoHeader.tsx
+│   │   │   ├── LogoHeaderHome.tsx
+│   │   │   └── LogoHeaderServer.tsx
+│   │   └── sidebar/
+│   │       └── Sidebar.tsx
+│   ├── navigation/
+│   │   ├── Breadcrumbs.tsx
+│   │   ├── PostNav.tsx
+│   │   └── ScrollToTop.tsx
+│   ├── sections/
+│   │   ├── Hero.tsx
+│   │   ├── HeroConfig.tsx
+│   │   ├── ImageSlider.tsx
+│   │   ├── LatestPostsList.tsx
+│   │   └── SliderRecursos.tsx
+│   ├── ui/
+│   │   ├── DarkModeToggle.tsx
+│   │   ├── Icons.tsx
+│   │   ├── LikeButton.tsx
+│   │   ├── LoadingSpiner.tsx
+│   │   ├── LoadingWrapper.tsx
+│   │   ├── PostCard.tsx
+│   │   ├── ShareLikeButtons.tsx
+│   │   └── SliderBase.tsx
+│   └── wordpress/
+│       ├── SiteInfo.tsx
+│       ├── WpNavMenu.tsx
+│       └── WpStyles.tsx
+├── hooks/
+│   ├── useCookieConsent.ts
+│   ├── useCustomScrollbar.ts
+│   ├── useGlobalAppReady.ts
+│   └── usePostLike.ts
+├── i18n/
+│   ├── en.json
+│   ├── es.json
+│   ├── i18n.ts
+│   ├── locales.generated.json
+│   └── pt-br.json
+├── middleware.ts
+├── store/
+│   └── modalStore.ts
+├── styles/
+│   ├── sass/
+│   │   ├── abstracts/
+│   │   │   ├── class-animations.scss
+│   │   │   ├── index.scss
+│   │   │   ├── mixins-animations.scss
+│   │   │   ├── mixins-buttons.scss
+│   │   │   ├── mixins-inputs.scss
+│   │   │   ├── mixins-nav.scss
+│   │   │   ├── mixins-typography.scss
+│   │   │   ├── var-colors.scss
+│   │   │   ├── var-layout.scss
+│   │   │   └── var-typography.scss
 │   │   ├── base/
-│   │   │   └── _grid-layout.scss  # Simple layout system
-│   ├── 🔌 api/             # Type-safe WordPress API
-│   ├── 🪝 hooks/           # Custom React hooks
-│   ├── 🌍 i18n/            # Internationalization
-│   ├── 📊 store/           # Zustand state management
-│   ├── 🛠️ types/           # TypeScript definitions
-│   └── 🔧 utils/           # Utility functions
-├── 🚀 public/              # Static assets & fonts
-├── 📋 *.php                # WordPress integration files
-└── ⚙️ *.config.*           # Configuration files
+│   │   │   ├── index.scss
+│   │   │   ├── resets.scss
+│   │   │   ├── _flex-layout.scss
+│   │   │   ├── _grid-layout.scss
+│   │   │   └── _icons.scss
+│   │   ├── components/
+│   │   │   ├── footer.scss
+│   │   │   ├── header.scss
+│   │   │   ├── hero-home.scss
+│   │   │   ├── index.scss
+│   │   │   ├── langswitcher.scss
+│   │   │   ├── loader-spinner.scss
+│   │   │   ├── post-card.scss
+│   │   │   ├── post-grid.scss
+│   │   │   ├── search.scss
+│   │   │   ├── sidebar.scss
+│   │   │   └── slider.scss
+│   │   ├── main.scss
+│   │   ├── nav/
+│   │   │   ├── breadcrumbs.scss
+│   │   │   ├── buttons.scss
+│   │   │   ├── cookies.scss
+│   │   │   ├── dark-mode.scss
+│   │   │   ├── footer-menu.scss
+│   │   │   ├── index.scss
+│   │   │   ├── inputs.scss
+│   │   │   ├── loader.scss
+│   │   │   ├── main-menu.scss
+│   │   │   ├── modals.scss
+│   │   │   ├── post-nav.scss
+│   │   │   └── scroll-to-top.scss
+│   │   ├── pages/
+│   │   │   ├── index.scss
+│   │   │   ├── page-404.scss
+│   │   │   ├── page-home.scss
+│   │   │   ├── page-search.scss
+│   │   │   ├── page-sitemap.scss
+│   │   │   ├── pages-archive.scss
+│   │   │   ├── pages-single.scss
+│   │   │   └── pages.scss
+│   │   ├── plugins/
+│   │   │   ├── index.scss
+│   │   │   ├── _contact-form7.scss
+│   │   │   ├── _wordpress.scss
+│   │   │   └── _yet-another-react-lightbox.scss
+│   │   ├── responsive/
+│   │   │   ├── index.scss
+│   │   │   └── media-queries.scss
+│   │   └── typography/
+│   │       ├── index.scss
+│   │       ├── _font-face.scss
+│   │       └── _fonts.scss
+│   └── vendor/
+├── types/
+│   ├── index.ts
+│   └── wordpressTypes.ts
+└── utils/
+    ├── BodyClass.tsx
+    ├── build/
+    │   └── fetch-locales.ts
+    ├── cptConfig.ts
+    ├── FetchFromWP.ts
+    ├── frontendPagesConfig.ts
+    ├── LocaleSync.tsx
+    ├── logger.ts
+    ├── processContent.ts
+    ├── seo.ts
+    ├── types.ts
+    ├── url.ts
+    ├── WpPageId.tsx
+    └── WpPageIdContext.tsx
 ```
 
 ### 🔧 **WordPress Integration Files**
