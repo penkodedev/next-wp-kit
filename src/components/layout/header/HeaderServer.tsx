@@ -4,6 +4,7 @@ import HeaderClient from "./HeaderClient";
 import { getSiteInfo, fetchAPI } from "@/api/wordpressApi";
 import type { SiteInfo, MenuItem } from "@/types/wordpressTypes";
 import { logger } from "@/utils/logger";
+import localesConfig from "@/i18n/locales.generated.json";
 
 interface HeaderServerProps {
   variant?: "default" | "home";
@@ -33,21 +34,32 @@ export default async function HeaderServer({
     },
   };
 
-  // Pre-fetch both SiteInfo and both menu versions (Spanish and English) on the server
+  // Pre-fetch SiteInfo and menus for ALL active locales dynamically
   let siteInfo: SiteInfo = defaultSiteInfo;
-  let menuES: MenuItem[] = [];
-  let menuEN: MenuItem[] = [];
+  const menusByLocale: Record<string, MenuItem[]> = {};
 
   try {
-    const [siteInfoData, menuESData, menuENData] = await Promise.all([
+    // Build promises array dynamically for all locales
+    const menuPromises = localesConfig.supportedLocales.map(locale =>
+      fetchAPI<MenuItem[]>(`/custom/v1/menus?lang=${locale}&location=mainnav`)
+        .then(menu => ({ locale, menu: menu || [] }))
+        .catch(err => {
+          logger.error(`Error fetching menu for ${locale}:`, err);
+          return { locale, menu: [] };
+        })
+    );
+
+    const [siteInfoData, ...menuResults] = await Promise.all([
       getSiteInfo(),
-      fetchAPI<MenuItem[]>('/custom/v1/menus?lang=es&location=mainnav'),
-      fetchAPI<MenuItem[]>('/custom/v1/menus?lang=en&location=mainnav'),
+      ...menuPromises,
     ]);
     
     siteInfo = siteInfoData || defaultSiteInfo;
-    menuES = menuESData || [];
-    menuEN = menuENData || [];
+    
+    // Organize menus by locale
+    menuResults.forEach(result => {
+      menusByLocale[result.locale] = result.menu;
+    });
   } catch (error) {
     logger.error('HeaderServer: Error pre-fetching data', error);
   }
@@ -57,8 +69,7 @@ export default async function HeaderServer({
       variant={variant} 
       initialLocale={initialLocale} 
       siteInfo={siteInfo}
-      menuES={menuES}
-      menuEN={menuEN}
+      menusByLocale={menusByLocale}
     />
   );
 }

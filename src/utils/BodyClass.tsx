@@ -6,6 +6,7 @@ import { useEffect, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { useWpPageId } from "@/utils/WpPageIdContext";
 import { CPT_SLUG_MAP } from "@/utils/cptConfig";
+import localesConfig from "@/i18n/locales.generated.json";
 
 interface BodyClassProps {
   children: React.ReactNode;
@@ -20,7 +21,7 @@ const BodyClass = ({ children }: BodyClassProps) => {
     const pathSegments = (pathname || '').split('/').filter(Boolean);
 
     // Remove locale from path segments for class generation
-    const slugWithoutLocale = (pathSegments.length > 0 && ['es', 'en'].includes(pathSegments[0])) ? pathSegments.slice(1) : pathSegments;
+    const slugWithoutLocale = (pathSegments.length > 0 && localesConfig.supportedLocales.includes(pathSegments[0])) ? pathSegments.slice(1) : pathSegments;
 
     let classes: string[] = [];
 

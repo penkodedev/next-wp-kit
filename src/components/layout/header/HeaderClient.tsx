@@ -7,30 +7,32 @@ import WpNavMenu from "@/components/wordpress/WpNavMenu";
 import LangSwitcher from "@/components/layout/header/LangSwitcher";
 import SearchTrigger from "@/components/features/search/SearchTrigger";
 import type { SiteInfo, MenuItem } from "@/types/wordpressTypes";
+import localesConfig from "@/i18n/locales.generated.json";
 
 interface HeaderClientProps {
   variant?: "default" | "home";
   initialLocale?: string;
   siteInfo: SiteInfo;
-  menuES: MenuItem[];
-  menuEN: MenuItem[];
+  menusByLocale: Record<string, MenuItem[]>;
 }
 
 export default function HeaderClient({
   variant = "default",
   initialLocale = "es",
   siteInfo,
-  menuES,
-  menuEN,
+  menusByLocale,
 }: HeaderClientProps) {
   const pathname = usePathname();
 
-  // Detect current locale from pathname
+  // Detect current locale from pathname dynamically
   const segments = pathname.split("/").filter(Boolean);
-  const currentLocale = segments.length > 0 && segments[0] === "en" ? "en" : "es";
+  const firstSegment = segments[0];
+  const currentLocale = localesConfig.supportedLocales.includes(firstSegment) 
+    ? firstSegment 
+    : localesConfig.defaultLocale;
 
   // Select the appropriate pre-fetched menu based on locale
-  const menuItems = currentLocale === "en" ? menuEN : menuES;
+  const menuItems = menusByLocale[currentLocale] || [];
 
   return (
     <header className={`header ${variant === "home" ? "header-home" : ""}`}>

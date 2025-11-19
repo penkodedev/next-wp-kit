@@ -4,6 +4,9 @@
 # TypeScript build cache
 *.tsbuildinfo
 
+# Auto-generated locale configuration (build-time)
+src/i18n/locales.generated.json
+
 # Node modules
 node_modules
 

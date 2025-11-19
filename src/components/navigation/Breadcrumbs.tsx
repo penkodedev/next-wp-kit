@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import localesConfig from '@/i18n/locales.generated.json';
 
 interface BreadcrumbItem {
   label: string;
@@ -19,7 +20,7 @@ export default function Breadcrumbs() {
   const segments = pathname.split('/').filter(Boolean); // Dividir y filtrar segmentos vacíos
 
   // Detect if we're in a localized route
-  const isLocalized = segments.length > 0 && ['es', 'en'].includes(segments[0]);
+  const isLocalized = segments.length > 0 && localesConfig.supportedLocales.includes(segments[0]);
   const locale = isLocalized ? segments[0] : null; // null for default (Spanish) routes
   const actualSegments = isLocalized ? segments.slice(1) : segments;
 

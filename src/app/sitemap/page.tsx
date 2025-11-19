@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getAllContent, fetchAPI } from "@/api/wordpressApi";
 import type { Post, Page } from "@/types/wordpressTypes";
 import { getActiveCptSlugs, getTranslatedCptSlug } from "@/utils/cptConfig";
+import localesConfig from "@/i18n/locales.generated.json";
 
 interface SitemapItem {
   title: string;
@@ -88,10 +89,10 @@ async function getActiveLocales(): Promise<string[]> {
     if (response?.languages && Array.isArray(response.languages)) {
       return response.languages.map((lang: any) => lang.code);
     }
-    return ['es', 'en']; // Fallback
+    return localesConfig.supportedLocales; // Fallback to generated config
   } catch (error) {
     console.error('Error fetching active locales:', error);
-    return ['es', 'en']; // Fallback
+    return localesConfig.supportedLocales; // Fallback to generated config
   }
 }
 

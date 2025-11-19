@@ -1,5 +1,5 @@
-import { Icons } from '@/components/ui/Icons';
 import Link from 'next/link';
+import { Icons } from '@/components/ui/Icons';
 import AnimatedArticle from '@/components/animations/AnimatedArticle';
 import Breadcrumbs from '@/components/navigation/Breadcrumbs';
 import PostNav from '@/components/navigation/PostNav';

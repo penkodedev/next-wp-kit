@@ -11,25 +11,35 @@ import { fetchAPI } from "@/api/wordpressApi";
 import type { MenuItem } from "@/types/wordpressTypes";
 import { logger } from "@/utils/logger";
 import { headers } from 'next/headers';
+import localesConfig from "@/i18n/locales.generated.json";
 
 export default async function Footer() {
   // Get current locale from middleware header
   const headersList = headers();
-  const locale = (headersList.get('x-locale') || 'es') as string;
+  const locale = (headersList.get('x-locale') || localesConfig.defaultLocale) as string;
   
-  // Pre-fetch both menu versions (Spanish and English) on the server
-  let menuES: MenuItem[] = [];
-  let menuEN: MenuItem[] = [];
+  // Pre-fetch menus for ALL active locales dynamically
+  const menusByLocale: Record<string, MenuItem[]> = {};
 
   try {
-    const [menuESData, menuENData] = await Promise.all([
-      fetchAPI<MenuItem[]>('/custom/v1/menus?lang=es&slug=menu-footer'),
-      fetchAPI<MenuItem[]>('/custom/v1/menus?lang=en&slug=menu-footer-ingles'),
-    ]);
+    // Fetch menus for all locales in parallel using LOCATION (same as header)
+    const menuPromises = localesConfig.supportedLocales.map(async (localeKey) => {
+      try {
+        // Use footer location - WPML will handle translation via icl_object_id
+        const menu = await fetchAPI<MenuItem[]>(`/custom/v1/menus?lang=${localeKey}&location=footernav`);
+        return { locale: localeKey, menu: menu || [] };
+      } catch (err) {
+        logger.error(`Error fetching footer menu for ${localeKey}:`, err);
+        return { locale: localeKey, menu: [] };
+      }
+    });
+
+    const menuResults = await Promise.all(menuPromises);
     
-    // Handle null responses (fallback to empty arrays)
-    menuES = menuESData || [];
-    menuEN = menuENData || [];
+    // Organize menus by locale
+    menuResults.forEach(result => {
+      menusByLocale[result.locale] = result.menu;
+    });
   } catch (error) {
     logger.error('Footer: Error pre-fetching menus', error);
   }
@@ -54,7 +64,7 @@ export default async function Footer() {
               </div>
             </div>
 
-            <FooterMenuClient menuES={menuES} menuEN={menuEN} />
+            <FooterMenuClient menusByLocale={menusByLocale} />
 
             <div className="copyright">
               <FooterLogo />

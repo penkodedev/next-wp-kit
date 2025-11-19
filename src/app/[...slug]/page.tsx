@@ -11,6 +11,7 @@ import ContentSingle from '@/components/layout/content/ContentSingle';
 import ContentArchive from '@/components/layout/content/ContentArchive';
 import ContentPages from '@/components/layout/content/ContentPages';
 import ContentHome from '@/components/layout/content/ContentHome';
+import localesConfig from '@/i18n/locales.generated.json';
 
 type PageProps = {
   params: {
@@ -31,7 +32,7 @@ export async function detectRouteType(slug: string[]): Promise<RouteType> {
   console.log('Detecting route type for slug:', slug);
 
   const firstSegment = slug[0];  
-  const isLocale = ['es', 'en'].includes(firstSegment);
+  const isLocale = localesConfig.supportedLocales.includes(firstSegment);
   const slugWithoutLocale = isLocale ? slug.slice(1) : slug;
 
   // Case 1: Home page (e.g., / or /en)
@@ -94,9 +95,10 @@ export async function generateMetadata({
 export async function generateStaticParams() {
   const params: { slug: string[] }[] = [];
 
-  // Add locale-only routes (like /en for home page)
-  params.push({ slug: ['es'] });
-  params.push({ slug: ['en'] });
+  // Add locale-only routes (like /en for home page) - dynamic from WordPress
+  localesConfig.supportedLocales.forEach(locale => {
+    params.push({ slug: [locale] });
+  });
 
   // Add pages
   const pages = await getAllContent<Page>("pages");
@@ -105,9 +107,10 @@ export async function generateStaticParams() {
       const pageSlugs = page.slug.split("/").filter(Boolean);
       // Add without locale prefix (default)
       params.push({ slug: pageSlugs });
-      // Add with locale prefixes
-      params.push({ slug: ['es', ...pageSlugs] });
-      params.push({ slug: ['en', ...pageSlugs] });
+      // Add with locale prefixes - dynamic
+      localesConfig.supportedLocales.forEach(locale => {
+        params.push({ slug: [locale, ...pageSlugs] });
+      });
     });
   }
 
@@ -119,33 +122,40 @@ export async function generateStaticParams() {
     );
 
     for (const cpt of customTypes) {
-      // Add archive pages - use translated slugs for English
+      // Add archive pages - dynamic for all locales
       params.push({ slug: [cpt] });
-      params.push({ slug: ['es', cpt] });
-
-      // For English, use getTranslatedCptSlug (100% dynamic, no hardcoding)
-      const englishSlug = getTranslatedCptSlug(cpt, 'en');
-      params.push({ slug: ['en', englishSlug] });
+      
+      localesConfig.supportedLocales.forEach(locale => {
+        const translatedSlug = getTranslatedCptSlug(cpt, locale);
+        params.push({ slug: [locale, translatedSlug] });
+      });
 
       try {
-        // Get posts in both languages to generate all possible routes
-        const spanishPosts = await getAllContent<WpContent>(cpt, '?per_page=10&_embed');
-        const englishPosts = await getAllContent<WpContent>(cpt, '?per_page=10&_embed&lang=en');
+        // Get posts in all languages dynamically
+        const allPosts: WpContent[] = [];
+        
+        for (const locale of localesConfig.supportedLocales) {
+          const apiParams = locale === localesConfig.defaultLocale 
+            ? '?per_page=10&_embed'
+            : `?per_page=10&_embed&lang=${locale}`;
+          const posts = await getAllContent<WpContent>(cpt, apiParams);
+          if (posts) allPosts.push(...posts);
+        }
 
-        // Combine posts from both languages
-        const allPosts = [...(spanishPosts || []), ...(englishPosts || [])];
+        // Remove duplicates by ID
         const uniquePosts = allPosts.filter((post, index, self) =>
           index === self.findIndex(p => p.id === post.id)
         );
 
         if (uniquePosts.length > 0) {
           uniquePosts.forEach(post => {
-            // Add single CPT pages in Spanish
+            // Add single CPT pages in all locales
             params.push({ slug: [cpt, post.slug] });
-            params.push({ slug: ['es', cpt, post.slug] });
-
-            // Add single CPT pages in English with translated archive slug
-            params.push({ slug: ['en', englishSlug, post.slug] });
+            
+            localesConfig.supportedLocales.forEach(locale => {
+              const translatedSlug = getTranslatedCptSlug(cpt, locale);
+              params.push({ slug: [locale, translatedSlug, post.slug] });
+            });
           });
         }
       } catch (error) {
@@ -163,7 +173,7 @@ export default async function CatchAllPage({ params }: PageProps) {
   const path = getPathFromParams(params);
   const routeType = await detectRouteType(params.slug);
   // Determine the current locale from the path
-  const locale = (params.slug.length > 0 && ['es', 'en'].includes(params.slug[0])) ? params.slug[0] : 'es';
+  const locale = (params.slug.length > 0 && localesConfig.supportedLocales.includes(params.slug[0])) ? params.slug[0] : localesConfig.defaultLocale;
   console.log('Route type result:', routeType);
 
   // ROUTE 1: Post Archive (CPT Archive)
@@ -203,7 +213,7 @@ export default async function CatchAllPage({ params }: PageProps) {
 
   // ROUTE 3: Home Page (locale-only routes like /en)
   const firstSegment = params.slug[0];
-  const isLocaleOnly = params.slug.length === 1 && ['es', 'en'].includes(firstSegment);
+  const isLocaleOnly = params.slug.length === 1 && localesConfig.supportedLocales.includes(firstSegment);
 
   if (isLocaleOnly) {
     const lang = firstSegment === 'es' ? undefined : firstSegment;
@@ -220,7 +230,7 @@ export default async function CatchAllPage({ params }: PageProps) {
   let page = await getContentBySlug<Page>("pages", path, locale);
 
   // If page not found and we have a locale prefix, try to get the translated version
-  if (!page && params.slug.length > 1 && ['es', 'en'].includes(params.slug[0])) {
+  if (!page && params.slug.length > 1 && localesConfig.supportedLocales.includes(params.slug[0])) {
     const lang = params.slug[0];
     const actualPath = params.slug.slice(1).join('/');
 

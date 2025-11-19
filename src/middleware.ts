@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import localesConfig from './i18n/locales.generated.json'
 
-// Supported locales (should match your i18n config)
-const SUPPORTED_LOCALES = ['es', 'en', 'pt'];
-const DEFAULT_LOCALE = 'es';
+// Auto-generated from WordPress WPML (see src/utils/build/fetch-locales.ts)
+const SUPPORTED_LOCALES = localesConfig.supportedLocales;
+const DEFAULT_LOCALE = localesConfig.defaultLocale;
 
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
