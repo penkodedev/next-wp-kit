@@ -29,7 +29,7 @@ export default function Breadcrumbs() {
   }
 
   let breadcrumbItems: BreadcrumbItem[] = [
-    { label: locale === 'en' ? 'Home' : 'Inicio', href: locale ? `/${locale}` : '/' },
+    { label: t('home'), href: locale ? `/${locale}` : '/' },
     ...actualSegments.map((segment, index) => {
       const href = locale
         ? `/${locale}/${actualSegments.slice(0, index + 1).join('/')}`

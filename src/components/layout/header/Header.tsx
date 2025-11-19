@@ -7,6 +7,7 @@ import LangSwitcher from "@/components/layout/header/LangSwitcher";
 import WpNavMenu from '@/components/wordpress/WpNavMenu';
 import SearchTrigger from '@/components/features/search/SearchTrigger';
 import type { SiteInfo } from "@/types/wordpressTypes";
+import localesConfig from '@/i18n/locales.generated.json';
 
 interface HeaderProps {
   variant?: 'default' | 'home';
@@ -14,13 +15,15 @@ interface HeaderProps {
   siteInfo: SiteInfo;
 }
 
-export default function Header({ variant = 'default', initialLocale = 'es', siteInfo }: HeaderProps) {
+export default function Header({ variant = 'default', initialLocale = localesConfig.defaultLocale, siteInfo }: HeaderProps) {
   const pathname = usePathname();
 
   // Detectar el locale actual del pathname
-  // Si la ruta comienza con /en, es inglés; de lo contrario, es español
   const segments = pathname.split('/').filter(Boolean);
-  const currentLocale = (segments.length > 0 && segments[0] === 'en') ? 'en' : 'es';
+  const firstSegment = segments[0];
+  const currentLocale = localesConfig.supportedLocales.includes(firstSegment)
+    ? firstSegment
+    : localesConfig.defaultLocale;
 
   return (
     <header className={`header ${variant === 'home' ? 'header-home' : ''}`}>

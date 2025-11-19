@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { getPostNavigation } from '@/api/wordpressApi';
 import { Icons } from '@/components/ui/Icons';
 import { getTranslatedCptSlug } from '@/utils/cptConfig';
+import localesConfig from '@/i18n/locales.generated.json';
 
 type PostNavigationProps = {
   postId: number;
@@ -33,7 +34,7 @@ export default async function PostNav({ postId, postType, basePath, locale = 'es
   
   // Generate locale-aware URLs
   const generateUrl = (slug: string) => {
-    const localePrefix = locale === 'es' ? '' : `/${locale}`;
+    const localePrefix = locale === localesConfig.defaultLocale ? '' : `/${locale}`;
     return `${localePrefix}/${translatedCptSlug}/${slug}`;
   };
 

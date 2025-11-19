@@ -24,6 +24,7 @@ import WpStyles from "@/components/wordpress/WpStyles";
 
 import BodyClass from "@/utils/BodyClass";
 import { WpPageIdProvider } from '@/utils/WpPageIdContext';
+import localesConfig from '@/i18n/locales.generated.json';
 
 
 // Base metadata for SEO
@@ -105,9 +106,13 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
+                var supportedLocales = ${JSON.stringify(localesConfig.supportedLocales)};
+                var defaultLocale = ${JSON.stringify(localesConfig.defaultLocale)};
+                
                 function updateLang() {
-                  const path = window.location.pathname;
-                  const locale = path.startsWith('/en') ? 'en' : 'es';
+                  var path = window.location.pathname;
+                  var firstSegment = path.split('/').filter(Boolean)[0];
+                  var locale = supportedLocales.includes(firstSegment) ? firstSegment : defaultLocale;
                   document.documentElement.lang = locale;
                 }
                 updateLang();

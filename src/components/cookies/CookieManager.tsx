@@ -1,6 +1,8 @@
 'use client'
 import { useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import { useCookieAware, useGoogleAnalytics, useFacebookPixel } from '@/hooks/useCookieConsent'
+import localesConfig from '@/i18n/locales.generated.json'
 
 // Componente que maneja Google Analytics
 const GoogleAnalyticsManager = () => {
@@ -41,23 +43,30 @@ const FacebookPixelManager = () => {
 // Componente que maneja cookies de funcionalidad
 const FunctionalityManager = () => {
   const { shouldLoad } = useCookieAware('preferences', 'functionality')
+  const pathname = usePathname()
+
+  // Detectar locale actual del pathname
+  const segments = pathname.split('/').filter(Boolean)
+  const currentLocale = localesConfig.supportedLocales.includes(segments[0])
+    ? segments[0]
+    : localesConfig.defaultLocale
 
   useEffect(() => {
     if (shouldLoad) {
       // Cargar funcionalidades personalizadas solo si está permitido
       console.log('✅ Funcionalidades personalizadas habilitadas')
       
-      // Ejemplo: guardar preferencias del usuario
+      // Ejemplo: guardar preferencias del usuario (usa locale dinámico)
       const userPreferences = {
         theme: 'dark',
-        language: 'es',
+        language: currentLocale,
         notifications: true
       }
       localStorage.setItem('user_preferences', JSON.stringify(userPreferences))
     } else {
       console.log('❌ Funcionalidades personalizadas bloqueadas')
     }
-  }, [shouldLoad])
+  }, [shouldLoad, currentLocale])
 
   return null
 }

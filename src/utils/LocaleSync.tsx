@@ -11,11 +11,11 @@ interface LocaleSyncProps {
 
 export default function LocaleSync({ locale }: LocaleSyncProps) {
   useEffect(() => {
-    // Update the HTML lang attribute with proper format
-    const langAttribute = locale === 'es' ? 'es-ES' : 'en-US';
-    document.documentElement.lang = langAttribute;
+    // Set HTML lang attribute directly from locale
+    // WordPress WPML returns valid lang codes (es, en, pt-br, etc.)
+    document.documentElement.lang = locale;
 
-    console.log('LocaleSync: Set lang to', langAttribute, 'for locale', locale);
+    console.log('LocaleSync: Set lang to', locale);
 
     // Optional: Store locale in localStorage for persistence
     if (typeof window !== 'undefined') {

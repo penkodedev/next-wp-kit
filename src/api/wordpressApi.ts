@@ -3,6 +3,7 @@
 import type { WpContent, SiteInfo, MenuItem, SearchResult, Page, Modal, PostNavigation, AllMenus } from '@/types/wordpressTypes';
 import { unstable_cache } from 'next/cache';
 import { logger } from '@/utils/logger';
+import localesConfig from '@/i18n/locales.generated.json';
 
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
@@ -145,7 +146,7 @@ export async function getContentBySlug<T extends WpContent>(postType: string, sl
   // This is needed to reconstruct block wrappers that the REST API might strip out.
   // We also request rendered content to ensure shortcodes are processed.
   let query = `/wp/v2/${postType}?slug=${slug}&_embed&_fields=id,slug,title,content,excerpt,date,modified,author,featured_media,_links,_embedded,blocks,yoast_head_json`;
-  if (lang && lang !== 'es') { // 'es' is default, no need to add param
+  if (lang && lang !== localesConfig.defaultLocale) {
     query += `&lang=${lang}`;
   }
   const data = await fetchAPI<T[]>(query);
@@ -155,14 +156,35 @@ export async function getContentBySlug<T extends WpContent>(postType: string, sl
 
 /*--------------------------------------------------------------------------------------
     🍔 GET HOME PAGE CONTENT
-    Route: /custom/v1/home-page?lang={lang} (or /wp/v2/pages?slug=inicio)
-    e.g. /custom/v1/home-page?lang=en
+    Route: /wp/v2/pages?per_page=1&filter[meta_key]=_wp_page_template&filter[meta_value]=front-page
+    Fetches the page set as "Front Page" in WordPress Settings > Reading
 --------------------------------------------------------------------------------------*/
 /** Fetches the home page content, with optional language support. */
 export async function getHomePage(lang?: string): Promise<Page | null> {
-  // Use getContentBySlug directly to fetch the home page content
-  const slug = lang === 'en' ? 'home' : 'inicio'; // Adjust slug based on language
-  return await getContentBySlug<Page>('pages', slug, lang);
+  // WordPress identifies the front page with is_front_page metadata
+  // We query for the page marked as front page in Settings > Reading
+  let query = '/wp/v2/pages?per_page=1&_embed&orderby=menu_order&order=asc';
+  
+  if (lang && lang !== localesConfig.defaultLocale) {
+    query += `&lang=${lang}`;
+  }
+  
+  // First, try to get the designated front page
+  const pages = await fetchAPI<Page[]>(query);
+  
+  if (pages && pages.length > 0) {
+    // Return the first page (WordPress front page)
+    return pages[0];
+  }
+  
+  // Fallback: try getting by common home page slugs
+  const commonSlugs = ['inicio', 'home', 'portada', 'accueil'];
+  for (const slug of commonSlugs) {
+    const page = await getContentBySlug<Page>('pages', slug, lang);
+    if (page) return page;
+  }
+  
+  return null;
 }
 
 
@@ -220,7 +242,7 @@ export const getAllMenus = unstable_cache(
  * @param postId The ID of the current post.
  * @param postType The post type (e.g., 'posts').
  */
-export async function getPostNavigation(postId: number, postType: string, lang: string = 'es'): Promise<PostNavigation | null> {
+export async function getPostNavigation(postId: number, postType: string, lang: string = localesConfig.defaultLocale): Promise<PostNavigation | null> {
   // We force revalidation on every request for navigation data to ensure it's always up-to-date.
   return await fetchAPI<PostNavigation>(`/custom/v1/post-navigation?post_id=${postId}&post_type=${postType}&lang=${lang}`, { next: { revalidate: process.env.NODE_ENV === 'production' ? 60 : 0 } });
 }
@@ -301,7 +323,7 @@ export async function getWpmlTranslation(postId: number, targetLang: string): Pr
 export async function getTranslatedUrl(postId: number | undefined, targetLang: string): Promise<string> {
   // If no postId provided, go to home of target language
   if (!postId) {
-    return targetLang === 'en' ? '/en' : '/';
+    return targetLang === localesConfig.defaultLocale ? '/' : `/${targetLang}`;
   }
 
   const translation = await getWpmlTranslation(postId, targetLang);
@@ -312,7 +334,7 @@ export async function getTranslatedUrl(postId: number | undefined, targetLang: s
   }
   
   // Fallback to home of target language
-  return translation?.fallback_url || (targetLang === 'en' ? '/en' : '/');
+  return translation?.fallback_url || (targetLang === localesConfig.defaultLocale ? '/' : `/${targetLang}`);
 }
 
 
@@ -335,14 +357,17 @@ export interface WpmlLanguagesResponse {
   count: number;
 }
 
-// Fallback cuando WordPress no está disponible
+// Fallback cuando WordPress no está disponible - usa localesConfig
 const FALLBACK_LANGUAGES: WpmlLanguagesResponse = {
-  languages: [
-    { code: 'es', name: 'Spanish', native_name: 'Español', is_default: true, url: '/' },
-    { code: 'en', name: 'English', native_name: 'English', is_default: false, url: '/en' }
-  ],
-  default: 'es',
-  count: 2
+  languages: localesConfig.supportedLocales.map(code => ({
+    code,
+    name: code.toUpperCase(),
+    native_name: code.toUpperCase(),
+    is_default: code === localesConfig.defaultLocale,
+    url: code === localesConfig.defaultLocale ? '/' : `/${code}`
+  })),
+  default: localesConfig.defaultLocale,
+  count: localesConfig.supportedLocales.length
 };
 
 /**

@@ -6,6 +6,7 @@ import { getTranslations } from 'next-intl/server';
 import { getTranslatedCptSlug } from '@/utils/cptConfig';
 import type { WpContent } from '@/types/wordpressTypes';
 import { Icons } from '@/components/ui/Icons';
+import localesConfig from '@/i18n/locales.generated.json';
 
 interface LatestPostsListProps {
   postType: string;
@@ -40,7 +41,7 @@ export default async function LatestPostsList({
 
   // Build URL based on locale (use translated slug for URL)
   const buildUrl = (slug: string) => {
-    return locale === 'es' 
+    return locale === localesConfig.defaultLocale 
       ? `/${translatedPostType}/${slug}` 
       : `/${locale}/${translatedPostType}/${slug}`;
   };

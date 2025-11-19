@@ -5,6 +5,8 @@ import Link from "next/link";
 import { getAllContent, fetchAPI } from "@/api/wordpressApi";
 import type { Post, Page } from "@/types/wordpressTypes";
 import { getActiveCptSlugs, getTranslatedCptSlug } from "@/utils/cptConfig";
+import localesConfig from "@/i18n/locales.generated.json";
+import { getTranslations } from "next-intl/server";
 
 interface SitemapItem {
   title: string;
@@ -78,7 +80,7 @@ function buildPageHierarchy(pages: Page[], baseUrl: string) {
  */
 function getLocalizedUrl(baseUrl: string, postType: string, slug: string, locale: string): string {
   const translatedSlug = getTranslatedCptSlug(postType, locale);
-  const localePrefix = locale === 'es' ? '' : `/${locale}`;
+  const localePrefix = locale === localesConfig.defaultLocale ? '' : `/${locale}`;
   return `${baseUrl}${localePrefix}/${translatedSlug}/${slug}`;
 }
 
@@ -87,8 +89,8 @@ async function getSitemapData(currentLocale: string) {
   const sections: SitemapSection[] = [];
 
   const locale = currentLocale;
-  const localePrefix = locale === 'es' ? '' : `/${locale}`;
-  const apiParams = locale === 'es' ? '' : `?lang=${locale}`;
+  const localePrefix = locale === localesConfig.defaultLocale ? '' : `/${locale}`;
+  const apiParams = locale === localesConfig.defaultLocale ? '' : `?lang=${locale}`;
   
   // === PAGES ===
   const pages = (await getAllContent<Page>("pages", apiParams)) || [];
@@ -144,13 +146,14 @@ type SitemapPageProps = {
 };
 
 export default async function SitemapPage({ params }: SitemapPageProps) {
-  const currentLocale = params.locale || 'es';
+  const currentLocale = params.locale || localesConfig.defaultLocale;
+  const t = await getTranslations({ locale: currentLocale, namespace: 'Navigation' });
   const sections = await getSitemapData(currentLocale);
 
   return (
     <div className="page-one-col sitemap-page">
       <section className="page-title">
-        <h1>{currentLocale === 'es' ? 'Mapa del Sitio' : 'Sitemap'}</h1>
+        <h1>{t('sitemap')}</h1>
       </section>
       
       <article className="page-content">

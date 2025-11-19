@@ -3,6 +3,7 @@
 
 import { ReactNode } from 'react';
 import LocaleSync from '@/utils/LocaleSync';
+import localesConfig from '@/i18n/locales.generated.json';
 
 interface SlugLayoutProps {
   children: ReactNode;
@@ -13,7 +14,10 @@ interface SlugLayoutProps {
 
 export default function SlugLayout({ children, params }: SlugLayoutProps) {
   // Detect locale from URL path
-  const locale = params.slug?.[0] === 'en' ? 'en' : 'es';
+  const firstSegment = params.slug?.[0];
+  const locale = localesConfig.supportedLocales.includes(firstSegment)
+    ? firstSegment
+    : localesConfig.defaultLocale;
 
   return (
     <>

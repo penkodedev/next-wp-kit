@@ -9,6 +9,7 @@ import { WpPageId } from '@/utils/WpPageId';
 import { processContent } from '@/utils/processContent';
 import { getTranslatedCptSlug } from '@/utils/cptConfig';
 import type { WpContent } from '@/types/wordpressTypes';
+import localesConfig from '@/i18n/locales.generated.json';
 
 type ContentSingleProps = {
   post: WpContent;
@@ -29,7 +30,7 @@ export default function ContentSingle({
   const translatedSlug = getTranslatedCptSlug(postType, locale);
   const safeSlug = translatedSlug || postType || 'posts'; // Triple fallback
   const archiveName = safeSlug.charAt(0).toUpperCase() + safeSlug.slice(1);
-  const backToArchiveUrl = locale === 'es' ? `/${safeSlug}` : `/${locale}/${safeSlug}`;
+  const backToArchiveUrl = locale === localesConfig.defaultLocale ? `/${safeSlug}` : `/${locale}/${safeSlug}`;
 
   return (
     <div className="page-sidebar">

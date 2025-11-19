@@ -5,6 +5,8 @@ import type { Metadata } from 'next';
 import { generateSeoMetadata } from '@/utils/seo';
 import type { Post } from '@/types/wordpressTypes';
 import ContentSingle from '@/components/layout/content/ContentSingle';
+import { headers } from 'next/headers';
+import localesConfig from '@/i18n/locales.generated.json';
 
 type PostPageProps = {
   params: {
@@ -31,6 +33,10 @@ export async function generateStaticParams() {
 
 // 3. El componente de la página
 export default async function PostPage({ params }: PostPageProps) {
+  // Get current locale from middleware header
+  const headersList = headers();
+  const locale = (headersList.get('x-locale') || localesConfig.defaultLocale) as string;
+
   const post = await getContentBySlug<Post>('posts', params.slug);
 
   // Si el post no se encuentra (o la API falló), muestra la página 404.
@@ -42,7 +48,7 @@ export default async function PostPage({ params }: PostPageProps) {
     <ContentSingle 
       post={post}
       postType="posts"
-      locale="es"
+      locale={locale}
     />
   );
 }

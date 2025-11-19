@@ -2,6 +2,7 @@
 import RSS from 'rss';
 import { getAllPosts } from '@/api/wordpressApi';
 import { metadata as siteMetadata } from '@/app/layout'; // Importamos los metadatos base
+import localesConfig from '@/i18n/locales.generated.json';
 
 export async function GET() {
   const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
@@ -24,7 +25,7 @@ export async function GET() {
     description: siteMetadata.description || 'Últimas noticias y artículos',
     site_url: baseUrl,
     feed_url: `${baseUrl}/feed.xml`,
-    language: 'es', // TODO: Hacer dinámico si se implementa i18n
+    language: localesConfig.defaultLocale,
     pubDate: new Date(),
   };
 

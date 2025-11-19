@@ -3,8 +3,14 @@ import { getAllContent } from '@/api/wordpressApi';
 import type { Post } from '@/types/wordpressTypes';
 import { logger } from '@/utils/logger';
 import ContentArchive from '@/components/layout/content/ContentArchive';
+import { headers } from 'next/headers';
+import localesConfig from '@/i18n/locales.generated.json';
 
 export default async function BlogIndexPage() {
+  // Get current locale from middleware header
+  const headersList = headers();
+  const locale = (headersList.get('x-locale') || localesConfig.defaultLocale) as string;
+
   let posts = null;
 
   try {
@@ -17,7 +23,8 @@ export default async function BlogIndexPage() {
     <ContentArchive 
       posts={posts}
       postType="posts"
-      locale="es"
+      locale={locale}
+      title="Blog"
     />
   );
 }

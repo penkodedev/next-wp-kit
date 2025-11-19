@@ -101,7 +101,7 @@ async function getActiveLocales(): Promise<string[]> {
  */
 function getLocalizedUrl(baseUrl: string, postType: string, slug: string, locale: string): string {
   const translatedSlug = getTranslatedCptSlug(postType, locale);
-  const localePrefix = locale === 'es' ? '' : `/${locale}`;
+  const localePrefix = locale === localesConfig.defaultLocale ? '' : `/${locale}`;
   return `${baseUrl}${localePrefix}/${translatedSlug}/${slug}`;
 }
 
@@ -111,8 +111,8 @@ async function getSitemapData(currentLocale: string) {
 
   // Only show content for the current locale
   const locale = currentLocale;
-  const localePrefix = locale === 'es' ? '' : `/${locale}`;
-  const apiParams = locale === 'es' ? '' : `?lang=${locale}`;
+  const localePrefix = locale === localesConfig.defaultLocale ? '' : `/${locale}`;
+  const apiParams = locale === localesConfig.defaultLocale ? '' : `?lang=${locale}`;
   
   // === PAGES ===
   const pages = (await getAllContent<Page>("pages", apiParams)) || [];

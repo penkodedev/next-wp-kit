@@ -179,7 +179,7 @@ export default async function CatchAllPage({ params }: PageProps) {
   // ROUTE 1: Post Archive (CPT Archive)
   if (routeType.type === 'post-archive') {
     // Use WPML REST API filtering for translated content
-    const apiParams = locale === 'es'
+    const apiParams = locale === localesConfig.defaultLocale
       ? '?per_page=12&_embed&orderby=date&order=desc'
       : `?per_page=12&_embed&orderby=date&order=desc&lang=${locale}`;
 
