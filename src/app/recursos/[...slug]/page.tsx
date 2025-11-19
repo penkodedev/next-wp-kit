@@ -6,7 +6,6 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { generateSeoMetadata } from "@/utils/seo";
 import type { WpContent } from "@/types/wordpressTypes";
-import { getTranslatedCptSlug } from "@/utils/cptConfig";
 import ContentSingle from '@/components/layout/content/ContentSingle';
 
 type RecursoPageProps = {
@@ -79,22 +78,14 @@ export default async function RecursoPage({ params }: RecursoPageProps) {
     notFound();
   }
 
-  // Build dynamic "Back to Archive" URL
-  const translatedCptSlug = getTranslatedCptSlug('recursos', locale);
-  const backToArchiveUrl = locale === 'es' ? `/${translatedCptSlug}` : `/${locale}/${translatedCptSlug}`;
-  const archiveName = translatedCptSlug.charAt(0).toUpperCase() + translatedCptSlug.slice(1);
-
   /**********************************************
    * USAR EL COMPONENTE ContentSingle
-   * Si necesitas un layout diferente para recursos, 
-   * crea un RecursosSingleCustom.tsx y úsalo aquí
+   * Los cálculos internos se hacen en el componente
    **********************************************/
   return (
     <ContentSingle 
       post={recurso}
-      cpt="recursos"
-      backToArchiveUrl={backToArchiveUrl}
-      archiveName={archiveName}
+      postType="recursos"
       locale={locale}
     />
   );

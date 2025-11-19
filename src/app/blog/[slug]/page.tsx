@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { generateSeoMetadata } from '@/utils/seo';
 import type { Post } from '@/types/wordpressTypes';
+import ContentSingle from '@/components/layout/content/ContentSingle';
 
 type PostPageProps = {
   params: {
@@ -38,11 +39,10 @@ export default async function PostPage({ params }: PostPageProps) {
   }
 
   return (
-    <div className="container">
-      <article className="post-content">
-        <h1>{post.title.rendered}</h1>
-        <div dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
-      </article>
-    </div>
+    <ContentSingle 
+      post={post}
+      postType="posts"
+      locale="es"
+    />
   );
 }

@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import LogoHeaderServer from "@/components/layout/header/LogoHeaderServer";
 import LangSwitcher from "@/components/layout/header/LangSwitcher"; 
 import WpNavMenu from '@/components/wordpress/WpNavMenu';
-import SearchTrigger from '@/components/ui/SearchTrigger';
+import SearchTrigger from '@/components/features/search/SearchTrigger';
 import type { SiteInfo } from "@/types/wordpressTypes";
 
 interface HeaderProps {

@@ -4,7 +4,7 @@
 
 import { useEffect } from 'react';
 import { useModalStore } from '@/store/modalStore';
-import Modals from '@/components/ui/Modals'; // The visual component
+import Modals from '@/components/features/modals/Modals'; // The visual component
 
 /**
  * A client component that handles (LISTEN) the logic for opening modals.

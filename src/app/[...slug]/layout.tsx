@@ -2,7 +2,7 @@
 // Layout for dynamic routes that handles locale detection
 
 import { ReactNode } from 'react';
-import LocaleSync from '@/components/ui/LocaleSync';
+import LocaleSync from '@/utils/LocaleSync';
 
 interface SlugLayoutProps {
   children: ReactNode;

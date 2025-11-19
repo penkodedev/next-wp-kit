@@ -6,7 +6,7 @@ import FooterCopyright from "@/components/layout/footer/FooterCopyright";
 import FooterSocial from "@/components/layout/footer/FooterSocial";
 import FooterContact from "@/components/layout/footer/FooterContact";
 import FooterMenuClient from "@/components/layout/footer/FooterMenuClient";
-import LatestPostsList from "@/components/ui/LatestPostsList";
+import LatestPostsList from "@/components/sections/LatestPostsList";
 import { fetchAPI } from "@/api/wordpressApi";
 import type { MenuItem } from "@/types/wordpressTypes";
 import { logger } from "@/utils/logger";

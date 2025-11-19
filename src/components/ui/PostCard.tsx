@@ -56,8 +56,9 @@ export default function PostCard({
     setIsVisible(inView);
   }, [inView]);
 
+
 /**********************************************
-      START BUILDING THE PAGE CONTENT HTML
+      START BUILDING THE POST CARD
 **********************************************/
   return (
     <article

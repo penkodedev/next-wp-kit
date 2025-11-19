@@ -56,16 +56,42 @@ export const CPT_SLUG_MAP: Record<string, string> = CPT_CONFIG.reduce((acc, cpt)
 }, {} as Record<string, string>);
 
 /**
- * Get the translated slug for a CPT based on the locale.
- * @param cptSlug - The internal WordPress CPT slug (e.g., 'noticias', 'recursos')
+ * Get the translated slug for a post type based on the locale.
+ * Works for both native post types (posts, pages) and custom post types.
+ * 
+ * @param postType - The internal WordPress post type slug (e.g., 'posts', 'noticias', 'recursos')
  * @param locale - The target locale (e.g., 'es', 'en')
  * @returns The translated slug for the given locale, or the original slug if not found
  * 
  * @example
+ * getTranslatedCptSlug('posts', 'en') // Returns 'posts'
  * getTranslatedCptSlug('noticias', 'en') // Returns 'news'
  * getTranslatedCptSlug('recursos', 'en') // Returns 'resorts'
  */
-export function getTranslatedCptSlug(cptSlug: string, locale: string): string {
-  const cptConfig = CPT_CONFIG.find(config => config.slug === cptSlug);
-  return cptConfig?.translations[locale] || cptSlug;
+export function getTranslatedCptSlug(postType: string, locale: string): string {
+  // Handle native WordPress post types (posts, pages, etc.)
+  if (postType === 'posts' || postType === 'pages') {
+    return postType;
+  }
+  
+  // Handle custom post types
+  const cptConfig = CPT_CONFIG.find(config => config.slug === postType);
+  return cptConfig?.translations[locale] || postType;
+}
+
+/**
+ * Get all active CPT slugs (internal WordPress slugs).
+ * Useful for dynamic operations like sitemap generation.
+ * 
+ * @param exclude - Optional array of CPT slugs to exclude (e.g., ['modales', 'hero'])
+ * @returns Array of CPT slugs
+ * 
+ * @example
+ * getActiveCptSlugs() // Returns ['noticias', 'recursos', 'modales', 'hero']
+ * getActiveCptSlugs(['modales', 'hero']) // Returns ['noticias', 'recursos']
+ */
+export function getActiveCptSlugs(exclude: string[] = []): string[] {
+  return CPT_CONFIG
+    .map(config => config.slug)
+    .filter(slug => !exclude.includes(slug));
 }

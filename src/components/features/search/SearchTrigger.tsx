@@ -3,7 +3,7 @@
 "use client";
 
 import { useState } from 'react';
-import SearchModal from '@/components/ui/SearchModal';
+import SearchModal from '@/components/features/search/SearchModal';
 import { Icons } from '@/components/ui/Icons';
 
 export default function SearchTrigger() {

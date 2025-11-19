@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import { getWpmlTranslation, getWpmlLanguages, type WpmlLanguage } from '@/api/wordpressApi';
 import { useWpPageId } from '@/utils/WpPageIdContext';
 import { CPT_SLUG_MAP, getTranslatedCptSlug } from '@/utils/cptConfig';
+import { shouldPreserveOnLanguageSwitch } from '@/utils/frontendPagesConfig';
 
 interface LangSwitcherProps {
   currentLocale: string;
@@ -95,7 +96,13 @@ export default function LangSwitcher({ currentLocale }: LangSwitcherProps) {
       return targetLang === defaultLang ? fullPath : `/${targetLang}${fullPath}`;
     }
     
-    // For pages (non-CPT), we can't translate without pageId, so fallback to home
+    // Handle frontend-only pages (dynamic, from config)
+    if (shouldPreserveOnLanguageSwitch(mainSlug)) {
+      const fullPath = `/${mainSlug}`;
+      return targetLang === defaultLang ? fullPath : `/${targetLang}${fullPath}`;
+    }
+    
+    // For regular pages (non-CPT), we can't translate without pageId, so fallback to home
     return targetLang === defaultLang ? '/' : `/${targetLang}`;
   }
 

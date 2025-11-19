@@ -1,21 +1,27 @@
-import GridPosts from '@/components/layout/GridPosts';
+import GridPosts from '@/components/layout/content/GridPosts';
+import { getTranslatedCptSlug } from '@/utils/cptConfig';
 import type { WpContent } from '@/types/wordpressTypes';
 
 type ContentArchiveProps = {
   posts: WpContent[] | null;
-  displayTitle: string;
-  basePath: string;
+  postType: string;   // 'posts', 'noticias', 'recursos', etc.
+  locale: string;     // 'es', 'en'
 };
 
 /**
- * Template para mostrar el archivo (listado) de cualquier CPT
- * Usado por el catch-all y por carpetas específicas de CPT
+ * Template para mostrar el archivo (listado) de cualquier post type
+ * Calcula internamente displayTitle y basePath según postType y locale
  */
 export default function ContentArchive({ 
   posts, 
-  displayTitle, 
-  basePath 
+  postType,
+  locale
 }: ContentArchiveProps) {
+  // Calcular displayTitle y basePath internamente
+  const translatedSlug = getTranslatedCptSlug(postType, locale);
+  const displayTitle = translatedSlug.charAt(0).toUpperCase() + translatedSlug.slice(1);
+  const basePath = locale === 'es' ? `/${translatedSlug}` : `/${locale}/${translatedSlug}`;
+
   return (
     <div className="page-fullwidth">
       <section className="page-title">

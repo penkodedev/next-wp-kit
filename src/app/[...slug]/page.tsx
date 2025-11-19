@@ -6,13 +6,11 @@ import { generateSeoMetadata } from "@/utils/seo";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import type { Page, WpContent } from "@/types/wordpressTypes";
-import { WpPageIdSetter } from "@/utils/WpPageIdContext";
-import { processContent } from "@/utils/processContent";
 import { CPT_SLUG_MAP, getTranslatedCptSlug } from "@/utils/cptConfig";
-import HeroConfig from '@/components/sections/HeroConfig';
 import ContentSingle from '@/components/layout/content/ContentSingle';
 import ContentArchive from '@/components/layout/content/ContentArchive';
 import ContentPages from '@/components/layout/content/ContentPages';
+import ContentHome from '@/components/layout/content/ContentHome';
 
 type PageProps = {
   params: {
@@ -26,8 +24,8 @@ function getPathFromParams(params: PageProps["params"]): string {
 
 type RouteType =
   | { type: 'page'; path: string }
-  | { type: 'cpt-archive'; cpt: string }
-  | { type: 'cpt-single'; cpt: string; slug: string };
+  | { type: 'post-archive'; postType: string }
+  | { type: 'post-single'; postType: string; slug: string };
 
 export async function detectRouteType(slug: string[]): Promise<RouteType> {
   console.log('Detecting route type for slug:', slug);
@@ -45,19 +43,19 @@ export async function detectRouteType(slug: string[]): Promise<RouteType> {
   const firstSlugSegment = slugWithoutLocale[0];
   const secondSlugSegment = slugWithoutLocale[1];
 
-  // Case 2: CPT Archive (e.g., /noticias or /en/news)
+  // Case 2: Post Archive (e.g., /noticias or /en/news)
   if (slugWithoutLocale.length === 1 && CPT_SLUG_MAP[firstSlugSegment]) {
-    const internalCpt = CPT_SLUG_MAP[firstSlugSegment];
-    console.log(`Route type: cpt-archive for ${internalCpt} (from slug ${firstSlugSegment})`);
-    return { type: 'cpt-archive', cpt: internalCpt };
+    const internalPostType = CPT_SLUG_MAP[firstSlugSegment];
+    console.log(`Route type: post-archive for ${internalPostType} (from slug ${firstSlugSegment})`);
+    return { type: 'post-archive', postType: internalPostType };
   }
 
-  // Case 3: CPT Single (e.g., /noticias/mi-noticia or /en/news/my-news)
+  // Case 3: Post Single (e.g., /noticias/mi-noticia or /en/news/my-news)
   if (slugWithoutLocale.length === 2 && CPT_SLUG_MAP[firstSlugSegment]) {
-    const internalCpt = CPT_SLUG_MAP[firstSlugSegment];
+    const internalPostType = CPT_SLUG_MAP[firstSlugSegment];
     const postSlug = secondSlugSegment;
-    console.log(`Route type: cpt-single for ${internalCpt} (from slug ${firstSlugSegment}), post slug: ${postSlug}`);
-    return { type: 'cpt-single', cpt: internalCpt, slug: postSlug };
+    console.log(`Route type: post-single for ${internalPostType} (from slug ${firstSlugSegment}), post slug: ${postSlug}`);
+    return { type: 'post-single', postType: internalPostType, slug: postSlug };
   }
 
   // Case 4: Default to a page
@@ -73,12 +71,12 @@ export async function generateMetadata({
   const path = getPathFromParams(params);
   const routeType = await detectRouteType(params.slug);
 
-  if (routeType.type === 'cpt-single') {
-    const post = await getContentBySlug<WpContent>(routeType.cpt, routeType.slug);
+  if (routeType.type === 'post-single') {
+    const post = await getContentBySlug<WpContent>(routeType.postType, routeType.slug);
     return generateSeoMetadata(post);
-  } else if (routeType.type === 'cpt-archive') {
+  } else if (routeType.type === 'post-archive') {
     return {
-      title: `${routeType.cpt.charAt(0).toUpperCase() + routeType.cpt.slice(1)} Archive`,
+      title: `${routeType.postType.charAt(0).toUpperCase() + routeType.postType.slice(1)} Archive`,
     };
   } else {
     let page = await getContentBySlug<Page>("pages", path).catch(() => null);
@@ -167,103 +165,58 @@ export default async function CatchAllPage({ params }: PageProps) {
   // Determine the current locale from the path
   const locale = (params.slug.length > 0 && ['es', 'en'].includes(params.slug[0])) ? params.slug[0] : 'es';
   console.log('Route type result:', routeType);
-  if (routeType.type === 'cpt-archive') {
+
+  // ROUTE 1: Post Archive (CPT Archive)
+  if (routeType.type === 'post-archive') {
     // Use WPML REST API filtering for translated content
     const apiParams = locale === 'es'
       ? '?per_page=12&_embed&orderby=date&order=desc'
       : `?per_page=12&_embed&orderby=date&order=desc&lang=${locale}`;
 
-    const posts = await getAllContent<WpContent>(routeType.cpt, apiParams);
+    const posts = await getAllContent<WpContent>(routeType.postType, apiParams);
 
-    // Use getTranslatedCptSlug for dynamic title and basePath (100% scalable)
-    const translatedCptSlug = getTranslatedCptSlug(routeType.cpt, locale);
-    const displayTitle = translatedCptSlug.charAt(0).toUpperCase() + translatedCptSlug.slice(1);
-    const basePath = locale === 'es' ? `/${translatedCptSlug}` : `/${locale}/${translatedCptSlug}`;
-
-/**********************************************
-      START BUILDING CPT ARCHIVE HTML
-**********************************************/
     return (
       <ContentArchive 
         posts={posts}
-        displayTitle={displayTitle}
-        basePath={basePath}
-      />
-    );
-  }
-
-  if (routeType.type === 'cpt-single') {
-    // For single posts, we need to find the translated slug if we're in a different locale
-    let slugToFetch = routeType.slug;
-
-    // For single posts, slugs are the same in both languages
-    // No translation needed - use the slug directly
-    console.log(`Fetching single post with slug: ${routeType.slug} for CPT: ${routeType.cpt} in locale: ${locale}`);
-
-    const post = await getContentBySlug<WpContent>(routeType.cpt, slugToFetch, locale);
-
-    if (!post) {
-      notFound();
-    }
-
-    // Build the correct "Back to Archive" URL based on current locale
-    const translatedCptSlug = getTranslatedCptSlug(routeType.cpt, locale);
-    const backToArchiveUrl = locale === 'es' ? `/${translatedCptSlug}` : `/${locale}/${translatedCptSlug}`;
-    
-    // Display name: capitalize the translated slug (fully dynamic, no hardcoding)
-    const archiveName = translatedCptSlug.charAt(0).toUpperCase() + translatedCptSlug.slice(1);
-
-/**********************************************
-           START BUILDING CPT SINGLE HTML
-**********************************************/
-    return (
-      <ContentSingle 
-        post={post}
-        cpt={routeType.cpt}
-        backToArchiveUrl={backToArchiveUrl}
-        archiveName={archiveName}
+        postType={routeType.postType}
         locale={locale}
       />
     );
   }
 
-  // Default: Render Page or Home
-  // Check if this is a locale-only route (like /en) that should show home page
+  // ROUTE 2: Post Single (CPT Single)
+  if (routeType.type === 'post-single') {
+    const post = await getContentBySlug<WpContent>(routeType.postType, routeType.slug, locale);
+
+    if (!post) {
+      notFound();
+    }
+
+    return (
+      <ContentSingle 
+        post={post}
+        postType={routeType.postType}
+        locale={locale}
+      />
+    );
+  }
+
+  // ROUTE 3: Home Page (locale-only routes like /en)
   const firstSegment = params.slug[0];
   const isLocaleOnly = params.slug.length === 1 && ['es', 'en'].includes(firstSegment);
 
   if (isLocaleOnly) {
-    // Load home page with language support
-    const lang = firstSegment === 'es' ? undefined : firstSegment; // es is default, so no lang param
+    const lang = firstSegment === 'es' ? undefined : firstSegment;
     const homePage = await getHomePage(lang);
 
     if (!homePage) {
       notFound();
     }
 
-    return (
-      <>
-        <WpPageIdSetter pageId={homePage.id} />
-        <HeroConfig /> {/* Render HeroConfig here */}
-        <div className="page-one-col">
-          <article>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: processContent(homePage.content.rendered),
-              }}
-            />
-          </article>
-        </div>
-
-        <section className="slider-container">
-          {/* You might want to import and use SliderRecursos here */}
-        </section>
-      </>
-    );
+    return <ContentHome page={homePage} />;
   }
 
-  // Default: Render Page
-  // For pages, we simply use the slug from the URL and the current locale
+  // ROUTE 4: Static Pages
   let page = await getContentBySlug<Page>("pages", path, locale);
 
   // If page not found and we have a locale prefix, try to get the translated version
@@ -271,8 +224,7 @@ export default async function CatchAllPage({ params }: PageProps) {
     const lang = params.slug[0];
     const actualPath = params.slug.slice(1).join('/');
 
-    // Try to get the translated page using WPML REST API
-    if (lang !== 'es') { // This check is redundant if getContentBySlug already uses locale
+    if (lang !== 'es') {
       const translatedPage = await fetchAPI<Page>(`/wp/v2/pages?slug=${actualPath}&lang=${lang}&_embed`);
       if (translatedPage && Array.isArray(translatedPage) && translatedPage.length > 0) {
         page = translatedPage[0];
@@ -281,7 +233,6 @@ export default async function CatchAllPage({ params }: PageProps) {
   }
 
   if (!page && params.slug.length > 1) {
-    // Try with just the last segment for child pages
     const lastSlug = params.slug[params.slug.length - 1];
     page = await getContentBySlug<Page>("pages", lastSlug);
   }
@@ -290,11 +241,5 @@ export default async function CatchAllPage({ params }: PageProps) {
     notFound();
   }
 
-  // Set page ID for body classes
-  const pageId = page.id;
-
-/**********************************************
-       START BUILDING STATIC PAGE HTML
-**********************************************/
-   return <ContentPages page={page} />;
+  return <ContentPages page={page} />;
 }

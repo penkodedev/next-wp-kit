@@ -1,7 +1,7 @@
 // src/components/layout/Sidebar.tsx
 
-import LatestPostsList from '@/components/ui/LatestPostsList';
-import SearchForm from '@/components/ui/SearchForm';
+import LatestPostsList from '@/components/sections/LatestPostsList';
+import SearchForm from '@/components/forms/SearchForm';
 import { headers } from 'next/headers';
 
 export default async function Sidebar() {
@@ -14,6 +14,10 @@ export default async function Sidebar() {
       <SearchForm />
       <div className="sidebox">
         <LatestPostsList postType="recursos" perPage={5} locale={locale} />
+      </div>
+
+      <div className="sidebox">
+        <LatestPostsList postType="noticias" perPage={5} locale={locale} />
       </div>
 
       {/* You can add more .sidebox divs here for other widgets like search, categories, etc. */}
