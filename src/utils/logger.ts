@@ -7,11 +7,13 @@
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
+type LogArg = string | number | Error | object;
+
 export const logger = {
   /**
    * Critical error logs (issues that affect functionality)
    */
-  error: (...args: any[]) => {
+  error: (...args: LogArg[]) => {
     if (isDevelopment) {
       console.error('🔴 [ERROR]', ...args);
     }
@@ -21,7 +23,7 @@ export const logger = {
   /**
    * Warnings (potential issues that don't break the app)
    */
-  warn: (...args: any[]) => {
+  warn: (...args: LogArg[]) => {
     if (isDevelopment) {
       console.warn('🟡 [WARN]', ...args);
     }
@@ -30,7 +32,7 @@ export const logger = {
   /**
    * General information (debugging)
    */
-  info: (...args: any[]) => {
+  info: (...args: LogArg[]) => {
     if (isDevelopment) {
       console.log('🔵 [INFO]', ...args);
     }
@@ -39,7 +41,8 @@ export const logger = {
   /**
    * Success logs
    */
-  success: (...args: any[]) => {
+  success: (...args: LogArg[]) => {
+type LogArg = string | number | Error | object;
     if (isDevelopment) {
       console.log('🟢 [SUCCESS]', ...args);
     }

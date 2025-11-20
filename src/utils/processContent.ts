@@ -4,7 +4,15 @@ import type { WpContent } from "@/types/wordpressTypes";
 // Define WpBlock interface locally since it's not exported from wordpressTypes
 interface WpBlock {
   blockName: string;
-  attrs: any;
+  attrs: WpBlockAttrs;
+  innerHTML: string;
+  innerBlocks?: WpBlock[];
+}
+
+interface WpBlockAttrs {
+  backgroundColor?: string;
+  className?: string;
+  [key: string]: unknown;
   innerBlocks?: WpBlock[];
   innerHTML: string;
 }

@@ -40,9 +40,27 @@ export interface SiteInfo {
   site_icon_url: string;
   date_format: string;
   language: string;
-  social: any[];
-  contact: any[];
-  analytics: any;
+  social: SocialLink[];
+  contact: ContactInfo[];
+  analytics: AnalyticsInfo[];
+}
+
+export interface SocialLink {
+  name: string;
+  url: string;
+  icon?: string;
+}
+
+export interface ContactInfo {
+  name: string;
+  value: string;
+  type?: string;
+}
+
+export interface AnalyticsInfo {
+  provider: string;
+  id: string;
+  // Puedes añadir más campos según tu WP
   i18n: {
     default_locale: string;
     locales: string[];
@@ -66,7 +84,13 @@ export interface WpContent {
   excerpt: {
     rendered: string;
   };
-  _embedded: any; // For embedded data like author, featured image, etc.
+  _embedded?: EmbeddedData; // For embedded data like author, featured image, etc.
+}
+
+export interface EmbeddedData {
+  author?: Array<{ id: number; name: string; }>; // Typical WP REST author
+  'wp:featuredmedia'?: Array<{ id: number; source_url: string; }>; // Featured image
+  // Puedes añadir más campos según tu WP
 }
 
 /**

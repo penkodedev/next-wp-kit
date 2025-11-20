@@ -28,7 +28,16 @@ type RouteType =
   | { type: 'post-archive'; postType: string }
   | { type: 'post-single'; postType: string; slug: string };
 
+// Cache route detection to avoid duplicate calls in generateMetadata + page render
+const routeCache = new Map<string, RouteType>();
+
 export async function detectRouteType(slug: string[]): Promise<RouteType> {
+  const cacheKey = slug.join('/');
+  
+  if (routeCache.has(cacheKey)) {
+    return routeCache.get(cacheKey)!;
+  }
+  
   console.log('Detecting route type for slug:', slug);
 
   const firstSegment = slug[0];  
@@ -38,7 +47,9 @@ export async function detectRouteType(slug: string[]): Promise<RouteType> {
   // Case 1: Home page (e.g., / or /en)
   if (slugWithoutLocale.length === 0) {
     console.log('Route type: home page');
-    return { type: 'page', path: '' };
+    const result = { type: 'page', path: '' } as const;
+    routeCache.set(cacheKey, result);
+    return result;
   }
 
   const firstSlugSegment = slugWithoutLocale[0];
@@ -48,7 +59,9 @@ export async function detectRouteType(slug: string[]): Promise<RouteType> {
   if (slugWithoutLocale.length === 1 && CPT_SLUG_MAP[firstSlugSegment]) {
     const internalPostType = CPT_SLUG_MAP[firstSlugSegment];
     console.log(`Route type: post-archive for ${internalPostType} (from slug ${firstSlugSegment})`);
-    return { type: 'post-archive', postType: internalPostType };
+    const result = { type: 'post-archive', postType: internalPostType } as const;
+    routeCache.set(cacheKey, result);
+    return result;
   }
 
   // Case 3: Post Single (e.g., /noticias/mi-noticia or /en/news/my-news)
@@ -56,13 +69,17 @@ export async function detectRouteType(slug: string[]): Promise<RouteType> {
     const internalPostType = CPT_SLUG_MAP[firstSlugSegment];
     const postSlug = secondSlugSegment;
     console.log(`Route type: post-single for ${internalPostType} (from slug ${firstSlugSegment}), post slug: ${postSlug}`);
-    return { type: 'post-single', postType: internalPostType, slug: postSlug };
+    const result = { type: 'post-single', postType: internalPostType, slug: postSlug } as const;
+    routeCache.set(cacheKey, result);
+    return result;
   }
 
   // Case 4: Default to a page
   const pagePath = slugWithoutLocale.join('/');
   console.log('Route type: page with path', pagePath);
-  return { type: 'page', path: pagePath };
+  const result = { type: 'page', path: pagePath } as const;
+  routeCache.set(cacheKey, result);
+  return result;
 }
 
 // Generate Dynamic Metadata for SEO.
