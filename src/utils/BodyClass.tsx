@@ -25,11 +25,13 @@ const BodyClass = ({ children }: BodyClassProps) => {
 
     let classes: string[] = [];
 
+    // Detect taxonomies dynamically (could be improved to fetch from API if needed)
+    const validTaxonomies = ['categoria', 'nivel_educativo', 'tags']; // TODO: make dynamic if needed
+
     if (slugWithoutLocale.length === 1 && CPT_SLUG_MAP[slugWithoutLocale[0]]) {
       const internalCpt = CPT_SLUG_MAP[slugWithoutLocale[0]];
       classes = ['archive', `archive-${internalCpt}`];
     } else if (slugWithoutLocale.length === 0) {
-      // Handle home page for all locales
       classes = ["page-home"];
     } else if (slugWithoutLocale.length === 2 && CPT_SLUG_MAP[slugWithoutLocale[0]]) {
       // It's a CPT single page
@@ -38,8 +40,18 @@ const BodyClass = ({ children }: BodyClassProps) => {
       if (pageId) {
         classes.push(`postid-${pageId}`);
       }
+    } else if (
+      slugWithoutLocale.length === 2 &&
+      validTaxonomies.includes(slugWithoutLocale[0])
+    ) {
+      // Taxonomy term archive: /[taxonomy]/[term-slug]
+      classes = [
+        'archive',
+        'archive-tax',
+        `archive-${slugWithoutLocale[0]}-${slugWithoutLocale[1]}`
+      ];
     } else {
-      // It's a regular page
+      // Regular page
       const className = `page-${slugWithoutLocale.join('-')}`;
       classes = ["page", className];
       if (pageId) {

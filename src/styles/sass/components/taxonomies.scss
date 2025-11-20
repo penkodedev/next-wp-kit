@@ -6,7 +6,8 @@
     display: flex;
 }
 
-.taxonomy-post {
+.taxonomy-post,
+.taxonomy-terms-list {
     margin-top: 2rem;
     padding: 1rem;
     // border: 1px solid rgb(207, 207, 207);
@@ -23,6 +24,8 @@
         li {
             list-style: none;
             font-size: 0.88em;
+            color: black;
+            border: 1px solid rgb(207, 207, 207);
             background-color: #efefef;
             border-radius: 5px;
             padding: 3px 8px;
@@ -34,7 +37,8 @@
     }
 }
 
-.taxonomy-post ul li:hover {
+.taxonomy-post ul li:hover,
+.taxonomy-terms-list ul li:hover {
     background-color: black;
     color: white;
 }

@@ -2,3 +2,21 @@
 // PAGES ARCHIVES (app/cpt-slug)
 // These are like the archive page templates for custom post types
 // -----------------------------------------------------------------------
+
+.archive-tax .post-grid {
+    margin: 0;
+}
+
+p.taxonomy-description {
+    font-size: 0.96em;
+    line-height: 1.5em;
+    margin-bottom: 0;
+    column-count: 2;
+    column-gap: 38px;
+}
+
+.page-title .taxonomy-description {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}

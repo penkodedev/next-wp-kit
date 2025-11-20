@@ -11,6 +11,7 @@ import ContentSingle from '@/components/layout/content/ContentSingle';
 import ContentArchive from '@/components/layout/content/ContentArchive';
 import ContentPages from '@/components/layout/content/ContentPages';
 import ContentHome from '@/components/layout/content/ContentHome';
+import ContentTaxonomy from '@/components/layout/content/ContentTaxonomy';
 import localesConfig from '@/i18n/locales.generated.json';
 
 type PageProps = {
@@ -186,16 +187,79 @@ export async function generateStaticParams() {
   return params;
 }
 
+
 export default async function CatchAllPage({ params }: PageProps) {
   const path = getPathFromParams(params);
   const routeType = await detectRouteType(params.slug);
-  // Determine the current locale from the path
   const locale = (params.slug.length > 0 && localesConfig.supportedLocales.includes(params.slug[0])) ? params.slug[0] : localesConfig.defaultLocale;
   console.log('Route type result:', routeType);
 
+  // --- Taxonomy Term Archive Route ---
+  // Detect if the first segment is a taxonomy and the second is a term slug
+  const taxSlug = params.slug[0];
+  const termSlug = params.slug[1];
+  // Get all taxonomies dynamically from WP REST API
+  const allTaxonomies = await import('@/api/wordpressApi').then(mod => mod.getAllTaxonomies());
+  const taxonomyObj = allTaxonomies && allTaxonomies[taxSlug];
+  if (taxonomyObj && termSlug) {
+    // 1. Fetch the term by slug
+    const termRes = await fetchAPI(`/wp/v2/${taxSlug}?slug=${termSlug}${locale !== 'es' ? `&lang=${locale}` : ''}`);
+    const term = Array.isArray(termRes) && termRes.length > 0 ? termRes[0] : null;
+    if (!term) return notFound();
+    // 2. Get CPTs associated with this taxonomy
+    const cptsForTax = taxonomyObj.types || [];
+    let posts: WpContent[] = [];
+    for (const cpt of cptsForTax) {
+      const cptPosts = await fetchAPI(`/wp/v2/${cpt}?${taxSlug}=${term.id}&_embed${locale !== 'es' ? `&lang=${locale}` : ''}`);
+      if (Array.isArray(cptPosts) && cptPosts.length > 0) {
+        posts = posts.concat(cptPosts);
+      }
+    }
+    // 3. Render taxonomy archive page
+    return (
+      <ContentTaxonomy
+        posts={posts}
+        taxonomy={taxSlug}
+        term={term}
+        locale={locale}
+      />
+    );
+  }
+
+  // --- Taxonomy Index Route ---
+  // Detect if the route is only a taxonomy (e.g. /nivel_educativo)
+  if (params.slug.length === 1 && allTaxonomies && allTaxonomies[params.slug[0]]) {
+    const taxonomyObj = allTaxonomies[params.slug[0]];
+    // 1. Get all terms for this taxonomy
+    const terms = await import('@/api/wordpressApi').then(mod => mod.getTermsForTaxonomy(params.slug[0]));
+    // 2. Get all posts for all terms of this taxonomy
+    let posts: WpContent[] = [];
+    if (terms && terms.length > 0) {
+      for (const term of terms) {
+        // Get CPTs associated with this taxonomy
+        const cptsForTax = taxonomyObj.types || [];
+        for (const cpt of cptsForTax) {
+          const cptPosts = await fetchAPI(`/wp/v2/${cpt}?${taxonomyObj.slug}=${term.id}&_embed${locale !== 'es' ? `&lang=${locale}` : ''}`);
+          if (Array.isArray(cptPosts) && cptPosts.length > 0) {
+            posts = posts.concat(cptPosts);
+          }
+        }
+      }
+    }
+    // 3. Render taxonomy index page
+    const ContentTaxonomyIndex = (await import('@/components/layout/content/ContentTaxonomyIndex')).default;
+    return (
+      <ContentTaxonomyIndex
+        taxonomy={taxonomyObj}
+        terms={terms || []}
+        posts={posts}
+        locale={locale}
+      />
+    );
+  }
+
   // ROUTE 1: Post Archive (CPT Archive)
   if (routeType.type === 'post-archive') {
-    // Use WPML REST API filtering for translated content
     const apiParams = locale === localesConfig.defaultLocale
       ? '?per_page=12&_embed&orderby=date&order=desc'
       : `?per_page=12&_embed&orderby=date&order=desc&lang=${locale}`;
@@ -246,7 +310,6 @@ export default async function CatchAllPage({ params }: PageProps) {
   // ROUTE 4: Static Pages
   let page = await getContentBySlug<Page>("pages", path, locale);
 
-  // If page not found and we have a locale prefix, try to get the translated version
   if (!page && params.slug.length > 1 && localesConfig.supportedLocales.includes(params.slug[0])) {
     const lang = params.slug[0];
     const actualPath = params.slug.slice(1).join('/');

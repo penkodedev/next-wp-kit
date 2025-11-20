@@ -1,0 +1,65 @@
+import React from "react";
+import { getTranslatedCptSlug } from "@/utils/cptConfig";
+import type { WpContent, Term } from "@/types/wordpressTypes";
+import localesConfig from "@/i18n/locales.generated.json";
+import PostCard from '@/components/ui/PostCard';
+import Breadcrumbs from '@/components/navigation/Breadcrumbs';
+
+interface ContentTaxonomyProps {
+  posts: WpContent[];
+  taxonomy: string;
+  term: Term;
+  locale: string;
+}
+
+/**
+ * Archive page for a taxonomy term.
+ * Shows the term info and all posts associated with it.
+ */
+export default function ContentTaxonomy({ posts, taxonomy, term, locale }: ContentTaxonomyProps) {
+  // Calculate displayTitle and basePath like ContentArchive
+  const translatedSlug = getTranslatedCptSlug(taxonomy, locale);
+  const displayTitle = term.name || (translatedSlug.charAt(0).toUpperCase() + translatedSlug.slice(1));
+  const basePath = locale === localesConfig.defaultLocale ? `/${translatedSlug}` : `/${locale}/${translatedSlug}`;
+
+  // Calculate basePath for each post's CPT, not for taxonomy
+  function getPostBasePath(post: WpContent) {
+    const cptSlug = post.type || 'posts';
+    const translatedCptSlug = getTranslatedCptSlug(cptSlug, locale);
+    return locale === localesConfig.defaultLocale ? `/${translatedCptSlug}` : `/${locale}/${translatedCptSlug}`;
+  }
+
+  return (
+    <div className="page-fullwidth">
+      <section className="page-title">
+        <h1>{displayTitle}</h1>
+        <div className="columns-wrap">
+          {term.description && (
+            <p
+              className="taxonomy-description"
+              dangerouslySetInnerHTML={{ __html: term.description }}
+            />
+          )}
+        </div>
+          </section>
+          
+       <article className="page-content"><Breadcrumbs /></article>
+
+      {posts && posts.length > 0 ? (
+        <div className={`post-grid cols-3`}>
+          {posts.map(post => (
+            <PostCard
+              key={post.id}
+              item={post}
+              basePath={getPostBasePath(post)}
+            />
+          ))}
+        </div>
+      ) : (
+        <article>
+          <p>No se encontró contenido en esta sección.</p>
+        </article>
+      )}
+    </div>
+  );
+}

@@ -59,7 +59,7 @@ export default function ContentSingle({
               }}
             />
           </AnimatedArticle>
-          <TaxonomyTermsList postType="asdf" taxonomy="nivel_educativo" title="Niveles Educativos" link />
+          {/* <TaxonomyTermsList postType="asdf" taxonomy="nivel_educativo" title="Niveles Educativos" link /> */}
           <TaxonomyPost post={post} taxonomies={['nivel_educativo', 'categoria']} title="Nivel del contenido" link />
         </article>
         
