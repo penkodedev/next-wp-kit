@@ -1,11 +1,44 @@
 // src/api/wordpress.ts
 
+/*--------------------------------------------------------------------------------------
+    🏷️ GET ALL TAXONOMIES
+    Route: /wp/v2/taxonomies
+    Returns all registered taxonomies (built-in and custom)
+--------------------------------------------------------------------------------------*/
+import type { Taxonomy } from '@/types/wordpressTypes';
+
+/**
+ * Fetches all taxonomies from WordPress REST API.
+ * Returns an object with taxonomy slugs as keys and Taxonomy objects as values.
+ */
+export async function getAllTaxonomies(): Promise<Record<string, Taxonomy> | null> {
+  return await fetchAPI<Record<string, Taxonomy>>('/wp/v2/taxonomies');
+}
+
+
 import type { WpContent, SiteInfo, MenuItem, SearchResult, Page, Modal, PostNavigation, AllMenus } from '@/types/wordpressTypes';
 import { unstable_cache } from 'next/cache';
 import { logger } from '@/utils/logger';
 import localesConfig from '@/i18n/locales.generated.json';
 
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
+
+
+/*--------------------------------------------------------------------------------------
+    🏷️ GET TERMS FOR TAXONOMY
+    Route: /wp/v2/taxonomy/terms
+    Returns all terms for a given taxonomy (built-in or custom)
+--------------------------------------------------------------------------------------*/
+import type { Term } from '@/types/wordpressTypes';
+
+/**
+ * Fetches all terms for a given taxonomy from WordPress REST API.
+ * @param taxonomySlug The slug of the taxonomy (e.g. 'category', 'tags', 'recursos_categoria')
+ * @returns Array of Term objects
+ */
+export async function getTermsForTaxonomy(taxonomySlug: string): Promise<Term[] | null> {
+  return await fetchAPI<Term[]>(`/wp/v2/${taxonomySlug}`);
+}
 
 /*--------------------------------------------------------------------------------------
     WORDPRESS API CONSUMPTION
@@ -145,7 +178,7 @@ export async function getContentBySlug<T extends WpContent>(postType: string, sl
   // We add `&_fields=...,blocks` to explicitly request the parsed Gutenberg blocks structure.
   // This is needed to reconstruct block wrappers that the REST API might strip out.
   // We also request rendered content to ensure shortcodes are processed.
-  let query = `/wp/v2/${postType}?slug=${slug}&_embed&_fields=id,slug,title,content,excerpt,date,modified,author,featured_media,_links,_embedded,blocks,yoast_head_json`;
+  let query = `/wp/v2/${postType}?slug=${slug}&_embed`;
   if (lang && lang !== localesConfig.defaultLocale) {
     query += `&lang=${lang}`;
   }
@@ -309,7 +342,7 @@ export async function getWpmlTranslation(postId: number, targetLang: string): Pr
     
     return data;
   } catch (error) {
-    logger.error(`Error fetching WPML translation for post ${postId} (lang: ${targetLang})`, error);
+  logger.error(`Error fetching WPML translation for post ${postId} (lang: ${targetLang})`, error instanceof Error ? error : String(error));
     return null;
   }
 }
@@ -381,7 +414,7 @@ export async function getWpmlLanguages(): Promise<WpmlLanguagesResponse> {
     });
     return data || FALLBACK_LANGUAGES;
   } catch (error) {
-    logger.error('Error fetching WPML languages, using fallback', error);
+  logger.error('Error fetching WPML languages, using fallback', error instanceof Error ? error : String(error));
     return FALLBACK_LANGUAGES;
   }
 }

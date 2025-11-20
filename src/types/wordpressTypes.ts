@@ -1,28 +1,51 @@
+// --- Taxonomy & Term Types ---
+
+export interface Taxonomy {
+  name: string;
+  slug: string;
+  types: string[]; // CPTs asociados
+  description?: string;
+  hierarchical: boolean;
+  rest_base: string;
+  show_ui: boolean;
+  show_in_rest: boolean;
+}
+
+export interface Term {
+  id: number;
+  name: string;
+  slug: string;
+  taxonomy: string;
+  description?: string;
+  parent?: number;
+  count?: number;
+  meta?: Record<string, unknown>;
+}
 // src/types/wordpressTypes.ts
 
 /**
- * Interfaz para un elemento de menú, potencialmente con hijos (submenús).
- * Esta interfaz refleja la estructura devuelta por la función `clean_menu_items` en PHP.
+ * Interface for a menu item, potentially with children (submenus).
+ * This interface reflects the structure returned by the `clean_menu_items` function in PHP.
  */
 export interface MenuItem {
   id: number;
-  parent: string | number; // El parent puede ser 0
+  parent: string | number; // Parent can be 0
   title: string;
   url: string;
-  target?: string; // Ej: '_blank'
-  classes?: string[]; // Clases CSS asignadas en el menú de WP
-  children?: MenuItem[]; // Los hijos son opcionales y recursivos
+  target?: string; // E.g. '_blank'
+  classes?: string[]; // CSS classes assigned in the WP menu
+  children?: MenuItem[]; // Children are optional and recursive
 }
 
 /**
- * Objeto que contiene todos los menús del sitio, indexados por su slug.
- * Refleja la estructura devuelta por `get_all_menus_data` en PHP.
+ * Object containing all site menus, indexed by their slug.
+ * Reflects the structure returned by `get_all_menus_data` in PHP.
  */
 export type AllMenus = {
   [slug: string]: {
     slug: string;
     name: string;
-    location: string | null; // La ubicación del tema, si la tiene
+  location: string | null; // Theme location, if set
     items: MenuItem[];
   };
 };
@@ -90,7 +113,8 @@ export interface WpContent {
 export interface EmbeddedData {
   author?: Array<{ id: number; name: string; }>; // Typical WP REST author
   'wp:featuredmedia'?: Array<{ id: number; source_url: string; }>; // Featured image
-  // Puedes añadir más campos según tu WP
+  // Allow any other embedded keys (for taxonomies, terms, etc.)
+  [key: string]: unknown;
 }
 
 /**

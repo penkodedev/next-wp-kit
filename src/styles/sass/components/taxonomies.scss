@@ -1,0 +1,40 @@
+@use 'abstracts' as *;
+
+
+.taxonomy-label {
+    @include heading();
+    display: flex;
+}
+
+.taxonomy-post {
+    margin-top: 2rem;
+    padding: 1rem;
+    // border: 1px solid rgb(207, 207, 207);
+    border-radius: 8px;
+
+
+    ul {
+        font-size: 1em;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: 10px;
+
+        li {
+            list-style: none;
+            font-size: 0.88em;
+            background-color: #efefef;
+            border-radius: 5px;
+            padding: 3px 8px;
+
+            &:before {
+                display: none;
+            }
+        }
+    }
+}
+
+.taxonomy-post ul li:hover {
+    background-color: black;
+    color: white;
+}

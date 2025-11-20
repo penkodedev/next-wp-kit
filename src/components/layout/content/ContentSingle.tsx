@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { Icons } from '@/components/ui/Icons';
 import AnimatedArticle from '@/components/animations/AnimatedArticle';
+import TaxonomyTermsList from '@/components/wordpress/TaxonomyTermsList';
+import TaxonomyPost from '@/components/wordpress/TaxonomyPost';
 import Breadcrumbs from '@/components/navigation/Breadcrumbs';
 import PostNav from '@/components/navigation/PostNav';
 import Sidebar from '@/components/layout/sidebar/Sidebar';
@@ -57,6 +59,8 @@ export default function ContentSingle({
               }}
             />
           </AnimatedArticle>
+          <TaxonomyTermsList postType="asdf" taxonomy="nivel_educativo" title="Niveles Educativos" link />
+          <TaxonomyPost post={post} taxonomies={['nivel_educativo', 'categoria']} title="Nivel del contenido" link />
         </article>
         
         <PostNav
