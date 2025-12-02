@@ -1,6 +1,6 @@
 // src/components/WpStyles.tsx
 
-import { logger } from '@/utils/logger';
+import { logger } from '@/utils/wordpress/logger';
 
 /**
  * Dynamically fetches block styles and global/theme styles

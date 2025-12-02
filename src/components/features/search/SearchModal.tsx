@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { searchSite } from '@/api/wordpressApi';
 import type { SearchResult } from '@/types/wordpressTypes';
-import { cleanInternalUrl } from '@/utils/url';
+import { cleanInternalUrl } from '@/utils/wordpress/url';
 import { Icons } from '@/components/ui/Icons';
 
 interface SearchModalProps {

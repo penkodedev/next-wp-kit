@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { getPostNavigation } from '@/api/wordpressApi';
 import { Icons } from '@/components/ui/Icons';
-import { getTranslatedCptSlug } from '@/utils/cptConfig';
+import { getTranslatedCptSlug } from '@/utils/routing/cptConfig';
 import localesConfig from '@/i18n/locales.generated.json';
 
 type PostNavigationProps = {

@@ -1,7 +1,7 @@
 import AnimatedArticle from '@/components/animations/AnimatedArticle';
 import Breadcrumbs from '@/components/navigation/Breadcrumbs';
 import { ContactForm7Content } from '@/components/forms';
-import { WpPageIdSetter } from '@/utils/WpPageIdContext';
+import { WpPageIdSetter } from '@/utils/wordpress/WpPageIdContext';
 import type { Page } from '@/types/wordpressTypes';
 
 type ContentPagesProps = {

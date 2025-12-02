@@ -16,18 +16,17 @@ export default function FooterMenuClient({ menusByLocale }: FooterMenuClientProp
   // Detect current locale from pathname dynamically
   const segments = pathname.split("/").filter(Boolean);
   const firstSegment = segments[0];
-  const currentLocale = localesConfig.supportedLocales.includes(firstSegment) 
-    ? firstSegment 
+  const currentLocale = localesConfig.supportedLocales.includes(firstSegment)
+    ? firstSegment
     : localesConfig.defaultLocale;
 
   // Select the appropriate pre-fetched menu based on locale
-  const menuSlug = `menu-footer${currentLocale !== localesConfig.defaultLocale ? `-${currentLocale}` : ''}`;
   const menuItems = menusByLocale[currentLocale] || [];
 
   return (
-    <WpNavMenu 
-      slug={menuSlug} 
-      className="footer-menu-nav" 
+    <WpNavMenu
+      location="footernav"
+      className="footer-menu-nav"
       locale={currentLocale}
       menuItems={menuItems}
     />

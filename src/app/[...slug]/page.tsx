@@ -1,12 +1,12 @@
-// Intelligent catch-all route to handle pages and CPTs from WordPress.
+// Catch-all route to handle pages, CPT archives, singles, and taxonomies from WordPress.
 
 import { getContentBySlug, getAllContent, getHomePage } from "@/api/wordpressApi";
 import { fetchAPI } from "@/api/wordpressApi";
-import { generateSeoMetadata } from "@/utils/seo";
+import { generateSeoMetadata } from "@/utils/seo/seo";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import type { Page, WpContent } from "@/types/wordpressTypes";
-import { CPT_SLUG_MAP, getTranslatedCptSlug } from "@/utils/cptConfig";
+import { CPT_SLUG_MAP, getTranslatedCptSlug } from "@/utils/routing/cptConfig";
 import ContentSingle from '@/components/layout/content/ContentSingle';
 import ContentArchive from '@/components/layout/content/ContentArchive';
 import ContentPages from '@/components/layout/content/ContentPages';
@@ -14,24 +14,31 @@ import ContentHome from '@/components/layout/content/ContentHome';
 import ContentTaxonomy from '@/components/layout/content/ContentTaxonomy';
 import localesConfig from '@/i18n/locales.generated.json';
 
+// Props for dynamic route pages
 type PageProps = {
   params: {
     slug: string[];
   };
 };
 
+// Helper to join slug array into a path string
 function getPathFromParams(params: PageProps["params"]): string {
   return params.slug.join("/");
 }
 
+// Route type discriminated union
 type RouteType =
   | { type: 'page'; path: string }
   | { type: 'post-archive'; postType: string }
   | { type: 'post-single'; postType: string; slug: string };
 
-// Cache route detection to avoid duplicate calls in generateMetadata + page render
+// Cache for route detection to avoid duplicate calls in generateMetadata and page render
 const routeCache = new Map<string, RouteType>();
 
+/**
+ * Detects the route type (page, post archive, post single) based on the slug array.
+ * Caches results for performance.
+ */
 export async function detectRouteType(slug: string[]): Promise<RouteType> {
   const cacheKey = slug.join('/');
   
@@ -83,7 +90,9 @@ export async function detectRouteType(slug: string[]): Promise<RouteType> {
   return result;
 }
 
-// Generate Dynamic Metadata for SEO.
+/**
+ * Generates dynamic metadata for SEO based on the route type and content.
+ */
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
@@ -109,7 +118,9 @@ export async function generateMetadata({
   }
 }
 
-// Generate Static Routes at build time.
+/**
+ * Generates static params for all dynamic routes at build time (ISR).
+ */
 export async function generateStaticParams() {
   const params: { slug: string[] }[] = [];
 
@@ -188,13 +199,20 @@ export async function generateStaticParams() {
 }
 
 
+/**
+ * Main catch-all page component. Handles:
+ * - Taxonomy term archives
+ * - Taxonomy index
+ * - CPT archives
+ * - CPT singles
+ * - Home page
+ * - Static pages
+ */
 export default async function CatchAllPage({ params }: PageProps) {
   const path = getPathFromParams(params);
   const routeType = await detectRouteType(params.slug);
   const locale = (params.slug.length > 0 && localesConfig.supportedLocales.includes(params.slug[0])) ? params.slug[0] : localesConfig.defaultLocale;
   console.log('Route type result:', routeType);
-
-  // --- Taxonomy Term Archive Route ---
   // Detect if the first segment is a taxonomy and the second is a term slug
   const taxSlug = params.slug[0];
   const termSlug = params.slug[1];

@@ -2,7 +2,7 @@
 // Layout for dynamic routes that handles locale detection
 
 import { ReactNode } from 'react';
-import LocaleSync from '@/utils/LocaleSync';
+import LocaleSync from '@/utils/wordpress/LocaleSync';
 import localesConfig from '@/i18n/locales.generated.json';
 
 interface SlugLayoutProps {

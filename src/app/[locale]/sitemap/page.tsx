@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { getAllContent, fetchAPI } from "@/api/wordpressApi";
 import type { Post, Page } from "@/types/wordpressTypes";
-import { getActiveCptSlugs, getTranslatedCptSlug } from "@/utils/cptConfig";
+import { getActiveCptSlugs, getTranslatedCptSlug } from "@/utils/routing/cptConfig";
 import localesConfig from "@/i18n/locales.generated.json";
 import { getTranslations } from "next-intl/server";
 

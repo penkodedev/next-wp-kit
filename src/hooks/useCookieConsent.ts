@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { logger } from '@/utils/logger'
+import { logger } from '@/utils/wordpress/logger'
 
 export type CookieCategory = 'necessary' | 'performance' | 'marketing' | 'functionality'
 
@@ -70,7 +70,7 @@ export const useCookieConsent = () => {
 
       return true
     } catch (error) {
-      logger.error('Error saving cookie preferences:', error)
+  logger.error('Error saving cookie preferences:', error as Error)
       return false
     }
   }, [])

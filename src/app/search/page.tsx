@@ -6,9 +6,9 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { searchSite } from '@/api/wordpressApi';
-import { cleanInternalUrl } from '@/utils/url';
+import { cleanInternalUrl } from '@/utils/wordpress/url';
 import AnimatedFadeIn from '@/components/animations/AnimatedFadeIn';
-import { logger } from '@/utils/logger';
+import { logger } from '@/utils/wordpress/logger';
 
 // La API de búsqueda devuelve un 'subtype' que es más útil
 interface SearchResultWithSubtype {

@@ -1,9 +1,122 @@
-// --- Taxonomy & Term Types ---
+// src/types/wordpressTypes.ts
+
+
+// -----------------------------------------------------
+//             Custom Field Schema Types
+// -----------------------------------------------------
+
+// Optional enum for known CPT slugs (extend as needed)
+export type CptSlug = 'recursos' | 'noticias' | 'eventos' | string;
+
+// Supported custom field types
+export type CustomFieldType =
+  | 'text'
+  | 'textarea'
+  | 'number'
+  | 'select'
+  | 'checkbox'
+  | 'radio'
+  | 'date'
+  | 'url'
+  | 'file'
+  | 'repeater'
+  | 'relation'
+  | 'color'
+  | 'group';
+
+export interface CustomFieldOption {
+  value: string | number;
+  label: Record<string, string>; // Multilingual label
+}
+
+// Base interface for all custom fields
+export interface CustomFieldSchemaBase {
+  id: string;
+  label: Record<string, string>; // Multilingual label
+  type: CustomFieldType;
+  cpts: CptSlug[]; // Associated CPTs
+  required?: boolean;
+  description?: Record<string, string>; // Multilingual description
+  showIf?: { fieldId: string; value: any }; // Conditional display
+}
+
+// Text, textarea, url, date, number, file
+export interface CustomFieldText extends CustomFieldSchemaBase {
+  type: 'text' | 'textarea' | 'url' | 'date';
+  placeholder?: Record<string, string>;
+  minLength?: number;
+  maxLength?: number;
+  pattern?: string;
+}
+
+export interface CustomFieldNumber extends CustomFieldSchemaBase {
+  type: 'number';
+  min?: number;
+  max?: number;
+  step?: number;
+}
+
+export interface CustomFieldSelect extends CustomFieldSchemaBase {
+  type: 'select' | 'radio';
+  options: CustomFieldOption[];
+}
+
+export interface CustomFieldCheckbox extends CustomFieldSchemaBase {
+  type: 'checkbox';
+  options?: CustomFieldOption[]; // Optional: for multi-checkbox
+}
+
+export interface CustomFieldMedia extends CustomFieldSchemaBase {
+  type: 'file';
+  allowedTypes?: string[]; // e.g. ['image/jpeg', 'application/pdf']
+  maxSizeMB?: number;
+}
+
+export interface CustomFieldColor extends CustomFieldSchemaBase {
+  type: 'color';
+  default?: string;
+}
+
+export interface CustomFieldRelation extends CustomFieldSchemaBase {
+  type: 'relation';
+  relationTo: 'post' | 'user' | 'media' | string;
+  multiple?: boolean;
+}
+
+export interface CustomFieldRepeater extends CustomFieldSchemaBase {
+  type: 'repeater';
+  fields: CustomFieldSchema[];
+}
+
+export interface CustomFieldGroup extends CustomFieldSchemaBase {
+  type: 'group';
+  fields: CustomFieldSchema[];
+}
+
+// Main union for all custom field schemas
+export type CustomFieldSchema =
+  | CustomFieldText
+  | CustomFieldNumber
+  | CustomFieldSelect
+  | CustomFieldCheckbox
+  | CustomFieldMedia
+  | CustomFieldColor
+  | CustomFieldRelation
+  | CustomFieldRepeater
+  | CustomFieldGroup;
+
+// Example usage:
+// const fields: CustomFieldSchema[] = [...]
+
+// -----------------------------------------------------
+//             Taxonomy & Term Types
+// -----------------------------------------------------
+
 
 export interface Taxonomy {
   name: string;
   slug: string;
-  types: string[]; // CPTs asociados
+  types: string[]; // Associated CPTs
   description?: string;
   hierarchical: boolean;
   rest_base: string;
@@ -21,11 +134,15 @@ export interface Term {
   count?: number;
   meta?: Record<string, unknown>;
 }
-// src/types/wordpressTypes.ts
 
+
+
+// -----------------------------------------------------
+//             Menu Types
+// -----------------------------------------------------
 /**
  * Interface for a menu item, potentially with children (submenus).
- * This interface reflects the structure returned by the `clean_menu_items` function in PHP.
+ * Matches the structure returned by the `clean_menu_items` PHP function.
  */
 export interface MenuItem {
   id: number;
@@ -34,22 +151,29 @@ export interface MenuItem {
   url: string;
   target?: string; // E.g. '_blank'
   classes?: string[]; // CSS classes assigned in the WP menu
-  children?: MenuItem[]; // Children are optional and recursive
+  children?: MenuItem[]; // Optional, recursive
 }
 
+// -----------------------------------------------------
+//             All Menus Type
+// -----------------------------------------------------
 /**
  * Object containing all site menus, indexed by their slug.
- * Reflects the structure returned by `get_all_menus_data` in PHP.
+ * Matches the structure returned by `get_all_menus_data` in PHP.
  */
 export type AllMenus = {
   [slug: string]: {
     slug: string;
     name: string;
-  location: string | null; // Theme location, if set
+    location: string | null; // Theme location, if set
     items: MenuItem[];
   };
 };
 
+
+// -----------------------------------------------------
+//             Site Info Types
+// -----------------------------------------------------
 /**
  * Interface for basic site information.
  */
@@ -83,13 +207,17 @@ export interface ContactInfo {
 export interface AnalyticsInfo {
   provider: string;
   id: string;
-  // Puedes añadir más campos según tu WP
+  // You can add more fields depending on your WP setup
   i18n: {
     default_locale: string;
     locales: string[];
   };
 }
 
+
+// -----------------------------------------------------
+//             WordPress Content Types
+// -----------------------------------------------------
 /**
  * Base interface for any type of WordPress content.
  */
@@ -107,7 +235,22 @@ export interface WpContent {
   excerpt: {
     rendered: string;
   };
-  _embedded?: EmbeddedData; // For embedded data like author, featured image, etc.
+  _embedded?: EmbeddedData; // Embedded data like author, featured image, etc.
+  meta?: Record<string, any>; // Custom fields (REST API)
+  yoast_head_json?: {
+    title?: string;
+    description?: string;
+    og_title?: string;
+    og_description?: string;
+    og_url?: string;
+    og_image?: Array<{ url: string }>;
+  };
+  // Custom meta fields exposed at root level via register_rest_field
+  recurso_autoria?: string;
+  recurso_web_url?: string;
+  recurso_pdf_url?: string;
+  recurso_pdf_id?: string;
+  [key: string]: any; // Allow any other custom fields dynamically
 }
 
 export interface EmbeddedData {
@@ -117,19 +260,22 @@ export interface EmbeddedData {
   [key: string]: unknown;
 }
 
-/**
- * Interface for a WordPress Post.
- */
+// -----------------------------------------------------
+//             Post & Page Types
+// -----------------------------------------------------
+
+// Interface for a WordPress Post
 export interface Post extends WpContent {}
 
-/**
- * Interface for a WordPress Page.
- */
+// Interface for a WordPress Page
 export interface Page extends WpContent {
   parent: number;
 }
 
-/**
+// -----------------------------------------------------
+//             Custom Post Types (CPT)
+// -----------------------------------------------------
+/*
  * Generic types for Custom Post Types
  *
  * All CPTs use the base WpContent interface.
@@ -137,7 +283,10 @@ export interface Page extends WpContent {
  * or create specific types in your components if needed.
  */
 
-/**
+// -----------------------------------------------------
+//             Modal CPT Type
+// -----------------------------------------------------
+/*
  * Interface for the 'Modal' CPT.
  */
 export interface Modal extends WpContent {
@@ -149,7 +298,10 @@ export interface Modal extends WpContent {
   };
 }
 
-/**
+// -----------------------------------------------------
+//             Search Result Type
+// -----------------------------------------------------
+/*
  * Interface for a WordPress search endpoint result.
  */
 export interface SearchResult {
@@ -169,6 +321,9 @@ export interface SearchResult {
   }
 }
 
+// -----------------------------------------------------
+//             Post Navigation Type
+// -----------------------------------------------------
 /**
  * Interface for post navigation data (previous/next).
  */

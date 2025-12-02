@@ -2,7 +2,7 @@ import React from "react";
 import type { Term, WpContent, Taxonomy } from "@/types/wordpressTypes";
 import GridPosts from "@/components/layout/content/GridPosts";
 import Link from "next/link";
-import TaxonomyTermsList from "@/components/wordpress/TaxonomyTermsList";
+// Elimina la importación de TaxonomyFilter
 
 interface ContentTaxonomyIndexProps {
   taxonomy: Taxonomy;
@@ -22,8 +22,9 @@ export default function ContentTaxonomyIndex({
 }: ContentTaxonomyIndexProps) {
   // Calculate displayTitle and basePath for UI consistency
   const displayTitle = taxonomy.name;
-  const basePath = `/${taxonomy.slug}`;
-
+  // Siempre usar /recursos como basePath para los recursos
+  const basePath = "/recursos";
+    
   return (
     <div className="page-fullwidth">
       <section className="page-title">
@@ -34,11 +35,7 @@ export default function ContentTaxonomyIndex({
       </section>
       <article className="page-content">
         <section className="taxonomy-terms-list">
-          <TaxonomyTermsList
-            taxonomy={taxonomy.slug}
-            title={taxonomy.name}
-            link
-          />
+          {/* Elimina cualquier uso de TaxonomyFilter */}
         </section>
         {posts && posts.length > 0 ? (
           <GridPosts posts={posts} basePath={basePath} />

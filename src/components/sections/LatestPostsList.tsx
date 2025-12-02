@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { getAllContent } from '@/api/wordpressApi';
 import { getTranslations } from 'next-intl/server';
-import { getTranslatedCptSlug } from '@/utils/cptConfig';
+import { getTranslatedCptSlug } from '@/utils/routing/cptConfig';
 import type { WpContent } from '@/types/wordpressTypes';
 import { Icons } from '@/components/ui/Icons';
 import localesConfig from '@/i18n/locales.generated.json';

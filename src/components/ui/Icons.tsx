@@ -40,7 +40,11 @@ import {
   Pin,
   Github,
   Youtube,
-  Globe
+  Globe,
+  FileText,
+  File,
+  Image,
+  Download
 } from 'lucide-react';
 
 
@@ -79,6 +83,10 @@ export const Icons = {
   Pin,
   Github,
   Youtube,
-  Globe
+  Globe,
+  FileText,
+  File,
+  Image,
+  Download
 };
 

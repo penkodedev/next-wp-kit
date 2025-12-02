@@ -18,7 +18,7 @@ export async function getAllTaxonomies(): Promise<Record<string, Taxonomy> | nul
 
 import type { WpContent, SiteInfo, MenuItem, SearchResult, Page, Modal, PostNavigation, AllMenus } from '@/types/wordpressTypes';
 import { unstable_cache } from 'next/cache';
-import { logger } from '@/utils/logger';
+import { logger } from '@/utils/wordpress/logger';
 import localesConfig from '@/i18n/locales.generated.json';
 
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
@@ -72,7 +72,28 @@ export async function swrFetcher<T>(url: string): Promise<T> {
   return response.json();
 }
 
-// ********************** Core Fetch API Function **********************
+/**
+ * Makes a request to the WordPress REST API and returns typed data.
+ *
+ * @template T Expected data type in the response.
+ * @param {string} [query=''] - Relative API endpoint (e.g., '/wp/v2/posts?per_page=10').
+ * @param {Object} [options={}] - Additional fetch options.
+ * @param {string} [options.method] - HTTP method (default 'GET').
+ * @param {Record<string, string>} [options.headers] - Custom headers for the request.
+ * @param {Record<string, any>|null} [options.body] - Request body (for POST/PUT).
+ * @param {NextFetchRequestConfig} [options.next] - Next.js cache/revalidation config.
+ * @returns {Promise<T|null>} The data received from the API, or null if there is an error.
+ *
+ * @example
+ * // Fetch posts
+ * const posts = await fetchAPI<Post[]>("/wp/v2/posts?per_page=5");
+ *
+ * // Create a new resource
+ * const created = await fetchAPI<CustomType>("/custom/v1/endpoint", {
+ *   method: "POST",
+ *   body: { foo: "bar" }
+ * });
+ */
 export async function fetchAPI<T>(
   query = '', 
   options: { 
@@ -183,6 +204,12 @@ export async function getContentBySlug<T extends WpContent>(postType: string, sl
     query += `&lang=${lang}`;
   }
   const data = await fetchAPI<T[]>(query);
+  
+  // Debug: log the first item to see what we're getting
+  if (data && data[0]) {
+    console.log('🔍 DEBUG - API Response for', slug, ':', JSON.stringify(data[0], null, 2));
+  }
+  
   return data?.[0] ?? null;
 }
  

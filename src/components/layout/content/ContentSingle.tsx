@@ -1,15 +1,15 @@
 import Link from 'next/link';
 import { Icons } from '@/components/ui/Icons';
 import AnimatedArticle from '@/components/animations/AnimatedArticle';
-import TaxonomyTermsList from '@/components/wordpress/TaxonomyTermsList';
-import TaxonomyPost from '@/components/wordpress/TaxonomyPost';
+import { TaxonomyTermsList, TaxonomyPost } from '@/components/wordpress/CustomTaxonomies';
+import CustomFields from '@/components/wordpress/CustomFields';
 import Breadcrumbs from '@/components/navigation/Breadcrumbs';
 import PostNav from '@/components/navigation/PostNav';
 import Sidebar from '@/components/layout/sidebar/Sidebar';
 import ShareLikeButtons from '@/components/ui/ShareLikeButtons';
-import { WpPageId } from '@/utils/WpPageId';
-import { processContent } from '@/utils/processContent';
-import { getTranslatedCptSlug } from '@/utils/cptConfig';
+import { WpPageId } from '@/utils/wordpress/WpPageId';
+import { processContent } from '@/utils/wordpress/processContent';
+import { getTranslatedCptSlug } from '@/utils/routing/cptConfig';
 import type { WpContent } from '@/types/wordpressTypes';
 import localesConfig from '@/i18n/locales.generated.json';
 
@@ -59,8 +59,17 @@ export default function ContentSingle({
               }}
             />
           </AnimatedArticle>
+
+          {/* Campos personalizados dinámicos - Se muestran automáticamente si existen */}
+          <CustomFields
+            cpt={postType}
+            locale={locale}
+            values={post}
+            readOnly={true}
+          />
+
           {/* <TaxonomyTermsList postType="asdf" taxonomy="nivel_educativo" title="Niveles Educativos" link /> */}
-          <TaxonomyPost post={post} taxonomies={['nivel_educativo', 'categoria']} title="Nivel del contenido" link />
+          <TaxonomyPost post={post} taxonomies={['nivel_educativo', 'categoria']} title="Niveles de contenido" link />
         </article>
         
         <PostNav

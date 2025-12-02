@@ -9,7 +9,7 @@ import FooterMenuClient from "@/components/layout/footer/FooterMenuClient";
 import LatestPostsList from "@/components/sections/LatestPostsList";
 import { fetchAPI } from "@/api/wordpressApi";
 import type { MenuItem } from "@/types/wordpressTypes";
-import { logger } from "@/utils/logger";
+import { logger } from "@/utils/wordpress/logger";
 import { headers } from 'next/headers';
 import localesConfig from "@/i18n/locales.generated.json";
 
@@ -29,7 +29,7 @@ export default async function Footer() {
         const menu = await fetchAPI<MenuItem[]>(`/custom/v1/menus?lang=${localeKey}&location=footernav`);
         return { locale: localeKey, menu: menu || [] };
       } catch (err) {
-        logger.error(`Error fetching footer menu for ${localeKey}:`, err);
+  logger.error(`Error fetching footer menu for ${localeKey}:`, err as Error);
         return { locale: localeKey, menu: [] };
       }
     });
@@ -41,7 +41,7 @@ export default async function Footer() {
       menusByLocale[result.locale] = result.menu;
     });
   } catch (error) {
-    logger.error('Footer: Error pre-fetching menus', error);
+  logger.error('Footer: Error pre-fetching menus', error as Error);
   }
 
   return (

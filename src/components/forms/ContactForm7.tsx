@@ -1,8 +1,9 @@
 // src/components/forms/ContactForm7.tsx
+
 "use client";
 
 import { useEffect, ReactNode } from 'react';
-import { logger } from '@/utils/logger';
+import { logger } from '@/utils/wordpress/logger';
 
 interface ContactForm7Props {
   children: ReactNode;
@@ -106,7 +107,7 @@ export default function ContactForm7({ children }: ContactForm7Props) {
         }
 
       } catch (error) {
-        logger.error('Contact Form 7 submission error:', error);
+  logger.error('Contact Form 7 submission error:', error as Error);
         showMessage(form, 'Error de conexión. Por favor, inténtalo de nuevo.', 'error');
       } finally {
         // Reset loading state

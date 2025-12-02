@@ -20,9 +20,10 @@ export default function GridPosts({
   const finalExcerptLength = excerptLength ?? 150; // Excerpt sizee
   const finalCols = cols ?? 3; // Number of columns
 
-/**********************************************
-        START BUILDING GRID POSTS HTML
-**********************************************/
+  
+// -----------------------------------------------------
+//           START BUILDING GRID POSTS HTML
+// -----------------------------------------------------
   return (
     <div className={`post-grid cols-${finalCols}`}>
       {posts.map((post) => (

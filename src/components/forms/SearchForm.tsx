@@ -1,4 +1,4 @@
-// src/components/ui/SearchForm.tsx
+// src/components/forms/SearchForm.tsx
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
@@ -7,7 +7,8 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { searchSite } from '@/api/wordpressApi';
 import type { SearchResult } from '@/types/wordpressTypes';
-import { cleanInternalUrl } from '@/utils/url';
+import { cleanInternalUrl } from '@/utils/wordpress/url';
+import { Icons } from '@/components/ui/Icons';
 
 export default function SearchForm() {
   const t = useTranslations('Search');
@@ -79,6 +80,9 @@ export default function SearchForm() {
             aria-label={t('ariaLabel')}
           />
           <label htmlFor="search-form-input">{t('placeholder')}</label>
+          <span className="search-icon">
+            <Icons.Search size={20} strokeWidth={1.2} />
+          </span>
         </div>
       </form>
       {isDropdownVisible && (

@@ -1,5 +1,5 @@
 import GridPosts from '@/components/layout/content/GridPosts';
-import { getTranslatedCptSlug } from '@/utils/cptConfig';
+import { getTranslatedCptSlug } from '@/utils/routing/cptConfig';
 import type { WpContent } from '@/types/wordpressTypes';
 import localesConfig from '@/i18n/locales.generated.json';
 

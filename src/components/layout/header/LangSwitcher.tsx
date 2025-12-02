@@ -6,9 +6,9 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Icons } from '@/components/ui/Icons';
 import { useState, useEffect } from 'react';
 import { getWpmlTranslation, getWpmlLanguages, type WpmlLanguage } from '@/api/wordpressApi';
-import { useWpPageId } from '@/utils/WpPageIdContext';
-import { CPT_SLUG_MAP, getTranslatedCptSlug } from '@/utils/cptConfig';
-import { shouldPreserveOnLanguageSwitch } from '@/utils/frontendPagesConfig';
+import { useWpPageId } from '@/utils/wordpress/WpPageIdContext';
+import { CPT_SLUG_MAP, getTranslatedCptSlug } from '@/utils/routing/cptConfig';
+import { shouldPreserveOnLanguageSwitch } from '@/utils/wordpress/frontendPagesConfig';
 
 interface LangSwitcherProps {
   currentLocale: string;

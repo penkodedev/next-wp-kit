@@ -1,7 +1,7 @@
-import { WpPageIdSetter } from '@/utils/WpPageIdContext';
+import { WpPageIdSetter } from '@/utils/wordpress/WpPageIdContext';
 import HeroConfig from '@/components/sections/HeroConfig';
 import SliderRecursos from '@/components/sections/SliderRecursos';
-import { processContent } from '@/utils/processContent';
+import { processContent } from '@/utils/wordpress/processContent';
 import type { Page } from '@/types/wordpressTypes';
 
 type ContentHomeProps = {

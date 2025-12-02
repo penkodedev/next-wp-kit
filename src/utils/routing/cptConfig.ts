@@ -6,53 +6,53 @@
 
 // Define the structure of a CPT configuration
 type CptConfig = {
-  slug: string; // The internal slug used in WordPress (e.g., 'noticias')
-  translations: {
-    [locale: string]: string; // Mapping of locale to translated slug (e.g., { es: 'noticias', en: 'news' })
-  };
+	slug: string; // The internal slug used in WordPress (e.g., 'noticias')
+	translations: {
+		[locale: string]: string; // Mapping of locale to translated slug (e.g., { es: 'noticias', en: 'news' })
+	};
 };
 
 // *******  Add and configure new CPTs here: *******//
 export const CPT_CONFIG: CptConfig[] = [
-  {
-    slug: 'noticias',
-    translations: {
-      es: 'noticias',
-      en: 'news',
-    },
-  },
-  {
-    slug: 'recursos',
-    translations: {
-      es: 'recursos',
-      en: 'resorts',
-    },
-  },
-  {
-    slug: 'modales',
-    translations: {
-      es: 'modales',
-      en: 'modals',
-    },
-  },
-  {
-    slug: 'hero',
-    translations: {
-      es: 'hero',
-      en: 'hero',
-    },
-  },
+	{
+		slug: 'noticias',
+		translations: {
+			es: 'noticias',
+			en: 'news',
+		},
+	},
+	{
+		slug: 'recursos',
+		translations: {
+			es: 'recursos',
+			en: 'resorts',
+		},
+	},
+	{
+		slug: 'modales',
+		translations: {
+			es: 'modales',
+			en: 'modals',
+		},
+	},
+	{
+		slug: 'hero',
+		translations: {
+			es: 'hero',
+			en: 'hero',
+		},
+	},
 ];
 
 // Generates a map of all translated slugs to their internal WP slug.
 // This is what detectRouteType will use to identify CPTs.
 // Result: { noticias: 'noticias', news: 'noticias', recursos: 'recursos', resorts: 'recursos', ... }
 export const CPT_SLUG_MAP: Record<string, string> = CPT_CONFIG.reduce((acc, cpt) => {
-  for (const locale in cpt.translations) {
-    const translatedSlug = cpt.translations[locale];
-    acc[translatedSlug] = cpt.slug;
-  }
-  return acc;
+	for (const locale in cpt.translations) {
+		const translatedSlug = cpt.translations[locale];
+		acc[translatedSlug] = cpt.slug;
+	}
+	return acc;
 }, {} as Record<string, string>);
 
 /**
@@ -69,14 +69,14 @@ export const CPT_SLUG_MAP: Record<string, string> = CPT_CONFIG.reduce((acc, cpt)
  * getTranslatedCptSlug('recursos', 'en') // Returns 'resorts'
  */
 export function getTranslatedCptSlug(postType: string, locale: string): string {
-  // Handle native WordPress post types (posts, pages, etc.)
-  if (postType === 'posts' || postType === 'pages') {
-    return postType;
-  }
+	// Handle native WordPress post types (posts, pages, etc.)
+	if (postType === 'posts' || postType === 'pages') {
+		return postType;
+	}
   
-  // Handle custom post types
-  const cptConfig = CPT_CONFIG.find(config => config.slug === postType);
-  return cptConfig?.translations[locale] || postType;
+	// Handle custom post types
+	const cptConfig = CPT_CONFIG.find(config => config.slug === postType);
+	return cptConfig?.translations[locale] || postType;
 }
 
 /**
@@ -91,7 +91,7 @@ export function getTranslatedCptSlug(postType: string, locale: string): string {
  * getActiveCptSlugs(['modales', 'hero']) // Returns ['noticias', 'recursos']
  */
 export function getActiveCptSlugs(exclude: string[] = []): string[] {
-  return CPT_CONFIG
-    .map(config => config.slug)
-    .filter(slug => !exclude.includes(slug));
+	return CPT_CONFIG
+		.map(config => config.slug)
+		.filter(slug => !exclude.includes(slug));
 }

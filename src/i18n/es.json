@@ -18,7 +18,7 @@
     "noRecentResources": "No se encontraron recursos recientes."
   },
   "Search": {
-    "placeholder": "Buscar en el sitio...",
+    "placeholder": "Buscar en el sitio",
     "ariaLabel": "Buscar en el sitio",
     "loading": "Cargando...",
     "noResults": "No se encontraron resultados.",

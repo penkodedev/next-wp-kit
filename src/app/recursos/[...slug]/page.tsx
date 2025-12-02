@@ -4,7 +4,7 @@
 import { getContentBySlug, getAllContent } from "@/api/wordpressApi";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { generateSeoMetadata } from "@/utils/seo";
+import { generateSeoMetadata } from "@/utils/seo/seo";
 import type { WpContent } from "@/types/wordpressTypes";
 import ContentSingle from '@/components/layout/content/ContentSingle';
 import localesConfig from '@/i18n/locales.generated.json';

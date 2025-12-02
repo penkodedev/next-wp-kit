@@ -1,13 +1,14 @@
 // src/components/wordpress/WpNavMenu.tsx
+
 "use client";
 
 import Link from 'next/link';
 import { swrFetcher } from '@/api/wordpressApi';
 import type { MenuItem, AllMenus } from '@/types/wordpressTypes';
-import { cleanInternalUrl } from '@/utils/url';
+import { cleanInternalUrl } from '@/utils/wordpress/url';
 import useSWR from 'swr';
 import { motion, AnimatePresence } from 'framer-motion';
-import { logger } from '@/utils/logger';
+import { logger } from '@/utils/wordpress/logger';
 
 /**
  * Props for the WpNavMenu component.

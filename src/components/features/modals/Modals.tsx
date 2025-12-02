@@ -6,10 +6,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useModalStore } from '@/store/modalStore';
 import { getContentBySlug } from '@/api/wordpressApi';
 import type { Modal as ModalType } from '@/types/wordpressTypes';
-import { processContent } from '@/utils/processContent';
+import { processContent } from '@/utils/wordpress/processContent';
 import { Icons } from '@/components/ui/Icons';
-import LoadingWrapper from './LoadingWrapper';
-import { logger } from '@/utils/logger';
+import LoadingWrapper from '@/components/ui/LoadingWrapper';
+import { logger } from '@/utils/wordpress/logger';
 
 const backdrop = {
   visible: { opacity: 1 },
@@ -51,7 +51,7 @@ export default function Modals() {
         const content = await getContentBySlug<ModalType>('modales', slug);
         setModalContent(content);
       } catch (error) {
-        logger.error("Failed to fetch modal content:", error);
+  logger.error("Failed to fetch modal content:", error as Error);
         // Optionally, set an error state to show a message
       } finally {
         setIsLoading(false);

@@ -3,7 +3,7 @@
 import HeaderClient from "./HeaderClient";
 import { getSiteInfo, fetchAPI } from "@/api/wordpressApi";
 import type { SiteInfo, MenuItem } from "@/types/wordpressTypes";
-import { logger } from "@/utils/logger";
+import { logger } from "@/utils/wordpress/logger";
 import localesConfig from "@/i18n/locales.generated.json";
 
 interface HeaderServerProps {
@@ -27,11 +27,7 @@ export default async function HeaderServer({
     language: "",
     social: [],
     contact: [],
-    analytics: {},
-    i18n: {
-      default_locale: "",
-      locales: [],
-    },
+  analytics: [],
   };
 
   // Pre-fetch SiteInfo and menus for ALL active locales dynamically
@@ -61,7 +57,7 @@ export default async function HeaderServer({
       menusByLocale[result.locale] = result.menu;
     });
   } catch (error) {
-    logger.error('HeaderServer: Error pre-fetching data', error);
+  logger.error('HeaderServer: Error pre-fetching data', error as Error);
   }
 
   return (

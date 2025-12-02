@@ -1,9 +1,7 @@
 // src/store/modalStore.ts
 import { create } from 'zustand';
 
-/**
- * Defines the state and actions for the modal store.
- */
+// State and actions for the modal store
 interface ModalState {
   modalSlug: string | null;
   isOpen: boolean;
@@ -12,8 +10,7 @@ interface ModalState {
 }
 
 /**
- * Creates a Zustand store for managing the global modal state.
- * This allows any component to open or close a modal.
+ * Zustand store for global modal state. Allows any component to open or close a modal.
  */
 export const useModalStore = create<ModalState>((set) => ({
   modalSlug: null,

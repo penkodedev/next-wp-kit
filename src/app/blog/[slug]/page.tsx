@@ -1,11 +1,13 @@
 // src/app/blog/[slug]/page.tsx
-import { getContentBySlug, getAllContent } from '@/api/wordpressApi';
+
+import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { generateSeoMetadata } from '@/utils/seo';
+
+import { generateSeoMetadata } from '@/utils/seo/seo';
+import { getContentBySlug, getAllContent } from '@/api/wordpressApi';
 import type { Post } from '@/types/wordpressTypes';
 import ContentSingle from '@/components/layout/content/ContentSingle';
-import { headers } from 'next/headers';
 import localesConfig from '@/i18n/locales.generated.json';
 
 type PostPageProps = {

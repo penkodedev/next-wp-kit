@@ -22,8 +22,8 @@ import AdvertisingPopup from '@/components/features/modals/AdvertisingPopup';
 import LightboxController from '@/components/features/lightbox/LightboxController';
 import WpStyles from "@/components/wordpress/WpStyles";
 
-import BodyClass from "@/utils/BodyClass";
-import { WpPageIdProvider } from '@/utils/WpPageIdContext';
+import BodyClass from "@/utils/wordpress/BodyClass";
+import { WpPageIdProvider } from '@/utils/wordpress/WpPageIdContext';
 import localesConfig from '@/i18n/locales.generated.json';
 
 
