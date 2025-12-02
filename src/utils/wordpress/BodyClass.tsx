@@ -26,22 +26,38 @@ const BodyClass = ({ children }: BodyClassProps) => {
 		// Detect taxonomies dynamically (could be improved to fetch from API if needed)
 		const validTaxonomies = ['categoria', 'nivel_educativo', 'tags']; // TODO: make dynamic if needed
 
+		// Special routes (search, sitemap, etc.)
+		const specialRoutes = ['search', 'sitemap', 'blog', 'feed.xml'];
+		const isSpecialRoute = slugWithoutLocale.length > 0 && specialRoutes.includes(slugWithoutLocale[0]);
+
 		if (slugWithoutLocale.length === 1 && CPT_SLUG_MAP[slugWithoutLocale[0]]) {
+			// CPT Archive
 			const internalCpt = CPT_SLUG_MAP[slugWithoutLocale[0]];
 			classes = ['archive', `archive-${internalCpt}`];
 		} else if (slugWithoutLocale.length === 0) {
+			// Home page
 			classes = ["page-home"];
 		} else if (slugWithoutLocale.length === 2 && CPT_SLUG_MAP[slugWithoutLocale[0]]) {
-			// It's a CPT single page
+			// CPT Single
 			const internalCpt = CPT_SLUG_MAP[slugWithoutLocale[0]];
 			classes = [`single`, `single-${internalCpt}`];
 			if (pageId) {
 				classes.push(`postid-${pageId}`);
 			}
 		} else if (slugWithoutLocale.length === 1 && validTaxonomies.includes(slugWithoutLocale[0])) {
+			// Taxonomy archive
 			classes = [`taxonomy`, `taxonomy-${slugWithoutLocale[0]}`];
+		} else if (isSpecialRoute) {
+			// Special routes: /search, /sitemap, etc.
+			const routeName = slugWithoutLocale[0];
+			classes = ["page", `page-${routeName}`];
 		} else {
-			classes = ["page"];
+			// Static pages
+			const pageSlug = slugWithoutLocale[slugWithoutLocale.length - 1] || 'home';
+			classes = ["page", `page-${pageSlug}`];
+			if (pageId) {
+				classes.push(`page-id-${pageId}`);
+			}
 		}
 
 		return classes.join(' ');
