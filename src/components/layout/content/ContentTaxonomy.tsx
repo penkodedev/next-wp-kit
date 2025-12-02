@@ -1,5 +1,5 @@
 import React from "react";
-import { getTranslatedCptSlug } from "@/utils/routing/cptConfig";
+import { getTranslatedCptSlug } from "@/utils/config/cptConfig";
 import type { WpContent, Term } from "@/types/wordpressTypes";
 import localesConfig from "@/i18n/locales.generated.json";
 import PostCard from "@/components/ui/PostCard";

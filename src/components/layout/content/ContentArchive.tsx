@@ -1,5 +1,6 @@
 import GridPosts from '@/components/layout/content/GridPosts';
-import { getTranslatedCptSlug } from '@/utils/routing/cptConfig';
+import LoadMore from '@/components/navigation/LoadMore';
+import { getTranslatedCptSlug } from '@/utils/config/cptConfig';
 import type { WpContent } from '@/types/wordpressTypes';
 import localesConfig from '@/i18n/locales.generated.json';
 
@@ -33,7 +34,17 @@ export default function ContentArchive({
       </section>
 
       {posts && posts.length > 0 ? (
-        <GridPosts posts={posts} basePath={basePath} />
+        <>
+          <GridPosts posts={posts} basePath={basePath} />
+          
+          {/* Load More button (client component) */}
+          <LoadMore
+            postType={postType}
+            basePath={basePath}
+            locale={locale}
+            initialPostsCount={posts.length}
+          />
+        </>
       ) : (
         <article>
           <p>No se encontró contenido en esta sección.</p>

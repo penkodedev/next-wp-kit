@@ -6,13 +6,14 @@ import { generateSeoMetadata } from "@/utils/seo/seo";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import type { Page, WpContent } from "@/types/wordpressTypes";
-import { CPT_SLUG_MAP, getTranslatedCptSlug } from "@/utils/routing/cptConfig";
+import { CPT_SLUG_MAP, getTranslatedCptSlug } from "@/utils/config/cptConfig";
 import ContentSingle from '@/components/layout/content/ContentSingle';
 import ContentArchive from '@/components/layout/content/ContentArchive';
 import ContentPages from '@/components/layout/content/ContentPages';
 import ContentHome from '@/components/layout/content/ContentHome';
 import ContentTaxonomy from '@/components/layout/content/ContentTaxonomy';
 import localesConfig from '@/i18n/locales.generated.json';
+import { getPostsPerPage } from '@/utils/config/pagination';
 
 // Props for dynamic route pages
 type PageProps = {
@@ -278,9 +279,10 @@ export default async function CatchAllPage({ params }: PageProps) {
 
   // ROUTE 1: Post Archive (CPT Archive)
   if (routeType.type === 'post-archive') {
+    const postsPerPage = getPostsPerPage(routeType.postType);
     const apiParams = locale === localesConfig.defaultLocale
-      ? '?per_page=12&_embed&orderby=date&order=desc'
-      : `?per_page=12&_embed&orderby=date&order=desc&lang=${locale}`;
+      ? `?per_page=${postsPerPage}&_embed&orderby=date&order=desc`
+      : `?per_page=${postsPerPage}&_embed&orderby=date&order=desc&lang=${locale}`;
 
     const posts = await getAllContent<WpContent>(routeType.postType, apiParams);
 

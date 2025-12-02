@@ -9,7 +9,7 @@ import Sidebar from '@/components/layout/sidebar/Sidebar';
 import ShareLikeButtons from '@/components/ui/ShareLikeButtons';
 import { WpPageId } from '@/utils/wordpress/WpPageId';
 import { processContent } from '@/utils/wordpress/processContent';
-import { getTranslatedCptSlug } from '@/utils/routing/cptConfig';
+import { getTranslatedCptSlug } from '@/utils/config/cptConfig';
 import type { WpContent } from '@/types/wordpressTypes';
 import localesConfig from '@/i18n/locales.generated.json';
 

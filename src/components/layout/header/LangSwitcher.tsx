@@ -7,8 +7,8 @@ import { Icons } from '@/components/ui/Icons';
 import { useState, useEffect } from 'react';
 import { getWpmlTranslation, getWpmlLanguages, type WpmlLanguage } from '@/api/wordpressApi';
 import { useWpPageId } from '@/utils/wordpress/WpPageIdContext';
-import { CPT_SLUG_MAP, getTranslatedCptSlug } from '@/utils/routing/cptConfig';
-import { shouldPreserveOnLanguageSwitch } from '@/utils/wordpress/frontendPagesConfig';
+import { CPT_SLUG_MAP, getTranslatedCptSlug } from '@/utils/config/cptConfig';
+import { shouldPreserveOnLanguageSwitch } from '@/utils/config/frontendPagesConfig';
 
 interface LangSwitcherProps {
   currentLocale: string;

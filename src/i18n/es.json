@@ -5,7 +5,9 @@
   "Content": {
     "noContentFound": "No se encontró contenido en esta sección.",
     "share": "Compartir",
-    "like": "Me gusta"
+    "like": "Me gusta",
+    "loadMore": "Cargar más",
+    "loading": "Cargando..."
   },
   "Footer": {
     "contact": "Contacto",

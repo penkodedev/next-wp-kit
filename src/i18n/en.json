@@ -5,7 +5,9 @@
   "Content": {
     "noContentFound": "No content found in this section.",
     "share": "Share",
-    "like": "Like"
+    "like": "Like",
+    "loadMore": "Load more",
+    "loading": "Loading..."
   },
   "Footer": {
     "contact": "Contact",

@@ -3,7 +3,7 @@
 import { useEffect, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { useWpPageId } from "@/utils/wordpress/WpPageIdContext";
-import { CPT_SLUG_MAP } from "@/utils/routing/cptConfig";
+import { CPT_SLUG_MAP } from "@/utils/config/cptConfig";
 import localesConfig from "@/i18n/locales.generated.json";
 
 interface BodyClassProps {
