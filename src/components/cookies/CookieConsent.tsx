@@ -179,7 +179,6 @@ const CookieConsent = () => {
   const handleSaveConsent = () => {
     savePreferences(localOptions)
     setShow(false)
-    console.log('Preferencias guardadas:', localOptions)
   }
 
   if (!show) return null

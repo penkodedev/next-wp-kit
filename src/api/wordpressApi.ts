@@ -205,11 +205,6 @@ export async function getContentBySlug<T extends WpContent>(postType: string, sl
   }
   const data = await fetchAPI<T[]>(query);
   
-  // Debug: log the first item to see what we're getting
-  if (data && data[0]) {
-    console.log('🔍 DEBUG - API Response for', slug, ':', JSON.stringify(data[0], null, 2));
-  }
-  
   return data?.[0] ?? null;
 }
  

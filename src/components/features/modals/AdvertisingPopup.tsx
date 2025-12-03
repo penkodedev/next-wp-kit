@@ -80,7 +80,6 @@ export default function AdvertisingPopup() {
             }
           }
         } catch (error) {
-          console.warn('sessionStorage is not available:', error);
           return; // Exit if sessionStorage is not available
         }
       }
@@ -96,7 +95,7 @@ export default function AdvertisingPopup() {
             const shownCount = sessionStorage.getItem(storageKey) ? parseInt(sessionStorage.getItem(storageKey)!, 10) : 0;
             sessionStorage.setItem(storageKey, (shownCount + 1).toString());
           } catch (error) {
-            console.warn('Could not write to sessionStorage:', error);
+            // Could not write to sessionStorage
           }
         }
       }, popupForThisPage.popup_settings?.delay ?? 2000); // Use delay from API, or default to 2s

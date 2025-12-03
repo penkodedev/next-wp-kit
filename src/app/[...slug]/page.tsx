@@ -47,8 +47,6 @@ export async function detectRouteType(slug: string[]): Promise<RouteType> {
   if (routeCache.has(cacheKey)) {
     return routeCache.get(cacheKey)!;
   }
-  
-  console.log('Detecting route type for slug:', slug);
 
   const firstSegment = slug[0];  
   const isLocale = localesConfig.supportedLocales.includes(firstSegment);
@@ -56,7 +54,6 @@ export async function detectRouteType(slug: string[]): Promise<RouteType> {
 
   // Case 1: Home page (e.g., / or /en)
   if (slugWithoutLocale.length === 0) {
-    console.log('Route type: home page');
     const result = { type: 'page', path: '' } as const;
     routeCache.set(cacheKey, result);
     return result;
@@ -69,7 +66,6 @@ export async function detectRouteType(slug: string[]): Promise<RouteType> {
   // They are handled by ModalController intercepting clicks
   if (CPT_SLUG_MAP[firstSlugSegment] === 'modales') {
     // Return a special type that will be handled differently
-    console.log('Route type: modal (should not render)');
     const result = { type: 'modal', slug: secondSlugSegment } as const;
     routeCache.set(cacheKey, result);
     return result;
@@ -78,7 +74,6 @@ export async function detectRouteType(slug: string[]): Promise<RouteType> {
   // Case 2: Post Archive (e.g., /noticias or /en/news)
   if (slugWithoutLocale.length === 1 && CPT_SLUG_MAP[firstSlugSegment]) {
     const internalPostType = CPT_SLUG_MAP[firstSlugSegment];
-    console.log(`Route type: post-archive for ${internalPostType} (from slug ${firstSlugSegment})`);
     const result = { type: 'post-archive', postType: internalPostType } as const;
     routeCache.set(cacheKey, result);
     return result;
@@ -88,7 +83,6 @@ export async function detectRouteType(slug: string[]): Promise<RouteType> {
   if (slugWithoutLocale.length === 2 && CPT_SLUG_MAP[firstSlugSegment]) {
     const internalPostType = CPT_SLUG_MAP[firstSlugSegment];
     const postSlug = secondSlugSegment;
-    console.log(`Route type: post-single for ${internalPostType} (from slug ${firstSlugSegment}), post slug: ${postSlug}`);
     const result = { type: 'post-single', postType: internalPostType, slug: postSlug } as const;
     routeCache.set(cacheKey, result);
     return result;
@@ -96,7 +90,6 @@ export async function detectRouteType(slug: string[]): Promise<RouteType> {
 
   // Case 4: Default to a page
   const pagePath = slugWithoutLocale.join('/');
-  console.log('Route type: page with path', pagePath);
   const result = { type: 'page', path: pagePath } as const;
   routeCache.set(cacheKey, result);
   return result;
@@ -235,7 +228,7 @@ export default async function CatchAllPage({ params }: PageProps) {
   const path = getPathFromParams(params);
   const routeType = await detectRouteType(params.slug);
   const locale = (params.slug.length > 0 && localesConfig.supportedLocales.includes(params.slug[0])) ? params.slug[0] : localesConfig.defaultLocale;
-  console.log('Route type result:', routeType);
+
   // Detect if the first segment is a taxonomy and the second is a term slug
   const taxSlug = params.slug[0];
   const termSlug = params.slug[1];

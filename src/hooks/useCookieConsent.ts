@@ -41,7 +41,7 @@ export const useCookieConsent = () => {
         }
       }
     } catch (error) {
-      console.warn('Error loading cookie preferences:', error)
+      // Error loading preferences - will show banner
     }
     
     setState(prev => ({ ...prev, isLoaded: true }))
@@ -170,8 +170,6 @@ export const useGoogleAnalytics = (measurementId: string) => {
         anonymize_ip: true,
         cookie_flags: 'SameSite=None;Secure'
       })
-      
-      console.log('✅ Google Analytics cargado')
     }
   }, [measurementId, isCookieEnabled, isCategoryEnabled])
 }
@@ -199,8 +197,6 @@ export const useFacebookPixel = (pixelId: string) => {
         fbq('track', 'PageView');
       `
       document.head.appendChild(script)
-      
-      console.log('✅ Facebook Pixel cargado')
     }
   }, [pixelId, isCookieEnabled, isCategoryEnabled])
 }

@@ -14,8 +14,6 @@ export default function LocaleSync({ locale }: LocaleSyncProps) {
 		// WordPress WPML returns valid lang codes (es, en, pt-br, etc.)
 		document.documentElement.lang = locale;
 
-		console.log('LocaleSync: Set lang to', locale);
-
 		// Optional: Store locale in localStorage for persistence
 		if (typeof window !== 'undefined') {
 			localStorage.setItem('preferred-locale', locale);

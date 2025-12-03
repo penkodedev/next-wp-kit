@@ -91,7 +91,6 @@ async function getActiveLocales(): Promise<string[]> {
     }
     return localesConfig.supportedLocales; // Fallback to generated config
   } catch (error) {
-    console.error('Error fetching active locales:', error);
     return localesConfig.supportedLocales; // Fallback to generated config
   }
 }

@@ -57,18 +57,9 @@ export default function ButtonShare({ title, description, className = '' }: Butt
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error('Failed to copy:', err);
+      // Silently fail if clipboard API not available
     }
   };
-
-  const socialNetworks = [
-    { name: 'Facebook', icon: Icons.Facebook, url: shareLinks.facebook, color: '#1877F2' },
-    { name: 'Twitter', icon: Icons.Twitter, url: shareLinks.twitter, color: '#1DA1F2' },
-    { name: 'WhatsApp', icon: Icons.MessageCircle, url: shareLinks.whatsapp, color: '#25D366' },
-    { name: 'Telegram', icon: Icons.Send, url: shareLinks.telegram, color: '#0088CC' },
-    { name: 'LinkedIn', icon: Icons.Linkedin, url: shareLinks.linkedin, color: '#0A66C2' },
-    { name: 'Email', icon: Icons.Mail, url: shareLinks.email, color: '#EA4335' },
-  ];
 
   return (
     <div className="button-share-wrapper" ref={menuRef}>

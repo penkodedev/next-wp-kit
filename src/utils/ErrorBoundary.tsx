@@ -27,7 +27,7 @@ class ErrorBoundaryBase extends Component<
   }
 
   componentDidCatch(error: Error, errorInfo: any) {
-    console.error('ErrorBoundary caught:', error, errorInfo);
+    // Error caught by boundary - could log to external service here
   }
 
   render() {

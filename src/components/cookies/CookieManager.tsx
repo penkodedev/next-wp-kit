@@ -11,14 +11,6 @@ const GoogleAnalyticsManager = () => {
   // Usar el hook para inicializar Google Analytics
   useGoogleAnalytics('GA_MEASUREMENT_ID') // Reemplazar con tu ID real
 
-  useEffect(() => {
-    if (shouldLoad) {
-      console.log('✅ Google Analytics habilitado')
-    } else {
-      console.log('❌ Google Analytics bloqueado por preferencias de cookies')
-    }
-  }, [shouldLoad])
-
   return null
 }
 
@@ -28,14 +20,6 @@ const FacebookPixelManager = () => {
 
   // Usar el hook para inicializar Facebook Pixel
   useFacebookPixel('FB_PIXEL_ID') // Reemplazar con tu ID real
-
-  useEffect(() => {
-    if (shouldLoad) {
-      console.log('✅ Facebook Pixel habilitado')
-    } else {
-      console.log('❌ Facebook Pixel bloqueado por preferencias de cookies')
-    }
-  }, [shouldLoad])
 
   return null
 }
@@ -54,7 +38,6 @@ const FunctionalityManager = () => {
   useEffect(() => {
     if (shouldLoad) {
       // Cargar funcionalidades personalizadas solo si está permitido
-      console.log('✅ Funcionalidades personalizadas habilitadas')
       
       // Ejemplo: guardar preferencias del usuario (usa locale dinámico)
       const userPreferences = {
@@ -63,8 +46,6 @@ const FunctionalityManager = () => {
         notifications: true
       }
       localStorage.setItem('user_preferences', JSON.stringify(userPreferences))
-    } else {
-      console.log('❌ Funcionalidades personalizadas bloqueadas')
     }
   }, [shouldLoad, currentLocale])
 
