@@ -1,0 +1,112 @@
+// src/styles/sass/components/share-like-buttons.scss
+
+// =============================================================================
+//   SHARE & LIKE BUTTONS
+//   Mantiene la apariencia original, solo añade contador de likes
+// =============================================================================
+
+.button-share-wrapper {
+    position: relative; // Para posicionar el dropdown
+}
+
+.icons-wrap {
+    color: white;
+    display: flex;
+    align-items: center; // Alinear verticalmente
+    position: absolute;
+    bottom: 5px;
+    right: 25px;
+    gap: 15px;
+
+    // Estilos comunes para ambos iconos
+    .icon-heart,
+    .icon-share {
+        position: relative;
+        cursor: pointer;
+
+        svg {
+            transition: transform 0.2s ease;
+        }
+
+        &:hover svg {
+            transform: scale(1.1);
+        }
+    }
+
+    .icon-heart {
+        color: var(--color-white, #fff);
+
+        // Contador de likes arriba del icono
+        .like-count {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--color-white, #fff);
+            text-align: center;
+            line-height: 1.2;
+            position: absolute;
+            top: -12px;
+            right: 0;
+            padding: 2px 6px;
+            border-radius: 10px;
+            min-width: 18px;
+
+            pointer-events: none;
+        }
+
+        // Estado: ya le diste like
+        &.liked svg {
+            fill: currentColor;
+            // color: var(--color-error, #e74c3c);
+        }
+
+        // Estado: límite alcanzado
+        &.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+
+            &:hover svg {
+                transform: none; // No hover si está deshabilitado
+            }
+        }
+    }
+}
+
+// =============================================================
+//   SHARE DROPDOWN MENU
+// =============================================================
+
+.share-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 5px;
+    min-width: 180px;
+    z-index: 1000;
+
+    p {
+        font-size: 0.88em;
+        margin: 0;
+    }
+
+    a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 3px 0 3px 12px;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background 0.2s;
+
+        &:hover {
+            background: #d8d8d8;
+        }
+
+        svg {
+            flex-shrink: 0;
+        }
+    }
+}

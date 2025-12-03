@@ -6,7 +6,8 @@ import CustomFields from '@/components/wordpress/CustomFields';
 import Breadcrumbs from '@/components/navigation/Breadcrumbs';
 import PostNav from '@/components/navigation/PostNav';
 import Sidebar from '@/components/layout/sidebar/Sidebar';
-import ShareLikeButtons from '@/components/ui/ShareLikeButtons';
+import ButtonShare from '@/components/ui/ButtonShare';
+import ButtonLike from '@/components/ui/ButtonLike';
 import { WpPageId } from '@/utils/wordpress/WpPageId';
 import { processContent } from '@/utils/wordpress/processContent';
 import { getTranslatedCptSlug } from '@/utils/config/cptConfig';
@@ -47,7 +48,16 @@ export default function ContentSingle({
           <section className="page-title">
             <h1>{post.title.rendered}</h1>
 
-            <ShareLikeButtons />
+            <div className="icons-wrap">
+              <ButtonShare 
+                title={post.title.rendered}
+                description={post.excerpt?.rendered?.replace(/<[^>]*>/g, '')}
+              />
+              <ButtonLike 
+                postId={post.id}
+                initialLikes={post.likes || 0}
+              />
+            </div>
           </section>
           
           <Breadcrumbs />

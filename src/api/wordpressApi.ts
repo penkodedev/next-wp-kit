@@ -445,3 +445,44 @@ export async function getWpmlLanguages(): Promise<WpmlLanguagesResponse> {
     return FALLBACK_LANGUAGES;
   }
 }
+
+/*--------------------------------------------------------------------------------------
+    ❤️ POST LIKES
+    Increment like count for a post and get current count
+--------------------------------------------------------------------------------------*/
+
+/**
+ * Increments the like count for a post
+ * @param postId The post ID to like
+ * @returns Object with success status and new like count
+ */
+export async function likePost(postId: number): Promise<{ success: boolean; likes: number }> {
+  try {
+    const data = await fetchAPI<{ success: boolean; likes: number; post_id: number }>(`/custom/v1/like/${postId}`, {
+      method: 'POST',
+      next: { revalidate: 0 } // No cache for POST requests
+    });
+    return { success: data?.success || false, likes: data?.likes || 0 };
+  } catch (error) {
+    logger.error(`Error liking post ${postId}`, error instanceof Error ? error : String(error));
+    throw new Error('Failed to like post');
+  }
+}
+
+/**
+ * Gets the current like count for a post
+ * @param postId The post ID
+ * @returns Current like count
+ */
+export async function getPostLikes(postId: number): Promise<number> {
+  try {
+    const data = await fetchAPI<{ post_id: number; likes: number }>(`/custom/v1/likes/${postId}`, {
+      next: { revalidate: 60 } // Cache for 1 minute
+    });
+    return data?.likes || 0;
+  } catch (error) {
+    logger.error(`Error fetching likes for post ${postId}`, error instanceof Error ? error : String(error));
+    return 0;
+  }
+}
+
