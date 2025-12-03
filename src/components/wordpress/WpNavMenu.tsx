@@ -9,6 +9,7 @@ import { cleanInternalUrl } from '@/utils/wordpress/url';
 import useSWR from 'swr';
 import { motion, AnimatePresence } from 'framer-motion';
 import { logger } from '@/utils/wordpress/logger';
+import { withErrorBoundary } from '@/utils/ErrorBoundary';
 
 /**
  * Props for the WpNavMenu component.
@@ -52,7 +53,7 @@ function NavItem({ item }: { item: MenuItem }) {
  * identified by its 'slug' or 'location'.
  * Uses SWR for client-side caching with server-side pre-fetched data as fallback.
  */
-export default function WpNavMenu({ slug, location, className, locale, menuItems: prefetchedMenuItems }: WpNavMenuProps) {
+function WpNavMenu({ slug, location, className, locale, menuItems: prefetchedMenuItems }: WpNavMenuProps) {
   // Build the API URL with the 'lang' parameter
   const apiUrl = locale ? `/custom/v1/menus?lang=${locale}&${location ? `location=${location}` : `slug=${slug}`}` : null;
   
@@ -101,3 +102,6 @@ export default function WpNavMenu({ slug, location, className, locale, menuItems
     </AnimatePresence>
   );
 }
+
+// Export with ErrorBoundary protection
+export default withErrorBoundary(WpNavMenu, 'WpNavMenu');

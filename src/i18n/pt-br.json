@@ -39,5 +39,10 @@
   "LanguageSwitcher": {
     "changeLanguage": "Alterar idioma",
     "switchTo": "Mudar para {{language}}"
+  },
+  "Errors": {
+    "componentFailed": "Erro ao carregar {component}",
+    "retry": "Tentar novamente",
+    "loadingContent": "Não foi possível carregar o conteúdo"
   }
 }

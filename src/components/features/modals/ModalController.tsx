@@ -6,6 +6,12 @@ import { useEffect } from 'react';
 import { useModalStore } from '@/store/modalStore';
 import Modals from '@/components/features/modals/Modals'; // The visual component
 
+// Constantes fuera del componente para evitar recrearlas en cada render
+const MODAL_CPT_PATH = '/modales/';
+const wpApiHostname = process.env.NEXT_PUBLIC_WORDPRESS_API_URL
+  ? new URL(process.env.NEXT_PUBLIC_WORDPRESS_API_URL).hostname
+  : '';
+
 /**
  * A client component that handles (LISTEN) the logic for opening modals.
  * It listens for clicks on links pointing to the 'modal' CPT (e.g., /modal/my-modal-slug).
@@ -13,12 +19,6 @@ import Modals from '@/components/features/modals/Modals'; // The visual componen
  */
 export default function ModalController() {
   const { openModal } = useModalStore();
-  // Definimos la ruta base para los modales para mayor claridad y mantenibilidad.
-  const MODAL_CPT_PATH = '/modales/';
-  // Extraemos el hostname de la URL de la API de WP para comparaciones.
-  const wpApiHostname = process.env.NEXT_PUBLIC_WORDPRESS_API_URL
-    ? new URL(process.env.NEXT_PUBLIC_WORDPRESS_API_URL).hostname
-    : '';
 
   useEffect(() => {
     // Añadimos una clase al body para indicar que el controlador de modales está listo.
@@ -38,7 +38,8 @@ export default function ModalController() {
 
       if (!target) return;
 
-      // Comprobamos si es un enlace a un modal, ya sea una ruta relativa o una URL absoluta al backend de WP.
+      // Detectar si es un enlace a un modal (/modales/slug)
+      // Funciona tanto con rutas relativas como con URLs absolutas al backend de WP
       const isRelativeModalLink = target.pathname.startsWith(MODAL_CPT_PATH);
       const isAbsoluteWpModalLink =
         wpApiHostname &&
@@ -53,7 +54,7 @@ export default function ModalController() {
         // We use pop() to get the last part of the URL, which is the slug
         const slug = target.pathname.split('/').filter(Boolean).pop();
 
-        if (slug) {
+        if (slug && slug !== 'modales') {
           openModal(slug);
         }
       }

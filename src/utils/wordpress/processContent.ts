@@ -48,11 +48,16 @@ export function processContent(content: string, blocks?: WpBlock[]): string {
 	}
 
 	// Add data-next-ignore to modal links
-	const modalLinkRegex = /<a\s+(?!.*\bdata-next-ignore\s*=\s*["']true["'])([^>]*\bhref\s*=\s*["']\/modales\/[^"']+["'][^>]*)>/g;
-
+	// This prevents Next.js router from handling these links, letting ModalController intercept them
 	processedContent = processedContent.replace(
-		modalLinkRegex,
-		'<a data-next-ignore="true" $1>'
+		/<a\s+([^>]*?)\bhref\s*=\s*["']\/modales\/[^"']+["']([^>]*?)>/gi,
+		(match) => {
+			// Only add data-next-ignore if not already present
+			if (match.includes('data-next-ignore')) {
+				return match;
+			}
+			return match.replace(/<a\s+/, '<a data-next-ignore="true" ');
+		}
 	);
 
 	// Add sizes attribute to img tags that don't have it (for Next.js Image optimization)

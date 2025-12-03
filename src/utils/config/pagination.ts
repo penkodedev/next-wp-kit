@@ -11,9 +11,10 @@ export const PAGINATION_CONFIG = {
   
   /** Posts per page for specific CPTs (override default) */
   cptOverrides: {
-    recursos: 6,   // Recursos shows 8 per page (already implemented in /recursos/page.tsx)
+    recursos: 6,
+    resorts: 6,
     noticias: 2,
-    // eventos: 6,
+    news: 2,
   } as Record<string, number>, // Allow dynamic access
   
   /** Posts per page for "Load More" button */

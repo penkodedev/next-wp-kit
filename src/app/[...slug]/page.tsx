@@ -31,7 +31,8 @@ function getPathFromParams(params: PageProps["params"]): string {
 type RouteType =
   | { type: 'page'; path: string }
   | { type: 'post-archive'; postType: string }
-  | { type: 'post-single'; postType: string; slug: string };
+  | { type: 'post-single'; postType: string; slug: string }
+  | { type: 'modal'; slug: string };
 
 // Cache for route detection to avoid duplicate calls in generateMetadata and page render
 const routeCache = new Map<string, RouteType>();
@@ -63,6 +64,16 @@ export async function detectRouteType(slug: string[]): Promise<RouteType> {
 
   const firstSlugSegment = slugWithoutLocale[0];
   const secondSlugSegment = slugWithoutLocale[1];
+
+  // SPECIAL CASE: Modales should NOT render as pages
+  // They are handled by ModalController intercepting clicks
+  if (CPT_SLUG_MAP[firstSlugSegment] === 'modales') {
+    // Return a special type that will be handled differently
+    console.log('Route type: modal (should not render)');
+    const result = { type: 'modal', slug: secondSlugSegment } as const;
+    routeCache.set(cacheKey, result);
+    return result;
+  }
 
   // Case 2: Post Archive (e.g., /noticias or /en/news)
   if (slugWithoutLocale.length === 1 && CPT_SLUG_MAP[firstSlugSegment]) {
@@ -99,6 +110,17 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const path = getPathFromParams(params);
   const routeType = await detectRouteType(params.slug);
+
+  // Modals should not have metadata (they don't render as pages)
+  if (routeType.type === 'modal') {
+    return {
+      title: 'Modal',
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
+  }
 
   if (routeType.type === 'post-single') {
     const post = await getContentBySlug<WpContent>(routeType.postType, routeType.slug);
@@ -277,7 +299,15 @@ export default async function CatchAllPage({ params }: PageProps) {
     );
   }
 
-  // ROUTE 1: Post Archive (CPT Archive)
+  // ROUTE 1: Modal Routes (should not render, handled by ModalController)
+  if (routeType.type === 'modal') {
+    // Modals should never render as pages
+    // They are intercepted by ModalController on click
+    // If someone navigates directly to /modales/slug, show 404
+    notFound();
+  }
+
+  // ROUTE 2: Post Archive (CPT Archive)
   if (routeType.type === 'post-archive') {
     const postsPerPage = getPostsPerPage(routeType.postType);
     const apiParams = locale === localesConfig.defaultLocale

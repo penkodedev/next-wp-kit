@@ -17,6 +17,8 @@ a[href*="/modales/"] {
   cursor: pointer;      // Vuelve al cursor normal
 }
 
+
+
 .modal-overlay { 
   position: fixed;
   top: 0;
@@ -65,8 +67,8 @@ a[href*="/modales/"] {
   max-width: 1100px; // Adjust MAX modal width on viewport
   background-color: var(--background-color, #fff);
   color: var(--text-color, #000);
-  border: 8px solid #fff; // Increased border size and adjust modal-close position
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border: 2px solid #fff; // Increased border size and adjust modal-close position
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.541);
   max-height: 80vh;
   overflow-y: auto; // Show scrollbar only when content overflows
   overflow-x: hidden; // NOT shown scrollbar only when content overflows

@@ -64,9 +64,23 @@ const BodyClass = ({ children }: BodyClassProps) => {
 	}, [pathname, pageId]);
 
 	useEffect(() => {
-		document.body.className = bodyClasses;
+		// Get existing classes that we don't manage (like 'modal-controller-ready')
+		const existingClasses = Array.from(document.body.classList);
+		const managedClasses = ['page', 'page-home', 'page-id-', 'postid-', 'single', 'single-', 'archive', 'archive-', 'taxonomy', 'taxonomy-'];
+		
+		// Filter out managed classes but keep others (like modal-controller-ready)
+		const unmanagedClasses = existingClasses.filter(cls => 
+			!managedClasses.some(prefix => cls.startsWith(prefix))
+		);
+		
+		// Combine unmanaged classes with our new body classes
+		const finalClasses = [...unmanagedClasses, ...bodyClasses.split(' ')].join(' ');
+		document.body.className = finalClasses;
+		
 		return () => {
-			document.body.className = '';
+			// On cleanup, only remove our managed classes
+			const classesToRemove = bodyClasses.split(' ');
+			classesToRemove.forEach(cls => document.body.classList.remove(cls));
 		};
 	}, [bodyClasses]);
 

@@ -8,7 +8,6 @@ import { getContentBySlug } from '@/api/wordpressApi';
 import type { Modal as ModalType } from '@/types/wordpressTypes';
 import { processContent } from '@/utils/wordpress/processContent';
 import { Icons } from '@/components/ui/Icons';
-import LoadingWrapper from '@/components/ui/LoadingWrapper';
 import { logger } from '@/utils/wordpress/logger';
 
 const backdrop = {
