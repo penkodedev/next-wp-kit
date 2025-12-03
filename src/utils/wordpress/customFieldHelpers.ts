@@ -4,10 +4,12 @@
  * Utility functions for custom fields validation and formatting
  */
 
+import type { CustomFieldValue } from '@/types/wordpressTypes';
+
 /**
  * Validates if a field value should be considered "not empty"
  */
-export function hasValue(value: any, fieldType: string): boolean {
+export function hasValue(value: CustomFieldValue, fieldType: string): boolean {
   // Explicitly empty values
   if (value === null || value === undefined || value === '') return false;
   
@@ -18,7 +20,7 @@ export function hasValue(value: any, fieldType: string): boolean {
       return true;
     }
     // If it's a numeric ID, validate > 0
-    const numValue = typeof value === 'string' ? parseInt(value, 10) : value;
+    const numValue = typeof value === 'string' ? parseInt(value, 10) : typeof value === 'number' ? value : 0;
     return !isNaN(numValue) && numValue > 0;
   }
   
@@ -26,7 +28,7 @@ export function hasValue(value: any, fieldType: string): boolean {
   if (Array.isArray(value)) return value.length > 0;
   
   // For objects
-  if (typeof value === 'object') return Object.keys(value).length > 0;
+  if (typeof value === 'object' && value !== null) return Object.keys(value).length > 0;
   
   return true;
 }

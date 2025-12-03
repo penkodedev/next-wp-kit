@@ -12,7 +12,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import type { CustomFieldSchema } from "@/types/wordpressTypes";
+import type { CustomFieldSchema, CustomFieldValue } from "@/types/wordpressTypes";
 import { hasValue } from "@/utils/wordpress/customFieldHelpers";
 import CustomFieldDisplay from "./CustomFieldDisplay";
 import CustomFieldInput from "./CustomFieldInput";
@@ -20,8 +20,8 @@ import CustomFieldInput from "./CustomFieldInput";
 interface CustomFieldsProps {
   cpt: string; // CPT slug (e.g. 'recursos', 'noticias')
   locale?: string; // Current language
-  values?: Record<string, any>; // Current field values
-  onChange?: (id: string, value: any) => void; // Callback for changes (edit mode)
+  values?: Record<string, CustomFieldValue>; // Current field values
+  onChange?: (id: string, value: CustomFieldValue) => void; // Callback for changes (edit mode)
   readOnly?: boolean; // Display mode vs edit mode
 }
 

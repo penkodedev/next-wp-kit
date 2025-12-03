@@ -7,12 +7,12 @@
 
 import React from 'react';
 import { Icons } from '@/components/ui/Icons';
-import type { CustomFieldSchema } from '@/types/wordpressTypes';
+import type { CustomFieldSchema, CustomFieldValue } from '@/types/wordpressTypes';
 import { getFileIcon, formatDate, getFieldText } from '@/utils/wordpress/customFieldHelpers';
 
 interface CustomFieldDisplayProps {
   field: CustomFieldSchema;
-  value: any;
+  value: CustomFieldValue;
   locale?: string;
 }
 
@@ -26,7 +26,7 @@ export default function CustomFieldDisplay({ field, value, locale = 'es' }: Cust
         <div className="custom-field-item">
           <p>
             <strong className="field-label">{label}: </strong>
-            <span className="field-value">{value}</span>
+            <span className="field-value">{typeof value === 'string' ? value : String(value)}</span>
           </p>
         </div>
       );
@@ -37,7 +37,7 @@ export default function CustomFieldDisplay({ field, value, locale = 'es' }: Cust
           <p>
             <strong className="field-label">{label}: </strong>
             <a
-              href={value}
+              href={typeof value === 'string' ? value : ''}
               target="_blank"
               rel="noopener noreferrer"
               className="field-value field-link external-link"
@@ -50,7 +50,8 @@ export default function CustomFieldDisplay({ field, value, locale = 'es' }: Cust
       );
 
     case 'file':
-      const iconName = getFileIcon(value);
+      const fileUrl = typeof value === 'string' ? value : '';
+      const iconName = getFileIcon(fileUrl);
       const FileIcon = Icons[iconName];
 
       return (
@@ -58,7 +59,7 @@ export default function CustomFieldDisplay({ field, value, locale = 'es' }: Cust
           <p>
             <strong className="field-label">{label}: </strong>
             <a
-              href={value}
+              href={fileUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="field-value field-link file-download-link"
@@ -71,7 +72,8 @@ export default function CustomFieldDisplay({ field, value, locale = 'es' }: Cust
       );
 
     case 'date':
-      const formattedDate = formatDate(value, locale);
+      const dateValue = typeof value === 'string' ? value : '';
+      const formattedDate = formatDate(dateValue, locale);
       return (
         <div className="custom-field-item">
           <p>
@@ -85,8 +87,8 @@ export default function CustomFieldDisplay({ field, value, locale = 'es' }: Cust
     case 'radio':
       const selectedOption = field.options?.find((opt) => opt.value === value);
       const displayValue = selectedOption
-        ? selectedOption.label[locale] || selectedOption.label['es'] || value
-        : value;
+        ? selectedOption.label[locale] || selectedOption.label['es'] || String(value)
+        : String(value);
       return (
         <div className="custom-field-item">
           <p>

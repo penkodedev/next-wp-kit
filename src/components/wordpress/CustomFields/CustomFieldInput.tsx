@@ -6,13 +6,13 @@
  */
 
 import React from 'react';
-import type { CustomFieldSchema } from '@/types/wordpressTypes';
+import type { CustomFieldSchema, CustomFieldValue } from '@/types/wordpressTypes';
 
 interface CustomFieldInputProps {
   field: CustomFieldSchema;
-  value: any;
+  value: CustomFieldValue;
   locale?: string;
-  onChange?: (id: string, value: any) => void;
+  onChange?: (id: string, value: CustomFieldValue) => void;
 }
 
 export default function CustomFieldInput({ field, value, locale = 'es', onChange }: CustomFieldInputProps) {
@@ -28,7 +28,7 @@ export default function CustomFieldInput({ field, value, locale = 'es', onChange
           <input
             id={field.id}
             type={field.type === 'date' ? 'date' : field.type === 'url' ? 'url' : 'text'}
-            value={value}
+            value={typeof value === 'string' ? value : ''}
             placeholder={field.placeholder?.[locale] || ''}
             required={field.required}
             onChange={(e) => onChange?.(field.id, e.target.value)}
@@ -42,7 +42,7 @@ export default function CustomFieldInput({ field, value, locale = 'es', onChange
           <label htmlFor={field.id}>{label}</label>
           <textarea
             id={field.id}
-            value={value}
+            value={typeof value === 'string' ? value : ''}
             placeholder={field.placeholder?.[locale] || ''}
             required={field.required}
             onChange={(e) => onChange?.(field.id, e.target.value)}
@@ -57,7 +57,7 @@ export default function CustomFieldInput({ field, value, locale = 'es', onChange
           <label>{label}</label>
           <select
             id={field.id}
-            value={value}
+            value={typeof value === 'string' || typeof value === 'number' ? value : ''}
             required={field.required}
             onChange={(e) => onChange?.(field.id, e.target.value)}
           >

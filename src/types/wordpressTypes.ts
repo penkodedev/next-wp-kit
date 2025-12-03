@@ -37,7 +37,7 @@ export interface CustomFieldSchemaBase {
   cpts: CptSlug[]; // Associated CPTs
   required?: boolean;
   description?: Record<string, string>; // Multilingual description
-  showIf?: { fieldId: string; value: any }; // Conditional display
+  showIf?: { fieldId: string; value: CustomFieldValue }; // Conditional display
 }
 
 // Text, textarea, url, date, number, file
@@ -104,6 +104,59 @@ export type CustomFieldSchema =
   | CustomFieldRelation
   | CustomFieldRepeater
   | CustomFieldGroup;
+
+// -----------------------------------------------------
+//             Custom Field Value Types
+// -----------------------------------------------------
+
+// File metadata structure returned by WordPress
+export interface FileMetadata {
+  id: number;
+  url: string;
+  filename: string;
+  filesize?: number;
+  mime_type?: string;
+}
+
+// Relation data structure
+export interface RelationData {
+  id: number;
+  title: string;
+  type: string;
+}
+
+// Color value structure
+export interface ColorValue {
+  r: number;
+  g: number;
+  b: number;
+  a?: number; // alpha/opacity
+}
+
+// Discriminated union for custom field values based on type
+export type CustomFieldValue =
+  | string                    // text, textarea, url, date
+  | number                    // number
+  | boolean                   // checkbox (single)
+  | string[]                  // select (multiple), checkbox (multiple)
+  | FileMetadata              // file
+  | RelationData[]            // relation
+  | ColorValue                // color
+  | Record<string, unknown>[] // repeater (array of field groups)
+  | Record<string, unknown>;  // group (nested fields)
+
+// Type guard helpers
+export const isFileMetadata = (value: CustomFieldValue): value is FileMetadata => {
+  return typeof value === 'object' && value !== null && 'url' in value && 'filename' in value;
+};
+
+export const isRelationData = (value: CustomFieldValue): value is RelationData[] => {
+  return Array.isArray(value) && value.length > 0 && typeof value[0] === 'object' && value[0] !== null && 'id' in value[0] && 'title' in value[0];
+};
+
+export const isColorValue = (value: CustomFieldValue): value is ColorValue => {
+  return typeof value === 'object' && value !== null && 'r' in value && 'g' in value && 'b' in value;
+};
 
 // Example usage:
 // const fields: CustomFieldSchema[] = [...]
