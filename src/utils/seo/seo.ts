@@ -14,14 +14,45 @@ export function generateSeoMetadata(content: Post | Page | null): Metadata {
 
 	// SEO logic: prioritize Yoast data if available
 	if (content.yoast_head_json) {
+		const yoast = content.yoast_head_json;
+
 		return {
-			title: content.yoast_head_json.title,
-			description: content.yoast_head_json.description,
+			title: yoast.title,
+			description: yoast.description,
+
+			// Open Graph for Facebook, LinkedIn, etc.
 			openGraph: {
-				title: content.yoast_head_json.og_title,
-				description: content.yoast_head_json.og_description,
-				url: content.yoast_head_json.og_url,
-				images: content.yoast_head_json.og_image?.map(img => ({ url: img.url })),
+				title: yoast.og_title,
+				description: yoast.og_description,
+				url: yoast.og_url,
+				siteName: yoast.og_site_name,
+				type: yoast.og_type as 'website' | 'article',
+				locale: yoast.og_locale,
+				images: yoast.og_image?.map(img => ({
+					url: img.url,
+					width: img.width,
+					height: img.height,
+					alt: yoast.og_title,
+				})),
+			},
+
+			// Twitter Cards
+			twitter: {
+				card: 'summary_large_image',
+				title: yoast.twitter_title || yoast.og_title,
+				description: yoast.twitter_description || yoast.og_description,
+				images: yoast.twitter_image || yoast.og_image?.[0]?.url,
+			},
+
+			// Canonical URL (evita contenido duplicado)
+			alternates: {
+				canonical: yoast.canonical || content.link,
+			},
+
+			// Robots meta tags (index/follow)
+			robots: {
+				index: yoast.robots?.index === 'index',
+				follow: yoast.robots?.follow === 'follow',
 			},
 		};
 	}
@@ -30,5 +61,8 @@ export function generateSeoMetadata(content: Post | Page | null): Metadata {
 	return {
 		title: content.title.rendered,
 		description: content.excerpt.rendered.replace(/<[^>]+>/g, ''),
+		alternates: {
+			canonical: content.link,
+		},
 	};
 }

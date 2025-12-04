@@ -161,8 +161,10 @@ async function getSitemapData(currentLocale: string) {
 }
 
 export default async function SitemapPage() {
-  // Spanish sitemap (default)
-  const currentLocale = 'es';
+  // Get default locale from WordPress
+  const siteInfo = await import('@/api/wordpressApi').then(mod => mod.getSiteInfo());
+  const localesConfig = await import('@/i18n/locales.generated.json').then(mod => mod.default);
+  const currentLocale = siteInfo?.i18n?.default_locale || localesConfig.defaultLocale;
   const sections = await getSitemapData(currentLocale);
 
 

@@ -1,6 +1,6 @@
 // Catch-all route to handle pages, CPT archives, singles, and taxonomies from WordPress.
 
-import { getContentBySlug, getAllContent, getHomePage } from "@/api/wordpressApi";
+import { getContentBySlug, getAllContent, getHomePage, getSiteInfo } from "@/api/wordpressApi";
 import { fetchAPI } from "@/api/wordpressApi";
 import { generateSeoMetadata } from "@/utils/seo/seo";
 import { notFound } from "next/navigation";
@@ -14,6 +14,15 @@ import ContentHome from '@/components/layout/content/ContentHome';
 import ContentTaxonomy from '@/components/layout/content/ContentTaxonomy';
 import localesConfig from '@/i18n/locales.generated.json';
 import { getPostsPerPage } from '@/utils/config/pagination';
+
+// Cache siteInfo to avoid multiple fetches
+let cachedSiteInfo: Awaited<ReturnType<typeof getSiteInfo>> | null = null;
+async function getDefaultLocale(): Promise<string> {
+  if (!cachedSiteInfo) {
+    cachedSiteInfo = await getSiteInfo();
+  }
+  return cachedSiteInfo?.i18n?.default_locale || localesConfig.defaultLocale;
+}
 
 // Props for dynamic route pages
 type PageProps = {
@@ -227,7 +236,8 @@ export async function generateStaticParams() {
 export default async function CatchAllPage({ params }: PageProps) {
   const path = getPathFromParams(params);
   const routeType = await detectRouteType(params.slug);
-  const locale = (params.slug.length > 0 && localesConfig.supportedLocales.includes(params.slug[0])) ? params.slug[0] : localesConfig.defaultLocale;
+  const defaultLocale = await getDefaultLocale();
+  const locale = (params.slug.length > 0 && localesConfig.supportedLocales.includes(params.slug[0])) ? params.slug[0] : defaultLocale;
 
   // Detect if the first segment is a taxonomy and the second is a term slug
   const taxSlug = params.slug[0];
@@ -237,14 +247,14 @@ export default async function CatchAllPage({ params }: PageProps) {
   const taxonomyObj = allTaxonomies && allTaxonomies[taxSlug];
   if (taxonomyObj && termSlug) {
     // 1. Fetch the term by slug
-    const termRes = await fetchAPI(`/wp/v2/${taxSlug}?slug=${termSlug}${locale !== 'es' ? `&lang=${locale}` : ''}`);
+    const termRes = await fetchAPI(`/wp/v2/${taxSlug}?slug=${termSlug}${locale !== defaultLocale ? `&lang=${locale}` : ''}`);
     const term = Array.isArray(termRes) && termRes.length > 0 ? termRes[0] : null;
     if (!term) return notFound();
     // 2. Get CPTs associated with this taxonomy
     const cptsForTax = taxonomyObj.types || [];
     let posts: WpContent[] = [];
     for (const cpt of cptsForTax) {
-      const cptPosts = await fetchAPI(`/wp/v2/${cpt}?${taxSlug}=${term.id}&_embed${locale !== 'es' ? `&lang=${locale}` : ''}`);
+      const cptPosts = await fetchAPI(`/wp/v2/${cpt}?${taxSlug}=${term.id}&_embed${locale !== defaultLocale ? `&lang=${locale}` : ''}`);
       if (Array.isArray(cptPosts) && cptPosts.length > 0) {
         posts = posts.concat(cptPosts);
       }
@@ -273,7 +283,7 @@ export default async function CatchAllPage({ params }: PageProps) {
         // Get CPTs associated with this taxonomy
         const cptsForTax = taxonomyObj.types || [];
         for (const cpt of cptsForTax) {
-          const cptPosts = await fetchAPI(`/wp/v2/${cpt}?${taxonomyObj.slug}=${term.id}&_embed${locale !== 'es' ? `&lang=${locale}` : ''}`);
+          const cptPosts = await fetchAPI(`/wp/v2/${cpt}?${taxonomyObj.slug}=${term.id}&_embed${locale !== defaultLocale ? `&lang=${locale}` : ''}`);
           if (Array.isArray(cptPosts) && cptPosts.length > 0) {
             posts = posts.concat(cptPosts);
           }
@@ -340,7 +350,8 @@ export default async function CatchAllPage({ params }: PageProps) {
   const isLocaleOnly = params.slug.length === 1 && localesConfig.supportedLocales.includes(firstSegment);
 
   if (isLocaleOnly) {
-    const lang = firstSegment === 'es' ? undefined : firstSegment;
+    const defaultLocale = await getDefaultLocale();
+    const lang = firstSegment === defaultLocale ? undefined : firstSegment;
     const homePage = await getHomePage(lang);
 
     if (!homePage) {
@@ -354,10 +365,11 @@ export default async function CatchAllPage({ params }: PageProps) {
   let page = await getContentBySlug<Page>("pages", path, locale);
 
   if (!page && params.slug.length > 1 && localesConfig.supportedLocales.includes(params.slug[0])) {
+    const defaultLocale = await getDefaultLocale();
     const lang = params.slug[0];
     const actualPath = params.slug.slice(1).join('/');
 
-    if (lang !== 'es') {
+    if (lang !== defaultLocale) {
       const translatedPage = await fetchAPI<Page>(`/wp/v2/pages?slug=${actualPath}&lang=${lang}&_embed`);
       if (translatedPage && Array.isArray(translatedPage) && translatedPage.length > 0) {
         page = translatedPage[0];

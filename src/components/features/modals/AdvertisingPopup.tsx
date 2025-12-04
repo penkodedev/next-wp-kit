@@ -105,7 +105,7 @@ export default function AdvertisingPopup() {
     };
 
     fetchAndCheckPopups();
-  }, [isAppLoading, pathname, isPresent]);
+  }, [isAppLoading, pathname, isPresent, activePopup]);
 
   const handleClose = () => {
     setActivePopup(null);

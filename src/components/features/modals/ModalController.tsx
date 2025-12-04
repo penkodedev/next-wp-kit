@@ -67,7 +67,7 @@ export default function ModalController() {
     return () => {
       document.removeEventListener('click', handleClick);
     };
-  }, [openModal, wpApiHostname]);
+  }, [openModal]);
 
   // This component renders the actual modal UI
   return <Modals />;

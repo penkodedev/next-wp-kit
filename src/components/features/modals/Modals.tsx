@@ -93,30 +93,21 @@ export default function Modals() {
             <Icons.X size={28} strokeWidth={1} />
           </button>
 
-          <motion.div
-            className="modal-content"
-            variants={modalVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            onClick={(e) => e.stopPropagation()}
-            role="document"
-          >
-            {isLoading ? (
-              <div className="modal-loading">
-                <div className="spinner spinner-md spinner-spinner"></div>
-              </div>
-            ) : modalContent ? (
+          {modalContent && (
+            <motion.div
+              className="modal-content"
+              variants={modalVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              onClick={(e) => e.stopPropagation()}
+              role="document"
+            >
               <div className="modal-scroll-wrapper">
                 <div className="modal-body" dangerouslySetInnerHTML={{ __html: processContent(modalContent.content.rendered) }} />
               </div>
-            ) : (
-              <div className="modal-error">
-                <h2>Error</h2>
-                <p>No se pudo cargar el contenido del modal.</p>
-              </div>
-            )}
-          </motion.div>
+            </motion.div>
+          )}
         </motion.div>
       )}
     </AnimatePresence>

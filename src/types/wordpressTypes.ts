@@ -237,12 +237,26 @@ export interface SiteInfo {
   front_url: string;
   light_logo: string;
   dark_logo: string;
-  site_icon_url: string;
+  favicons: {
+    icon_32: string;
+    icon_180: string;
+    icon_192: string;
+    icon_512: string;
+  };
   date_format: string;
   language: string;
   social: SocialLink[];
   contact: ContactInfo[];
-  analytics: AnalyticsInfo[];
+  analytics: {
+    google_analytics_id: string;
+    facebook_pixel_id: string;
+    gtm_id: string;
+    twitter_pixel_id: string;
+  };
+  i18n: {
+    default_locale: string;
+    locales: string[];
+  };
 }
 
 export interface SocialLink {
@@ -252,19 +266,8 @@ export interface SocialLink {
 }
 
 export interface ContactInfo {
-  name: string;
+  type: string;
   value: string;
-  type?: string;
-}
-
-export interface AnalyticsInfo {
-  provider: string;
-  id: string;
-  // You can add more fields depending on your WP setup
-  i18n: {
-    default_locale: string;
-    locales: string[];
-  };
 }
 
 
@@ -294,10 +297,31 @@ export interface WpContent {
   yoast_head_json?: {
     title?: string;
     description?: string;
+    robots?: {
+      index?: string;
+      follow?: string;
+      'max-snippet'?: string;
+      'max-image-preview'?: string;
+      'max-video-preview'?: string;
+    };
+    canonical?: string;
+    og_locale?: string;
+    og_type?: string;
     og_title?: string;
     og_description?: string;
     og_url?: string;
-    og_image?: Array<{ url: string }>;
+    og_site_name?: string;
+    og_image?: Array<{
+      url: string;
+      width?: number;
+      height?: number;
+      type?: string;
+    }>;
+    twitter_card?: string;
+    twitter_title?: string;
+    twitter_description?: string;
+    twitter_image?: string;
+    schema?: Record<string, any>; // JSON-LD structured data
   };
   // Custom meta fields exposed at root level via register_rest_field
   recurso_autoria?: string;

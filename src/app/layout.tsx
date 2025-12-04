@@ -25,26 +25,48 @@ import WpStyles from "@/components/wordpress/WpStyles";
 import BodyClass from "@/utils/wordpress/BodyClass";
 import { WpPageIdProvider } from '@/utils/wordpress/WpPageIdContext';
 import localesConfig from '@/i18n/locales.generated.json';
+import Analytics from '@/components/tracking/Analytics';
+import { getSiteInfo } from '@/api/wordpressApi';
 
+// Generate dynamic metadata from WordPress
+export async function generateMetadata(): Promise<Metadata> {
+  const siteInfo = await getSiteInfo();
+  
+  if (!siteInfo) {
+    // Fallback metadata if WordPress is unreachable
+    return {
+      metadataBase: new URL(process.env.BASE_URL || 'http://localhost:3000'),
+      title: {
+        default: 'Next-WP Kit',
+        template: '%s | Next-WP Kit',
+      },
+      description: 'An advanced starter kit for building websites with Next.js and WordPress as headless CMS.',
+    };
+  }
 
-// Base metadata for SEO
-export const metadata: Metadata = {
-  metadataBase: new URL(process.env.BASE_URL || 'http://localhost:3000'),
-  title: {
-    default: 'Next-WP Kit',
-    template: '%s | Next-WP Kit',
-  },
-  description: 'An advanced starter kit for building websites with Next.js and WordPress as headless CMS.',
-  openGraph: {
-    title: 'Next-WP Kit',
-    description: 'A starter kit for building websites with Next.js and WordPress as headless CMS.',
-    siteName: 'Next-WP Kit',
-    // images: [{ url: '/og-image.png', width: 1200, height: 630 }],
-    locale: 'es_ES',
-    type: 'website',
-  },
-  // Add more metadata here: openGraph, icons, etc.
-};
+  return {
+    metadataBase: new URL(process.env.BASE_URL || 'http://localhost:3000'),
+    title: {
+      default: siteInfo.title,
+      template: `%s | ${siteInfo.title}`,
+    },
+    description: siteInfo.description,
+    openGraph: {
+      title: siteInfo.title,
+      description: siteInfo.description,
+      siteName: siteInfo.title,
+      locale: siteInfo.i18n?.default_locale 
+        ? `${siteInfo.i18n.default_locale}_${siteInfo.i18n.default_locale.toUpperCase()}` 
+        : 'es_ES',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: siteInfo.title,
+      description: siteInfo.description,
+    },
+  };
+}
 
 type RootLayoutProps = {
   children: ReactNode;
@@ -68,17 +90,35 @@ function GlobalUI() {
 export default async function RootLayout({ children }: RootLayoutProps) {
   const headersList = headers();
   
+  // Fetch site info for dynamic configuration
+  const siteInfo = await getSiteInfo();
+  
+  // Get default locale from WordPress or fallback to config
+  const defaultLocale = siteInfo?.i18n?.default_locale || localesConfig.defaultLocale;
+  
   // Get the locale from the middleware header (set in middleware.ts)
   // The middleware extracts the locale from the URL and sets it as 'x-locale' header
-  const currentLocale = (headersList.get('x-locale') || 'es') as string;
+  const currentLocale = (headersList.get('x-locale') || defaultLocale) as string;
 
   // Providing all messages to the client with the correct locale
   const messages = await getMessages({ locale: currentLocale });
+  
+  // Get supported locales from WordPress or fallback to config
+  const supportedLocales = siteInfo?.i18n?.locales || localesConfig.supportedLocales;
   
   return (
     <html lang={currentLocale} suppressHydrationWarning>
       <head>
         <WpStyles />
+        {/* Analytics tracking from WordPress settings */}
+        {siteInfo && (
+          <Analytics
+            gtmId={siteInfo.analytics.gtm_id}
+            ga4Id={siteInfo.analytics.google_analytics_id}
+            fbPixelId={siteInfo.analytics.facebook_pixel_id}
+            twitterPixelId={siteInfo.analytics.twitter_pixel_id}
+          />
+        )}
       </head>
       <body>
         <NextIntlClientProvider locale={currentLocale} messages={messages}>
@@ -106,8 +146,8 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
-                var supportedLocales = ${JSON.stringify(localesConfig.supportedLocales)};
-                var defaultLocale = ${JSON.stringify(localesConfig.defaultLocale)};
+                var supportedLocales = ${JSON.stringify(supportedLocales)};
+                var defaultLocale = ${JSON.stringify(defaultLocale)};
                 
                 function updateLang() {
                   var path = window.location.pathname;

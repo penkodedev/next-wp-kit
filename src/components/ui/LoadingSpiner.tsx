@@ -36,6 +36,8 @@ export default function LoadingSpinner({
             <span></span>
             <span></span>
             <span></span>
+            <span></span>
+            <span></span>
           </div>
         );
       case 'spinner':
