@@ -1,19 +1,21 @@
 // src/components/navigation/LoadMore.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getAllContent } from "@/api/wordpressApi";
 import PostCard from "@/components/ui/PostCard";
 import LoadingSpinner from "@/components/ui/LoadingSpiner";
 import type { WpContent } from "@/types/wordpressTypes";
 import { getPostsPerPage } from "@/utils/config/pagination";
 import { useTranslations } from "next-intl";
+import localesConfig from "@/i18n/locales.generated.json";
 
 interface LoadMoreProps {
   postType: string; // 'recursos', 'noticias', 'posts', etc.
   basePath: string; // '/recursos', '/noticias', etc.
   locale: string; // 'es', 'en'
   initialPostsCount: number; // How many posts were server-rendered (to know if there might be more)
+  defaultLocale?: string; // Default locale from WordPress
 }
 
 export default function LoadMore({
@@ -21,6 +23,7 @@ export default function LoadMore({
   basePath,
   locale,
   initialPostsCount,
+  defaultLocale = localesConfig.defaultLocale,
 }: LoadMoreProps) {
   const t = useTranslations("Content");
   const [posts, setPosts] = useState<WpContent[]>([]);
@@ -39,7 +42,7 @@ export default function LoadMore({
     setIsLoading(true);
 
     const apiParams =
-      locale === "es"
+      locale === defaultLocale
         ? `?per_page=${postsPerPage}&page=${page}&_embed&orderby=date&order=desc`
         : `?per_page=${postsPerPage}&page=${page}&_embed&orderby=date&order=desc&lang=${locale}`;
 

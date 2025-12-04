@@ -112,6 +112,12 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const path = getPathFromParams(params);
   const routeType = await detectRouteType(params.slug);
+  
+  // Detect current locale from slug
+  const firstSegment = params.slug[0];
+  const currentLocale = localesConfig.supportedLocales.includes(firstSegment) 
+    ? firstSegment 
+    : await getDefaultLocale();
 
   // Modals should not have metadata (they don't render as pages)
   if (routeType.type === 'modal') {
@@ -126,7 +132,7 @@ export async function generateMetadata({
 
   if (routeType.type === 'post-single') {
     const post = await getContentBySlug<WpContent>(routeType.postType, routeType.slug);
-    return generateSeoMetadata(post);
+    return await generateSeoMetadata(post, currentLocale);
   } else if (routeType.type === 'post-archive') {
     return {
       title: `${routeType.postType.charAt(0).toUpperCase() + routeType.postType.slice(1)} Archive`,
@@ -139,7 +145,7 @@ export async function generateMetadata({
       page = await getContentBySlug<Page>("pages", lastSlug).catch(() => null);
     }
 
-    return generateSeoMetadata(page);
+    return await generateSeoMetadata(page, currentLocale);
   }
 }
 

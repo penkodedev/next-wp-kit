@@ -13,8 +13,13 @@ interface HeaderServerProps {
 
 export default async function HeaderServer({
   variant = "default",
-  initialLocale = "es",
+  initialLocale,
 }: HeaderServerProps) {
+  // Get default locale from WordPress or config
+  const siteInfoForLocale = await getSiteInfo();
+  const defaultLocale = siteInfoForLocale?.i18n?.default_locale || localesConfig.defaultLocale;
+  const locale = initialLocale || defaultLocale;
+  
   const defaultSiteInfo: SiteInfo = {
     title: "Logo del sitio",
     description: "",
@@ -22,12 +27,26 @@ export default async function HeaderServer({
     front_url: "",
     light_logo: "/images/framework-logo-white.png",
     dark_logo: "/framework-logo.png",
-    site_icon_url: "",
+    favicons: {
+      icon_32: "",
+      icon_180: "",
+      icon_192: "",
+      icon_512: "",
+    },
     date_format: "",
     language: "",
     social: [],
     contact: [],
-  analytics: [],
+    analytics: {
+      google_analytics_id: "",
+      facebook_pixel_id: "",
+      gtm_id: "",
+      twitter_pixel_id: "",
+    },
+    i18n: {
+      default_locale: localesConfig.defaultLocale,
+      locales: localesConfig.supportedLocales,
+    },
   };
 
   // Pre-fetch SiteInfo and menus for ALL active locales dynamically
@@ -63,7 +82,7 @@ export default async function HeaderServer({
   return (
     <HeaderClient 
       variant={variant} 
-      initialLocale={initialLocale} 
+      initialLocale={locale} 
       siteInfo={siteInfo}
       menusByLocale={menusByLocale}
     />

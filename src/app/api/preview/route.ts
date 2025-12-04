@@ -38,8 +38,12 @@ export async function GET(req: NextRequest) {
   }
 
   // Construir la URL pública
+  const localesConfig = await import('@/i18n/locales.generated.json').then(mod => mod.default);
+  const siteInfo = await import('@/api/wordpressApi').then(mod => mod.getSiteInfo());
+  const defaultLocale = (await siteInfo)?.i18n?.default_locale || localesConfig.defaultLocale;
+  
   let redirectUrl = '/';
-  if (lang && lang !== 'es') redirectUrl += lang + '/';
+  if (lang && lang !== defaultLocale) redirectUrl += lang + '/';
   if (slug) {
     redirectUrl += slug + '/';
   } else {

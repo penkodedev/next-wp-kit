@@ -79,6 +79,60 @@ Transform your WordPress content into lightning-fast, SEO-optimized websites wit
 
 ## ✨ Penkode Next WP kit Enterprise Features
 
+### 🎯 **100% Dynamic Configuration** (NEW - December 2024)
+
+**Zero hardcoded values - Everything configurable from WordPress Dashboard:**
+
+#### 📊 **Dynamic Analytics & Tracking**
+- **Google Tag Manager (GTM)** - Priority tracking container
+- **Google Analytics 4 (GA4)** - Fallback individual tracking
+- **Facebook Pixel** - Automatic conversion tracking
+- **Twitter Pixel** - Campaign optimization
+- **Server-rendered scripts** - SEO-friendly, loads in initial HTML
+- **Smart Priority System** - GTM manages all trackers when configured
+- **WordPress Dashboard Control** - Update tracking IDs without code changes
+
+#### 🌍 **Dynamic Internationalization (i18n)**
+- **Locale auto-detection** - Default language from WordPress
+- **Supported locales** - Fetched from WordPress i18n settings
+- **No hardcoded 'es', 'en'** - All language codes from API
+- **WPML Integration** - Seamless multi-language support
+- **Dynamic hreflang** - SEO-optimized language alternates
+
+#### 🎨 **Dynamic SEO & Metadata**
+- **Site Title** - WordPress site name
+- **Meta Descriptions** - From WordPress site description
+- **Favicons** - WordPress Site Icon (32px, 180px, 192px, 512px)
+- **Open Graph** - Dynamic og:title, og:description, og:locale
+- **Twitter Cards** - Auto-generated from WordPress content
+- **Canonical URLs** - Proper SEO structure from Yoast
+
+#### 🌐 **Hreflang for Multilingual SEO** (NEW - December 2024)
+- **Automatic hreflang tags** - Generated from WPML translations
+- **Google-compliant** - Prevents duplicate content penalties
+- **All languages supported** - Works with any WPML language configuration
+- **Translation detection** - Fetches translated URLs from WordPress automatically
+- **Fallback handling** - Graceful degradation when translations don't exist
+- **Archive-aware** - Only generates hreflang for single posts/pages (correct SEO behavior)
+- **Zero configuration** - Just create translations in WPML, hreflang appears automatically
+
+**Example output:**
+```html
+<link rel="alternate" hreflang="es" href="https://ejemplo.com/quienes-somos" />
+<link rel="alternate" hreflang="en" href="https://ejemplo.com/en/about-us" />
+<link rel="alternate" hreflang="pt-br" href="https://ejemplo.com/pt-br/sobre-nos" />
+```
+
+📖 **[Full Hreflang Documentation](./docs/HREFLANG_IMPLEMENTATION.md)** - See how it works and how to verify it
+
+#### 🔒 **Enterprise Security Headers**
+- **Strict-Transport-Security** - HTTPS enforcement (2-year max-age)
+- **X-Frame-Options** - Clickjacking protection
+- **X-Content-Type-Options** - MIME sniffing prevention
+- **Content-Security-Policy** - XSS attack mitigation
+- **Referrer-Policy** - Privacy-focused referrer control
+- **Permissions-Policy** - Browser API restrictions
+
 ### 🚀 Core Technologies & Performance
 
 - **Next.js 14.2** with App Router, Server Components, and advanced ISR
@@ -346,11 +400,49 @@ cp .env.example .env.local
 Edit `.env.local` with your WordPress details:
 
 ```env
+# Required: WordPress API Configuration
 NEXT_PUBLIC_WORDPRESS_API_URL="https://your-site.com/wp-json"
 NEXT_PUBLIC_WORDPRESS_URL="https://your-site.com"
+
+# Required: Site Configuration
+BASE_URL="http://localhost:3000"  # Change to your production URL
+
+# Optional: WordPress Theme
 WP_THEME_SLUG="your-theme-slug"
-BASE_URL="http://localhost:3000"
 ```
+
+### 🎛️ WordPress Dashboard Configuration
+
+**All site settings are managed from WordPress Dashboard - no code changes needed:**
+
+#### 📊 **Analytics Setup** (Settings → General → Analytics)
+- Google Tag Manager ID (GTM-XXXXXXX)
+- Google Analytics 4 ID (G-XXXXXXXXXX)
+- Facebook Pixel ID
+- Twitter Pixel ID
+
+*Note: GTM takes priority - if configured, it manages all tracking*
+
+#### 🌍 **Internationalization** (Settings → General → i18n)
+- Default Locale (es, en, pt-br, etc.)
+- Supported Locales (array of language codes)
+
+*All locale configurations auto-sync with Next.js*
+
+#### 🎨 **Site Identity** (Appearance → Customize → Site Identity)
+- Site Title → Meta tags & SEO
+- Site Description → og:description
+- Site Icon → Favicons (32px, 180px, 192px, 512px auto-generated)
+
+#### 🔗 **Social Media** (Settings → General → Social Links)
+- Configure social media URLs (LinkedIn, Instagram, Facebook, GitHub)
+- Auto-rendered in footer with Lucide icons
+
+#### 📧 **Contact Information** (Settings → General → Contact)
+- Phone, Address, Email
+- Displayed in footer contact section
+
+**✨ All changes in WordPress Dashboard reflect immediately in Next.js - zero deployments needed!**
 
 ### 🎯 Launch
 

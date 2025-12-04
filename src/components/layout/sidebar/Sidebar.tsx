@@ -3,11 +3,15 @@
 import LatestPostsList from '@/components/sections/LatestPostsList';
 import SearchForm from '@/components/forms/SearchForm';
 import { headers } from 'next/headers';
+import { getSiteInfo } from '@/api/wordpressApi';
+import localesConfig from '@/i18n/locales.generated.json';
 
 export default async function Sidebar() {
   // Get current locale from middleware header
   const headersList = headers();
-  const locale = (headersList.get('x-locale') || 'es') as string;
+  const siteInfo = await getSiteInfo();
+  const defaultLocale = siteInfo?.i18n?.default_locale || localesConfig.defaultLocale;
+  const locale = (headersList.get('x-locale') || defaultLocale) as string;
 
   return (
     <aside>

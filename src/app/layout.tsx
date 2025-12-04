@@ -51,6 +51,19 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s | ${siteInfo.title}`,
     },
     description: siteInfo.description,
+    // Dynamic favicons from WordPress Site Icon
+    icons: siteInfo.favicons ? {
+      icon: [
+        { url: siteInfo.favicons.icon_32, sizes: '32x32', type: 'image/png' },
+        { url: siteInfo.favicons.icon_192, sizes: '192x192', type: 'image/png' },
+      ],
+      apple: [
+        { url: siteInfo.favicons.icon_180, sizes: '180x180', type: 'image/png' },
+      ],
+      other: [
+        { rel: 'icon', url: siteInfo.favicons.icon_512, sizes: '512x512', type: 'image/png' },
+      ],
+    } : undefined,
     openGraph: {
       title: siteInfo.title,
       description: siteInfo.description,

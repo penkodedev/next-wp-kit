@@ -11,14 +11,14 @@ import localesConfig from "@/i18n/locales.generated.json";
 
 interface HeaderClientProps {
   variant?: "default" | "home";
-  initialLocale?: string;
+  initialLocale: string;
   siteInfo: SiteInfo;
   menusByLocale: Record<string, MenuItem[]>;
 }
 
 export default function HeaderClient({
   variant = "default",
-  initialLocale = "es",
+  initialLocale,
   siteInfo,
   menusByLocale,
 }: HeaderClientProps) {
