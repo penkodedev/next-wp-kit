@@ -23,6 +23,7 @@
     color: #000;
 }
 
-.page-home #logo-container img {
+/* Logo is already white from API, no need to invert */
+/* .page-home #logo-container img {
     filter: invert(1);
-}
+} */

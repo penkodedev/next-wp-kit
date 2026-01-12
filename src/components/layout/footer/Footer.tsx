@@ -7,6 +7,7 @@ import FooterSocial from "@/components/layout/footer/FooterSocial";
 import FooterContact from "@/components/layout/footer/FooterContact";
 import FooterMenuClient from "@/components/layout/footer/FooterMenuClient";
 import LatestPostsList from "@/components/sections/LatestPostsList";
+import DarkModeToggle from "@/components/ui/DarkModeToggle";
 import { fetchAPI } from "@/api/wordpressApi";
 import type { MenuItem } from "@/types/wordpressTypes";
 import { logger } from "@/utils/wordpress/logger";
@@ -53,6 +54,7 @@ export default async function Footer() {
             <div className="footer-content">
               <div className="footer-box footer-social">
                 <FooterSocial social={siteInfo.social} />
+                <DarkModeToggle />
               </div>
 
               <div className="footer-box footer-resources">
@@ -67,7 +69,7 @@ export default async function Footer() {
             <FooterMenuClient menusByLocale={menusByLocale} />
 
             <div className="copyright">
-              <FooterLogo />
+              <FooterLogo siteInfo={siteInfo} />
               <FooterCopyright
                 title={siteInfo.title}
                 description={siteInfo.description}

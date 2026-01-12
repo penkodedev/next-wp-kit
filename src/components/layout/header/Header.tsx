@@ -33,12 +33,15 @@ export default function Header({
     ? firstSegment
     : localesConfig.defaultLocale;
 
+  // Detect if we're on home page
+  const isHome = pathname === '/' || pathname === `/${currentLocale}`;
+
   // Get pre-fetched menu for current locale (if available)
   const menuItems = menusByLocale?.[currentLocale];
 
   return (
     <header className={`header ${variant === 'home' ? 'header-home' : ''}`}>
-      <LogoHeader siteInfo={siteInfo} />
+      <LogoHeader siteInfo={siteInfo} isHome={isHome} />
       <WpNavMenu 
         location="mainnav" 
         className="main-menu" 

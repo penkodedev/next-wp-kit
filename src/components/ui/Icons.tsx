@@ -51,7 +51,9 @@ import {
   FileText,
   File,
   Image,
-  Download
+  Download,
+  Sun,
+  Moon
 } from 'lucide-react';
 
 
@@ -101,6 +103,8 @@ export const Icons = {
   FileText,
   File,
   Image,
-  Download
+  Download,
+  Sun,
+  Moon
 };
 

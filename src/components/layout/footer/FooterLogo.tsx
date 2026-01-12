@@ -1,22 +1,45 @@
 // src/components/layout/footer/FooterLogo.tsx
-import Image from "next/image";
-import SiteInfo from "@/components/wordpress/SiteInfo";
+'use client';
 
-export default function FooterLogo() {
+import { useState, useEffect } from 'react';
+import Image from "next/image";
+import type { SiteInfo } from "@/types/wordpressTypes";
+
+interface FooterLogoProps {
+  siteInfo: SiteInfo;
+}
+
+export default function FooterLogo({ siteInfo }: FooterLogoProps) {
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    // Detectar dark mode inicial
+    setIsDark(document.documentElement.classList.contains('dark-mode'));
+
+    // Observar cambios en la clase dark-mode
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains('dark-mode'));
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="logo-footer-wrapper">
-      <SiteInfo>
-        {(siteInfo) => (
-          <Image
-            src="/images/framework-logo.png"
-            alt={siteInfo?.title || "Logo del sitio"} // Usamos el título del sitio o un fallback
-            width={90}
-            height={55}
-            priority
-            style={{ width: '60px', height: 'auto' }} // Ocupa el 100% de la altura del contenedor, ancho automático
-          />
-        )}
-      </SiteInfo>
+      <Image
+        src={isDark ? siteInfo.light_logo : siteInfo.dark_logo}
+        alt={siteInfo?.title || "Logo del sitio"}
+        width={90}
+        height={55}
+        priority
+        style={{ width: '60px', height: 'auto' }}
+        unoptimized
+      />
     </div>
   );
 }
