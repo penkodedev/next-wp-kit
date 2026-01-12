@@ -108,27 +108,39 @@ export default function LangSwitcher({ currentLocale }: LangSwitcherProps) {
 
   if (languages.length === 0) return null;
 
+  // Get current language info
+  const currentLang = languages.find(lang => lang.code === currentLocale);
+  const otherLanguages = languages.filter(lang => lang.code !== currentLocale);
+
   return (
     <div className="lang-switcher-simple">
       <Icons.Globe size={21} strokeWidth={0.8} className="lang-icon" />
-      {languages.map((lang) => {
-        const href = buildLanguageUrl(lang.code);
-        const isActive = currentLocale === lang.code;
-        return (
-          <a
-            key={lang.code} 
-            href={href}
-            onClick={(e) => { 
-              e.preventDefault(); 
-              window.location.href = href; // Force full page reload to update translations
-            }}
-            className={`lang-link ${isActive ? 'active' : ''}`} 
-            aria-label={`Switch to ${lang.name}`}
-          >
-            {lang.code.toUpperCase()}
-          </a>
-        );
-      })}
+      <span className="current-lang">
+        {currentLang?.code.toUpperCase() || currentLocale.toUpperCase()}
+      </span>
+      
+      {/* Dropdown with other languages */}
+      {otherLanguages.length > 0 && (
+        <div className="lang-dropdown">
+          {otherLanguages.map((lang) => {
+            const href = buildLanguageUrl(lang.code);
+            return (
+              <a
+                key={lang.code} 
+                href={href}
+                onClick={(e) => { 
+                  e.preventDefault(); 
+                  window.location.href = href;
+                }}
+                className="lang-link" 
+                aria-label={`Switch to ${lang.name}`}
+              >
+                {lang.code.toUpperCase()}
+              </a>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

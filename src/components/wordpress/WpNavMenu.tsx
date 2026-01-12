@@ -170,7 +170,7 @@ function WpNavMenu({
       
       {/* Burger Icon */}
       <a 
-        className="mobile-menu-toggle"
+        className={`mobile-menu-toggle ${isMobileMenuOpen ? 'menu-open' : ''}`}
         onClick={(e) => {
           e.preventDefault();
           setIsMobileMenuOpen(!isMobileMenuOpen);

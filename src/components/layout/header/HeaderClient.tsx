@@ -42,7 +42,7 @@ export default function HeaderClient({
         className="main-menu" 
         locale={currentLocale}
         menuItems={menuItems}
-        variant="mobile"
+        variant="desktop"
       />
       <LangSwitcher currentLocale={currentLocale} />
       <SearchTrigger />
