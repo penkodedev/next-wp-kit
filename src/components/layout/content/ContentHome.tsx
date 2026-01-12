@@ -1,22 +1,23 @@
 import { WpPageIdSetter } from '@/utils/wordpress/WpPageIdContext';
-import HeroConfig from '@/components/sections/HeroConfig';
+import HeroWrapper from '@/components/sections/HeroWrapper';
 import SliderRecursos from '@/components/sections/SliderRecursos';
 import { processContent } from '@/utils/wordpress/processContent';
 import type { Page } from '@/types/wordpressTypes';
 
 type ContentHomeProps = {
   page: Page;
+  lang?: string;
 };
 
 /**
- * Template para la home page
- * Usado tanto por app/page.tsx como por app/[...slug]/page.tsx (rutas con locale)
+ * Home Page Template
+ * Used by both app/page.tsx and app/[...slug]/page.tsx (routes with locale)
  */
-export default function ContentHome({ page }: ContentHomeProps) {
+export default function ContentHome({ page, lang }: ContentHomeProps) {
   return (
     <>
       <WpPageIdSetter pageId={page.id} />
-      <HeroConfig />
+      <HeroWrapper position="home" lang={lang} />
       <div className="page-one-col">
         <article>
           <div

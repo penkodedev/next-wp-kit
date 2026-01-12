@@ -1,6 +1,7 @@
 {
   "Navigation": {
-    "home": "Home"
+    "home": "Home",
+    "sitemap": "Sitemap"
   },
   "Content": {
     "noContentFound": "No content found in this section.",
@@ -31,7 +32,8 @@
     "modalPlaceholder": "What are you looking for?",
     "searchHint": "Were you looking for that?",
     "searching": "Searching...",
-    "noResultsFor": "No results found for \"{query}\""
+    "noResultsFor": "No results found for \"{query}\"",
+    "updating": "Updating results..."
   },
   "RecursosPage": {
     "loadMore": "Load more",

@@ -69,23 +69,23 @@ export default async function SliderLatestRecursos({
           },
           // Normal desktop (1440px+)
           1440: {
-            slidesPerView: 4,
+            slidesPerView: 2.7,
           },
           // Small desktop (1024px+)
           1024: {
-            slidesPerView: 3.5,
+            slidesPerView: 2,
           },
           // Tablet (768px+)
           768: {
-            slidesPerView: 2.5,
+            slidesPerView: 1.7,
           },
           // Large mobile (640px+)
           640: {
-            slidesPerView: 1.8,
+            slidesPerView: 1.4,
           },
           // Small mobile (base)
           320: {
-            slidesPerView: 1.2,
+            slidesPerView: 1,
           },
     },
          };

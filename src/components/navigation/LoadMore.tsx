@@ -11,8 +11,8 @@ import { useTranslations } from "next-intl";
 import localesConfig from "@/i18n/locales.generated.json";
 
 interface LoadMoreProps {
-  postType: string; // 'recursos', 'noticias', 'posts', etc.
-  basePath: string; // '/recursos', '/noticias', etc.
+  postType: string; 
+  basePath: string; 
   locale: string; // 'es', 'en'
   initialPostsCount: number; // How many posts were server-rendered (to know if there might be more)
   defaultLocale?: string; // Default locale from WordPress

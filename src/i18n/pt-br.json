@@ -1,6 +1,7 @@
 {
   "Navigation": {
-    "home": "Início"
+    "home": "Início",
+    "sitemap": "Mapa do Site"
   },
   "Content": {
     "noContentFound": "Nenhum conteúdo encontrado nesta seção.",

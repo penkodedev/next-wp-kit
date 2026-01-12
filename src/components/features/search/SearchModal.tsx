@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useDeferredValue, useMemo, startTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
@@ -23,6 +23,12 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Defer the query value to prevent blocking the UI during typing
+  const deferredQuery = useDeferredValue(query);
+  
+  // Check if the deferred value is lagging behind the current value
+  const isStale = query !== deferredQuery;
+
   const getResultTitle = (result: SearchResult): string => {
     if (typeof result.title === 'string') return result.title;
     return result.title.rendered;
@@ -39,21 +45,26 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     onClose();
   }, [onClose, resetSearch]);
 
+  // Perform search using deferred query value
   useEffect(() => {
-    if (query.length < 3) {
+    if (deferredQuery.length < 3) {
       setResults([]);
       return;
     }
 
     const debounceTimer = setTimeout(async () => {
       setIsLoading(true);
-      const searchResults = await searchSite(query);
-      setResults(searchResults || []);
-      setIsLoading(false);
+      
+      // Use startTransition to mark this update as non-urgent
+      startTransition(async () => {
+        const searchResults = await searchSite(deferredQuery);
+        setResults(searchResults || []);
+        setIsLoading(false);
+      });
     }, 300);
 
     return () => clearTimeout(debounceTimer);
-  }, [query]);
+  }, [deferredQuery]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -138,10 +149,15 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
             <motion.div layout className="search-modal-results">
               {isLoading && <p>{t('searching')}</p>}
+              {isStale && !isLoading && query.length >= 3 && (
+                <p style={{ opacity: 0.6, fontStyle: 'italic' }}>
+                  {t('updating') || 'Updating results...'}
+                </p>
+              )}
               {!isLoading && results.length > 0 && (
                 
                 
-                <ul>
+                <ul style={{ opacity: isStale ? 0.6 : 1, transition: 'opacity 0.2s ease' }}>
                   {results.map((result) => (
                     <li key={result.id}>
                       <Link href={cleanInternalUrl(result.url)} onClick={handleClose}>

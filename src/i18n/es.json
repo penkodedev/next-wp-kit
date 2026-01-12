@@ -1,6 +1,7 @@
 {
   "Navigation": {
-    "home": "Inicio"
+    "home": "Inicio",
+    "sitemap": "Mapa del Sitio"
   },
   "Content": {
     "noContentFound": "No se encontró contenido en esta sección.",
@@ -31,7 +32,8 @@
     "modalPlaceholder": "¿Qué estás buscando?",
     "searchHint": "¿Estabas buscando eso?",
     "searching": "Buscando...",
-    "noResultsFor": "No se encontraron resultados para \"{query}\""
+    "noResultsFor": "No se encontraron resultados para \"{query}\"",
+    "updating": "Actualizando resultados..."
   },
   "RecursosPage": {
     "loadMore": "Cargar más",

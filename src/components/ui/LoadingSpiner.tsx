@@ -10,7 +10,7 @@ interface LoadingSpinnerProps {
 
 export default function LoadingSpinner({
   size = 'md',
-  variant = 'bars',
+  variant = 'dots',
   text,
   overlay = false,
   className = ''

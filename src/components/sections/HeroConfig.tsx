@@ -1,11 +1,13 @@
-// src/components/ui/HeroConfig.tsx
-// Centralized Hero configuration component for easy customization
-// This component contains all Hero slides, animations, and settings in one place
+// src/components/sections/HeroConfig.tsx
+// Hero configuration component that fetches data from WordPress
+// Falls back to hardcoded data if WordPress is unreachable
 
 "use client";
 
 import { motion } from "framer-motion";
 import Hero from "./Hero";
+import { useEffect, useState } from "react";
+import type { HeroData } from "@/api/wordpressApi";
 
 // ==================== HERO ANIMATION VARIANTS ====================
 // Customize these variants to change animation behavior
@@ -110,14 +112,22 @@ export const heroSettings = {
 
 // ==================== HERO COMPONENT ====================
 // This is the main component that combines everything
-// Use this in your pages instead of the raw Hero component
+// Accepts WordPress data as optional prop, falls back to hardcoded data
 
-export default function HeroConfig() {
+interface HeroConfigProps {
+  heroData?: HeroData;
+}
+
+export default function HeroConfig({ heroData }: HeroConfigProps = {}) {
+  // Use WordPress data if available, otherwise fall back to hardcoded slides
+  const slides = heroData?.slides && heroData.slides.length > 0 ? heroData.slides : heroSlides;
+  const settings = heroData?.settings || heroSettings;
+  
   return (
     <Hero
-      slides={heroSlides}
-      autoPlay={heroSettings.autoPlay}
-      autoPlayInterval={heroSettings.autoPlayInterval}
+      slides={slides}
+      autoPlay={settings.autoPlay ?? heroSettings.autoPlay}
+      autoPlayInterval={settings.interval ?? heroSettings.autoPlayInterval}
     />
   );
 }

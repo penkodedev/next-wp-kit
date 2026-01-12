@@ -159,11 +159,73 @@ export async function fetchAPI<T>(
 /*--------------------------------------------------------------------------------------
     🍔 GET SITE INFO
     Route: /custom/v1/site-info
-    e.g. /custom/v1/site-info
+    e.g. /custom/v1/site-info?lang=en
 --------------------------------------------------------------------------------------*/
-/** Fetches basic site information from a custom endpoint. */
-export async function getSiteInfo(): Promise<SiteInfo | null> {
-  const data = await fetchAPI<SiteInfo>('/custom/v1/site-info');
+/** 
+ * Fetches basic site information from a custom endpoint.
+ * @param lang - Optional language code for WPML translation (e.g. 'en', 'es', 'pt-br')
+ */
+export async function getSiteInfo(lang?: string): Promise<SiteInfo | null> {
+  const endpoint = lang ? `/custom/v1/site-info?lang=${lang}` : '/custom/v1/site-info';
+  const data = await fetchAPI<SiteInfo>(endpoint);
+  return data;
+}
+
+/*--------------------------------------------------------------------------------------
+    🎬 GET HERO DATA
+    Route: /custom/v1/hero?position={position}&lang={lang}
+    Fetches hero configuration and slides for a specific position
+--------------------------------------------------------------------------------------*/
+export interface HeroSlide {
+  title: string;
+  title_align: 'left' | 'center' | 'right';
+  subtitle: string;
+  content_position: 'top' | 'center' | 'bottom';
+  content_align: 'left' | 'center' | 'right';
+  overlay_opacity: number;
+  ken_burns: number;
+  button_text: string;
+  button_link: string;
+  button_style: 'default' | 'outline';
+  background_type: 'image' | 'video' | 'gradient';
+  background_image: string;
+  background_video: string;
+  video_playback_rate: number;
+  gradient_color_1: string;
+  gradient_color_2: string;
+  gradient_direction: string;
+}
+
+export interface HeroData {
+  active: boolean;
+  position: 'home' | 'page' | 'archive' | 'custom';
+  hero_id?: number;
+  title?: string;
+  settings?: {
+    autoplay: boolean;
+    interval: number;
+    show_arrows: boolean;
+    show_dots: boolean;
+  };
+  slides?: HeroSlide[];
+  language?: string;
+  message?: string;
+}
+
+/**
+ * Fetches hero data for a specific position.
+ * @param position - Where the hero should appear (home, page, archive, custom)
+ * @param lang - Optional language code for WPML translation
+ * @returns Hero configuration with slides, or { active: false } if none found
+ */
+export async function getHeroData(
+  position: 'home' | 'page' | 'archive' | 'custom',
+  lang?: string
+): Promise<HeroData | null> {
+  const endpoint = `/custom/v1/hero?position=${position}${lang ? `&lang=${lang}` : ''}`;
+  const data = await fetchAPI<HeroData>(endpoint, {
+    next: { revalidate: 300 } // Cache for 5 minutes
+  });
   return data;
 }
 
@@ -240,25 +302,6 @@ export async function getHomePage(lang?: string): Promise<Page | null> {
   }
   
   return null;
-}
-
-
-/*--------------------------------------------------------------------------------------
-    🍔 GET HERO DATA
-    Route: /custom/v1/hero-data
-    e.g. /custom/v1/hero-data
---------------------------------------------------------------------------------------*/
-/** Fetches hero data from the customizer endpoint. */
-export async function getHeroData(): Promise<{
-  title?: string;
-  subtitle?: string;
-  backgroundImage?: string;
-  backgroundVideo?: string;
-  buttonText?: string;
-  buttonLink?: string;
-  // Add other hero-specific fields if needed
-} | null> {
-  return await fetchAPI('/custom/v1/hero-data');
 }
 
 

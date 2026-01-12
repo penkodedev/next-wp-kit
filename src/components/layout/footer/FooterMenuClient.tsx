@@ -29,6 +29,7 @@ export default function FooterMenuClient({ menusByLocale }: FooterMenuClientProp
       className="footer-menu-nav"
       locale={currentLocale}
       menuItems={menuItems}
+      variant="desktop"
     />
   );
 }

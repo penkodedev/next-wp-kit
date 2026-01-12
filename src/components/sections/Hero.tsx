@@ -1,4 +1,4 @@
-// src/components/ui/Hero.tsx
+// src/components/sections/Hero.tsx
 
 "use client";
 
@@ -8,17 +8,34 @@ import Link from "next/link";
 import Image from "next/image";
 import { Icons } from "../ui/Icons";
 import { useHeroConfig } from "./HeroConfig";
+import type { HeroSlide as APIHeroSlide } from "@/api/wordpressApi";
 
+// Local type for backward compatibility + WordPress API support
 type HeroSlide = {
   title?: string;
+  title_align?: 'left' | 'center' | 'right';
   subtitle?: string;
+  content_position?: 'top' | 'center' | 'bottom';
+  content_align?: 'left' | 'center' | 'right';
+  overlay_opacity?: number;
+  ken_burns?: number;
   buttonText?: string;
+  button_text?: string; // WordPress uses snake_case
   buttonLink?: string;
+  button_link?: string; // WordPress uses snake_case
+  button_style?: 'default' | 'outline';
   backgroundType?: 'gradient' | 'image' | 'video' | 'none';
+  background_type?: 'gradient' | 'image' | 'video' | 'none'; // WordPress uses snake_case
   backgroundImage?: string;
+  background_image?: string; // WordPress uses snake_case
   backgroundVideo?: string;
+  background_video?: string; // WordPress uses snake_case
   backgroundColor?: string;
   videoPlaybackRate?: number;
+  video_playback_rate?: number; // WordPress uses snake_case
+  gradient_color_1?: string;
+  gradient_color_2?: string;
+  gradient_direction?: string;
 };
 
 type HeroProps = {
@@ -82,12 +99,27 @@ export default function Hero({
   const slideVariants = heroVariants.slideVariants;
 
   const currentSlideData = heroSlides[currentSlide];
-  const backgroundType = currentSlideData?.backgroundType || 'gradient';
+  
+  // Helper para decodificar HTML entities (WordPress escapa el HTML en JSON)
+  const decodeHTML = (html: string) => {
+    const textarea = document.createElement('textarea');
+    textarea.innerHTML = html;
+    return textarea.value;
+  };
+  
+  // Normalize WordPress snake_case to camelCase for easier use
+  const bgType = (currentSlideData?.background_type || currentSlideData?.backgroundType || 'gradient') as 'gradient' | 'image' | 'video' | 'none';
+  const bgImage = currentSlideData?.background_image || currentSlideData?.backgroundImage;
+  const bgVideo = currentSlideData?.background_video || currentSlideData?.backgroundVideo;
+  const playbackRate = currentSlideData?.video_playback_rate || currentSlideData?.videoPlaybackRate || 1;
+  const gradientColor1 = currentSlideData?.gradient_color_1 || '#6366f1';
+  const gradientColor2 = currentSlideData?.gradient_color_2 || '#8b5cf6';
+  const gradientDirection = currentSlideData?.gradient_direction || 'to bottom';
 
   return (
     <section className="hero-section">
       {/* Capa de fondo dinámica con crossfade */}
-      <div className={`hero-background hero-background-${backgroundType}`}>
+      <div className={`hero-background hero-background-${bgType}`}>
         <AnimatePresence mode="sync">
           <motion.div
             key={currentSlide}
@@ -96,25 +128,29 @@ export default function Hero({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.8, ease: "easeInOut" }}
             className="hero-background-slide"
+            style={bgType === 'gradient' ? {
+              background: `linear-gradient(${gradientDirection}, ${gradientColor1}, ${gradientColor2})`
+            } : undefined}
           >
-            {backgroundType === 'image' && currentSlideData?.backgroundImage && (
+            {bgType === 'image' && bgImage && (
               <Image
-                src={currentSlideData.backgroundImage}
+                src={bgImage}
                 alt="Hero background"
                 fill
                 sizes="100vw"
                 style={{ objectFit: 'cover' }}
+                className={currentSlideData?.ken_burns ? 'ken-burns-active' : ''}
                 priority
               />
             )}
-            {backgroundType === 'video' && currentSlideData?.backgroundVideo && (
+            {bgType === 'video' && bgVideo && (
               <video
                 ref={(video) => {
-                  if (video && currentSlideData.videoPlaybackRate) {
-                    video.playbackRate = currentSlideData.videoPlaybackRate;
+                  if (video && playbackRate) {
+                    video.playbackRate = playbackRate;
                   }
                 }}
-                src={currentSlideData.backgroundVideo}
+                src={bgVideo}
                 autoPlay
                 loop
                 muted
@@ -122,16 +158,34 @@ export default function Hero({
                 // Styles moved to hero-home.scss for consistency
               />
             )}
-            {backgroundType === 'none' && currentSlideData?.backgroundColor && (
+            {bgType === 'none' && currentSlideData?.backgroundColor && (
               <div style={{ backgroundColor: currentSlideData.backgroundColor, width: '100%', height: '100%' }} />
             )}
           </motion.div>
         </AnimatePresence>
       </div>
-      <div className="hero-overlay" />
+      
+      {/* Overlay con opacidad dinámica */}
+      <div 
+        className="hero-overlay" 
+        style={{ 
+          opacity: currentSlideData?.overlay_opacity ?? 0.3 
+        }} 
+      />
 
       {/* Contenido animado con slides */}
-      <div className="hero-content">
+      <div 
+        className="hero-content"
+        style={{
+          justifyContent: currentSlideData?.content_position === 'top' ? 'flex-start' 
+                        : currentSlideData?.content_position === 'bottom' ? 'flex-end' 
+                        : 'center',
+          alignItems: currentSlideData?.content_align === 'left' ? 'flex-start'
+                    : currentSlideData?.content_align === 'right' ? 'flex-end'
+                    : 'center',
+          textAlign: (currentSlideData?.content_align || 'center') as 'left' | 'center' | 'right'
+        }}
+      >
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide}
@@ -153,19 +207,31 @@ export default function Hero({
               animate="visible"
             >
               {heroSlides[currentSlide]?.title && (
-                <motion.h1 variants={itemVariants}>
+                <motion.h1 
+                  variants={itemVariants}
+                  style={{ 
+                    textAlign: (heroSlides[currentSlide].title_align || 'left') as 'left' | 'center' | 'right' 
+                  }}
+                >
                   {heroSlides[currentSlide].title}
                 </motion.h1>
               )}
-              {heroSlides[currentSlide]?.subtitle && (
-                <motion.p variants={itemVariants}>
-                  {heroSlides[currentSlide].subtitle}
-                </motion.p>
+              {heroSlides[currentSlide]?.subtitle && isClient && (
+                <motion.div 
+                  variants={itemVariants}
+                  dangerouslySetInnerHTML={{ 
+                    __html: decodeHTML(heroSlides[currentSlide].subtitle || '') 
+                  }}
+                />
               )}
-              {heroSlides[currentSlide]?.buttonText && heroSlides[currentSlide]?.buttonLink && (
+              {(heroSlides[currentSlide]?.buttonText || heroSlides[currentSlide]?.button_text) && 
+               (heroSlides[currentSlide]?.buttonLink || heroSlides[currentSlide]?.button_link) && (
                 <motion.div variants={itemVariants}>
-                  <Link href={heroSlides[currentSlide].buttonLink!} className="button hero-button">
-                    {heroSlides[currentSlide].buttonText} <Icons.ArrowRight size={21} strokeWidth={1.5} />
+                  <Link 
+                    href={(heroSlides[currentSlide].button_link || heroSlides[currentSlide].buttonLink)!} 
+                    className={`button hero-button hero-button-${heroSlides[currentSlide].button_style || 'primary'}`}
+                  >
+                    {heroSlides[currentSlide].button_text || heroSlides[currentSlide].buttonText} <Icons.ArrowRight size={21} strokeWidth={1.5} />
                   </Link>
                 </motion.div>
               )}

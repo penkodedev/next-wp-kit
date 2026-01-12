@@ -1,6 +1,6 @@
 // src/components/layout/header/HeaderServer.tsx
 
-import HeaderClient from "./HeaderClient";
+import Header from "./Header";
 import { getSiteInfo, fetchAPI } from "@/api/wordpressApi";
 import type { SiteInfo, MenuItem } from "@/types/wordpressTypes";
 import { logger } from "@/utils/wordpress/logger";
@@ -8,11 +8,13 @@ import localesConfig from "@/i18n/locales.generated.json";
 
 interface HeaderServerProps {
   variant?: "default" | "home";
+  menuVariant?: 'desktop' | 'mobile' | 'responsive';
   initialLocale?: string;
 }
 
 export default async function HeaderServer({
   variant = "default",
+  menuVariant = "mobile", // CHANGE MENU BETWEEN 'desktop', 'mobile' or 'responsive'
   initialLocale,
 }: HeaderServerProps) {
   // Get default locale from WordPress or config
@@ -80,8 +82,9 @@ export default async function HeaderServer({
   }
 
   return (
-    <HeaderClient 
-      variant={variant} 
+    <Header 
+      variant={variant}
+      menuVariant={menuVariant}
       initialLocale={locale} 
       siteInfo={siteInfo}
       menusByLocale={menusByLocale}
