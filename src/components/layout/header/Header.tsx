@@ -2,9 +2,11 @@
 "use client";
 
 import { usePathname } from 'next/navigation';
+import { useScrollShrink } from '@/hooks/useScrollShrink';
+import DarkModeToggle from "@/components/ui/DarkModeToggle";
 import LogoHeader from "@/components/layout/header/LogoHeader";
 import LangSwitcher from "@/components/layout/header/LangSwitcher"; 
-import WpNavMenu from '@/components/wordpress/WpNavMenu';
+import WpNavMenu from '@/components/navigation/WpNavMenu';
 import SearchTrigger from '@/components/features/search/SearchTrigger';
 import type { SiteInfo, MenuItem } from "@/types/wordpressTypes";
 import localesConfig from '@/i18n/locales.generated.json';
@@ -15,6 +17,8 @@ interface HeaderProps {
   initialLocale?: string;
   siteInfo: SiteInfo;
   menusByLocale?: Record<string, MenuItem[]>;
+
+  shrinkOnScroll?: boolean;
 }
 
 export default function Header({ 
@@ -22,9 +26,24 @@ export default function Header({
   menuVariant = 'responsive',
   initialLocale = localesConfig.defaultLocale, 
   siteInfo,
-  menusByLocale
+  menusByLocale,
+
+
+  // =================================================================
+  // ENABLE/DISABLE SHRINK EFFECT HERE ↓
+  // =================================================================
+  shrinkOnScroll = true, // Change to 'false' to disable sticky shrink effect, 'true' to enable
 }: HeaderProps) {
   const pathname = usePathname();
+
+
+  // =================================================================
+  // SHRINK EFFECT HOOK
+  // Detects when user scrolls past 100px threshold
+  // Only active if shrinkOnScroll prop is true
+  // =================================================================
+  const isScrolled = useScrollShrink(100); // 100px scroll threshold
+  const shouldShrink = shrinkOnScroll && isScrolled;
 
   // Detectar el locale actual del pathname
   const segments = pathname.split('/').filter(Boolean);
@@ -39,18 +58,33 @@ export default function Header({
   // Get pre-fetched menu for current locale (if available)
   const menuItems = menusByLocale?.[currentLocale];
 
+  // Build header classes
+  const headerClasses = [
+    'header',
+    variant === 'home' ? 'header-home' : '',
+    shrinkOnScroll ? 'header-sticky-enabled' : '', // Enable sticky feature
+    shouldShrink ? 'header-scrolled' : '' // Apply shrink effect when scrolled
+  ].filter(Boolean).join(' ');
+
+
+
   return (
-    <header className={`header ${variant === 'home' ? 'header-home' : ''}`}>
-      <LogoHeader siteInfo={siteInfo} isHome={isHome} />
-      <WpNavMenu 
-        location="mainnav" 
-        className="main-menu" 
-        locale={currentLocale}
-        menuItems={menuItems}
-        variant={menuVariant}
-      />
-      <LangSwitcher currentLocale={currentLocale} />
-      <SearchTrigger />
+    <header className={headerClasses}>   
+      <LogoHeader siteInfo={siteInfo} isHome={isHome} shrink={shouldShrink} />
+
+      <div className="actions-container">
+        <DarkModeToggle variant="icon" size={23} strokeWidth={1} />
+        <SearchTrigger />
+        <LangSwitcher currentLocale={currentLocale} />
+        <WpNavMenu 
+          location="mainnav" 
+          className="main-menu" 
+          locale={currentLocale}
+          menuItems={menuItems}
+          variant={menuVariant}
+        />
+      </div>
+      
     </header>
   );
 }

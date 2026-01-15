@@ -8,6 +8,7 @@ import PostNav from '@/components/navigation/PostNav';
 import Sidebar from '@/components/layout/sidebar/Sidebar';
 import ButtonShare from '@/components/ui/ButtonShare';
 import ButtonLike from '@/components/ui/ButtonLike';
+import ButtonCopyLink from '@/components/ui/ButtonCopyLink';
 import { WpPageId } from '@/utils/wordpress/WpPageId';
 import { processContent } from '@/utils/wordpress/processContent';
 import { getTranslatedCptSlug } from '@/utils/config/cptConfig';
@@ -49,6 +50,7 @@ export default function ContentSingle({
             <h1>{post.title.rendered}</h1>
 
             <div className="icons-wrap">
+              <ButtonCopyLink size={26} strokeWidth={1.3} className="copy-link" />
               <ButtonShare 
                 title={post.title.rendered}
                 description={post.excerpt?.rendered?.replace(/<[^>]*>/g, '')}

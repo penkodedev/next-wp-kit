@@ -6,10 +6,16 @@ import { Icons } from '@/components/ui/Icons';
 
 interface DarkModeToggleProps {
   variant?: 'button' | 'select' | 'icon';
+  size?: number;
+  strokeWidth?: number;
 }
 
 // Change the default variant to 'select or button'
-export default function DarkModeToggle({ variant = 'select' }: DarkModeToggleProps) {
+export default function DarkModeToggle({ 
+  variant = 'select',
+  size = 22,
+  strokeWidth = 1.6
+}: DarkModeToggleProps) {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
@@ -47,7 +53,7 @@ export default function DarkModeToggle({ variant = 'select' }: DarkModeTogglePro
         aria-label={isDark ? 'Light mode' : 'Dark mode'}
         title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       >
-        {isDark ? <Icons.Sun size={22} strokeWidth={1.6} /> : <Icons.Moon size={22} strokeWidth={1.6} />}
+        {isDark ? <Icons.Sun size={size} strokeWidth={strokeWidth} /> : <Icons.Moon size={size} strokeWidth={strokeWidth} />}
       </a>
     );
   }
@@ -63,7 +69,7 @@ export default function DarkModeToggle({ variant = 'select' }: DarkModeTogglePro
         aria-label={isDark ? 'Light mode' : 'Dark mode'}
         title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       >
-        {isDark ? <Icons.Sun size={22} strokeWidth={1.6} /> : <Icons.Moon size={22} strokeWidth={1.6} />}
+        {isDark ? <Icons.Sun size={size} strokeWidth={strokeWidth} /> : <Icons.Moon size={size} strokeWidth={strokeWidth} />}
       </a>
     );
   }
@@ -76,7 +82,7 @@ export default function DarkModeToggle({ variant = 'select' }: DarkModeTogglePro
     <div className="dark-mode-select">
       {/* Icon on the left that changes */}
       <div className="mode-icon">
-        {isDark ? <Icons.Moon size={22} strokeWidth={1.6} /> : <Icons.Sun size={22} strokeWidth={1.6} />}
+        {isDark ? <Icons.Moon size={size} strokeWidth={strokeWidth} /> : <Icons.Sun size={size} strokeWidth={strokeWidth} />}
       </div>
       
       {/* Toggle switch */}

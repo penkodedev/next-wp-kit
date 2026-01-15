@@ -3,7 +3,7 @@
 
 import { usePathname } from "next/navigation";
 import LogoHeader from "./LogoHeader";
-import WpNavMenu from "@/components/wordpress/WpNavMenu";
+import WpNavMenu from "@/components/navigation/WpNavMenu";
 import LangSwitcher from "@/components/layout/header/LangSwitcher";
 import SearchTrigger from "@/components/features/search/SearchTrigger";
 import type { SiteInfo, MenuItem } from "@/types/wordpressTypes";

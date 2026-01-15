@@ -5,19 +5,11 @@
 // User preference stored in localStorage (see DarkModeToggle.tsx)
 // =================================================================
 
-
-// =================================================================
-//                    GLOBAL TRANSITIONS
-// =================================================================
 // Smooth color transitions for all color changes when toggling modes
 * {
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-
-// =================================================================
-//                    DARK MODE OVERRIDES
-// =================================================================
 
 .dark-mode {
 
@@ -43,7 +35,8 @@
         color: #8f8f8f;
     }
 
-    ul li a {
+    ul li a,
+    .post-navigation a {
         color: #e0e0e0;
     }
 
@@ -69,23 +62,38 @@
         background-color: #1f1b1b;
         border: 1px solid #333;
     }
-
-    // =================================================================
-    //                    NAVIGATION
-    // =================================================================
     
 
     // =================================================================
-    //                    HEADER
+    //                    HEADER & menú
     // =================================================================
-    header {
-        background-color: #1f1f1f;
-
-        svg,
-        .current-lang {
-            color: #e0e0e0 !important;
+        header {
+            background-color: #1f1f1f; // Dark background by default
+    
+            svg,
+            .current-lang,
+            .main-menu ul li a {
+                color: #e0e0e0 !important;
+            }
         }
-    }
+    
+        // Home page: solid background when scrolled
+        .page-home .header-scrolled {
+            background-color: #1f1f1f !important;
+        }
+    
+        .main-menu ul li .submenu {
+            background: #242424;
+            border: none;
+    
+            a {
+                color: #e0e0e0;
+    
+                &:hover {
+                    color: #7a7a7a;
+                }
+            }
+        }
 
     // =================================================================
     //                    POST CARDS
@@ -107,11 +115,15 @@
     }
 
     // =================================================================
-    //                    FORMS & INPUTS
+    //                  FORMS SEARCH & INPUTS
     // =================================================================
     #search-form-input {
         background-color: #1f1f1f;
         border: 1px solid #333;
         color: #ffffff;
     }
+}
+
+.search-modal-content {
+    background-color: #1f1f1fab;
 }

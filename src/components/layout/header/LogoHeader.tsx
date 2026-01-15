@@ -9,9 +9,10 @@ import type { SiteInfo } from "@/types/wordpressTypes";
 interface LogoHeaderProps {
   siteInfo: SiteInfo;
   isHome?: boolean; // If true, always show light_logo (for dark backgrounds)
+  shrink?: boolean; // If true, apply shrink effect to logo
 }
 
-export default function LogoHeader({ siteInfo, isHome = false }: LogoHeaderProps) {
+export default function LogoHeader({ siteInfo, isHome = false, shrink = false }: LogoHeaderProps) {
   const [isDark, setIsDark] = useState(() => {
     // Inicializar desde localStorage si está disponible (evita parpadeo)
     if (typeof window !== 'undefined') {
@@ -49,7 +50,7 @@ export default function LogoHeader({ siteInfo, isHome = false }: LogoHeaderProps
     : (isDark ? siteInfo.light_logo : siteInfo.dark_logo);
 
   return (
-    <div id="logo-container">
+    <div id="logo-container" className={shrink ? 'logo-shrink' : ''}>
       <Link href="/" aria-label="Ir a la página principal">
         <Image
           src={logoSrc}

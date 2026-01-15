@@ -14,7 +14,7 @@ interface HeaderServerProps {
 
 export default async function HeaderServer({
   variant = "default",
-  menuVariant = "mobile", // CHANGE MENU BETWEEN 'desktop', 'mobile' or 'responsive'
+  menuVariant = "responsive", // CHANGE MENU BETWEEN 'desktop', 'mobile' or 'responsive'
   initialLocale,
 }: HeaderServerProps) {
   // Get default locale from WordPress or config

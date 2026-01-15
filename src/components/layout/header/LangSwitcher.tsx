@@ -114,7 +114,7 @@ export default function LangSwitcher({ currentLocale }: LangSwitcherProps) {
 
   return (
     <div className="lang-switcher-simple">
-      <Icons.Globe size={21} strokeWidth={0.8} className="lang-icon" />
+      <Icons.Globe size={23} strokeWidth={0.8} className="lang-icon" />
       <span className="current-lang">
         {currentLang?.code.toUpperCase() || currentLocale.toUpperCase()}
       </span>

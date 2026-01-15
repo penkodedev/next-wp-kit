@@ -5,14 +5,11 @@
       LANGUAGE SWITCHER SIMPLE
 **********************************************/
 .lang-switcher-simple {
-    padding: 5px 10px;
-    border-radius: 8px;
     display: flex;
     align-items: center;
-    position: absolute;
-    right: 140px;
-    gap: 10px;
+    gap: 3px;
     cursor: pointer;
+    margin-bottom: 5px; // hard fix for alignment issue
 
     svg.lang-icon {
         color: #000;
@@ -20,9 +17,9 @@
 
     .current-lang {
         @include copy-text;
-        font-size: 0.88em;
+        font-size: 0.72em;
+        font-weight: 100;
         color: rgb(0, 0, 0);
-        font-weight: 500;
         line-height: normal;
         margin: 0;
     }
@@ -30,8 +27,7 @@
     // Dropdown container
     .lang-dropdown {
         position: absolute;
-        top: 30px;
-        left: 0;
+        top: 90%;
         background: #fff;
         border: 1px solid #e2e2e2;
         border-radius: 8px;
@@ -93,10 +89,3 @@
         }
     }
 }
-
-
-/**********************************************
-      LANGUAGE SWITCHER DROPDOWN
-**********************************************/
-// USAGE: Change class on /components/layout/header/LangSwitcher.tsx
-// from lang-switcher-simple to lang-switcher-dropdown

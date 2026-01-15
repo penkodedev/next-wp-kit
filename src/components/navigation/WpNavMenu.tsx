@@ -70,7 +70,7 @@ function WpNavMenu({
   locale, 
   menuItems: prefetchedMenuItems,
   variant = 'responsive',
-  mobileBreakpoint = 1024
+  mobileBreakpoint = 1224
 }: WpNavMenuProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
@@ -139,9 +139,6 @@ function WpNavMenu({
     variant === 'mobile' || 
     (variant === 'responsive' && isMobileView);
 
-  // Debug log (remove later)
-  console.log('WpNavMenu Debug:', { variant, isMobileView, shouldShowMobile });
-
   // Desktop Menu
   if (!shouldShowMobile) {
     return (
@@ -181,7 +178,7 @@ function WpNavMenu({
       >
         {/* Change size and strokeWidth of X and burger icons */}
         {/* Available burger icons: Icons.Menu, Icons.AlignJustify, Icons.AlignLeft, Icons.AlignRight, Icons.MoreVertical, Icons.MoreHorizontal */}
-        {isMobileMenuOpen ? <Icons.X size={28} strokeWidth={1} /> : <Icons.Menu size={28} strokeWidth={1} />} 
+        {isMobileMenuOpen ? <Icons.X size={28} strokeWidth={1} /> : <Icons.AlignRight size={40} strokeWidth={1.2} />} 
       </a>
       
 

@@ -10,6 +10,7 @@
 .swiper-wrapper {
   /* ¡Esta es la clave! Fuerza una transición lineal y constante. */
   transition-timing-function: linear !important;
+  z-index: 0 !important;
 }
 
 .swiper {

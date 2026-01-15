@@ -1,39 +1,140 @@
+// =================================================================
+// BASE HEADER STYLES (Normal, non-sticky header)
+// =================================================================
+
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 40px;
-    background-color: #fff;
+    background-color: #fff; // Default white background
     border-bottom: 1px solid #d6d6d6;
     height: 120px;
-    width:100%;
+    width: 100%;
     margin: 0;
     position: relative;
     z-index: 1000;
-    //box-sizing: border-box;
 
     .nav-header {
         display: flex;
     }
 }
 
+// Home page header transparent by default
+.page-home .header {
+    background-color: transparent;
+    border-bottom: none;
+}
+
 #header-container {
-    padding: 0 25px 0 25px;
+    padding: 0 25px;
 }
 
 .header #logo-container {
     display: flex;
     align-items: center;
     margin: 0;
+
+    a:hover {
+        border: 0;
+        background: none;
+        display: block;
+        transform: scale(1.05);
+        transition: transform 0.6s ease;
+    }
 }
 
-#logo-container a:hover {
-    border: 0px;
-    background: none;
-    display: block;
-    transform: scale(1.05);
-    -webkit-transition: 0.6s ease;
-    -moz-transition: 0.6s ease;
-    -o-transition: 0.6s ease;
-    transition: 0.6s ease;
+header .actions-container {
+    display: flex;
+    align-items: center;
+    column-gap: 20px;
+    position: relative;
+
+    > :nth-last-child(2) {
+        margin-right: 55px; // Space before last element
+    }
+}
+
+// =================================================================
+// STICKY HEADER WITH SHRINK EFFECT (Optional feature)
+// Enable/disable in Header.tsx with shrinkOnScroll prop
+// =================================================================
+
+// Configuration variables - Change only these values
+$header-height-normal: 120px;
+$header-height-scrolled: 65px;
+$header-padding-x: 40px;
+
+// Proportional scales (logo and icons relative to header height)
+$logo-scale: 0.45; // Logo header height
+$burger-scale: 0.36; // Burger header height
+
+
+// Calculated values (don't modify)
+$logo-height-normal: calc($header-height-normal * $logo-scale);
+$logo-height-scrolled: calc($header-height-scrolled * 0.55);
+$header-padding-normal: calc($header-height-normal * 0.167) $header-padding-x;
+$header-padding-scrolled: calc($header-height-scrolled * 0.154) $header-padding-x;
+
+
+// =================================================================
+// Enable sticky behavior
+// =================================================================         
+.header.header-sticky-enabled {
+    position: sticky;
+    top: 0;
+    transition: all 0.3s ease;
+
+    #logo-container {
+        transition: all 0.3s ease;
+
+        img {
+            transition: all 0.3s ease;
+            height: $logo-height-normal;
+            width: auto;
+        }
+    }
+
+    .dark-mode-icon {
+        transition: top 0.3s ease;
+    }
+}
+
+// Apply shrink effect when scrolled
+.header.header-sticky-enabled.header-scrolled {
+    height: $header-height-scrolled;
+    padding: $header-padding-scrolled;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+    .main-menu ul li a {
+        font-size: 0.86em;
+        letter-spacing: 0.01em;
+        transition: font-size 0.22s cubic-bezier(.2, .8, .2, 1), letter-spacing 0.22s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    #logo-container.logo-shrink img {
+        height: $logo-height-scrolled;
+    }
+
+    .dark-mode-icon {
+        top: calc($header-height-scrolled);
+    }
+
+    .main-menu ul li .submenu {
+        top: 20px;
+    }
+
+    .mobile-menu-toggle {
+        top: calc($header-height-scrolled * 0.4);
+
+        svg {
+            height: calc($header-height-scrolled * 0.5);
+        }
+    }
+}
+
+// Burger icon base size (transition in mobile-menu.scss)
+.mobile-menu-toggle svg {
+    height: calc($header-height-normal * $burger-scale);
+    width: auto;
 }

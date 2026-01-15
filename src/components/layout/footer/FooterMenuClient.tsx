@@ -2,7 +2,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import WpNavMenu from "@/components/wordpress/WpNavMenu";
+import WpNavMenu from "@/components/navigation/WpNavMenu";
 import type { MenuItem } from "@/types/wordpressTypes";
 import localesConfig from "@/i18n/locales.generated.json";
 
