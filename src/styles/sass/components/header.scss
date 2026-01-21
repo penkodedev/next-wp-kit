@@ -120,6 +120,10 @@ $header-padding-scrolled: calc($header-height-scrolled * 0.154) $header-padding-
         top: calc($header-height-scrolled);
     }
 
+    .page-home header {
+        background-color: #fff !important;
+    }
+    
     .main-menu ul li .submenu {
         top: 20px;
     }

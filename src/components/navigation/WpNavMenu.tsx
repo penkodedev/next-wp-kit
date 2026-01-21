@@ -38,14 +38,47 @@ function NavItem({ item, isMobile = false, onLinkClick }: { item: MenuItem; isMo
   
   const hasChildren = item.children && item.children.length > 0;
 
+  // ELocal state to track hover for submenu arrow animation
+  const [isHovered, setIsHovered] = useState(false);
+
+  const liClass = item.classes && item.classes.length > 0 ? item.classes.join(' ') : undefined;
+  const linkClass = hasChildren ? 'has-submenu' : undefined;
   return (
-    <li className={item.classes?.join(' ')}>
+    <li
+      {...(liClass ? { className: liClass } : {})}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <Link 
         href={linkUrl || '/'} 
         target={item.target || (isInternal ? '_self' : '_blank')}
         onClick={onLinkClick}
+        {...(linkClass ? { className: linkClass } : {})}
       >
         {item.title}
+        {hasChildren && (
+          <motion.span
+            className="submenu-arrow"
+            aria-hidden="true"
+            animate={{ rotate: 0 }}
+            transition={{ duration: 0.22, ease: [0.2, 0.8, 0.2, 1] }}
+          >
+            <motion.span
+              initial={{ opacity: 1 }}
+              animate={{ opacity: isHovered ? 0 : 1 }}
+              transition={{ duration: 0.22 }}
+            >
+              <Icons.ChevronDown size={20} strokeWidth={2.4}  />
+            </motion.span>
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isHovered ? 1 : 0 }}
+              transition={{ duration: 0.22 }}
+            >
+              <Icons.ChevronUp size={20} strokeWidth={2.4}  />
+            </motion.span>
+          </motion.span>
+        )}
       </Link>
       {hasChildren && item.children && (
         <ul className={isMobile ? "submenu mobile" : "submenu"}>
