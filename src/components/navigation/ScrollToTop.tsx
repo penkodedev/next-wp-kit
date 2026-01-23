@@ -35,13 +35,13 @@ const ScrollToTop = () => {
   };
 
   return (
-    <button
+    <a
       onClick={handleClick}
       className={`scroll-top-btn ${visible ? 'visible' : ''}`}
       aria-label="Volver arriba"
     >
       <Icons.ArrowUp size={22} strokeWidth={1.5} />
-    </button>
+    </a>
   );
 };
 

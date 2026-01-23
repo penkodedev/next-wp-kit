@@ -2,7 +2,7 @@
 // 
 "use client";
 
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { Icons } from '@/components/ui/Icons';
 import { useState, useEffect } from 'react';
 import { getWpmlTranslation, getWpmlLanguages, type WpmlLanguage } from '@/api/wordpressApi';
@@ -16,7 +16,6 @@ interface LangSwitcherProps {
 
 export default function LangSwitcher({ currentLocale }: LangSwitcherProps) {
   const pathname = usePathname();
-  const router = useRouter();
   const { pageId } = useWpPageId();
   const [languages, setLanguages] = useState<WpmlLanguage[]>([]);
   const [defaultLang, setDefaultLang] = useState('es');
@@ -30,17 +29,20 @@ export default function LangSwitcher({ currentLocale }: LangSwitcherProps) {
     });
   }, []);
 
-  // Fetch translations for current page
+  // Clear translations when pathname changes
   useEffect(() => {
     // CRITICAL: Always clear translations when pathname changes
     // This ensures archive pages (without pageId) don't show stale URLs
     setTranslatedUrls({});
-    
+  }, [pathname]);
+
+  // Fetch translations for current page
+  useEffect(() => {
     // Early return for archive pages - they don't have pageId, so no WPML translations
     if (!pageId || languages.length === 0) return;
-    
+
     const currentPageId = pageId;
-    
+
     async function fetchTranslations() {
       const urls: Record<string, string> = {};
       for (const lang of languages) {
@@ -54,7 +56,22 @@ export default function LangSwitcher({ currentLocale }: LangSwitcherProps) {
       setTranslatedUrls(urls);
     }
     fetchTranslations();
-  }, [pathname, pageId, currentLocale, languages, defaultLang]); // pathname FIRST to trigger clearing
+  }, [pageId, currentLocale, languages, defaultLang, pathname]);
+
+  function getRouteSegments() {
+    const segments = pathname.split('/').filter(Boolean);
+    const languageCodes = languages.map(l => l.code);
+    const hasLocalePrefix = languageCodes.includes(segments[0]);
+    return hasLocalePrefix ? segments.slice(1) : segments;
+  }
+
+  function isHomePath() {
+    return pathname === '/' || pathname === '/es' || pathname === '/en';
+  }
+
+  function withLocalePrefix(path: string, targetLang: string) {
+    return targetLang === defaultLang ? path : `/${targetLang}${path}`;
+  }
 
   function buildLanguageUrl(targetLang: string): string {
     // If we have pageId AND translated URLs from WPML API, use them
@@ -65,17 +82,12 @@ export default function LangSwitcher({ currentLocale }: LangSwitcherProps) {
     }
     
     // Handle home page
-    if (pathname === '/' || pathname === '/es' || pathname === '/en') {
+    if (isHomePath()) {
       return targetLang === defaultLang ? '/' : `/${targetLang}`;
     }
     
     // Parse current pathname
-    const segments = pathname.split('/').filter(Boolean);
-    const languageCodes = languages.map(l => l.code);
-    
-    // Remove locale prefix if present (e.g., /en/news -> [news])
-    const hasLocalePrefix = languageCodes.includes(segments[0]);
-    const routeSegments = hasLocalePrefix ? segments.slice(1) : segments;
+    const routeSegments = getRouteSegments();
     
     if (routeSegments.length === 0) {
       return targetLang === defaultLang ? '/' : `/${targetLang}`;
@@ -93,13 +105,13 @@ export default function LangSwitcher({ currentLocale }: LangSwitcherProps) {
       const fullPath = restOfPath ? `/${translatedSlug}/${restOfPath}` : `/${translatedSlug}`;
       
       // Add locale prefix only for non-default languages
-      return targetLang === defaultLang ? fullPath : `/${targetLang}${fullPath}`;
+      return withLocalePrefix(fullPath, targetLang);
     }
     
     // Handle frontend-only pages (dynamic, from config)
     if (shouldPreserveOnLanguageSwitch(mainSlug)) {
       const fullPath = `/${mainSlug}`;
-      return targetLang === defaultLang ? fullPath : `/${targetLang}${fullPath}`;
+      return withLocalePrefix(fullPath, targetLang);
     }
     
     // For regular pages (non-CPT), we can't translate without pageId, so fallback to home
@@ -114,7 +126,7 @@ export default function LangSwitcher({ currentLocale }: LangSwitcherProps) {
 
   return (
     <div className="lang-switcher-simple">
-      <Icons.Globe size={23} strokeWidth={0.8} className="lang-icon" />
+      <Icons.Globe size={20} strokeWidth={1.1} className="lang-icon" />
       <span className="current-lang">
         {currentLang?.code.toUpperCase() || currentLocale.toUpperCase()}
       </span>

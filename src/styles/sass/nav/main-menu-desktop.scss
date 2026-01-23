@@ -1,5 +1,9 @@
 @use 'abstracts' as *;
 
+
+// =================================================================
+//                    MAIN MENU DESKTOP
+// =================================================================
 .main-menu {
   display: flex;
   align-items: center;
@@ -11,12 +15,13 @@
     margin: 0;
 
     li {
-      position: relative; // Necesario para posicionar la línea ::after
+      // position: relative; // Necessary to position submenus
       display: flex;
+      list-style: none;
 
       a {
         font-family: $menu-font;
-        font-size: $menu-size;
+        font-size: $menu-size; // MAIN MENU FONT SIZE
         color: #000;
         text-decoration: none;
         margin: 10px; // Distance between menu items
@@ -53,31 +58,38 @@
 }
 
 
-
+// =================================================================
+//                  MAIN MENU DROPDOWN SUBMENU
+// =================================================================
 .main-menu ul li {
-  position: relative;
-  list-style: none;
-
-  li a:after {
-    content: none;
-  }
-
   .submenu {
     display: none;
     position: absolute;
-    top: 30px; // TOP POSITION FROM MAIN NAV
+    top: 40px; // TOP POSITION FROM MAIN NAV
     //left: -50%;
     background: #fff;
-    padding: 0.5rem 0;
+    padding: 5px 10px;
     border: 1px solid #ddd;
+    border-radius: 0 0 8px 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     z-index: 10;
-    min-width: 220px; // Sub menu width
+    min-width: 260px; // Sub menu width
+    
 
     li {
-      padding: 5px 0 5px 10px;
+      font-size: 0.86em;
+      padding: 0px;
     }
-    
+
+    a {
+      font-size: 1.1em; // SUB MENU FONT SIZE
+      padding: 0px;
+      margin: 5px 20px;
+
+      &::after {
+        display: none; // Disable the underline effect for submenu items
+      }
+    }
   }
 
   &:hover>.submenu {
@@ -118,5 +130,35 @@
     left: 0;
     top: 0;
 
+  }
+}
+
+
+// =================================================================
+//      SUBMENU ANIMATION
+// =================================================================
+
+.main-menu ul li .submenu {
+  display: block; /* reemplaza display: none */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-14px) scaleY(0.2);
+  transform-origin: top center;
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.4s ease, visibility 0s linear 0.35s;
+}
+
+.main-menu ul li:hover > .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scaleY(1);
+  pointer-events: auto;
+  transition: opacity 0.35s ease, transform 0.4s ease, visibility 0s linear 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-menu ul li .submenu {
+    transition: none;
+    transform: none;
   }
 }

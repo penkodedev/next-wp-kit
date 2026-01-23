@@ -73,7 +73,7 @@ export default function Header({
       <LogoHeader siteInfo={siteInfo} isHome={isHome} shrink={shouldShrink} />
 
       <div className="actions-container">
-        <DarkModeToggle variant="icon" size={23} strokeWidth={1} />
+        <DarkModeToggle variant="icon" size={20} strokeWidth={1.4} />
         <SearchTrigger />
         <LangSwitcher currentLocale={currentLocale} />
         <WpNavMenu 

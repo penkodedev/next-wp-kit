@@ -17,7 +17,7 @@ export default function SearchTrigger() {
   return (
     <>
       <a href="#" onClick={handleOpenSearch} className="search-open-button" aria-label="Abrir búsqueda">
-        <Icons.Search size={24} strokeWidth={1.2} />
+        <Icons.Search size={20} strokeWidth={1.4} />
       </a>
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>

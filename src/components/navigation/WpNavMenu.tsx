@@ -68,14 +68,14 @@ function NavItem({ item, isMobile = false, onLinkClick }: { item: MenuItem; isMo
               animate={{ opacity: isHovered ? 0 : 1 }}
               transition={{ duration: 0.22 }}
             >
-              <Icons.ChevronDown size={20} strokeWidth={2.4}  />
+              <Icons.ChevronDown size={19} strokeWidth={2.2}  />
             </motion.span>
             <motion.span
               initial={{ opacity: 0 }}
               animate={{ opacity: isHovered ? 1 : 0 }}
               transition={{ duration: 0.22 }}
             >
-              <Icons.ChevronUp size={20} strokeWidth={2.4}  />
+              <Icons.ChevronUp size={19} strokeWidth={2.2}  />
             </motion.span>
           </motion.span>
         )}
