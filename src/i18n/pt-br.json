@@ -45,5 +45,8 @@
     "componentFailed": "Erro ao carregar {component}",
     "retry": "Tentar novamente",
     "loadingContent": "Não foi possível carregar o conteúdo"
+  },
+  "AudioPlayer": {
+    "listenAudio": "Ouvir áudio"
   }
 }

@@ -58,11 +58,11 @@ export const CPT_SLUG_MAP: Record<string, string> = CPT_CONFIG.reduce((acc, cpt)
 /**
  * Get the translated slug for a post type based on the locale.
  * Works for both native post types (posts, pages) and custom post types.
- * 
+ *
  * @param postType - The internal WordPress post type slug (e.g., 'posts', 'noticias', 'recursos')
  * @param locale - The target locale (e.g., 'es', 'en')
  * @returns The translated slug for the given locale, or the original slug if not found
- * 
+ *
  * @example
  * getTranslatedCptSlug('posts', 'en') // Returns 'posts'
  * getTranslatedCptSlug('noticias', 'en') // Returns 'news'
@@ -73,7 +73,7 @@ export function getTranslatedCptSlug(postType: string, locale: string): string {
 	if (postType === 'posts' || postType === 'pages') {
 		return postType;
 	}
-  
+
 	// Handle custom post types
 	const cptConfig = CPT_CONFIG.find(config => config.slug === postType);
 	return cptConfig?.translations[locale] || postType;
@@ -82,10 +82,10 @@ export function getTranslatedCptSlug(postType: string, locale: string): string {
 /**
  * Get all active CPT slugs (internal WordPress slugs).
  * Useful for dynamic operations like sitemap generation.
- * 
+ *
  * @param exclude - Optional array of CPT slugs to exclude (e.g., ['modales', 'hero'])
  * @returns Array of CPT slugs
- * 
+ *
  * @example
  * getActiveCptSlugs() // Returns ['noticias', 'recursos', 'modales', 'hero']
  * getActiveCptSlugs(['modales', 'hero']) // Returns ['noticias', 'recursos']

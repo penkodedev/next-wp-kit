@@ -55,7 +55,11 @@ import {
   Image,
   Download,
   Sun,
-  Moon
+  Moon,
+  Play,
+  Pause,
+  Volume2,
+  Loader2
 } from 'lucide-react';
 
 
@@ -109,6 +113,10 @@ export const Icons = {
   Image,
   Download,
   Sun,
-  Moon
+  Moon,
+  Play,
+  Pause,
+  Volume2,
+  Loader2
 };
 

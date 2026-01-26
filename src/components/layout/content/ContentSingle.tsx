@@ -3,6 +3,7 @@ import { Icons } from '@/components/ui/Icons';
 import AnimatedArticle from '@/components/animations/AnimatedArticle';
 import { TaxonomyTermsList, TaxonomyPost } from '@/components/wordpress/CustomTaxonomies';
 import CustomFields from '@/components/wordpress/CustomFields';
+import AudioPlayer from '@/components/ui/AudioPlayer';
 import Breadcrumbs from '@/components/navigation/Breadcrumbs';
 import PostNav from '@/components/navigation/PostNav';
 import Sidebar from '@/components/layout/sidebar/Sidebar';
@@ -25,10 +26,10 @@ type ContentSingleProps = {
  * Template para mostrar un post individual de cualquier post type
  * Calcula internamente backToArchiveUrl y archiveName según postType y locale
  */
-export default function ContentSingle({ 
-  post, 
+export default function ContentSingle({
+  post,
   postType,
-  locale 
+  locale
 }: ContentSingleProps) {
   // Calcular backToArchiveUrl y archiveName internamente
   const translatedSlug = getTranslatedCptSlug(postType, locale);
@@ -61,9 +62,21 @@ export default function ContentSingle({
               />
             </div>
           </section>
-          
+
           <Breadcrumbs />
-          
+
+
+          {/* AUDIO PLAYER GOOGLE TEXT TO SPEECH (config. CPTs*/}
+          {['posts', 'recursos', 'noticias'].includes(postType) && post.audio_url && ( 
+            <div className="audio-player-section">
+              <AudioPlayer
+                src={post.audio_url}
+                title={post.title.rendered}
+                className="resource-audio-player"
+              />
+            </div>
+          )}
+
           <AnimatedArticle className="custom-article-class" amount={0.5}>
             <div
               dangerouslySetInnerHTML={{

@@ -1,0 +1,56 @@
+.audio-player-section {
+    display: flex;
+    margin: 0 0 20px 0
+}
+
+.audio-player {
+    display: flex;
+    position: relative;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 36px 20px 10px 20px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    p.audio-text {
+        font-size: 0.78em;
+        font-weight: 700;
+        margin: 0 0 8px 0;
+        position: absolute;
+        top: 6px;
+        left: 20px
+    }
+
+    .audio-player-controls {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        justify-content: space-around;
+        width: 100%; // Fix align to full width
+
+        a.play-button,
+        a.pause-button {
+            cursor: pointer;
+        }
+
+        p.time-display {
+            font-size: 0.8em;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .progress-container {
+            flex: 1; // Allow the progress container to grow
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            input[type="range"] {
+                width: 100%;
+                cursor: pointer;
+            }
+        }
+    }
+}

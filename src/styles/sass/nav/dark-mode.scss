@@ -62,38 +62,38 @@
         background-color: #1f1b1b;
         border: 1px solid #333;
     }
-    
+
 
     // =================================================================
     //                    HEADER & menú
     // =================================================================
-        header {
-            background-color: #1f1f1f; // Dark background by default
-    
-            svg,
-            .current-lang,
-            .main-menu ul li a {
-                color: #e0e0e0 !important;
+    header {
+        background-color: #1f1f1f; // Dark background by default
+
+        svg,
+        .current-lang,
+        .main-menu ul li a {
+            color: #e0e0e0 !important;
+        }
+    }
+
+    // Home page: solid background when scrolled
+    .page-home .header-scrolled {
+        background-color: #1f1f1f !important;
+    }
+
+    .main-menu ul li .submenu {
+        background: #242424;
+        border: none;
+
+        a {
+            color: #e0e0e0;
+
+            &:hover {
+                color: #7a7a7a;
             }
         }
-    
-        // Home page: solid background when scrolled
-        .page-home .header-scrolled {
-            background-color: #1f1f1f !important;
-        }
-    
-        .main-menu ul li .submenu {
-            background: #242424;
-            border: none;
-    
-            a {
-                color: #e0e0e0;
-    
-                &:hover {
-                    color: #7a7a7a;
-                }
-            }
-        }
+    }
 
     // =================================================================
     //                    POST CARDS
@@ -122,8 +122,17 @@
         border: 1px solid #333;
         color: #ffffff;
     }
+
+
+    // =================================================================
+    //                  AUDIO PLAYER
+    // =================================================================
+    .audio-player {
+        background-color: #181818;
+        border: 1px solid #474747;
+    }
 }
 
 .search-modal-content {
-    background-color: #1f1f1fab;
-}
+        background-color: #1f1f1fab;
+    }

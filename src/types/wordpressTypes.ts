@@ -294,6 +294,7 @@ export interface WpContent {
   _embedded?: EmbeddedData; // Embedded data like author, featured image, etc.
   meta?: Record<string, any>; // Custom fields (REST API)
   likes?: number; // Like count from custom endpoint
+  audio_url?: string; // Audio file URL for text-to-speech
   yoast_head_json?: {
     title?: string;
     description?: string;
