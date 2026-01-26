@@ -8,6 +8,7 @@
 
 import {
   ArrowUp,
+  ArrowDown,
   ArrowRight,
   ArrowLeft,
   ArrowUpLeft,
@@ -60,7 +61,8 @@ import {
 
 // Group all the icons into a single object for cleaner imports.
 export const Icons = {
-   ArrowUp,
+  ArrowUp,
+  ArrowDown,
   ArrowRight,
   ArrowLeft,
   ArrowUpLeft,

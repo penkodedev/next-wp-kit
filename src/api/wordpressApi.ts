@@ -15,6 +15,19 @@ export async function getAllTaxonomies(): Promise<Record<string, Taxonomy> | nul
   return await fetchAPI<Record<string, Taxonomy>>('/wp/v2/taxonomies');
 }
 
+/**
+ * Cached version of getAllTaxonomies using Next.js unstable_cache.
+ * Caches taxonomies for 1 hour to avoid redundant API calls in catch-all routes.
+ * Use this in pages that need taxonomy information.
+ */
+export const getCachedTaxonomies = unstable_cache(
+  async (): Promise<Record<string, Taxonomy> | null> => {
+    return await fetchAPI<Record<string, Taxonomy>>('/wp/v2/taxonomies');
+  },
+  ['taxonomies'],
+  { revalidate: 3600 } // Cache for 1 hour
+);
+
 
 import type { WpContent, SiteInfo, MenuItem, SearchResult, Page, Modal, PostNavigation, AllMenus } from '@/types/wordpressTypes';
 import { unstable_cache } from 'next/cache';
@@ -161,7 +174,7 @@ export async function fetchAPI<T>(
     Route: /custom/v1/site-info
     e.g. /custom/v1/site-info?lang=en
 --------------------------------------------------------------------------------------*/
-/** 
+/**
  * Fetches basic site information from a custom endpoint.
  * @param lang - Optional language code for WPML translation (e.g. 'en', 'es', 'pt-br')
  */
@@ -170,6 +183,21 @@ export async function getSiteInfo(lang?: string): Promise<SiteInfo | null> {
   const data = await fetchAPI<SiteInfo>(endpoint);
   return data;
 }
+
+/**
+ * Cached version of getSiteInfo using Next.js unstable_cache.
+ * Caches site info for 1 hour to avoid redundant API calls.
+ * Use this in layouts and components that don't need real-time data.
+ * @param lang - Optional language code for WPML translation
+ */
+export const getCachedSiteInfo = unstable_cache(
+  async (lang?: string): Promise<SiteInfo | null> => {
+    const endpoint = lang ? `/custom/v1/site-info?lang=${lang}` : '/custom/v1/site-info';
+    return await fetchAPI<SiteInfo>(endpoint);
+  },
+  ['site-info'],
+  { revalidate: 3600 } // Cache for 1 hour
+);
 
 /*--------------------------------------------------------------------------------------
     🎬 GET HERO DATA

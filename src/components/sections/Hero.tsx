@@ -291,7 +291,7 @@ export default function Hero({
           }
         }}
       >
-        <Icons.ChevronDown size={18} />
+        <Icons.ArrowDown size={22} strokeWidth={1.5} />
       </a>
     </section>
   );

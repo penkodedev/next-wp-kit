@@ -50,9 +50,9 @@ header .actions-container {
     column-gap: 20px;
     position: relative;
 
-    > :nth-last-child(2) {
-        margin-right: 55px; // Space before last element
-    }
+    // > :nth-last-child(2) {
+    //     margin-right: 55px; // Space before last element IF NEEDED
+    // }
 }
 
 // =================================================================
@@ -112,6 +112,7 @@ $header-padding-scrolled: calc($header-height-scrolled * 0.154) $header-padding-
         transition: font-size 0.22s cubic-bezier(.2, .8, .2, 1), letter-spacing 0.22s cubic-bezier(.2, .8, .2, 1);
     }
 
+
     #logo-container.logo-shrink img {
         height: $logo-height-scrolled;
     }
@@ -123,9 +124,9 @@ $header-padding-scrolled: calc($header-height-scrolled * 0.154) $header-padding-
     .page-home header {
         background-color: #fff !important;
     }
-    
+
     .main-menu ul li .submenu {
-        top: 20px;
+        top: 37px; // TOP POSITION FROM MAIN NAV
     }
 
     .mobile-menu-toggle {

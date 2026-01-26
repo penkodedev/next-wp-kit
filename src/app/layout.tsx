@@ -2,6 +2,7 @@
 
 import type { Metadata } from 'next';
 import type { ReactNode } from "react";
+import dynamic from 'next/dynamic';
 
 import 'swiper/css/bundle';
 import { headers } from 'next/headers';
@@ -17,20 +18,27 @@ import Footer from "@/components/layout/footer/Footer";
 import CookieConsent from "@/components/cookies/CookieConsent";
 import CookieManager from "@/components/cookies/CookieManager";
 import ScrollToTop from "@/components/navigation/ScrollToTop";
-import ModalController from '@/components/features/modals/ModalController';
 import AdvertisingPopup from '@/components/features/modals/AdvertisingPopup';
-import LightboxController from '@/components/features/lightbox/LightboxController';
 import WpStyles from "@/components/wordpress/WpStyles";
+
+// Lazy load heavy components that aren't needed on every page
+const ModalController = dynamic(() => import('@/components/features/modals/ModalController'), {
+  ssr: false
+});
+
+const LightboxController = dynamic(() => import('@/components/features/lightbox/LightboxController'), {
+  ssr: false
+});
 
 import BodyClass from "@/utils/wordpress/BodyClass";
 import { WpPageIdProvider } from '@/utils/wordpress/WpPageIdContext';
 import localesConfig from '@/i18n/locales.generated.json';
 import Analytics from '@/components/tracking/Analytics';
-import { getSiteInfo } from '@/api/wordpressApi';
+import { getCachedSiteInfo } from '@/api/wordpressApi';
 
 // Generate dynamic metadata from WordPress
 export async function generateMetadata(): Promise<Metadata> {
-  const siteInfo = await getSiteInfo();
+  const siteInfo = await getCachedSiteInfo();
   
   if (!siteInfo) {
     // Fallback metadata if WordPress is unreachable
@@ -103,8 +111,8 @@ function GlobalUI() {
 export default async function RootLayout({ children }: RootLayoutProps) {
   const headersList = headers();
   
-  // Fetch site info for dynamic configuration
-  const siteInfo = await getSiteInfo();
+  // Fetch site info for dynamic configuration (cached for 1 hour)
+  const siteInfo = await getCachedSiteInfo();
   
   // Get default locale from WordPress or fallback to config
   const defaultLocale = siteInfo?.i18n?.default_locale || localesConfig.defaultLocale;

@@ -248,8 +248,8 @@ export default async function CatchAllPage({ params }: PageProps) {
   // Detect if the first segment is a taxonomy and the second is a term slug
   const taxSlug = params.slug[0];
   const termSlug = params.slug[1];
-  // Get all taxonomies dynamically from WP REST API
-  const allTaxonomies = await import('@/api/wordpressApi').then(mod => mod.getAllTaxonomies());
+  // Get all taxonomies dynamically from WP REST API (cached)
+  const allTaxonomies = await import('@/api/wordpressApi').then(mod => mod.getCachedTaxonomies());
   const taxonomyObj = allTaxonomies && allTaxonomies[taxSlug];
   if (taxonomyObj && termSlug) {
     // 1. Fetch the term by slug
