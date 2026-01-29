@@ -1,7 +1,6 @@
 // src/app/feed.xml/route.ts
 import RSS from 'rss';
-import { getAllPosts } from '@/api/wordpressApi';
-import { metadata as siteMetadata } from '@/app/layout'; // Importamos los metadatos base
+import { STATIC_CONTENT, SITE_METADATA } from '@/utils/staticContent';
 import localesConfig from '@/i18n/locales.generated.json';
 
 export async function GET() {
@@ -9,20 +8,16 @@ export async function GET() {
 
   // Lógica mejorada para obtener el título del sitio de forma segura
   let siteTitle = 'Blog';
-  if (siteMetadata.title) {
-    if (typeof siteMetadata.title === 'string') {
-      siteTitle = siteMetadata.title;
-    } else if ('default' in siteMetadata.title) {
-      siteTitle = siteMetadata.title.default;
-    } else if ('absolute' in siteMetadata.title) {
-      siteTitle = siteMetadata.title.absolute;
+  if (SITE_METADATA.title) {
+    if (typeof SITE_METADATA.title === 'string') {
+      siteTitle = SITE_METADATA.title;
     }
   }
 
   // 1. Configurar la información general del feed usando los metadatos del sitio
   const feedOptions = {
     title: siteTitle,
-    description: siteMetadata.description || 'Últimas noticias y artículos',
+    description: SITE_METADATA.description || 'Últimas noticias y artículos',
     site_url: baseUrl,
     feed_url: `${baseUrl}/feed.xml`,
     language: localesConfig.defaultLocale,
@@ -31,8 +26,8 @@ export async function GET() {
 
   const feed = new RSS(feedOptions);
 
-  // 2. Obtener los posts de WordPress
-  const allPosts = await getAllPosts();
+  // 2. Obtener los posts de la configuración estática
+  const allPosts = STATIC_CONTENT.posts;
   
   // 3. Añadir cada post como un item en el feed
   if (allPosts) {

@@ -1,13 +1,13 @@
 // src/app/sitemap.ts
 import { MetadataRoute } from 'next';
-import { getAllPosts, getAllPages } from '@/api/wordpressApi';
+import { STATIC_CONTENT } from '@/utils/staticContent';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Obtiene la URL base de las variables de entorno
   const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
 
   // 1. Obtener todas las URLs de los posts del blog
-  const posts = (await getAllPosts()) || [];
+  const posts = STATIC_CONTENT.posts;
   const postUrls = posts.map((post) => {
     return {
       url: `${baseUrl}/blog/${post.slug}`,
@@ -16,7 +16,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   });
 
   // 2. Obtener todas las URLs de las páginas
-  const pages = (await getAllPages()) || [];
+  const pages = STATIC_CONTENT.pages;
   const pageUrls = pages.map((page) => {
     return {
       url: `${baseUrl}/${page.slug}`,
