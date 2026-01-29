@@ -50,7 +50,7 @@ const routeCache = new Map<string, RouteType>();
  * Detects the route type (page, post archive, post single) based on the slug array.
  * Caches results for performance.
  */
-export async function detectRouteType(slug: string[]): Promise<RouteType> {
+async function detectRouteType(slug: string[]): Promise<RouteType> {
   const cacheKey = slug.join('/');
   
   if (routeCache.has(cacheKey)) {
