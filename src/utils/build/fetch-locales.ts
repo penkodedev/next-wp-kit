@@ -21,10 +21,8 @@ interface LocalesConfig {
   generatedAt: string;
 }
 
-const WORDPRESS_API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || 'https://penkode.com/headless/wp-json';
-const WPML_ENDPOINT = '/custom/v1/languages';
-const OUTPUT_PATH = join(process.cwd(), 'src', 'i18n', 'locales.generated.json');
-const LOCALES_FILE_EXISTS = require('fs').existsSync(OUTPUT_PATH);
+const SUPPORTED_LOCALES = ['es', 'en', 'pt-br'];
+const DEFAULT_LOCALE = 'es';
 
 /**
  * Fetches active languages from WordPress WPML endpoint
@@ -90,63 +88,12 @@ function writeLocalesFile(config: LocalesConfig): void {
  * Main execution
  */
 async function main() {
-  console.log('🔄 Fetching active languages from WordPress...');
-  console.log(`   API URL: ${WORDPRESS_API_URL}`);
-  
-  // Skip fetch if locales file already exists and is recent
-  const fs = require('fs');
-  const path = require('path');
-  const outputPath = path.join(process.cwd(), 'src', 'i18n', 'locales.generated.json');
-  
-  if (LOCALES_FILE_EXISTS) {
-    const stats = fs.statSync(outputPath);
-    const fileAgeMinutes = (Date.now() - stats.mtime.getTime()) / (1000 * 60);
-    
-    if (fileAgeMinutes < 60) { // If file is less than 1 hour old
-      console.log('✅ Using existing locales configuration (file is recent)');
-      console.log(`   File: ${outputPath}`);
-      console.log(`   Generated: ${new Date(stats.mtime).toISOString()}`);
-      process.exit(0);
-    }
-  }
-  
-  try {
-    const languages = await fetchActiveLanguages();
-    const config = generateLocalesConfig(languages);
-    writeLocalesFile(config);
-  } catch (error) {
-     console.error('\n⚠️  Build-time locale detection failed.');
-     console.error('   Falling back to manual configuration in middleware.ts');
-     console.error('   (Build will continue, but you may need to update locales manually)\n');
-     
-     // Create a basic fallback configuration if the file doesn\'t exist
-     try {
-       const fs = require('fs');
-       const path = require('path');
-       const outputPath = path.join(process.cwd(), 'src', 'i18n', 'locales.generated.json');
-       
-       if (!fs.existsSync(outputPath)) {
-         const fallbackConfig = {
-           supportedLocales: ['en'],
-           defaultLocale: 'en',
-           generatedAt: new Date().toISOString()
-         };
-         
-         fs.writeFileSync(outputPath, JSON.stringify(fallbackConfig, null, 2), 'utf-8');
-         console.log('✅ Created fallback locales configuration:');
-         console.log(`   Supported: [${fallbackConfig.supportedLocales.join(', ')}]`);
-         console.log(`   Default: ${fallbackConfig.defaultLocale}`);
-         console.log(`   File: ${outputPath}`);
-       }
-     } catch (fallbackError) {
-       console.error('❌ Failed to create fallback configuration:', fallbackError);
-       process.exit(1);
-     }
-     
-     // Don't throw - allow build to continue with hardcoded fallback
-     process.exit(0);
-   }
- }
+  console.log('🔄 Usando configuración de locales estática...');
+  console.log(`   File: ${OUTPUT_PATH}`);
+  console.log(`   Supported: [${SUPPORTED_LOCALES.join(', ')}]`);
+  console.log(`   Default: ${DEFAULT_LOCALE}`);
+  process.exit(0);
+}
 
 // Run if executed directly (not imported)
 if (require.main === module) {
