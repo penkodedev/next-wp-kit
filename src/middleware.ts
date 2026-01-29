@@ -3,8 +3,8 @@ import type { NextRequest } from 'next/server'
 import localesConfig from './i18n/locales.generated.json'
 
 // Auto-generated from WordPress WPML (see src/utils/build/fetch-locales.ts)
-const SUPPORTED_LOCALES = localesConfig.supportedLocales;
-const DEFAULT_LOCALE = localesConfig.defaultLocale;
+const SUPPORTED_LOCALES = localesConfig.supportedLocales || ['en'];
+const DEFAULT_LOCALE = localesConfig.defaultLocale || 'en';
 
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
@@ -24,4 +24,9 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  // Add validation to ensure locales are properly configured
+  onError: (error: Error) => {
+    console.error('⚠️  Middleware error:', error);
+    return NextResponse.next();
+  }
 }

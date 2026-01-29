@@ -97,14 +97,38 @@ async function main() {
     const config = generateLocalesConfig(languages);
     writeLocalesFile(config);
   } catch (error) {
-    console.error('\n⚠️  Build-time locale detection failed.');
-    console.error('   Falling back to manual configuration in middleware.ts');
-    console.error('   (Build will continue, but you may need to update locales manually)\n');
-    
-    // Don't throw - allow build to continue with hardcoded fallback
-    process.exit(0);
-  }
-}
+     console.error('\n⚠️  Build-time locale detection failed.');
+     console.error('   Falling back to manual configuration in middleware.ts');
+     console.error('   (Build will continue, but you may need to update locales manually)\n');
+     
+     // Create a basic fallback configuration if the file doesn\'t exist
+     try {
+       const fs = require('fs');
+       const path = require('path');
+       const outputPath = path.join(process.cwd(), 'src', 'i18n', 'locales.generated.json');
+       
+       if (!fs.existsSync(outputPath)) {
+         const fallbackConfig = {
+           supportedLocales: ['en'],
+           defaultLocale: 'en',
+           generatedAt: new Date().toISOString()
+         };
+         
+         fs.writeFileSync(outputPath, JSON.stringify(fallbackConfig, null, 2), 'utf-8');
+         console.log('✅ Created fallback locales configuration:');
+         console.log(`   Supported: [${fallbackConfig.supportedLocales.join(', ')}]`);
+         console.log(`   Default: ${fallbackConfig.defaultLocale}`);
+         console.log(`   File: ${outputPath}`);
+       }
+     } catch (fallbackError) {
+       console.error('❌ Failed to create fallback configuration:', fallbackError);
+       process.exit(1);
+     }
+     
+     // Don't throw - allow build to continue with hardcoded fallback
+     process.exit(0);
+   }
+ }
 
 // Run if executed directly (not imported)
 if (require.main === module) {
