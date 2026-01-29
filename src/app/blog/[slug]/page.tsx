@@ -18,8 +18,10 @@ type PostPageProps = {
 
 // 1. Generar Metadatos Dinámicos para SEO
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
+  const headersList = headers();
+  const locale = (headersList.get('x-locale') || localesConfig.defaultLocale) as string;
   const post = await getContentBySlug<Post>('posts', params.slug).catch(() => null);
-  return generateSeoMetadata(post);
+  return generateSeoMetadata(post, locale);
 }
 
 // 2. Generar Rutas Estáticas en el momento de la compilación
