@@ -1,3 +1,5 @@
+// src/components/layout/content/ContentTaxonomy.tsx
+
 import React from "react";
 import { getTranslatedCptSlug } from "@/utils/config/cptConfig";
 import type { WpContent, Term } from "@/types/wordpressTypes";

@@ -15,18 +15,33 @@ const nextConfig = {
   // },
 
   images: {
-    remotePatterns: [
-      {
-        protocol: 'http',
-        hostname: 'localhost',
-        // Si tu WP local usa un puerto, añádelo aquí. Ej: port: '10003'
-        // port: '',
-      },
-      {
-        protocol: 'http',
-        hostname: 'penkode-headless.local',
-      },
-    ],
+    remotePatterns: (() => {
+      const patterns = [];
+      const apiUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
+
+      if (apiUrl) {
+        try {
+          const url = new URL(apiUrl);
+          patterns.push({
+            protocol: url.protocol.replace(':', ''),
+            hostname: url.hostname,
+            port: url.port || undefined,
+          });
+        } catch (e) {
+          console.warn('Invalid NEXT_PUBLIC_WORDPRESS_API_URL for images remotePatterns');
+        }
+      }
+
+      // Additional local hostnames if needed
+      if (process.env.NODE_ENV === 'development') {
+        patterns.push({
+          protocol: 'http',
+          hostname: 'localhost',
+        });
+      }
+
+      return patterns;
+    })(),
   },
   // Esta función actúa como un "proxy".
   // Le dice a Next.js: "Cuando alguien pida un archivo de /wp-content/..."

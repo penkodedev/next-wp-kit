@@ -1,3 +1,5 @@
+// src/components/layout/content/ContentSingle.tsx
+// 
 import Link from 'next/link';
 import { Icons } from '@/components/ui/Icons';
 import AnimatedArticle from '@/components/animations/AnimatedArticle';
@@ -18,24 +20,25 @@ import localesConfig from '@/i18n/locales.generated.json';
 
 type ContentSingleProps = {
   post: WpContent;
-  postType: string;   // 'posts', 'noticias', 'recursos', etc.
-  locale: string;     // 'es', 'en'
+  postType: string;   // 'posts', 'news', 'personal', etc.
+  locale: string;     // 'es', 'en', etc.
 };
 
-/**
- * Template para mostrar un post individual de cualquier post type
- * Calcula internamente backToArchiveUrl y archiveName según postType y locale
+/*
+ * Template to display a single post from any post type
+ * Internally computes backToArchiveUrl and archiveName based on postType and locale
  */
 export default function ContentSingle({
   post,
   postType,
   locale
 }: ContentSingleProps) {
-  // Calcular backToArchiveUrl y archiveName internamente
+  // Compute backToArchiveUrl and archiveName internally
   const translatedSlug = getTranslatedCptSlug(postType, locale);
   const safeSlug = translatedSlug || postType || 'posts'; // Triple fallback
   const archiveName = safeSlug.charAt(0).toUpperCase() + safeSlug.slice(1);
   const backToArchiveUrl = locale === localesConfig.defaultLocale ? `/${safeSlug}` : `/${locale}/${safeSlug}`;
+
 
   return (
     <div className="page-sidebar">
@@ -85,7 +88,7 @@ export default function ContentSingle({
             />
           </AnimatedArticle>
 
-          {/* Campos personalizados dinámicos - Se muestran automáticamente si existen */}
+          {/* // Dynamic custom fields – automatically displayed if they exist */}
           <CustomFields
             cpt={postType}
             locale={locale}
@@ -93,7 +96,6 @@ export default function ContentSingle({
             readOnly={true}
           />
 
-          {/* <TaxonomyTermsList postType="asdf" taxonomy="nivel_educativo" title="Niveles Educativos" link /> */}
           <TaxonomyPost post={post} taxonomies={['nivel_educativo', 'categoria']} title="Niveles de contenido" link />
         </article>
         

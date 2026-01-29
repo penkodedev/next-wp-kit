@@ -1,9 +1,10 @@
+// src/components/layout/ui/AudioPlayer.tsx
+
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Icons } from './Icons';
-
 
 interface AudioPlayerProps {
   src: string;
@@ -17,33 +18,30 @@ export default function AudioPlayer({ src, title, className = '' }: AudioPlayerP
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const updateTime = () => setCurrentTime(audio.currentTime);
-    const updateDuration = () => setDuration(audio.duration);
-    const handleLoadStart = () => setIsLoading(true);
-    const handleCanPlay = () => setIsLoading(false);
-    const handleEnded = () => setIsPlaying(false);
+    const handlers = {
+      timeupdate: () => setCurrentTime(audio.currentTime),
+      loadedmetadata: () => setDuration(audio.duration),
+      loadstart: () => setIsLoading(true),
+      canplay: () => setIsLoading(false),
+      ended: () => setIsPlaying(false),
+    };
 
-    audio.addEventListener('timeupdate', updateTime);
-    audio.addEventListener('loadedmetadata', updateDuration);
-    audio.addEventListener('loadstart', handleLoadStart);
-    audio.addEventListener('canplay', handleCanPlay);
-    audio.addEventListener('ended', handleEnded);
+    Object.entries(handlers).forEach(([event, handler]) => 
+      audio.addEventListener(event, handler)
+    );
 
     return () => {
-      audio.removeEventListener('timeupdate', updateTime);
-      audio.removeEventListener('loadedmetadata', updateDuration);
-      audio.removeEventListener('loadstart', handleLoadStart);
-      audio.removeEventListener('canplay', handleCanPlay);
-      audio.removeEventListener('ended', handleEnded);
+      Object.entries(handlers).forEach(([event, handler]) => 
+        audio.removeEventListener(event, handler)
+      );
     };
-  }, [src]);
+  }, []);
 
   const togglePlay = async () => {
     if (!audioRef.current) return;
@@ -51,42 +49,34 @@ export default function AudioPlayer({ src, title, className = '' }: AudioPlayerP
     try {
       if (isPlaying) {
         audioRef.current.pause();
-        setIsPlaying(false);
       } else {
         await audioRef.current.play();
-        setIsPlaying(true);
       }
+      setIsPlaying(!isPlaying);
     } catch (error) {
       console.error('Error playing audio:', error);
     }
   };
 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!audioRef.current) return;
     const time = parseFloat(e.target.value);
-    audioRef.current.currentTime = time;
-    setCurrentTime(time);
-  };
-
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const vol = parseFloat(e.target.value);
     if (audioRef.current) {
-      audioRef.current.volume = vol;
+      audioRef.current.currentTime = time;
+      setCurrentTime(time);
     }
-    setVolume(vol);
   };
 
   const formatTime = (time: number) => {
+    if (!time || !isFinite(time)) return '0:00';
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
-    
   return (
     <div className={`audio-player ${className}`}>
-      
       <p className="audio-text">{t('AudioPlayer.listenAudio')}</p>
+      
       <div className="audio-player-controls">
         <a
           onClick={togglePlay}
@@ -109,26 +99,14 @@ export default function AudioPlayer({ src, title, className = '' }: AudioPlayerP
             min="0"
             max={duration || 0}
             value={currentTime}
+            onInput={handleSeek}
             onChange={handleSeek}
             className="progress-bar"
             aria-label="Seek audio"
+            disabled={!duration}
           />
           <p className="time-display">{formatTime(duration)}</p>
         </div>
-
-        {/* <div className="volume-container">
-          <Icons.Volume2 size={16} />
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.1"
-            value={volume}
-            onChange={handleVolumeChange}
-            className="volume-slider"
-            aria-label="Adjust volume"
-          />
-        </div> */}
       </div>
 
       <audio ref={audioRef} src={src} preload="metadata" />
