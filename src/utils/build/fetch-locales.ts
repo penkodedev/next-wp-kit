@@ -21,7 +21,7 @@ interface LocalesConfig {
   generatedAt: string;
 }
 
-const WORDPRESS_API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || 'http://penkode-headless.local/wp-json';
+const WORDPRESS_API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || 'https://penkode.com/headless/wp-json';
 const WPML_ENDPOINT = '/custom/v1/languages';
 const OUTPUT_PATH = join(process.cwd(), 'src', 'i18n', 'locales.generated.json');
 const LOCALES_FILE_EXISTS = require('fs').existsSync(OUTPUT_PATH);
