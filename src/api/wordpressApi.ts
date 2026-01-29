@@ -29,7 +29,7 @@ export const getCachedTaxonomies = unstable_cache(
 );
 
 
-import type { WpContent, SiteInfo, MenuItem, SearchResult, Page, Modal, PostNavigation, AllMenus } from '@/types/wordpressTypes';
+import type { WpContent, SiteInfo, MenuItem, SearchResult, Page, Modal, PostNavigation, AllMenus, Post } from '@/types/wordpressTypes';
 import { unstable_cache } from 'next/cache';
 import { logger } from '@/utils/wordpress/logger';
 import localesConfig from '@/i18n/locales.generated.json';
@@ -257,6 +257,60 @@ export async function getHeroData(
   return data;
 }
 
+
+/*--------------------------------------------------------------------------------------
+    🍔 GET ALL POSTS
+    Route: /wp/v2/posts?per_page=100&_embed
+    Fetches all posts with embedded data
+--------------------------------------------------------------------------------------*/
+/**
+ * Fetches all posts from WordPress REST API.
+ * @param params Optional query parameters (e.g., '?per_page=10')
+ * @returns Array of Post objects
+ */
+export async function getAllPosts(params: string = ''): Promise<Post[] | null> {
+  return await fetchAPI<Post[]>(`/wp/v2/posts${params}`);
+}
+
+/**
+ * Cached version of getAllPosts using Next.js unstable_cache.
+ * Caches posts for 5 minutes to avoid redundant API calls.
+ * Use this in pages that need post listings.
+ */
+export const getCachedAllPosts = unstable_cache(
+  async (params: string = ''): Promise<Post[] | null> => {
+    return await fetchAPI<Post[]>(`/wp/v2/posts${params}`);
+  },
+  ['all-posts'],
+  { revalidate: 300 } // Cache for 5 minutes
+);
+
+/*--------------------------------------------------------------------------------------
+    🍔 GET ALL PAGES
+    Route: /wp/v2/pages?per_page=100&_embed
+    Fetches all pages with embedded data
+--------------------------------------------------------------------------------------*/
+/**
+ * Fetches all pages from WordPress REST API.
+ * @param params Optional query parameters (e.g., '?per_page=10')
+ * @returns Array of Page objects
+ */
+export async function getAllPages(params: string = ''): Promise<Page[] | null> {
+  return await fetchAPI<Page[]>(`/wp/v2/pages${params}`);
+}
+
+/**
+ * Cached version of getAllPages using Next.js unstable_cache.
+ * Caches pages for 5 minutes to avoid redundant API calls.
+ * Use this in pages that need page listings.
+ */
+export const getCachedAllPages = unstable_cache(
+  async (params: string = ''): Promise<Page[] | null> => {
+    return await fetchAPI<Page[]>(`/wp/v2/pages${params}`);
+  },
+  ['all-pages'],
+  { revalidate: 300 } // Cache for 5 minutes
+);
 
 /*--------------------------------------------------------------------------------------
     🍔 GET ALL CONTENT (GENERIC)
