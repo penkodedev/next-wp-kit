@@ -24,6 +24,7 @@ interface LocalesConfig {
 const WORDPRESS_API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || 'http://penkode-headless.local/wp-json';
 const WPML_ENDPOINT = '/custom/v1/languages';
 const OUTPUT_PATH = join(process.cwd(), 'src', 'i18n', 'locales.generated.json');
+const LOCALES_FILE_EXISTS = require('fs').existsSync(OUTPUT_PATH);
 
 /**
  * Fetches active languages from WordPress WPML endpoint
@@ -91,6 +92,23 @@ function writeLocalesFile(config: LocalesConfig): void {
 async function main() {
   console.log('🔄 Fetching active languages from WordPress...');
   console.log(`   API URL: ${WORDPRESS_API_URL}`);
+  
+  // Skip fetch if locales file already exists and is recent
+  const fs = require('fs');
+  const path = require('path');
+  const outputPath = path.join(process.cwd(), 'src', 'i18n', 'locales.generated.json');
+  
+  if (LOCALES_FILE_EXISTS) {
+    const stats = fs.statSync(outputPath);
+    const fileAgeMinutes = (Date.now() - stats.mtime.getTime()) / (1000 * 60);
+    
+    if (fileAgeMinutes < 60) { // If file is less than 1 hour old
+      console.log('✅ Using existing locales configuration (file is recent)');
+      console.log(`   File: ${outputPath}`);
+      console.log(`   Generated: ${new Date(stats.mtime).toISOString()}`);
+      process.exit(0);
+    }
+  }
   
   try {
     const languages = await fetchActiveLanguages();
