@@ -47,10 +47,16 @@ const nextConfig = {
   // Le dice a Next.js: "Cuando alguien pida un archivo de /wp-content/..."
   // "...en realidad, búscalo en tu backend de WordPress y sírvelo".
   async rewrites() {
+    const apiUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
+    if (!apiUrl) {
+      console.warn('NEXT_PUBLIC_WORDPRESS_API_URL not configured, skipping rewrites');
+      return [];
+    }
+
     return [
       {
         source: '/wp-content/:path*',
-        destination: `${process.env.NEXT_PUBLIC_WORDPRESS_API_URL.replace('/wp-json', '')}/wp-content/:path*`,
+        destination: `${apiUrl.replace('/wp-json', '')}/wp-content/:path*`,
       },
     ]
   },

@@ -20,9 +20,9 @@ button,
 a.button,
 .wp-block-button__link,
 input[type="submit"],
-input.wpcf7-form-control
+input.wpcf7-submit
 {
-  display: flex;
+  display: flex !important; // IMPORTANT to override WP block styles
   font-family: $text-font, sans-serif;
   font-size: 1em;
   text-decoration: none;
