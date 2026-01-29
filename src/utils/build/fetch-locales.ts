@@ -21,6 +21,9 @@ interface LocalesConfig {
   generatedAt: string;
 }
 
+const WORDPRESS_API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || 'https://penkode.com/headless/wp-json';
+const WPML_ENDPOINT = '/custom/v1/languages';
+const OUTPUT_PATH = join(process.cwd(), 'src', 'i18n', 'locales.generated.json');
 const SUPPORTED_LOCALES = ['es', 'en', 'pt-br'];
 const DEFAULT_LOCALE = 'es';
 

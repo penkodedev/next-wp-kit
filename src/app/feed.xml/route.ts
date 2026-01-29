@@ -1,5 +1,6 @@
 // src/app/feed.xml/route.ts
 import RSS from 'rss';
+import { generateMetadata } from '@/app/layout';
 import { STATIC_CONTENT, SITE_METADATA } from '@/utils/staticContent';
 import localesConfig from '@/i18n/locales.generated.json';
 
