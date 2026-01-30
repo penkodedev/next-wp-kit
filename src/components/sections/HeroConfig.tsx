@@ -123,11 +123,15 @@ export default function HeroConfig({ heroData }: HeroConfigProps = {}) {
   const slides = heroData?.slides && heroData.slides.length > 0 ? heroData.slides : heroSlides;
   const settings = heroData?.settings || heroSettings;
   
+  // Handle different property names between WordPress API and local settings
+  const autoPlay = 'autoplay' in settings ? settings.autoplay : settings.autoPlay;
+  const autoPlayInterval = 'interval' in settings ? settings.interval : settings.autoPlayInterval;
+  
   return (
     <Hero
       slides={slides}
-      autoPlay={settings.autoPlay ?? heroSettings.autoPlay}
-      autoPlayInterval={settings.interval ?? heroSettings.autoPlayInterval}
+      autoPlay={autoPlay ?? heroSettings.autoPlay}
+      autoPlayInterval={autoPlayInterval ?? heroSettings.autoPlayInterval}
     />
   );
 }
