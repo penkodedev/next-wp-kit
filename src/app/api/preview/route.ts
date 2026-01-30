@@ -1,5 +1,7 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
+import localesConfig from '@/i18n/locales.generated.json';
+import { getSiteInfo } from '@/api/wordpressApi';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -38,10 +40,8 @@ export async function GET(req: NextRequest) {
   }
 
   // Construir la URL pública
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const localesConfig = (await import('@/i18n/locales.generated.json')) as any;
-  const siteInfo = await import('@/api/wordpressApi').then(mod => mod.getSiteInfo());
-  const defaultLocale = (await siteInfo)?.i18n?.default_locale || localesConfig.defaultLocale;
+  const siteInfo = await getSiteInfo();
+  const defaultLocale = siteInfo?.i18n?.default_locale || localesConfig.defaultLocale;
   
   let redirectUrl = '/';
   if (lang && lang !== defaultLocale) redirectUrl += lang + '/';

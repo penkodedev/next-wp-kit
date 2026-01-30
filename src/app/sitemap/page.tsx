@@ -1,7 +1,7 @@
 // src/app/sitemap/page.tsx
 
 import Link from "next/link";
-import { getAllContent, fetchAPI } from "@/api/wordpressApi";
+import { getAllContent, fetchAPI, getSiteInfo } from "@/api/wordpressApi";
 import type { Post, Page } from "@/types/wordpressTypes";
 import { getActiveCptSlugs, getTranslatedCptSlug } from "@/utils/config/cptConfig";
 import localesConfig from "@/i18n/locales.generated.json";
@@ -162,9 +162,7 @@ async function getSitemapData(currentLocale: string) {
 
 export default async function SitemapPage() {
   // Get default locale from WordPress
-  const siteInfo = await import('@/api/wordpressApi').then(mod => mod.getSiteInfo());
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const localesConfig = (await import('@/i18n/locales.generated.json')) as any;
+  const siteInfo = await getSiteInfo();
   const currentLocale = siteInfo?.i18n?.default_locale || localesConfig.defaultLocale;
   const sections = await getSitemapData(currentLocale);
 
