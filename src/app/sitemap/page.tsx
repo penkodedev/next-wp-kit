@@ -163,7 +163,8 @@ async function getSitemapData(currentLocale: string) {
 export default async function SitemapPage() {
   // Get default locale from WordPress
   const siteInfo = await import('@/api/wordpressApi').then(mod => mod.getSiteInfo());
-  const localesConfig = await import('@/i18n/locales.generated.json').then(mod => mod.default);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const localesConfig = (await import('@/i18n/locales.generated.json')) as any;
   const currentLocale = siteInfo?.i18n?.default_locale || localesConfig.defaultLocale;
   const sections = await getSitemapData(currentLocale);
 
