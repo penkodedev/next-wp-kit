@@ -1,6 +1,6 @@
 // Catch-all route to handle pages, CPT archives, singles, and taxonomies from WordPress.
 
-import { getContentBySlug, getAllContent, getHomePage, getSiteInfo } from "@/api/wordpressApi";
+import { getContentBySlug, getAllContent, getHomePage, getSiteInfo, safeGetAllContent, safeGetContentBySlug } from "@/api/wordpressApi";
 import { fetchAPI } from "@/api/wordpressApi";
 import { generateSeoMetadata } from "@/utils/seo/seo";
 import { notFound } from "next/navigation";
@@ -161,7 +161,7 @@ export async function generateStaticParams() {
   });
 
   // Add pages
-  const pages = await getAllContent<Page>("pages");
+  const pages = await safeGetAllContent<Page>("pages");
   if (pages) {
     pages.forEach((page) => {
       const pageSlugs = page.slug.split("/").filter(Boolean);
@@ -198,8 +198,8 @@ export async function generateStaticParams() {
           const apiParams = locale === localesConfig.defaultLocale 
             ? '?per_page=10&_embed'
             : `?per_page=10&_embed&lang=${locale}`;
-          const posts = await getAllContent<WpContent>(cpt, apiParams);
-          if (posts) allPosts.push(...posts);
+          const posts = await safeGetAllContent<WpContent>(cpt, apiParams);
+          if (posts && posts.length > 0) allPosts.push(...posts);
         }
 
         // Remove duplicates by ID

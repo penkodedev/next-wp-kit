@@ -606,3 +606,50 @@ export async function getPostLikes(postId: number): Promise<number> {
   }
 }
 
+/**
+ * Safe wrapper for build-time operations.
+ * Returns empty array instead of null on network errors.
+ */
+export async function safeGetAllContent<T extends { id: number }>(
+  postType: string,
+  params: string = ''
+): Promise<T[]> {
+  try {
+    const data = await fetchAPI<T[]>(`/wp/v2/${postType}${params}`);
+    if (!data) return [];
+    // Filter out entries without valid ID
+    return data.filter((item): item is T => item && typeof item.id === 'number');
+  } catch {
+    logger.error(`safeGetAllContent failed for ${postType}`);
+    return [];
+  }
+}
+
+/**
+ * Safe wrapper for site info that returns a minimal fallback.
+ */
+export async function safeGetSiteInfo(): Promise<SiteInfo | null> {
+  try {
+    return await getSiteInfo();
+  } catch {
+    logger.error('safeGetSiteInfo failed');
+    return null;
+  }
+}
+
+/**
+ * Safe wrapper for content by slug.
+ */
+export async function safeGetContentBySlug<T extends WpContent>(
+  postType: string,
+  slug: string,
+  lang?: string
+): Promise<T | null> {
+  try {
+    return await getContentBySlug<T>(postType, slug, lang);
+  } catch {
+    logger.error(`safeGetContentBySlug failed for ${postType}/${slug}`);
+    return null;
+  }
+}
+
