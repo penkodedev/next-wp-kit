@@ -40,8 +40,10 @@ export default function PostCard({
   excerptLength = 150,
 }: PostCardProps) {
   const featuredMedia = item._embedded?.["wp:featuredmedia"]?.[0];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const mediaDetails = featuredMedia as any;
   const imageUrl =
-    featuredMedia?.media_details?.sizes?.large?.source_url ||
+    mediaDetails?.media_details?.sizes?.large?.source_url ||
     featuredMedia?.source_url;
   const excerptText = createExcerpt(item, excerptLength);
 
@@ -81,7 +83,7 @@ export default function PostCard({
           >
             <Image
               src={imageUrl}
-              alt={featuredMedia?.alt_text || item.title.rendered}
+              alt={mediaDetails?.alt_text || item.title.rendered}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               style={{
