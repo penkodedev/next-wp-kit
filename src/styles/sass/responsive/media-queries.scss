@@ -1,28 +1,18 @@
-
 //----------------------------------------------------
 //            SMALLER THAN 1440px
 //----------------------------------------------------
-@media screen and (max-width: 1440px) {
-   
-
-}
+@media screen and (max-width: 1440px) {}
 
 
 //----------------------------------------------------
 //            SMALLER THAN 1200px
 //----------------------------------------------------
-@media screen and (max-width: 1200px) {
-
-
-}
+@media screen and (max-width: 1200px) {}
 
 //----------------------------------------------------
 //            SMALLER THAN 992px
 //----------------------------------------------------
-@media screen and (max-width: 992px) {
-    
-
-}
+@media screen and (max-width: 992px) {}
 
 //----------------------------------------------------
 //            SMALLER THAN 768px
@@ -31,24 +21,29 @@
 
     // ************** HOME *************//
     .page-home .home-content {
-    padding: 10px 20px;
-}
+        padding: 10px 20px;
+    }
 
-.page-home .texto-inicio {
-    margin-top: -30px;
-    padding: 50px 20px 40px 20px;
+    .page-home .texto-inicio {
+        margin-top: -30px;
+        padding: 50px 20px 40px 20px;
 
-}
+    }
+
     // ************** GENERAL & LAYOUT *************//
-
-    main {
-        padding-inline: 1em;
+    .page-one-col {
+        padding: 0 1.2rem;
     }
 
     // ************** HEADER *************//
-    header .actions-container {
+    .header {
+        height: 80px;
+        padding: 15px 20px;
+
+    .actions-container {
         display: flex;
         flex-direction: row-reverse; // REVERT ORDER IF NEEDED of menu and components on smaller screens
+     } 
     }
 
     // ************** ENCUESTA *************//
@@ -57,12 +52,14 @@
         flex-direction: column;
         align-items: center;
     }
+
     .encuesta-sidebar {
         display: flex;
         flex-direction: column;
         width: 90%;
         margin: 0 0 35px 0;
     }
+
     .encuesta-container {
         & p.pregunta-bold {
             font-size: 1.1em !important;
@@ -83,6 +80,7 @@
             text-align: center;
         }
     }
+
     .texto-eval-final {
         padding: 10px;
         margin: 0;
@@ -105,25 +103,40 @@
 @media screen and (max-width: 576px) {
 
     // ************** HEADER *************//
-    .header-desc { 
+
+    .header .logo-container img {
+        height: 42px;
+    }
+    
+    .header .actions-container {
+        column-gap: 12px;
+    }
+
+    a.mobile-menu-toggle svg { // HAMBURGER MENU SIZE
+        height: 36px;
+    }
+
+    .header-desc {
         font-size: 0.8em;
     }
 
-     #logo-container img.logo-xamle-header {
+    #logo-container img.logo-xamle-header {
         // TODO: Revisar si este selector sigue siendo necesario o se puede generalizar
-        width: 90px;   /* reduce al 50% del contenedor */
-        height: auto; /* mantiene la proporción */
-     }
+        width: 90px;
+        /* reduce al 50% del contenedor */
+        height: auto;
+        /* mantiene la proporción */
+    }
 
 
-     // ************** FORMULARIO *************//
+    // ************** FORMULARIO *************//
 
-     .form-text {
+    .form-text {
         font-size: 1.1em;
         padding: 22px 18px;
-     }
+    }
 
-     .form-main {
+    .form-main {
         padding: 0 20px 20px;
 
         fieldset {
@@ -139,24 +152,24 @@
         h1 {
             font-size: 1.4em;
         }
-     }
+    }
 
-     // ************** FOOTER *************//
+    // ************** FOOTER *************//
 
-     .footer small {
+    .footer small {
         width: 90%;
-        margin:  0 auto;
+        margin: 0 auto;
         line-height: 1.2em;
-     }
+    }
 }
 
 //----------------------------------------------------
 //            SMALLER THAN 400px
 //----------------------------------------------------
 @media screen and (max-width: 400px) {
-    
+
     // ************** HEADER *************//
-    .header-desc { 
+    .header-desc {
         font-size: 0.73em;
         line-height: 1em;
     }
