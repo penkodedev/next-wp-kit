@@ -40,10 +40,10 @@
         height: 80px;
         padding: 15px 20px;
 
-    .actions-container {
-        display: flex;
-        flex-direction: row-reverse; // REVERT ORDER IF NEEDED of menu and components on smaller screens
-     } 
+        .actions-container {
+            display: flex;
+            flex-direction: row-reverse; // REVERT ORDER IF NEEDED of menu and components on smaller screens
+        }
     }
 
     // ************** ENCUESTA *************//
@@ -105,14 +105,16 @@
     // ************** HEADER *************//
 
     .header .logo-container img {
-        height: 42px;
+        // LOGO SIZE
+        height: 38px;
     }
-    
+
     .header .actions-container {
         column-gap: 12px;
     }
 
-    a.mobile-menu-toggle svg { // HAMBURGER MENU SIZE
+    a.mobile-menu-toggle svg {
+        // HAMBURGER MENU SIZE
         height: 36px;
     }
 
@@ -129,31 +131,6 @@
     }
 
 
-    // ************** FORMULARIO *************//
-
-    .form-text {
-        font-size: 1.1em;
-        padding: 22px 18px;
-    }
-
-    .form-main {
-        padding: 0 20px 20px;
-
-        fieldset {
-            display: flex;
-            flex-direction: column;
-            width: 85%;
-        }
-
-        legend {
-            font-size: 1em;
-        }
-
-        h1 {
-            font-size: 1.4em;
-        }
-    }
-
     // ************** FOOTER *************//
 
     .footer small {
@@ -169,22 +146,22 @@
 @media screen and (max-width: 400px) {
 
     // ************** HEADER *************//
-    .header-desc {
-        font-size: 0.73em;
-        line-height: 1em;
+
+    .header-sticky-enabled #logo-container img {
+        // LOGO SIZE
+        height: 38px !important;
     }
 
-    // ************** ENCUESTA *************//
+    .lang-switcher-simple {
+        background: transparent;
 
-    .resultado-container {
-        margin: -20px 0 100px 0;
-    }
+        svg {
+            color: rgb(53, 53, 53) !important;
+            padding: 0;
+        }
 
-    .score-animado {
-        text-align: center;
-    }
-
-    .nav-buttons {
-        gap: 6px;
+        .current-lang {
+            display: none;
+        }
     }
 }
