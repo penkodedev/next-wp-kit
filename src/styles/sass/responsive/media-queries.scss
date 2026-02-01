@@ -35,6 +35,27 @@
         padding: 0 1.2rem;
     }
 
+    .page-fullwidth {
+        padding: 0 1rem;
+
+        .page-title {
+            margin: 20px 0 0 0;
+        }
+
+        .post-grid {
+            margin: 20px 0;
+        }
+    }
+
+    aside {
+        border: none;
+        padding: 0;
+
+        .sidebox {
+            position: relative;
+        }
+    }
+
     // ************** HEADER *************//
     .header {
         height: 80px;
@@ -123,10 +144,10 @@
     }
 
     .lang-switcher-simple {
-        background: transparent;
+        // background: transparent;
 
         svg {
-            color: rgb(53, 53, 53) !important;
+            // color: rgb(53, 53, 53) !important;
             padding: 0;
         }
 
