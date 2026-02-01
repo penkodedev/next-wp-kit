@@ -9,10 +9,12 @@
 //----------------------------------------------------
 @media screen and (max-width: 1200px) {}
 
+
 //----------------------------------------------------
 //            SMALLER THAN 992px
 //----------------------------------------------------
 @media screen and (max-width: 992px) {}
+
 
 //----------------------------------------------------
 //            SMALLER THAN 768px
@@ -99,9 +101,16 @@
 
     // ************** FOOTER *************//
 
-    footer .footer-content {
-        justify-content: flex-start;
-        margin-left: 20px;
+    footer {
+
+        .footer-content {
+            justify-content: flex-start;
+        }
+
+        .footer-box {
+            margin-bottom: 44px;
+        }
+
     }
 }
 
@@ -155,9 +164,9 @@
     .post-card {
         padding: 6px;
     }
-    
-    .post-card-content {
-        line-height: 1.25em;
+
+    .post-card h3.post-card-title {
+        line-height: 1.18em;
     }
 
     // ************** FOOTER *************//
@@ -165,7 +174,7 @@
     .footer {
         background: #efefef;
     }
-    
+
     .footer small {
         width: 90%;
         margin: 0 auto;
@@ -198,6 +207,15 @@
         }
 
         .current-lang {
+            display: none;
+        }
+    }
+
+    // ************** ASIDE *************//
+    aside {
+        margin-bottom: 44px;
+
+        .search-container {
             display: none;
         }
     }
