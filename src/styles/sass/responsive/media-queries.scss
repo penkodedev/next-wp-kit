@@ -35,8 +35,12 @@
         padding: 0 1.2rem;
     }
 
-    .page-one-col {
+    .page-fullwidth {
         padding: 0 1.2rem;
+
+        .page-title {
+            margin: 20px 0 0 0;
+        }
     }
 
     .page-sidebar {
@@ -76,6 +80,10 @@
         .sidebox {
             position: relative;
         }
+    }
+
+    .load-more-container {
+        margin: 20px !important;
     }
 
     // ************** HEADER *************//
