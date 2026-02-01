@@ -26,9 +26,10 @@ input.wpcf7-submit
   font-family: $text-font, sans-serif;
   font-size: 1em;
   text-decoration: none;
-  // text-align: left;
+  text-align: center;
   color: #000;
   display: inline-flex;
+  justify-content: center;
   align-items: center;
   gap: 1rem;
   padding: 1rem 2.4rem;
@@ -37,10 +38,9 @@ input.wpcf7-submit
   border: 1px solid #bdbdbd;
   border-radius: 50px;
   cursor: pointer;
-  font-weight: 600;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  @include icon-after(arrow-right, 1em);
+  //@include icon-after(arrow-right, 1em);
   
 
   &:hover {

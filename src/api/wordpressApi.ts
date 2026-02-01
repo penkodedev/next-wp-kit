@@ -136,8 +136,8 @@ export async function fetchAPI<T>(
         ...customHeaders,
       },
       body: body ? JSON.stringify(body) : null,
-      // Next.js cache options (cache for 5 minutes in production, 60 seconds in development to reduce load on Local)
-      next: next || { revalidate: process.env.NODE_ENV === 'production' ? 300 : 60 },
+      // Next.js cache options (cache for 30 seconds in both production and development)
+      next: next || { revalidate: 30 },
     });
 
     if (!res.ok) {

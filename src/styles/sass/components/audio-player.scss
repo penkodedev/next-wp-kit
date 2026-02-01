@@ -1,6 +1,7 @@
 .audio-player-section {
     display: flex;
-    margin: 0 0 20px 0
+    margin: 0 0 20px 0;
+    position: relative;
 }
 
 .audio-player {
@@ -12,6 +13,7 @@
     padding: 36px 20px 10px 20px;
     width: 100%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: -1; // Ensure it stays behind SHARE dropdown
 
     p.audio-text {
         font-size: 0.78em;
