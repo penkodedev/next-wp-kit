@@ -35,15 +35,37 @@
         padding: 0 1.2rem;
     }
 
-    .page-fullwidth {
+    .page-one-col {
+        padding: 0 1.2rem;
+    }
+
+    .page-sidebar {
         padding: 0 1rem;
 
+        aside {
+            min-height: auto;
+        }
+
         .page-title {
-            margin: 20px 0 0 0;
+            margin: 20px 0 20px 0;
+            padding: 20px;
+
+            h1 {
+                line-height: 1.48em;
+            }
         }
 
         .post-grid {
             margin: 20px 0;
+        }
+    }
+
+    .icons-wrap {
+        bottom: 0;
+        gap: 4px;
+
+        svg {
+            height: 16px; // ICONS SIZE
         }
     }
 
@@ -112,16 +134,16 @@
 
 
     // ************** PAGE LAYOUT *************//
-    
+
     .page-title {
         padding: 24px;
-        margin:20px auto 20px auto;
+        margin: 20px auto 20px auto;
     }
 
     ul.breadcrumb {
-      display: none;
+        display: none;
     }
-    
+
     // ************** FOOTER *************//
 
     .footer small {
