@@ -16,7 +16,7 @@ export default function FooterCopyright({
 }: FooterCopyrightProps) {
   return (
     <div className="footer-copy">
-      &copy; {new Date().getFullYear()} {title}
+      {showTitle && <>&copy; {new Date().getFullYear()} {title}</>}
       {showDescription && description && (
         <>
           <br />

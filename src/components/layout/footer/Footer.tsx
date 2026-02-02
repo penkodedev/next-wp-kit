@@ -72,7 +72,9 @@ export default async function Footer() {
               <FooterLogo siteInfo={siteInfo} />
               <FooterCopyright
                 title={siteInfo.title}
-                description={siteInfo.description}
+                // description={siteInfo.description}
+                showTitle
+                showDescription
               />
             </div>
           </>

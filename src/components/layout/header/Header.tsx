@@ -23,7 +23,7 @@ interface HeaderProps {
 
 export default function Header({ 
   variant = 'default', 
-  menuVariant = 'responsive',
+  menuVariant, // Controlled by HeaderServer
   initialLocale = localesConfig.defaultLocale, 
   siteInfo,
   menusByLocale,
@@ -75,10 +75,10 @@ export default function Header({
       <div className="actions-container">
         <WpNavMenu 
           location="mainnav" 
-          className="main-menu" 
+          className="main-menu"
+          variant="mobile"
           locale={currentLocale}
           menuItems={menuItems}
-          variant={menuVariant}
         />
         <DarkModeToggle variant="icon" size={20} strokeWidth={1.4} />
         <SearchTrigger />

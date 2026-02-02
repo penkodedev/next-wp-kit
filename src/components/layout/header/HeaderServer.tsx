@@ -44,10 +44,11 @@ const defaultSiteInfo: SiteInfo = {
 
 export default async function HeaderServer({
   variant = "default",
-  menuVariant = "responsive", // CHANGE MENU BETWEEN 'desktop', 'mobile' or 'responsive'
+  menuVariant: menuVariantProp, // Controlled by props
   initialLocale,
 }: HeaderServerProps) {
-  // Use cached siteInfo (shared with layout, avoids duplicate API call)
+  // Handle undefined menuVariant (use responsive as default)
+  const menuVariant = menuVariantProp || 'responsive';
   const cachedSiteInfo = await getCachedSiteInfo();
   const siteInfo = cachedSiteInfo || defaultSiteInfo;
   
