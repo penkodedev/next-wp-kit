@@ -4,8 +4,8 @@
 // MOBILE MENU CONFIGURATION
 // =================================================================
 
-$menu-width: 100vw;
-$menu-padding: 5% 20%;
+$menu-width: 98vw; // WIDTH OF MOBILE PANEL MENU
+$menu-padding: 60px 5% 10% 5%;
 $menu-bg: white;
 $backdrop-bg: rgba(0, 0, 0, 0.7);
 
@@ -17,10 +17,10 @@ $backdrop-bg: rgba(0, 0, 0, 0.7);
     .mobile-menu-panel ul li a {
         color: #000;
     }
-    
+
     .mobile-menu-toggle {
         color: #fff;
-        
+
         &.menu-open {
             color: #000;
         }
@@ -28,7 +28,7 @@ $backdrop-bg: rgba(0, 0, 0, 0.7);
 }
 
 // =================================================================
-// MOBILE MENU TOGGLE BUTTON
+// MOBILE MENU TOGGLE (CLOSE) BUTTON
 // =================================================================
 
 .mobile-menu-toggle {
@@ -38,6 +38,13 @@ $backdrop-bg: rgba(0, 0, 0, 0.7);
     cursor: pointer;
     z-index: 1001;
     transition: top 0.3s ease;
+
+    .close-icon {
+        position: fixed; // Relativo al viewport
+        top: 2.4rem;
+        right: 2.4rem;
+        z-index: 1002;
+    }
 
     svg {
         transition: transform 0.2s ease, height 0.3s ease, width 0.3s ease;
@@ -69,16 +76,17 @@ $backdrop-bg: rgba(0, 0, 0, 0.7);
 
 .mobile-menu-panel {
     position: fixed;
-    top: 0;
-    right: 0;
-    width: $menu-width;
+    inset: 20px; // top, right, bottom, left = 20px each
+    margin: 0; // reset margin
+    padding: $menu-padding;
+    width: auto;
     max-width: 100vw;
-    height: 100vh;
+    height: auto;
     background: $menu-bg;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
     z-index: 1000;
     overflow-y: auto;
-    padding: $menu-padding;
+    transform: translateZ(0);
 
     &.main-menu {
         align-items: normal;
@@ -89,85 +97,91 @@ $backdrop-bg: rgba(0, 0, 0, 0.7);
         flex-direction: column;
 
         li {
+            display: flex;
+            flex-direction: column;
             margin: 0;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid #b1b1b1;
+
+            &:hover {
+                background: #efefef;
+            }
+
 
             a {
-                display: block;
+                font-family: $menu-font;
+                font-size: 1.16rem;
+                font-weight: 800;
                 color: #000;
                 text-decoration: none;
-                font-family: $menu-font;
-                font-size: 1rem;
+                display: block;
                 transition: background 0.2s ease;
                 position: relative;
+                padding: 0;
 
                 &::after {
-                    left: 0;
-                    transform: translateX(0) scaleX(0);
-                    width: 100%;
-                }
-
-                &:hover::after {
-                    transform: translateX(0) scaleX(1);
+                    content: none;
                 }
             }
         }
     }
 
-    // Submenu styles
-    .submenu.mobile {
-        position: static;
+
+    // ***************** SUBMENU STYLES FOR MOBILE *****************
+    ul.submenu-mobile {
         display: block;
         background: transparent;
         border: none;
         box-shadow: none;
-        padding: 0 0 0 1.5rem;
+        padding: 0 0 0 1rem;
         min-width: auto;
-        z-index: auto;
-        width: 100%;
-        margin: 0;
+        margin: -10px 0 0 0;
 
         li {
             display: block;
-            width: 100%;
+            width: 90%;
             border-bottom: none;
             padding: 0;
 
+            &:hover {
+                background: #fff;
+            }
+
             a {
-                padding: 0.5rem;
                 font-size: 0.9rem;
+                font-weight: normal;
+                padding: 0;
                 background: transparent;
-                
-                &:hover {
-                    background: transparent;
+
+                .has-submenu {
+                    margin: 10px 10px 0 10px; // indent submenu items
                 }
             }
         }
     }
 
     // Item with submenu toggle
-    .mobile-menu-item-with-children {
-        display: flex;
-        justify-content: space-between;
-        padding: 1rem 0.5rem;
+    // .mobile-menu-item-with-children {
+    //     display: flex;
+    //     justify-content: space-between;
+    //     padding: 1rem 0.5rem;
 
-        a {
-            padding: 0;
-            flex: 1;
-        }
+    //     a {
+    //         padding: 0;
+    //         flex: 1;
+    //     }
 
-        .submenu-toggle {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 0.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    //     .submenu-toggle {
+    //         background: transparent;
+    //         border: none;
+    //         cursor: pointer;
+    //         padding: 0.25rem;
+    //         display: flex;
+    //         align-items: center;
+    //         justify-content: center;
 
-            svg {
-                transition: transform 0.2s ease;
-            }
-        }
-    }
+    //         svg {
+    //             transition: transform 0.2s ease;
+    //         }
+    //     }
+    // }
 }

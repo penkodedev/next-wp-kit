@@ -56,7 +56,7 @@ function NavItem({ item, isMobile = false, onLinkClick }: { item: MenuItem; isMo
         {...(linkClass ? { className: linkClass } : {})}
       >
         {item.title}
-        {hasChildren && (
+        {hasChildren && !isMobile && (
           <motion.span
             className="submenu-arrow"
             aria-hidden="true"
@@ -81,7 +81,7 @@ function NavItem({ item, isMobile = false, onLinkClick }: { item: MenuItem; isMo
         )}
       </Link>
       {hasChildren && item.children && (
-        <ul className={isMobile ? "submenu mobile" : "submenu"}>
+        <ul className={isMobile ? "submenu-mobile" : "submenu"}>
           {item.children.map((child) => (
             <NavItem key={child.id} item={child} isMobile={isMobile} onLinkClick={onLinkClick} />
           ))}
@@ -157,6 +157,20 @@ function WpNavMenu({
     setIsMobileMenuOpen(false);
   }, [locale]);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
   // Log errors (development only)
   if (error) {
     logger.error(`WpNavMenu: Error fetching menu from ${apiUrl}`, error);
@@ -211,7 +225,9 @@ function WpNavMenu({
       >
         {/* Change size and strokeWidth of X and burger icons */}
         {/* Available burger icons: Icons.Menu, Icons.AlignJustify, Icons.AlignLeft, Icons.AlignRight, Icons.MoreVertical, Icons.MoreHorizontal */}
-        {isMobileMenuOpen ? <Icons.X size={28} strokeWidth={1} /> : <Icons.AlignRight size={40} strokeWidth={1.2} />} 
+        {isMobileMenuOpen 
+          ? <Icons.X size={28} strokeWidth={1} className="close-icon" /> 
+          : <Icons.AlignRight size={40} strokeWidth={1.2} className="burger-icon" />} 
       </a>
       
 
