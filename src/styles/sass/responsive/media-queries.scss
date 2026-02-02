@@ -71,7 +71,7 @@
         gap: 4px;
 
         svg {
-            height: 16px; // ICONS SIZE
+            height: 18px; // ICONS SIZE
         }
     }
 
@@ -141,13 +141,6 @@
         font-size: 0.8em;
     }
 
-    #logo-container img.logo-xamle-header {
-        // TODO: Revisar si este selector sigue siendo necesario o se puede generalizar
-        width: 90px;
-        /* reduce al 50% del contenedor */
-        height: auto;
-        /* mantiene la proporción */
-    }
 
 
     // ************** PAGE LAYOUT *************//

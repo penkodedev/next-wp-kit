@@ -24,6 +24,28 @@ export async function generateMetadata(): Promise<Metadata> {
     };
   }
 
+  // Use Yoast SEO if available
+  if (homePage.yoast_head_json) {
+    const yoast = homePage.yoast_head_json;
+    return {
+      title: yoast.title,
+      description: yoast.description,
+      openGraph: {
+        title: yoast.og_title,
+        description: yoast.og_description,
+        url: yoast.og_url,
+        siteName: yoast.og_site_name,
+        type: yoast.og_type as 'website' | 'article',
+        images: yoast.og_image?.map(img => ({
+          url: img.url,
+          width: img.width,
+          height: img.height,
+        })),
+      },
+    };
+  }
+
+  // Fallback to WordPress title and excerpt
   return {
     title: homePage.title.rendered,
     description: homePage.excerpt.rendered.replace(/<[^>]+>/g, ""),

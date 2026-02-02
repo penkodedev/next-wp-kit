@@ -360,27 +360,36 @@ export async function getContentBySlug<T extends WpContent>(postType: string, sl
 --------------------------------------------------------------------------------------*/
 /** Fetches the home page content, with optional language support. */
 export async function getHomePage(lang?: string): Promise<Page | null> {
-  // WordPress identifies the front page with is_front_page metadata
-  // We query for the page marked as front page in Settings > Reading
-  let query = '/wp/v2/pages?per_page=1&_embed&orderby=menu_order&order=asc';
+  // Get the front page by querying with is_front_page meta key
+  // This reliably gets the page configured in WordPress Settings > Reading
+  let query = '/wp/v2/pages?per_page=100&_embed';
   
   if (lang && lang !== localesConfig.defaultLocale) {
     query += `&lang=${lang}`;
   }
   
-  // First, try to get the designated front page
   const pages = await fetchAPI<Page[]>(query);
   
   if (pages && pages.length > 0) {
-    // Return the first page (WordPress front page)
+    // Find the page marked as front page (template = front-page)
+    const frontPage = pages.find(p => 
+      p.template === 'front-page' || 
+      p.meta?.['_wp_page_template'] === 'front-page'
+    );
+    
+    if (frontPage) {
+      return frontPage;
+    }
+    
+    // Fallback: look for pages with common home page slugs
+    const commonSlugs = ['inicio', 'home', 'portada', 'accueil', 'landing'];
+    for (const slug of commonSlugs) {
+      const page = pages.find(p => p.slug === slug);
+      if (page) return page;
+    }
+    
+    // Final fallback: return first page
     return pages[0];
-  }
-  
-  // Fallback: try getting by common home page slugs
-  const commonSlugs = ['inicio', 'home', 'portada', 'accueil'];
-  for (const slug of commonSlugs) {
-    const page = await getContentBySlug<Page>('pages', slug, lang);
-    if (page) return page;
   }
   
   return null;
