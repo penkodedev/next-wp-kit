@@ -82,10 +82,19 @@
         background-color: #1f1f1f !important;
     }
 
-    .main-menu ul li .submenu {
-        background: #242424;
-        border: none;
+    .mobile-menu-panel {
+        background-color: #292929;
+        border: 1px solid #414141;
 
+        ul li {
+            border-bottom: 1px solid #7d7d7d
+        }
+    }
+
+    .main-menu ul li .submenu {
+        background:#212020;
+        border: none;
+        
         a {
             color: #e0e0e0;
 
@@ -94,6 +103,8 @@
             }
         }
     }
+
+    
 
     // =================================================================
     //                    POST CARDS
