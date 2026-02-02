@@ -76,7 +76,7 @@ export default function Header({
         <WpNavMenu 
           location="mainnav" 
           className="main-menu"
-          variant="mobile"
+          variant="responsive"
           locale={currentLocale}
           menuItems={menuItems}
         />
