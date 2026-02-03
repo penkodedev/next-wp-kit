@@ -7,6 +7,7 @@
 .main-menu {
   display: flex;
   align-items: center;
+  gap: 28px;
 
   ul {
     list-style: none;
@@ -24,7 +25,6 @@
         font-size: $menu-size; // MAIN MENU FONT SIZE
         color: #000;
         text-decoration: none;
-        margin: 10px; // Distance between menu items
         position: relative; // For ::after works
         padding-bottom: 5px;
 
