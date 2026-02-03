@@ -171,8 +171,12 @@
     }
 
     .footer-content {
-        margin-bottom: 0px;
+        margin-bottom: 0;
+        gap: 0;
     }
+
+    .copyright {
+        margin: 0;
 }
 
 //----------------------------------------------------
