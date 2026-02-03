@@ -4,6 +4,14 @@
 
 @use 'abstracts' as *;
 
+
+// Home page header transparent IF NEEDED BY HERO SECTION
+.page-home .header {
+    background-color: transparent;
+    border-bottom: none;
+}
+
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -21,11 +29,6 @@
     }
 }
 
-// Home page header transparent by default
-.page-home .header {
-    background-color: transparent;
-    border-bottom: none;
-}
 
 #header-container {
     padding: 0 25px;
@@ -55,6 +58,8 @@ header .actions-container {
     //     margin-right: 55px; // Space before last element IF NEEDED
     // }
 }
+
+
 
 // =================================================================
 // STICKY HEADER WITH SHRINK EFFECT (Optional feature)
@@ -122,10 +127,6 @@ $header-padding-scrolled: calc($header-height-scrolled * 0.154) $header-padding-
         top: calc($header-height-scrolled);
     }
 
-    .page-home header {
-        background-color: #fff !important;
-    }
-
     .main-menu ul li .submenu {
         top: 37px; // TOP POSITION FROM MAIN NAV
     }
@@ -143,4 +144,20 @@ $header-padding-scrolled: calc($header-height-scrolled * 0.154) $header-padding-
 .mobile-menu-toggle svg {
     height: calc($header-height-normal * $burger-scale);
     width: auto;
+}
+
+
+
+body.page-home .header.header-scrolled {
+    background-color: #fff !important;
+
+    .main-menu ul li a,
+    a.search-open-button {
+        color: black;
+    }
+
+    #logo-container img {
+       filter: invert(1);
+    }
+
 }

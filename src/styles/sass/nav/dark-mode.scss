@@ -78,8 +78,12 @@
     }
 
     // Home page: solid background when scrolled
-    .page-home .header-scrolled {
+    body.page-home .header.header-scrolled {
         background-color: #1f1f1f !important;
+    }
+
+    body.page-home .header.header-scrolled #logo-container img {
+       filter: invert(0);
     }
 
     .mobile-menu-panel {
