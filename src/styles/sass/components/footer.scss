@@ -97,7 +97,7 @@ footer {
 
     ul {
         font-family: $text-font;
-        font-size: $text-size - 0.1;
+        font-size: $text-size - 0.16;
         color: $text-color;
         list-style: none;
         padding: 0;
@@ -109,7 +109,7 @@ footer {
                 display: flex;
                 gap: 8px;
                 text-decoration: none;
-                margin-bottom: 4px;
+                margin-bottom: 18px;
                 transition: color 0.2s ease;
 
                 &:hover {
