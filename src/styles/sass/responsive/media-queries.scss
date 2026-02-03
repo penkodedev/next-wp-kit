@@ -175,55 +175,61 @@
         gap: 0;
     }
 
-    .copyright {
+    .copyright-notice {
         margin: 0;
-}
-
-//----------------------------------------------------
-//            SMALLER THAN 400px
-//----------------------------------------------------
-@media screen and (max-width: 400px) {
-
-    // ************** HEADER *************//
-
-    .header-sticky-enabled #logo-container img {
-        // LOGO SIZE
-        height: 38px !important;
     }
 
-    .lang-switcher-simple {
-        // background: transparent;
+    //----------------------------------------------------
+    //            SMALLER THAN 400px
+    //----------------------------------------------------
+    @media screen and (max-width: 400px) {
 
-        svg {
-            // color: rgb(53, 53, 53) !important;
+        // ************** HEADER *************//
+
+        .header-sticky-enabled #logo-container img {
+            // LOGO SIZE
+            height: 38px !important;
+        }
+
+        .lang-switcher-simple {
+            // background: transparent;
+
+            svg {
+                // color: rgb(53, 53, 53) !important;
+                padding: 0;
+            }
+
+            .current-lang {
+                display: none;
+            }
+        }
+
+        // ************** HERO *************//
+        .hero-content {
+            width:90%
+        }
+        
+        // ************** ASIDE *************//
+        aside {
+            margin-bottom: 44px;
+
+            .search-container {
+                display: none;
+            }
+        }
+
+        // ************** LAYOUT *************//
+        .post-grid {
+            margin: 20px 0;
+        }
+
+        .post-card {
             padding: 0;
+            border-radius: 8px;
         }
 
-        .current-lang {
-            display: none;
-        }
-    }
-
-    // ************** ASIDE *************//
-    aside {
-        margin-bottom: 44px;
-
-        .search-container {
-            display: none;
+        .post-card-content {
+            padding: 18px 10px 8px 10px;
         }
     }
-   
-    // ************** LAYOUT *************//
-   .post-grid {
-        margin:20px 0;
-   }
-
-   .post-card {
-        padding: 0;
-        border-radius: 8px;
-   }
-   
-   .post-card-content{
-        padding: 18px 10px 8px 10px;
-        }
-    }
+}
