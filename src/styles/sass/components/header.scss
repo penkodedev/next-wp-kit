@@ -2,6 +2,8 @@
 // BASE HEADER STYLES (Normal, non-sticky header)
 // =================================================================
 
+@use 'abstracts' as *;
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -9,7 +11,7 @@
     padding: 20px 40px;
     background-color: #fff; // Default white background
     border-bottom: 1px solid #d6d6d6;
-    height: 120px;
+    height: $header-height;
     width: 100%;
     margin: 0;
     position: relative;

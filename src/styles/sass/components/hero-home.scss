@@ -1,11 +1,13 @@
 // ********** HERO SECTION ********************//
 
+@use 'abstracts' as *;
+
 .hero-section {
   //position: relative;
   width: 100%;
   height: 100vh;
   display: flex;
-  align-items: stretch; // Permite que hero-content tenga altura completa
+  align-items: stretch; // Allows hero-content to have full height
   justify-content: center;
   overflow: hidden;
   //margin-top:-140px; // When we want Header over Hero
@@ -13,7 +15,7 @@
   .hero-background {
     position: absolute;
     inset: 0;
-    overflow: hidden; // Importante para el efecto Ken Burns
+    overflow: hidden; // Important for Ken Burns effect
     //z-index: -1;
 
     &.hero-background-gradient {
@@ -52,20 +54,20 @@
   .hero-overlay {
     position: absolute;
     inset: 0;
-    background: rgb(0, 0, 0); // Negro puro, opacidad controlada desde WordPress
+    background: rgb(0, 0, 0); // Pure black, opacity controlled from WordPress
     z-index: 0;
   }
 
   .hero-content {
     position: relative;
-    display: flex; // Necesario para justifyContent/alignItems
-    flex-direction: column; // Layout vertical
-    //z-index: 1;
+    display: flex; // Required for justifyContent/alignItems
+    flex-direction: column; // Vertical layout
     text-align: center;
     max-width: 800px;
     padding: 0 2rem;
     width: 100%;
-    height: 100%; // Ocupar toda la altura para posicionamiento vertical
+    height: 100%; // Occupy full height for vertical positioning
+    margin-top: -$header-height; // Compensate header height for Hero content
 
     .hero-slide {
       width: 100%;
@@ -90,7 +92,7 @@
       opacity: 0.9;
       line-height: 1.6;
 
-      // Estilos del WYSIWYG
+      // WYSIWYG styles
       strong,
       b {
         font-weight: 700;
@@ -127,7 +129,7 @@
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       }
 
-      // Estilo outline (solo borde, sin fondo)
+      // Outline style (border only, no background)
       &.hero-button-outline {
         background: transparent;
         border: 2px solid rgba(255, 255, 255, 0.8);

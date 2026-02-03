@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { logger } from '@/utils/wordpress/logger';
 import { withErrorBoundary } from '@/utils/ErrorBoundary';
 import { Icons } from '@/components/ui/Icons';
+import SearchForm from '@/components/forms/SearchForm';
 import { useState, useEffect } from 'react';
 
 /**
@@ -55,6 +56,9 @@ function NavItem({ item, isMobile = false, onLinkClick }: { item: MenuItem; isMo
         onClick={onLinkClick}
         {...(linkClass ? { className: linkClass } : {})}
       >
+        {isMobile && item.parent !== '0' && (
+          <Icons.ChevronRight size={20} strokeWidth={1} className="submenu-arrow-mobile" />
+        )}
         {item.title}
         {hasChildren && !isMobile && (
           <motion.span
@@ -264,6 +268,7 @@ function WpNavMenu({
                 />
               ))}
             </ul>
+            {/* <SearchForm /> */}
           </motion.nav>
         )}
       </AnimatePresence>
