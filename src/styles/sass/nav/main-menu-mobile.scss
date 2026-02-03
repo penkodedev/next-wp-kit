@@ -93,6 +93,7 @@ $backdrop-bg: rgba(0, 0, 0, 0.5);
         flex-direction: column;
         width: 100%;
         margin-bottom: 44px;
+        gap: 0; // CLEAN MAINMENU GAP
 
         li {
             display: flex;
@@ -106,17 +107,16 @@ $backdrop-bg: rgba(0, 0, 0, 0.5);
 
 
             a {
-                font-family: $menu-font;
-                font-size: 1.16rem;
-                font-weight: 800;
+                font-family: $font-family-bold;
+                font-size: 1.1rem;
                 color: #000;
                 text-decoration: none;
-                display: block;
-                margin: 7px;
-                transition: background 0.2s ease;
+                display: flex;
                 position: relative;
-                padding: 0;
-
+                margin: 5px;
+                padding: 3px;
+                transition: background 0.2s ease;
+                
                 &::after {
                     content: none;
                 }
@@ -147,6 +147,7 @@ $backdrop-bg: rgba(0, 0, 0, 0.5);
             }
 
             a {
+                font-family: $font-family-base;
                 font-size: 0.9rem;
                 font-weight: normal;
                 padding: 0;
