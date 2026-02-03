@@ -79,7 +79,7 @@ $backdrop-bg: rgba(0, 0, 0, 0.5);
     margin: 0; // reset margin
     padding: $menu-padding;
     height: auto;
-    background: $menu-bg;
+    background: rgba(255, 255, 255, 0.92);
     border-radius: 12px;
     overflow-y: auto;
     transform: translateZ(0);
