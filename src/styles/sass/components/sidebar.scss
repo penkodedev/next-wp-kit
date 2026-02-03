@@ -41,7 +41,7 @@ aside ul {
 
         a {
             display: flex;
-            font-size: 0.88em;
+            font-size: 0.82em;
             color: inherit;
             gap: 8px;
             text-decoration: none;
@@ -56,6 +56,7 @@ aside ul {
                 flex-shrink: 0;
                 color: #707070;
                 transition: color 0.2s ease, transform 0.2s ease;
+                height:18px // LIST ICON SIZE
             }
 
             &:hover .list-icon {

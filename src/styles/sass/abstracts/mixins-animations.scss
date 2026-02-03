@@ -127,7 +127,7 @@
 // 🎯 BOUNCE ANIMATIONS
 // =========================================
 
-@mixin bounce-infinite($duration: 2s) {
+@mixin bounce-infinite($duration: 3s) {
   animation: bounce $duration infinite;
 }
 
