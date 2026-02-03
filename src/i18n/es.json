@@ -11,6 +11,10 @@
     "loadMore": "Cargar más",
     "loading": "Cargando..."
   },
+  "SliderTitle": {
+    "recursos": "Últimos recursos",
+    "noticias": "Últimas noticias"
+  },
   "Footer": {
     "contact": "Contacto",
     "socialMedia": "Redes Sociales",

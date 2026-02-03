@@ -1,4 +1,4 @@
-// src/components/ui/SliderBase.tsx
+// src/components/sections/SliderBase.tsx
 "use client";
 
 import React, { Children } from 'react';

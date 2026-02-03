@@ -4,13 +4,19 @@
 ==========================================================================
 */
 
+.slider-title {
+  display: flex;
+}
+
 .page-home .slider-container {
   padding: 40px 0;
   margin-bottom: 25px;
 }
 
 .swiper-wrapper {
-  transition-timing-function: linear !important; /* This is the key for contastant and smooth travel */
+  transition-timing-function: linear !important;
+  /* This is the key for contastant and smooth travel */
+
 }
 
 .swiper {
@@ -20,12 +26,16 @@
 
   .post-card {
     margin: 0 auto;
-    width: 500px;
+    width: 350px;
+    min-height: 520px;
     transition: transform 0.3s ease-in-out; // Add smooth transition
-    height: auto;
+
+    .post-card-title {
+      line-height: 1em;
+    }
 
     .post-card-excerpt {
-      font-size: 1rem;
+      font-size: 0.86rem;
       line-height: 1.4rem;
     }
 
@@ -48,9 +58,3 @@
 .swiper-pagination-bullet-active {
   background: #000;
 }
-
-.slider-title {
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    text-align: center;
-  }

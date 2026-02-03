@@ -1,6 +1,6 @@
 import { WpPageIdSetter } from '@/utils/wordpress/WpPageIdContext';
 import HeroWrapper from '@/components/sections/HeroWrapper';
-import SliderRecursos from '@/components/sections/SliderRecursos';
+import Slider from '@/components/sections/Slider';
 import { processContent } from '@/utils/wordpress/processContent';
 import type { Page } from '@/types/wordpressTypes';
 
@@ -28,7 +28,7 @@ export default function ContentHome({ page, lang }: ContentHomeProps) {
         </article>
       </div>
       <section className="slider-container">
-        <SliderRecursos />
+        <Slider postType="recursos" />
       </section>
     </>
   );

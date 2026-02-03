@@ -80,8 +80,9 @@ export default function Header({
           locale={currentLocale}
           menuItems={menuItems}
         />
-        <DarkModeToggle variant="icon" size={20} strokeWidth={1.4} />
+        
         <SearchTrigger />
+        <DarkModeToggle variant="icon" size={20} strokeWidth={1.4} />
         <LangSwitcher currentLocale={currentLocale} />
         
       </div>
