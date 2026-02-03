@@ -47,7 +47,6 @@
         flex-direction: column;
         width: 64px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.281);
-        z-index: 1000;
         
         .lang-link {
             @include copy-text;

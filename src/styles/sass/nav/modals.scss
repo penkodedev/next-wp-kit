@@ -29,7 +29,6 @@ a[href*="/modales/"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
   padding: 1rem;
 
   .modal-close {
@@ -48,7 +47,6 @@ a[href*="/modales/"] {
     padding: 0;
     opacity: 1;
     transition: opacity 0.2s;
-    z-index: 9999;
     
     &:hover {
       opacity: 0.5;
@@ -89,7 +87,6 @@ a[href*="/modales/"] {
     padding: 0;
     opacity: 1;
     transition: opacity 0.2s;
-    z-index: 9999;
     
     &:hover {
       opacity: 0.5;

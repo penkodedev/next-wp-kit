@@ -5,14 +5,13 @@
 // =============================================================================
 
 .cookie-consent-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(8px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
     padding: 1rem;
 }
 
@@ -80,7 +79,6 @@
     background: #f8f9fa;
     border-bottom: 1px solid #ffffff;
     box-shadow: 0 4px 12px #00000034;
-    z-index: 1;
 
     button {
         transition: all 0.2s ease;

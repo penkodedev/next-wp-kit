@@ -16,7 +16,6 @@
     position: absolute;
     inset: 0;
     overflow: hidden; // Important for Ken Burns effect
-    //z-index: -1;
 
     &.hero-background-gradient {
       background: linear-gradient(45deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
@@ -55,7 +54,6 @@
     position: absolute;
     inset: 0;
     background: rgb(0, 0, 0); // Pure black, opacity controlled from WordPress
-    z-index: 0;
   }
 
   .hero-content {
@@ -155,7 +153,6 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 2;
     //background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
     //border: 1px solid rgba(255, 255, 255, 0.3);
@@ -202,7 +199,6 @@
   //   bottom: 2rem;
   //   left: 50%;
   //   transform: translateX(-50%);
-  //   z-index: 2;
   //   display: flex;
   //   gap: 0.5rem;
   // }

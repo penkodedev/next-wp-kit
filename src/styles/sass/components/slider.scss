@@ -1,6 +1,8 @@
-/* ==========================================================================
+/* 
+==========================================================================
    Component: Slider (Swiper)
-   ========================================================================== */
+==========================================================================
+*/
 
 .page-home .slider-container {
   padding: 40px 0;
@@ -8,9 +10,7 @@
 }
 
 .swiper-wrapper {
-  /* ¡Esta es la clave! Fuerza una transición lineal y constante. */
-  transition-timing-function: linear !important;
-  z-index: 0 !important;
+  transition-timing-function: linear !important; /* This is the key for contastant and smooth travel */
 }
 
 .swiper {
@@ -19,9 +19,9 @@
   padding-bottom: 40px; // Adjust dots distance from cards
 
   .post-card {
-    margin: 0 auto; // Asegura que cada tarjeta llene el contenedor del slider
+    margin: 0 auto;
     width: 500px;
-    transition: transform 0.3s ease-in-out; // Añadimos una transición suave
+    transition: transform 0.3s ease-in-out; // Add smooth transition
     height: auto;
 
     .post-card-excerpt {
@@ -40,8 +40,7 @@
     }
 
     &:hover {
-      transform: scale(1.09); // Aumentamos el tamaño un 5% al pasar el ratón
-      z-index: 10; // Nos aseguramos que se ponga por encima de otros elementos
+      transform: scale(1.09); // Onmouseover zoom effect
     }
   }
 }

@@ -1,0 +1,111 @@
+// ==================================================
+// Z-INDEX SCALE
+// ==================================================
+//
+// 0–9      → Base / backgrounds
+// 10–99    → Layout & content
+// 100–199  → Local floating UI (dropdowns, submenus)
+// 1000–1099→ Global UI (menus, panels, overlays)
+// 2000+    → Critical / blocking UI
+// ==================================================
+
+
+// *************   BASE & BACKGROUNDS   ************* //
+.hero-overlay {
+    z-index: 0;
+}
+
+.swiper-wrapper {
+    z-index: 0 !important;
+}
+
+.image-404::before {
+    z-index: -1;
+}
+
+
+// *************   LAYOUT & CONTENT   ************* //
+.page-home header {
+    z-index: 10;
+}
+
+.header {
+    z-index: 20;
+}
+
+.hero-nav {
+    z-index: 20;
+}
+
+.audio-player {
+    z-index: 10; // Behind dropdowns
+}
+
+.cookie-consent-actions {
+    z-index: 10;
+}
+
+inputs label {
+    z-index: 10;
+}
+
+
+// *************   LOCAL FLOATING UI   ************* //
+.main-menu ul li .submenu {
+    z-index: 100;
+}
+
+.lang-dropdown {
+    z-index: 110;
+}
+
+.share-dropdown {
+    z-index: 110;
+}
+
+.search-results-dropdown {
+    z-index: 120;
+}
+
+.swiper .post-card .post-card-excerpt a.button a:hover {
+    z-index: 120;
+}
+
+
+// *************   GLOBAL UI   ************* //
+.mobile-menu-backdrop {
+    z-index: 1000;
+}
+
+.mobile-menu-panel {
+    z-index: 1010;
+}
+
+.mobile-menu-toggle {
+    z-index: 1020;
+
+    .close-icon {
+        z-index: 1030;
+    }
+}
+
+.search-modal-overlay {
+    z-index: 1040;
+}
+
+.scroll-top-btn {
+    z-index: 1050;
+}
+
+
+// *************   CRITICAL / BLOCKING UI   ************* //
+.global-spinner {
+    z-index: 2000;
+}
+
+.modal-overlay .modal-close,
+.modal-content .modal-close,
+.copy-modal,
+.cookie-consent-overlay {
+    z-index: 2010;
+}
