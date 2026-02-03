@@ -50,5 +50,9 @@
   },
   "AudioPlayer": {
     "listenAudio": "Audio Intro"
+  },
+  "SliderTitle": {
+    "recursos": "Latest resources",
+    "noticias": "Latest news"
   }
 }

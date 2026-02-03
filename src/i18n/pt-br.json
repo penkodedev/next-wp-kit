@@ -48,5 +48,9 @@
   },
   "AudioPlayer": {
     "listenAudio": "Ouvir Introdução"
+  },
+  "SliderTitle": {
+    "recursos": "Últimos recursos",
+    "noticias": "Últimas notícias"
   }
 }

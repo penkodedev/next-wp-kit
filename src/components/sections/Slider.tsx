@@ -67,8 +67,8 @@ export default async function Slider({
       disableOnInteraction: false,
     },
     breakpoints: {
-      1920: { slidesPerView: 5 },
-      1440: { slidesPerView: 4 },
+      1920: { slidesPerView: 3.5 },
+      1440: { slidesPerView: 3.6 },
       1024: { slidesPerView: 3.3 },
       900: { slidesPerView: 2.5 },
       768: { slidesPerView: 2.2 },
@@ -80,7 +80,7 @@ export default async function Slider({
   // 4. Render the slider
   return (
     <section className={`slider-recursos slider-${postType}`}>
-      {title && <h2 className={`slider-title slider-title-${postType}`}>{title}</h2>}
+      {title && <h1 className={`slider-title slider-title-${postType}`}>{title}</h1>}
       <SliderBase swiperOptions={sliderOptions}>
         {postsConImagen.map((post) => (
           <PostCard 
