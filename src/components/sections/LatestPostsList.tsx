@@ -48,7 +48,7 @@ export default async function LatestPostsList({
 
   return (
     <div className="latest-posts-list">
-      {showTitle && <h3>{t('latestPosts', { postType: translatedPostType })}</h3>}
+      {showTitle && <h4>{t('latestPosts', { postType: translatedPostType })}</h4>}
       
       {!latestPosts || latestPosts.length === 0 ? (
         <p>{t('noRecentPosts', { postType: translatedPostType })}</p>
