@@ -60,9 +60,11 @@
     }
 }
 
-.dark-mode .mode-icon svg {
+.dark-mode .mode-icon svg,
+.page-home .dark-mode .mode-icon svg {
     color: #ffffff; // Moon color (dark mode)
 }
+
 
 .toggle-switch {
     position: relative;
