@@ -47,6 +47,12 @@ body {
 ==============================
 */
 
+// Clean Agent Stylesheet on lists
+ul {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
 // Links
 a {
   background-color: transparent;
