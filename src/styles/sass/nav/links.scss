@@ -23,9 +23,14 @@ $article-link: 'article p a, article p a:link, main p a:link, article ul a:link,
     }
 }
 
-.wp-block-gallery figure a, article a img {
+.wp-block-gallery figure a,
+article a img {
     transition: transform .3s; /* Animation */
         &:hover {
         transform: scale(1.013);
     }
+}
+
+article img {
+    margin-bottom:18px;
 }
