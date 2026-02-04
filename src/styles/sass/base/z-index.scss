@@ -37,8 +37,12 @@
     z-index: 20;
 }
 
+.page-title {
+    z-index:50;
+}
+
 .audio-player {
-    z-index: 10; // Behind dropdowns
+    z-index: 1; // Behind dropdowns
 }
 
 .cookie-consent-actions {
@@ -53,14 +57,6 @@ inputs label {
 // *************   LOCAL FLOATING UI   ************* //
 .main-menu ul li .submenu {
     z-index: 100;
-}
-
-.lang-dropdown {
-    z-index: 110;
-}
-
-.share-dropdown {
-    z-index: 110;
 }
 
 .search-results-dropdown {

@@ -5,6 +5,7 @@ import { getAllContent, fetchAPI, getSiteInfo } from "@/api/wordpressApi";
 import type { Post, Page } from "@/types/wordpressTypes";
 import { getActiveCptSlugs, getTranslatedCptSlug } from "@/utils/config/cptConfig";
 import localesConfig from "@/i18n/locales.generated.json";
+import SearchForm from "@/components/forms/SearchForm";
 
 interface SitemapItem {
   title: string;
@@ -193,6 +194,8 @@ export default async function SitemapPage() {
             </div>
           ))}
         </div>
+<SearchForm />
+
       </article>
     </div>
   );

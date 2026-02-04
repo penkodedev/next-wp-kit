@@ -54,7 +54,7 @@ export default async function Footer() {
             <div className="footer-content">
               <div className="footer-box footer-social">
                 <FooterSocial social={siteInfo.social} />
-                <DarkModeToggle variant="select" />
+                {/* <DarkModeToggle variant="select" /> */}
               </div>
 
               <div className="footer-box footer-resources">
