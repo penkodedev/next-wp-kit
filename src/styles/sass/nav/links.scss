@@ -1,0 +1,31 @@
+//----------------------------------------------------
+//            ARTICLE
+//----------------------------------------------------
+
+$article-link: 'article p a, article p a:link, main p a:link, article ul a:link, p#breadcrumbs a,';
+
+#{$article-link} {
+    // color:red;
+    text-decoration: none;
+    text-decoration-color: red;
+    padding: 0px 0px;
+    transition: color 0.6s ease-out, background 0.6s ease-out;
+    background-image: linear-gradient(to right, rgb(199, 199, 99) 100%,#fff 0);
+    background-position: 0 110%;
+    background-repeat: repeat-x;
+    background-size: 100% 23%;
+
+    &:hover {
+        color: #000;
+        background:  rgb(199, 199, 99);
+        text-decoration: none;
+        border-bottom: none;
+    }
+}
+
+.wp-block-gallery figure a, article a img {
+    transition: transform .3s; /* Animation */
+        &:hover {
+        transform: scale(1.013);
+    }
+}
