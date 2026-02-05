@@ -67,12 +67,12 @@ export default async function Slider({
       disableOnInteraction: false,
     },
     breakpoints: {
-      1920: { slidesPerView: 3.5 },
-      1440: { slidesPerView: 3.6 },
-      1024: { slidesPerView: 3.3 },
-      900: { slidesPerView: 2.5 },
-      768: { slidesPerView: 2.2 },
-      640: { slidesPerView: 2 },
+      1920: { slidesPerView: 3 },
+      1440: { slidesPerView: 2.2 },
+      1024: { slidesPerView: 1.7 },
+      900: { slidesPerView: 1.2 },
+      768: { slidesPerView: 1.2 },
+      640: { slidesPerView: 1 },
       320: { slidesPerView: 1 },
     },
   };

@@ -45,6 +45,15 @@
   }
 }
 
+li.sitemap-leaf a.sitemap-link {
+  background-image: none;
+
+   &:hover {
+        background: none;
+        text-decoration: underline;
+    }
+}
+
 .sitemap-link {
   font-size: 0.88em;
   text-decoration: none;

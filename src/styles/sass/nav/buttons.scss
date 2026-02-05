@@ -22,7 +22,7 @@ a.button,
 input[type="submit"],
 input.wpcf7-submit
 {
-  display: flex !important; // IMPORTANT to override WP block styles
+  //display: flex !important; // IMPORTANT to override WP block styles
   font-family: $text-font, sans-serif;
   font-size: 1em;
   text-decoration: none;
@@ -32,7 +32,7 @@ input.wpcf7-submit
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  padding: 1rem 2.4rem;
+  padding: .88rem 2.6rem;
   margin: 10px 0 10px 0;
   background-color: white;
   border: 1px solid #bdbdbd;
