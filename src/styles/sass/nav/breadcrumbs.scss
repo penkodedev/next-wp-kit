@@ -1,5 +1,5 @@
 ul.breadcrumb {
-  font-size: 0.93em; // Breadcrumb font size
+  font-size: 0.93em;
   color: #777777;
   list-style: none;
   gap: 1rem 0;
@@ -10,11 +10,14 @@ ul.breadcrumb {
     display: inline;
 
     &::before {
-      content: none; // Reset checkmark from global styles
+      content: none !important; // Use important to quit article ul class
+      background: none !important;
+      -webkit-mask: none !important;
+      mask: none !important;
     }
 
     a {
-      font-size: 0.93em; // Breadcrumb font size
+      font-size: 0.93em;
       color: #000;
 
       &:hover {
@@ -23,7 +26,10 @@ ul.breadcrumb {
     }
 
     &+li::before {
-      content: '/';
+      content: '/' !important;
+      background: none !important;
+      -webkit-mask: none !important;
+      mask: none !important;
       font-size: 1em;
       padding: 0 0.4em;
     }

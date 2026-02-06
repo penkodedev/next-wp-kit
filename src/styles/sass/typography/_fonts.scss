@@ -82,7 +82,7 @@ article ul {
     font-size: $text-size;
     color: $text-color;
     list-style-type: none;
-    margin: 25px 0 15px 0;
+    margin: 25px 0;
 
     p:empty { // Clean Gutenberg <p> between li
         display: none;
