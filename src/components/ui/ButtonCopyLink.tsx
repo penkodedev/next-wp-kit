@@ -7,34 +7,26 @@ import { usePathname } from 'next/navigation';
 import { Icons } from '@/components/ui/Icons';
 
 interface ButtonCopyLinkProps {
-  url?: string;
-  size?: number;
-  strokeWidth?: number;
   className?: string;
 }
 
 /**
  * Small copy-to-clipboard button used near share actions.
- * - If `url` is not provided, it copies the current page URL.
- * - Minimal, accessible feedback shown for a short time.
+ * Copies the current page URL.
+ * Minimal, accessible feedback shown for a short time.
  */
 export default function ButtonCopyLink({
-  url,
-  size = 18,
-  strokeWidth = 1.2,
   className = ''
 }: ButtonCopyLinkProps) {
   const pathname = usePathname();
-  // Si la url prop no se pasa, usar location.origin + pathname para asegurar URL absoluta
-  let href = url;
-  if (!href) {
-    if (typeof window !== 'undefined' && window.location) {
-      href = window.location.origin + pathname;
-    } else if (process.env.NEXT_PUBLIC_BASE_URL) {
-      href = process.env.NEXT_PUBLIC_BASE_URL.replace(/\/$/, '') + pathname;
-    } else {
-      href = pathname;
-    }
+  // Usar location.origin + pathname para asegurar URL absoluta
+  let href: string;
+  if (typeof window !== 'undefined' && window.location) {
+    href = window.location.origin + pathname;
+  } else if (process.env.NEXT_PUBLIC_BASE_URL) {
+    href = process.env.NEXT_PUBLIC_BASE_URL.replace(/\/$/, '') + pathname;
+  } else {
+    href = pathname;
   }
 
   const [copied, setCopied] = useState(false);
@@ -93,15 +85,15 @@ export default function ButtonCopyLink({
         aria-label="Copy link"
         title={copied ? 'OK' : 'Copy link'}
       >
-  <Icons.Link2 size={size} strokeWidth={strokeWidth} />
+  <Icons.Copy size={18} strokeWidth={1.6} />
         {/* Toast animado, sin portal */}
         <span
           className={`copy-modal${copied ? ' visible' : ''}`}
           aria-hidden={!copied}
         >
                   <p>✔ Link Copied</p>
-<p>✔ Enlace Copiado</p>
-<p>✔ Lien copié</p>
+                  <p>✔ Enlace Copiado</p>
+                  <p>✔ Lien copié</p>
         </span>
 
         {/* Screen reader announcement */}

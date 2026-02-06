@@ -41,7 +41,7 @@ export async function getGNews(
   const params = new URLSearchParams({
     q: query,
     lang: gnewsLang,
-    max: '6',
+    max: '8',
     token: apiKey,
   });
 

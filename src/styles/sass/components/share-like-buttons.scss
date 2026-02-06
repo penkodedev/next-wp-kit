@@ -14,8 +14,8 @@
     display: flex;
     align-items: center; // Alinear verticalmente
     position: absolute;
-    bottom: 5px;
-    right: 25px;
+    top: 15px;
+    right: 20px;
     gap: 15px;
 
     // Estilos comunes para ambos iconos
@@ -44,7 +44,7 @@
             text-align: center;
             line-height: 1.2;
             position: absolute;
-            top: -12px;
+            bottom: -17px;
             right: 0;
             padding: 2px 6px;
             border-radius: 10px;

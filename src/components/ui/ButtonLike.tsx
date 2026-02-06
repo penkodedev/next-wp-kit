@@ -35,7 +35,7 @@ export default function ButtonLike({ postId, initialLikes, className = '' }: But
     >
       {likes > 0 && <p className="like-count">{likes}</p>}
       <Icons.Heart
-        size={21}
+        size={18}
         strokeWidth={1.5}
         fill={userLikeCount > 0 ? 'currentColor' : 'none'}
       />

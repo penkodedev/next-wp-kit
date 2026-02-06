@@ -55,7 +55,7 @@ export default function ContentSingle({
             <h1>{post.title.rendered}</h1>
 
             <div className="icons-wrap">
-              <ButtonCopyLink size={26} strokeWidth={1.3} className="copy-link" />
+              <ButtonCopyLink className="copy-link" />
               <ButtonShare 
                 title={post.title.rendered}
                 description={post.excerpt?.rendered?.replace(/<[^>]*>/g, '')}

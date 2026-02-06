@@ -73,7 +73,7 @@ export default function ButtonShare({ title, description, className = '' }: Butt
         aria-label={t('share')}
         aria-expanded={isOpen}
       >
-        <Icons.Share2 size={21} strokeWidth={1.5} />
+        <Icons.Share2 size={18} strokeWidth={1.5} />
       </a>
 
       {isOpen && (

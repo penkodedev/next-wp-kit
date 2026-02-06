@@ -41,7 +41,7 @@ export default async function TechNewsPage({ params }: PageProps) {
       </section>
 
       {news.length > 0 ? (
-        <GridGNews news={news} cols={3} />
+        <GridGNews news={news} cols={4} />
       ) : (
         <article>
           <p>No news available at the moment.</p>
