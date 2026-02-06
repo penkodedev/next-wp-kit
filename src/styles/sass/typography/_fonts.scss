@@ -84,24 +84,34 @@ article ul {
     list-style-type: none;
     margin: 25px 0 15px 0;
 
+    p:empty { // Clean Gutenberg <p> between li
+        display: none;
+    }
+
     li {
-        max-width: 800px;
-        line-height: $text-lh;
+        // line-height: $text-lh;
         margin-bottom: 10px;
+        display: flex;
+        align-items: center;
     }
 
     li:before {
-        content: "✓";
-        font-size: 1.3em;
-        font-weight: 700;
-        color: $branding-color1;
-        padding: 0 10px 0 0;
+        content: "";
+        display: inline-flex;
+        width: 1.3em;
+        height: 1.3em;
+        margin-right: 10px;
+        flex-shrink: 0;
         
-        a {
-            color: $article-link-color;
-        }
+        // Lucide Check icon SVG as mask
+        background-color: black;
+        -webkit-mask: url('/icons/check.svg') no-repeat center;
+        mask: url('/icons/check.svg') no-repeat center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
     }
 }
+
 
 
 article ol {  

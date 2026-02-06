@@ -109,7 +109,7 @@ $header-padding-scrolled: calc($header-height-scrolled * 0.154) $header-padding-
 // Apply shrink effect when scrolled
 .header.header-sticky-enabled.header-scrolled {
     height: $header-height-scrolled;
-    padding: $header-padding-scrolled;
+    // padding: $header-padding-scrolled;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
 
     .main-menu ul li a {
