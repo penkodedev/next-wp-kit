@@ -11,6 +11,7 @@ import PostNav from '@/components/navigation/PostNav';
 import Sidebar from '@/components/layout/sidebar/Sidebar';
 import ButtonShare from '@/components/ui/ButtonShare';
 import ButtonLike from '@/components/ui/ButtonLike';
+import PostDate from '@/components/ui/PostDate';
 import ButtonCopyLink from '@/components/ui/ButtonCopyLink';
 import { WpPageId } from '@/utils/wordpress/WpPageId';
 import { processContent } from '@/utils/wordpress/processContent';
@@ -81,6 +82,8 @@ export default function ContentSingle({
           )}
 
           <AnimatedArticle className="custom-article-class" amount={0.5}>
+            <PostDate date={post.date} />
+            
             <div
               dangerouslySetInnerHTML={{
                 __html: processContent(post.content.rendered),

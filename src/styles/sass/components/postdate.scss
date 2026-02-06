@@ -1,0 +1,15 @@
+@use '../abstracts' as *;
+
+time.post-date {
+    font-family: $text-font;
+    font-size: 0.8rem;
+    color: #000;
+    margin-bottom: 10px;
+    display: flex;
+
+}
+
+.post-date-icon {
+    margin-right: 6px;
+    vertical-align: middle;
+}
