@@ -83,6 +83,7 @@ article ul {
     color: $text-color;
     list-style-type: none;
     margin: 25px 0;
+    max-width: 900px;
 
     p:empty { // Clean Gutenberg <p> between li
         display: none;
@@ -90,8 +91,8 @@ article ul {
 
     li {
         // line-height: $text-lh;
-        margin-bottom: 10px;
-        display: flex;
+        margin-bottom: 20px;
+        // display: flex;
         align-items: center;
     }
 
