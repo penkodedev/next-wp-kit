@@ -229,7 +229,7 @@ const CookieConsent = () => {
     <div className="cookie-consent-overlay">
       <div className="cookie-consent-modal">
         <div className="cookie-consent-header">
-          <h2>🍪 Configuración de cookies</h2>
+          <h2>🍪 Tenemos cookies</h2>
           <p className="cookie-consent-intro">
             Utilizamos cookies para mejorar tu experiencia, analizar el tráfico del sitio y personalizar el contenido. 
             Puedes elegir qué tipos de cookies aceptar.
@@ -294,7 +294,7 @@ const CookieConsent = () => {
                       <div key={cookie.id} className="cookie-item">
                         <div className="cookie-info">
                           <div className="cookie-header">
-                            <strong>{cookie.name}</strong>
+                            <p><strong>{cookie.name}</strong></p>
                             <span className="cookie-provider">{cookie.provider}</span>
                           </div>
                           <p className="cookie-description">{cookie.description}</p>

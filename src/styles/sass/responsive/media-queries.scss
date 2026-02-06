@@ -19,7 +19,25 @@
 //----------------------------------------------------
 //            SMALLER THAN 768px
 //----------------------------------------------------
+
+
+
+
 @media screen and (max-width: 768px) {
+
+    // ************** COOKIES CONSENT *************//
+    .cookie-consent-modal {
+        max-width: 90%;
+    }
+
+    .cookie-consent-actions {
+        gap: 0;
+
+        button {
+            padding: 8px;
+            margin: 0 0 4px 0;
+        }
+    }
 
     // ************** HOME *************//
     .page-home .home-content {
@@ -112,7 +130,7 @@
         }
 
         .footer-menu-nav {
-            display:none;
+            display: none;
         }
 
     }
@@ -125,8 +143,22 @@
 //----------------------------------------------------
 @media screen and (max-width: 576px) {
 
-    // ************** HEADER *************//
+    // ************** COOKIES CONSENT *************//
+    .cookie-consent-modal {
+        width: 100%;
+        max-height: 92vh;
+    }
 
+    .cookie-consent-intro {
+        font-size: 0.85em !important;
+    }
+
+    p.cookie-description {
+        line-height: 1.1rem;
+    }
+
+
+    // ************** HEADER *************//
     .header .logo-container img {
         // LOGO SIZE
         height: 38px;
@@ -144,7 +176,6 @@
     .header-desc {
         font-size: 0.8em;
     }
-
 
 
     // ************** PAGE LAYOUT *************//
@@ -188,6 +219,12 @@
     //----------------------------------------------------
     @media screen and (max-width: 400px) {
 
+        // ************** COOKIES CONSENT *************//
+        p.cookie-consent-legal {
+            font-size: 0.7em !important;
+            line-height: 1.2em;
+        }
+
         // ************** HEADER *************//
 
         .header-sticky-enabled #logo-container img {
@@ -208,17 +245,17 @@
             }
 
             .swiper .post-card {
-                width:350px
+                width: 350px
             }
 
-            
+
         }
 
         // ************** HERO *************//
         .hero-content {
-            width:90%
+            width: 90%
         }
-        
+
         // ************** ASIDE *************//
         aside {
             margin-bottom: 44px;

@@ -10,7 +10,7 @@
     justify-content: center;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(112, 112, 112, 0.6);
     backdrop-filter: blur(8px);
     padding: 1rem;
 }
@@ -21,7 +21,7 @@
     border-radius: 20px;
     max-width: 800px;
     width: 100%;
-    max-height: 80vh;
+    max-height: 95vh;
     overflow: hidden;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     animation: slideIn 0.3s ease-out;
@@ -62,7 +62,7 @@
     }
 
     .cookie-consent-intro {
-        color: white;
+        color: rgb(185, 185, 185);
         margin: 0;
         font-size: 1rem;
         line-height: 1.6;
@@ -82,6 +82,7 @@
 
     button {
         transition: all 0.2s ease;
+        position:relative;
 
         &.active {
             border-color: #6c757d;
@@ -99,7 +100,7 @@
         }
 
         &.btn-customize.active {
-            padding-right: 0.75rem;
+            // padding-right: 0.75rem;
             
             &:before {
                 display: none;
@@ -136,7 +137,7 @@
     }
 
     &::-webkit-scrollbar-thumb {
-        background: linear-gradient(180deg, #ffb41d 0%, #e6a200 100%);
+        background: linear-gradient(180deg, #505050 0%, #505050 100%);
         border-radius: 12px;
         border: 2px solid #f8f9fa;
         box-shadow: 
@@ -212,7 +213,8 @@
 
         .category-title {
             margin: 0;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
+            line-height:1.1;
             font-weight: 700;
         }
 
@@ -234,10 +236,8 @@
 
 .cookie-item {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
     padding: 1rem 0;
-    border-bottom: 1px solid #f8f9fa;
+    border-bottom: 1px solid #939393;
 
     &:last-child {
         border-bottom: none;
@@ -252,11 +252,10 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            margin-bottom: 0.5rem;
 
             strong {
-                font-weight: 600;
-                color: #2c3e50;
+                color: #020202;
+                font-weight:800;
             }
 
             .cookie-provider {
@@ -271,8 +270,8 @@
 
         .cookie-description {
             margin: 0 0 0.5rem 0;
-            font-size: 0.9rem;
-            color: #6c757d;
+            font-size: 0.88rem;
+            color: #575757;
             line-height: 1.5;
         }
 
