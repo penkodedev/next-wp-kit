@@ -36,7 +36,7 @@
   //max-height: 70vh;
   //overflow-y: auto;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.89);
+  background: rgba(243, 243, 243, 0.952);
   // backdrop-filter: blur(2px) saturate(120%);
 }
 
@@ -88,6 +88,10 @@
   display: flex;
   justify-content: center;
   gap: 1rem;
+
+  button {
+    padding:8px 22px;
+  }
 }
 
 .search-modal-results {

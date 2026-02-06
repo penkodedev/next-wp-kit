@@ -13,7 +13,13 @@
 //----------------------------------------------------
 //            SMALLER THAN 992px
 //----------------------------------------------------
-@media screen and (max-width: 992px) {}
+@media screen and (max-width: 992px) {
+
+.search-modal-content {
+  width: 90%;
+  padding: 3.5em 2em 2em 2em ;
+}
+}
 
 
 //----------------------------------------------------

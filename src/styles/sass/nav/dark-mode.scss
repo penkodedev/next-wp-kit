@@ -146,8 +146,14 @@
         background-color: #181818;
         border: 1px solid #474747;
     }
+
+    // =================================================================
+    //                  SEARCH MODAL
+    // =================================================================
+
+    .search-modal-content {
+        background-color: rgb(37 37 37 / 96%);
+        border:1px solid rgb(75, 75, 75);
+    }
 }
 
-.search-modal-content {
-        background-color: #1f1f1fab;
-    }
