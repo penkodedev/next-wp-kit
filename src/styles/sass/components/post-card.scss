@@ -1,3 +1,7 @@
+
+
+@use 'abstracts' as *;
+
 .post-card {
     background-color: white;
     border: 1px solid #e0e0e0;
@@ -12,13 +16,19 @@
     }
 
     h3.post-card-title {
-        font-size: 1.5em;
+        font-size: 1.4em;
         color: black;
-        line-height: 1.4em;
+        line-height: 1.18em;
         text-decoration: none;
     }
 
     .post-card-excerpt {
+        font-size: 0.96em;
+        line-height: 1.4em;
+    }
+
+    .post-card-meta {
+        font-family: $font-family-base;
         font-size: 0.96em;
         line-height: 1.4em;
     }
