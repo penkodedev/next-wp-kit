@@ -47,11 +47,6 @@ export default async function TechNewsPage({ params }: PageProps) {
         <ContentPages page={wpPage} />
       )}
 
-      {/* Tech News Section Title */}
-      <section className="page-title" style={{ paddingTop: wpPage ? '2rem' : '0' }}>
-        <h1>Tech News</h1>
-      </section>
-
       {/* GNews Grid */}
       {news.length > 0 ? (
         <GridGNews news={news} cols={4} />
