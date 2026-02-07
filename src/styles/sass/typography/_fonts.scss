@@ -82,7 +82,7 @@ article ul {
     font-size: $text-size;
     color: $text-color;
     list-style-type: none;
-    margin: 25px 0;
+    margin: 25px 0 25px 10px;
     max-width: 900px;
     margin-block-start: 0 !important; // Override WP BLocks styles
     padding-inline-start: 15px !important; // Override WP BLocks styles
@@ -93,7 +93,7 @@ article ul {
 
     li {
         // line-height: $text-lh;
-        margin-bottom: 20px;
+        margin-bottom: 16px;
         // display: flex;
         align-items: center;
     }
@@ -103,15 +103,15 @@ article ul {
         display: inline-flex;
         width: 1.3em;
         height: 1.3em;
-        margin-right: 10px;
-        flex-shrink: 0;
-        
+        margin-right: 5px;
+        vertical-align:middle;      
         // Lucide Check icon SVG as mask
-        background-color: black;
+        background-color: black; // Icon Color
         -webkit-mask: url('/icons/check.svg') no-repeat center;
         mask: url('/icons/check.svg') no-repeat center;
         -webkit-mask-size: contain;
         mask-size: contain;
+
     }
 }
 
