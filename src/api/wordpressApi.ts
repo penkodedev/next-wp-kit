@@ -300,6 +300,20 @@ export async function getAllPages(params: string = ''): Promise<Page[] | null> {
 }
 
 /**
+ * Fetches a single page by slug.
+ * @param slug Page slug
+ * @param lang Optional language parameter
+ * @returns Page object or null
+ */
+export async function getPage(slug: string, lang?: string): Promise<Page | null> {
+  const params = slug 
+    ? `?slug=${slug}${lang ? `&lang=${lang}` : ''}&_embed`
+    : '';
+  const pages = await fetchAPI<Page[]>(`/wp/v2/pages${params}`);
+  return pages && pages.length > 0 ? pages[0] : null;
+}
+
+/**
  * Cached version of getAllPages using Next.js unstable_cache.
  * Caches pages for 5 minutes to avoid redundant API calls.
  * Use this in pages that need page listings.
