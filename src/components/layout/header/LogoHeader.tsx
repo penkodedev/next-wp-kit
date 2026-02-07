@@ -13,14 +13,7 @@ interface LogoHeaderProps {
 }
 
 export default function LogoHeader({ siteInfo, isHome = false, shrink = false }: LogoHeaderProps) {
-  const [isDark, setIsDark] = useState(() => {
-    // Inicializar desde localStorage si está disponible (evita parpadeo)
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('darkMode');
-      return stored === 'true';
-    }
-    return false;
-  });
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     // Si estamos en home, no necesitamos observar dark mode
