@@ -47,14 +47,19 @@ export default async function TechNewsPage({ params }: PageProps) {
         <ContentPages page={wpPage} />
       )}
 
-      {/* GNews Grid */}
-      {news.length > 0 ? (
-        <GridGNews news={news} cols={4} />
-      ) : (
-        <article>
+      {/* Tech News Section inside article-content */}
+      <article className="page-content">
+        <section className="page-title">
+          <h1>Tech News</h1>
+        </section>
+
+        {/* GNews Grid inside article-content */}
+        {news.length > 0 ? (
+          <GridGNews news={news} cols={4} />
+        ) : (
           <p>No news available at the moment.</p>
-        </article>
-      )}
+        )}
+      </article>
     </div>
   );
 }
