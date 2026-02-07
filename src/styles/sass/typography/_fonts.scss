@@ -111,7 +111,6 @@ article ul {
         mask: url('/icons/check.svg') no-repeat center;
         -webkit-mask-size: contain;
         mask-size: contain;
-
     }
 }
 
@@ -242,17 +241,55 @@ pre.wp-block-code {
     padding: 28px;
 }
 
-//******************** SUMMARY ************************
 
-.wp-block-details {
-    // border: 1px solid #ccc;
-    padding: 25px;
-    margin-bottom: 25px;
-}
+// ******************* SUMMARY (Details WP block accordion) ****************** //
+details.wp-block-details {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 14px 35px !important;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.185);
+    transition: box-shadow 0.3s ease;
+    overflow: hidden;
+    margin-bottom: 22px;
 
-summary {
-    @include heading;
-    font-size: 1.4em;
+    p {
+        font-size: 1em;
+        padding: 40px 0 0 0;
+    }
+
+    &:hover {
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    }
+
+    summary {
+        @include heading;
+        font-size: 1.2em;
+        display: flex;
+        align-items: center;
+        // justify-content: space-between;
+        margin-bottom: 0;
+
+        // Hide native WP marker
+        &::-webkit-details-marker {
+            display: none;
+        }
+
+        // Chevron icon
+        &::before { // Change before and after title
+            content: "";
+            width: 30px;
+            height: 30px;
+            background: url('/icons/chevron-down.svg') no-repeat center;
+            transition: transform 0.3s ease;
+            margin-right: 10px;
+        }
+    }
+
+    // Icon Animation
+    &[open] summary::before { // Change before and after title
+        transform: rotate(180deg);
+    }
 }
 
 //******************** CAPTIONS ************************

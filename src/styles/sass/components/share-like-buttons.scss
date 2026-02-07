@@ -132,6 +132,7 @@
         text-decoration: none;
         border-radius: 4px;
         transition: background 0.2s;
+        background-image: none !important;
 
         &:hover {
             background: #d8d8d8;
