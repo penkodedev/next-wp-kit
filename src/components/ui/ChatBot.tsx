@@ -279,18 +279,14 @@ export default function ChatBot() {
                 className={CLASSES.input}
                 disabled={isLoading}
               />
-              <a
+              <button
+                type="submit"
+                disabled={!input.trim() || isLoading}
                 className={`${CLASSES.sendButton} ${!input.trim() || isLoading ? CLASSES.sendButtonDisabled : ''}`}
-                onClick={(e) => {
-                  if (!input.trim() || isLoading) {
-                    e.preventDefault();
-                    return;
-                  }
-                }}
                 aria-label="Enviar mensaje"
               >
                 <Send className={CLASSES.sendIcon} />
-              </a>
+              </button>
             </form>
           </motion.div>
         )}
