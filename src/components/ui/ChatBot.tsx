@@ -115,16 +115,19 @@ export default function ChatBot() {
     
     async function fetchConfig() {
       try {
+        console.log('🔍 ChatBot: Fetching config from:', `${wpApiUrl}/wp-json/custom/v1/chatbot`);
         const res = await fetch(`${wpApiUrl}/wp-json/custom/v1/chatbot`);
+        console.log('🔍 ChatBot: Response status:', res.status);
         if (!res.ok) throw new Error('Failed to fetch config');
         const data = await res.json();
+        console.log('🔍 ChatBot: Config loaded:', data);
         setConfig(data);
         
         if (data.enabled && data.welcome) {
           setMessages([{ role: 'bot', content: data.welcome }]);
         }
       } catch (error) {
-        console.error('Error fetching ChatBot config:', error);
+        console.error('❌ Error fetching ChatBot config:', error);
       }
     }
     fetchConfig();
