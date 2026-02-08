@@ -86,9 +86,15 @@ inputs label {
 }
 
 .scroll-top-btn {
-    z-index: 1050;
+    z-index: 800;
 }
 
+
+// *************   CHAT BOT   ************* //
+.chat-bot-position-right,
+.chat-bot-position-left {
+  z-index: 1000;
+}
 
 // *************   CRITICAL / BLOCKING UI   ************* //
 .global-spinner {
