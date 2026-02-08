@@ -30,6 +30,10 @@ const LightboxController = dynamic(() => import('@/components/features/lightbox/
   ssr: false
 });
 
+const ChatBot = dynamic(() => import('@/components/ui/ChatBot'), {
+  ssr: false
+});
+
 import BodyClass from "@/utils/wordpress/BodyClass";
 import { WpPageIdProvider } from '@/utils/wordpress/WpPageIdContext';
 import localesConfig from '@/i18n/locales.generated.json';
@@ -103,6 +107,7 @@ function GlobalUI() {
       <ModalController />
       <LightboxController />
       <AdvertisingPopup />
+      <ChatBot />
     </>
   );
 }
