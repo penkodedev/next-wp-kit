@@ -21,6 +21,7 @@ import ScrollToTop from "@/components/navigation/ScrollToTop";
 import AdvertisingPopup from '@/components/features/modals/AdvertisingPopup';
 import WpStyles from "@/components/wordpress/WpStyles";
 
+
 // Lazy load heavy components that aren't needed on every page
 const ModalController = dynamic(() => import('@/components/features/modals/ModalController'), {
   ssr: false
@@ -37,6 +38,7 @@ const ChatBot = dynamic(() => import('@/components/ui/ChatBot'), {
 const ChatWhatsApp = dynamic(() => import('@/components/ui/ChatWhatsApp'), {
   ssr: false
 });
+
 
 import BodyClass from "@/utils/wordpress/BodyClass";
 import { WpPageIdProvider } from '@/utils/wordpress/WpPageIdContext';
@@ -113,6 +115,7 @@ function GlobalUI() {
       <AdvertisingPopup />
       <ChatBot />
       <ChatWhatsApp />
+   
     </>
   );
 }

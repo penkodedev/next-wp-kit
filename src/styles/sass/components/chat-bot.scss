@@ -64,7 +64,7 @@
   width: 320px;
   height: 580px;
   background-color: var(--background-color);
-  border: 1px solidd2d2d2;
+  border: 1px solid #9f9f9f;
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.46);
   display: flex;
@@ -80,7 +80,7 @@
 // Header
 .chat-bot-header {
   color: #fff;
-  padding: 1rem;
+  padding: 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -92,6 +92,11 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+
+  img {
+    width:102px;
+    height: 102px;
+  }
 }
 
 .chat-bot-avatar {

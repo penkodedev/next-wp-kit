@@ -34,3 +34,25 @@ article a img {
 article img {
     margin-bottom:18px;
 }
+
+// Iconos para enlaces externos (target="_blank" o dominios externos)
+article p a[target="_blank"]:not(.no-icon)::after,
+article ul a[target="_blank"]:not(.no-icon)::after,
+main p a[target="_blank"]:not(.no-icon)::after,
+.page-content a[target="_blank"]:not(.no-icon)::after {
+  content: "";
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  margin: 0 2px 0 4px;
+  background: url('/icons/external-link.svg') no-repeat center;
+  background-size: contain;
+  vertical-align: middle;
+  opacity: 0.6;
+}
+
+// Ocultar si ya tiene un icono dentro
+article a[target="_blank"] .icon-external-link + *::after,
+article a[target="_blank"] .external-icon + *::after {
+  display: none;
+}
