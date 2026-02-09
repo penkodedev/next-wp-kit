@@ -52,6 +52,32 @@ const CLASSES = {
   sendIcon: 'chat-bot-send-icon',
 };
 
+// Helper function to convert URLs to clickable links
+function formatMessageContent(content: string) {
+  // URL regex pattern
+  const urlRegex = /(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/g;
+  
+  // Split content by URLs
+  const parts = content.split(urlRegex);
+  
+  return parts.map((part, index) => {
+    if (urlRegex.test(part)) {
+      return (
+        <a
+          key={index}
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="chat-bot-link"
+        >
+          {part}
+        </a>
+      );
+    }
+    return part;
+  });
+}
+
 // Animation variants
 const buttonVariants = {
   initial: { scale: 0, opacity: 0 },
@@ -246,8 +272,9 @@ export default function ChatBot() {
                 >
                   <div 
                     className={CLASSES.messageBubble}
+                    style={{ whiteSpace: 'pre-wrap' }}
                   >
-                    {msg.content}
+                    {formatMessageContent(msg.content)}
                   </div>
                 </motion.div>
               ))}
