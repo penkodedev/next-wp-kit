@@ -34,6 +34,10 @@ const ChatBot = dynamic(() => import('@/components/ui/ChatBot'), {
   ssr: false
 });
 
+const ChatWhatsApp = dynamic(() => import('@/components/ui/ChatWhatsApp'), {
+  ssr: false
+});
+
 import BodyClass from "@/utils/wordpress/BodyClass";
 import { WpPageIdProvider } from '@/utils/wordpress/WpPageIdContext';
 import localesConfig from '@/i18n/locales.generated.json';
@@ -108,6 +112,7 @@ function GlobalUI() {
       <LightboxController />
       <AdvertisingPopup />
       <ChatBot />
+      <ChatWhatsApp />
     </>
   );
 }

@@ -3,8 +3,8 @@ ul.breadcrumb {
   color: #777777;
   list-style: none;
   gap: 1rem 0;
-  margin: 0 0 20px 0;
-  padding: 0;
+  margin: 0 0 20px 0 !important;
+  padding: 0 !important;
 
   li {
     display: inline;

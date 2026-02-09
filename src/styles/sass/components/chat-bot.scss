@@ -60,7 +60,7 @@
   bottom: 60px;
   right: 0;
   width: 320px;
-  height: 450px;
+  height: 580px;
   background-color: var(--background-color);
   border: 1px solidd2d2d2;
   border-radius: 12px;
@@ -71,7 +71,7 @@
 
   @media (min-width: 768px) {
     width: 380px;
-    height: 500px;
+    height: 580px;
   }
 }
 
@@ -243,6 +243,7 @@
 
   input {
     font-size: 0.9rem !important;
+    margin: 0 !important;
   }
 }
 
@@ -282,7 +283,7 @@
   border: none;
   cursor: pointer;
   padding: 0;
-  background-color: transparent;
+  background-color: #373737;
 
   &:hover {
     background-color: transparent;
