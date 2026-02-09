@@ -2,15 +2,30 @@
 // PAGE SITEMAP (app/sitemap/page)
 //------------------------------------------------------------------------
 
-.sitemap-tree {
-  font-family: monospace;
-  color: #333;
-  margin: 66px 0 126px 0;
-}
+body.page-sitemap {
+  .sitemap-tree {
+    font-family: monospace;
+    color: #333;
+    margin: 66px 0 126px 0;
+  }
+
+  .sitemap-leaf::before {
+    font-family: monospace !important;
+    content: "├── " !important;
+    color: #5f5f5f !important;
+    -webkit-mask: none !important;
+    mask: none !important;
+    background-image: none !important;
+    background: transparent;
+    
+  }
+
+  .sitemap-leaf:last-child::before {
+    content: "└── " !important;
+  }
 
 .sitemap-branch {
   margin-bottom: 2rem;
-  
 }
 
 .sitemap-node--root {
@@ -35,7 +50,7 @@
   &::before {
     font-family: system-ui, monospace;
     content: "├── ";
-    color: #858585;
+    color: #555555;
     font-weight: 100;
     //margin-right: 0.2rem;
   }
@@ -48,10 +63,10 @@
 li.sitemap-leaf a.sitemap-link {
   background-image: none;
 
-   &:hover {
-        background: none;
-        text-decoration: underline;
-    }
+  &:hover {
+    background: none;
+    text-decoration: underline;
+  }
 }
 
 .sitemap-link {
@@ -68,15 +83,14 @@ li.sitemap-leaf a.sitemap-link {
 }
 
 .sitemap-title {
-  font-weight: 500;
+  padding-left: 10px;
 }
 
 .sitemap-date {
   font-size: 0.66em;
   color: #757575;
-  margin-left: 0.5rem; 
+  margin-left: 0.5rem;
 
   &::before {
-    content: "- " ;
-  }
-}
+    content: "- ";
+  }  }  }

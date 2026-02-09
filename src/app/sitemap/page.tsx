@@ -178,7 +178,7 @@ export default async function SitemapPage() {
         <h1>Mapa del Sitio</h1>
       </section>
       
-      <article className="page-content">
+      <article className="">
 
         {/* <p>Encuentra todas las páginas y contenidos de nuestro sitio web</p> */}
 
