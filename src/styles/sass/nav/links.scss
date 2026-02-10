@@ -44,11 +44,10 @@ main p a[target="_blank"]:not(.no-icon)::after,
   display: inline-block;
   width: 13px;
   height: 13px;
-  margin: 0 2px 0 4px;
+  margin: -10px 2px 0 4px;
   background: url('/icons/external-link.svg') no-repeat center;
   background-size: contain;
   vertical-align: middle;
-  opacity: 0.6;
 }
 
 // Ocultar si ya tiene un icono dentro

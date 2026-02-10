@@ -80,7 +80,7 @@
 // Header
 .chat-bot-header {
   color: #fff;
-  padding: 8px;
+  padding:18px 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -100,7 +100,6 @@
 }
 
 .chat-bot-avatar {
-  padding: 10px;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -134,19 +133,19 @@
 }
 
 .chat-bot-close-button {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  background: transparent;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  background-color: #373737;
 
   &:hover {
-    background-color: var(--neutral-100);
+    background-color: transparent;
   }
 
   &-disabled {
@@ -184,7 +183,7 @@
 }
 
 .chat-bot-message-bubble {
-  font-size: 0.9rem;
+  font-size: 1rem;
   line-height: 1.35;
   padding: 0.625rem 1rem;
   max-width: 99%;

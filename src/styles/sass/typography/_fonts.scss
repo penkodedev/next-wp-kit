@@ -93,7 +93,7 @@ article ul {
 
     li {
         // line-height: $text-lh;
-        margin-bottom: 16px;
+        margin-bottom: 10px;
         // display: flex;
         align-items: center;
     }
@@ -104,8 +104,9 @@ article ul {
         width: 1.3em;
         height: 1.3em;
         margin-right: 5px;
-        vertical-align:middle;      
-        // Lucide Check icon SVG as mask
+        vertical-align:middle;
+          
+        // Lucide Check SVG as mask
         background-color: black; // Icon Color
         -webkit-mask: url('/icons/check.svg') no-repeat center;
         mask: url('/icons/check.svg') no-repeat center;
@@ -123,7 +124,7 @@ article ol {
     li {
         font-family: $text-font;
         counter-increment: my-awesome-counter;
-        margin-bottom: 2rem;
+        margin-bottom: 12px;
         font-size: $text-size;
         max-width: 1000px;
     }
