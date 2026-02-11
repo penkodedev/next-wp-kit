@@ -30,7 +30,7 @@ type WpNavMenuProps = {
 /**
  * Recursive component to render an individual menu item and its children.
  */
-function NavItem({ item, isMobile = false, onLinkClick }: { item: MenuItem; isMobile?: boolean; onLinkClick?: () => void }) {
+function NavItem({ item, isMobile = false, isSubmenu = false, onLinkClick }: { item: MenuItem; isMobile?: boolean; isSubmenu?: boolean; onLinkClick?: () => void }) {
   const wpDomain = process.env.NEXT_PUBLIC_WORDPRESS_API_URL ? new URL(process.env.NEXT_PUBLIC_WORDPRESS_API_URL).origin : '';
   const frontendDomain = process.env.NEXT_PUBLIC_BASE_URL || '';
 
@@ -50,7 +50,7 @@ function NavItem({ item, isMobile = false, onLinkClick }: { item: MenuItem; isMo
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <Link 
+      <Link
         href={linkUrl || '/'} 
         target={item.target || (isInternal ? '_self' : '_blank')}
         onClick={onLinkClick}
@@ -58,6 +58,9 @@ function NavItem({ item, isMobile = false, onLinkClick }: { item: MenuItem; isMo
       >
         {isMobile && item.parent !== '0' && (
           <Icons.ChevronRight size={20} strokeWidth={1} className="submenu-arrow-mobile" />
+        )}
+        {isSubmenu && !isMobile && (
+          <Icons.MoveRight size={14} strokeWidth={1} className="submenu-item-icon" />
         )}
         {item.title}
         {hasChildren && !isMobile && (
@@ -87,7 +90,7 @@ function NavItem({ item, isMobile = false, onLinkClick }: { item: MenuItem; isMo
       {hasChildren && item.children && (
         <ul className={isMobile ? "submenu-mobile" : "submenu"}>
           {item.children.map((child) => (
-            <NavItem key={child.id} item={child} isMobile={isMobile} onLinkClick={onLinkClick} />
+            <NavItem key={child.id} item={child} isMobile={isMobile} isSubmenu={true} onLinkClick={onLinkClick} />
           ))}
         </ul>
       )}

@@ -25,16 +25,16 @@ export default function CodeBlockCopier() {
         link.className = 'copy-btn';
         link.href = '#';
         // Convertir el componente React a HTML string
-        link.innerHTML = renderToString(<Icons.Copy size={20} strokeWidth={1.5} />);
+        link.innerHTML = renderToString(<Icons.Copy size={17} strokeWidth={2.2} />);
         link.setAttribute('aria-label', 'Copiar código');
         
         link.onclick = async (e) => {
           e.preventDefault(); // Evitar que navegue
           await navigator.clipboard.writeText(code);
           // Cambiar a icono de check
-          link.innerHTML = renderToString(<Icons.Check size={20} strokeWidth={1.8} />);
+          link.innerHTML = renderToString(<Icons.Check size={17} strokeWidth={2.2} />);
           setTimeout(() => {
-            link.innerHTML = renderToString(<Icons.Copy size={20} strokeWidth={1.8} />);
+            link.innerHTML = renderToString(<Icons.Copy size={17} strokeWidth={2.2} />);
           }, 2000);
         };
         

@@ -112,6 +112,12 @@
   }
 }
 
+.submenu-item-icon {
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
 .submenu-arrow {
   display: inline-flex;
   position: relative;
@@ -136,7 +142,6 @@
 // =================================================================
 //      SUBMENU ANIMATION
 // =================================================================
-
 .main-menu ul li .submenu {
   display: block; /* reemplaza display: none */
   opacity: 0;
