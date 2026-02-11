@@ -15,6 +15,8 @@ import "@/styles/sass/main.scss";
 import HeaderServer from '@/components/layout/header/HeaderServer';
 import Footer from "@/components/layout/footer/Footer";
 
+import CodeBlockCopier from "@/components/ui/CodeBlockCopier";
+
 import CookieConsent from "@/components/cookies/CookieConsent";
 import CookieManager from "@/components/cookies/CookieManager";
 import ScrollToTop from "@/components/navigation/ScrollToTop";
@@ -195,6 +197,8 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             `
           }}
         />
+
+        <CodeBlockCopier />
       </body>
     </html>
   );

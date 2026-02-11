@@ -16,6 +16,17 @@
                           @BUTTONS
 --------------------------------------------------------------------
 */
+
+.wp-block-button__link {
+  height: auto !important; // CLEAN WordPress Height
+}
+
+input[type="submit" i] {
+    padding-block:inherit !important;
+    padding-inline: inherit !important;
+}
+
+
 button,
 a.button,
 .wp-block-button__link,
@@ -75,3 +86,34 @@ input.wpcf7-submit
 // .page-ui-components a.wp-block-button__link {
 //   @include icon-after(arrow-right, 1em);
 // }
+
+
+
+//************** Button Copy Code Block *************//
+.copy-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 6px;
+  background: rgba(0,0,0,0.7);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0.6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: transparent;
+  }
+  
+  svg {
+    stroke: white;
+  }
+}
+
+pre.wp-block-code:hover .copy-btn {
+  color:#000;
+}
