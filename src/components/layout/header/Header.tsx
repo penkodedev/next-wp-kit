@@ -10,6 +10,7 @@ import WpNavMenu from '@/components/navigation/WpNavMenu';
 import SearchTrigger from '@/components/features/search/SearchTrigger';
 import type { SiteInfo, MenuItem } from "@/types/wordpressTypes";
 import localesConfig from '@/i18n/locales.generated.json';
+import Ticker from '@/components/sections/Ticker';
 
 interface HeaderProps {
   variant?: 'default' | 'home';
@@ -17,7 +18,7 @@ interface HeaderProps {
   initialLocale?: string;
   siteInfo: SiteInfo;
   menusByLocale?: Record<string, MenuItem[]>;
-
+  currentPageId?: number;
   shrinkOnScroll?: boolean;
 }
 
@@ -27,7 +28,7 @@ export default function Header({
   initialLocale = localesConfig.defaultLocale, 
   siteInfo,
   menusByLocale,
-
+  currentPageId,
 
   // =================================================================
   // ENABLE/DISABLE SHRINK EFFECT HERE ↓
@@ -69,7 +70,10 @@ export default function Header({
 
 
   return (
-    <header className={headerClasses}>   
+    <>
+      <Ticker pageIdParam={currentPageId} />
+      
+      <header className={headerClasses}>   
       <LogoHeader siteInfo={siteInfo} isHome={isHome} shrink={shouldShrink} />
 
       <div className="actions-container">
@@ -88,5 +92,6 @@ export default function Header({
       </div>
       
     </header>
+    </>
   );
 }

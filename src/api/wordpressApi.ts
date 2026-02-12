@@ -676,3 +676,30 @@ export async function safeGetContentBySlug<T extends WpContent>(
   }
 }
 
+
+/*--------------------------------------------------------------------------------------
+    📰 TICKER
+    Route: /next-wp-kit/v1/ticker
+    Returns ticker configuration (texts, size, duration, pauseOnHover)
+--------------------------------------------------------------------------------------*/
+export interface TickerSettings {
+  enabled: boolean;
+  text: string;
+  link: string;
+  pages: number[];
+  speed: number;
+  size: 'small' | 'medium' | 'big' | 'extra-big';
+  noAnimate: boolean;
+  pauseOnHover: boolean;
+}
+
+/**
+ * Fetches ticker settings from WordPress custom endpoint.
+ * Returns empty settings if ticker is not configured.
+ */
+export async function getTickerSettings(): Promise<TickerSettings | null> {
+  return await fetchAPI<TickerSettings>('/custom/v1/ticker', {
+    next: { revalidate: 300 } // Cache for 5 minutes
+  });
+}
+

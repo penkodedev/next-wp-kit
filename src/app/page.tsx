@@ -8,6 +8,7 @@ import { headers } from "next/headers";
 import ContentHome from "@/components/layout/content/ContentHome";
 import localesConfig from '@/i18n/locales.generated.json';
 
+
 /**
  * Connects to WordPress to get the title and description.
  */
