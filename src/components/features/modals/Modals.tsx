@@ -50,7 +50,7 @@ export default function Modals() {
         const content = await getContentBySlug<ModalType>('modales', slug);
         setModalContent(content);
       } catch (error) {
-  logger.error("Failed to fetch modal content:", error as Error);
+        logger.error("Failed to fetch modal content:", error as Error);
         // Optionally, set an error state to show a message
       } finally {
         setIsLoading(false);
@@ -73,8 +73,6 @@ export default function Modals() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [closeModal]);
 
-  
-
   return (
     <AnimatePresence mode="wait">
       {isOpen && (
@@ -88,11 +86,6 @@ export default function Modals() {
           role="dialog"
           aria-modal="true"
         >
-          {/* Close button outside modal-content */}
-          <button className="modal-close" onClick={closeModal} aria-label="Cerrar modal">
-            <Icons.X size={28} strokeWidth={1} />
-          </button>
-
           {modalContent && (
             <motion.div
               className="modal-content"
@@ -103,8 +96,15 @@ export default function Modals() {
               onClick={(e) => e.stopPropagation()}
               role="document"
             >
+
+              
               <div className="modal-scroll-wrapper">
                 <div className="modal-body" dangerouslySetInnerHTML={{ __html: processContent(modalContent.content.rendered) }} />
+
+                <a className="modal-close" onClick={closeModal} aria-label="Cerrar modal">
+                <Icons.X size={28} strokeWidth={1} />
+                </a>
+                
               </div>
             </motion.div>
           )}

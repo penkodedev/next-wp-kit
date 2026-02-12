@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence, useIsPresent } from 'framer-motion';
 import { useGlobalAppReady } from '@/hooks/useGlobalAppReady';
@@ -36,10 +36,11 @@ export default function AdvertisingPopup() {
   const { loading: isAppLoading } = useGlobalAppReady();
   const pathname = usePathname();
   const isPresent = useIsPresent(); // Hook from Framer Motion to handle component unmounts
+  const hasShownPopup = useRef(false); // Flag to prevent re-showing after close
 
   useEffect(() => {
-    // Don't do anything if the app is still loading, a popup is already active, or the component is unmounting.
-    if (isAppLoading || activePopup || !isPresent) return;
+    // Don't do anything if the app is still loading, popup is already active, component is unmounting, or already shown
+    if (isAppLoading || activePopup || !isPresent || hasShownPopup.current) return;
 
     const fetchAndCheckPopups = async () => {
       const popups = await getActivePopups();
@@ -52,11 +53,9 @@ export default function AdvertisingPopup() {
 
       if (!popupForThisPage) return;
 
-      // ========================================================================
+      // =================================================================满了
       // POPUP DISPLAY FREQUENCY LOGIC
-      // This is where we decide whether to show the popup based on the
-      // 'frequency' setting from WordPress.
-      //
+      // ========================================================================
       // 'always': The popup will always be shown on every page load.
       // 'once':   The popup will be shown only once per page per session.
       // number (e.g., '2', '3'): The popup will be shown that many times per page per session.
@@ -86,7 +85,24 @@ export default function AdvertisingPopup() {
 
       // If all checks pass, set a timer to show the popup
       const timer = setTimeout(() => {
+        // Double-check frequency before showing (in case sessionStorage changed)
+        if (frequency !== 'always') {
+          const storageKey = `${STORAGE_KEY_PREFIX}${popupForThisPage.id}_${pathname}`;
+          const sessionData = sessionStorage.getItem(storageKey);
+          const shownCount = sessionData ? parseInt(sessionData, 10) : 0;
+          
+          if (frequency === 'once' && sessionData) {
+            return; // Already shown once
+          }
+          
+          const showCount = parseInt(frequency, 10);
+          if (!isNaN(showCount) && shownCount >= showCount) {
+            return; // Already shown the maximum times
+          }
+        }
+        
         setActivePopup(popupForThisPage);
+        hasShownPopup.current = true; // Mark as shown to prevent re-showing
 
         // Update session storage if needed
         if (frequency !== 'always') {
@@ -126,20 +142,16 @@ export default function AdvertisingPopup() {
           aria-modal="true"
           aria-labelledby="popup-title"
         >
-          {/* Close button outside modal-content, like in Modals */}
-          <button className="modal-close" onClick={handleClose} aria-label="Cerrar popup">
-            <Icons.X size={28} strokeWidth={1} />
-          </button>
-
           <motion.div
             className="modal-content advertising-popup"
             variants={modalVariants}
             onClick={(e) => e.stopPropagation()}
             role="document"
           >
-            <div className="modal-body"
-                 dangerouslySetInnerHTML={{ __html: activePopup.content.rendered }}
-            />
+            <a className="modal-close" onClick={handleClose} aria-label="Cerrar popup">
+              <Icons.X size={28} strokeWidth={1} />
+            </a>
+            <div className="modal-body" dangerouslySetInnerHTML={{ __html: activePopup.content.rendered }} />
           </motion.div>
         </motion.div>
       )}
