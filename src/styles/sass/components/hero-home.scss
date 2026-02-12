@@ -3,15 +3,14 @@
 @use 'abstracts' as *;
 
 .hero-section {
-  //position: relative;
   width: 100%;
   height: 100vh;
   display: flex;
-  align-items: stretch; // Allows hero-content to have full height
+  align-items: stretch;
   justify-content: center;
   overflow: hidden;
-  //margin-top:-140px; // When we want Header over Hero
 
+  // ── Background ──────────────────────────────────────────
   .hero-background {
     position: absolute;
     inset: 0;
@@ -50,21 +49,23 @@
     }
   }
 
+  // ── Overlay ─────────────────────────────────────────────
   .hero-overlay {
     position: absolute;
     inset: 0;
     background: rgb(0, 0, 0); // Pure black, opacity controlled from WordPress
   }
 
+  // ── Content ─────────────────────────────────────────────
   .hero-content {
     position: relative;
-    display: flex; // Required for justifyContent/alignItems
-    flex-direction: column; // Vertical layout
+    display: flex;
+    flex-direction: column;
     text-align: center;
     max-width: 800px;
     padding: 0 2rem;
     width: 100%;
-    height: 100%; // Occupy full height for vertical positioning
+    height: 100%;
     margin-top: -$header-height; // Compensate header height for Hero content
 
     .hero-slide {
@@ -106,200 +107,116 @@
         text-decoration: underline;
       }
     }
+  }
 
-    //   .hero-button {
-    //     display: inline-flex;
-    //     align-items: center;
-    //     gap: 0.5rem;
-    //     padding: 1rem 2rem;
-    //     background: rgba(255, 255, 255, 0.2);
-    //     backdrop-filter: blur(10px);
-    //     border: 1px solid rgba(255, 255, 255, 0.3);
-    //     border-radius: 50px;
-    //     color: white;
-    //     text-decoration: none;
-    //     font-weight: 600;
-    //     transition: all 0.3s ease;
+  // ── Navigation (FIX: fuera de .hero-content, directo en .hero-section) ──
+  .hero-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    backdrop-filter: blur(10px);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
 
-    //     &:hover {
-    //       background: rgba(255, 255, 255, 0.3);
-    //       transform: translateY(-2px);
-    //       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    //     }
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-50%) scale(1.1);
+    }
 
-    //     // Outline style (border only, no background)
-    //     &.hero-button-outline {
-    //       background: transparent;
-    //       border: 2px solid rgba(255, 255, 255, 0.8);
+    &.hero-nav-prev {
+      left: 2rem;
+    }
 
-    //       &:hover {
-    //         background: rgba(255, 255, 255, 0.1);
-    //         border-color: white;
-    //       }
-    //     }
+    &.hero-nav-next {
+      right: 2rem;
+    }
 
-    //     svg {
-    //       transition: transform 0.3s ease;
-    //     }
+    &.hero-nav-down {
+      bottom: 2rem;
+      top: auto;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 44px;
+      width: 44px;
+      border: 1px solid #5e5c5c;
+      border-radius: 50px;
+      animation: bounce 2s infinite;
 
-    //     &:hover svg {
-    //       transform: translateX(4px);
-    //     }
-    //   }
-    // }
-
-    // Navigation
-    .hero-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      //background: rgba(255, 255, 255, 0.2);
+      background-color: rgba(255, 255, 255, 0.11); // Button with opacity
       backdrop-filter: blur(10px);
-      //border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      cursor: pointer;
-      transition: all 0.3s ease;
+      -webkit-backdrop-filter: blur(10px);  
 
       &:hover {
-        background: rgba(255, 255, 255, 0.3);
-        transform: translateY(-50%) scale(1.1);
-      }
-
-      &.hero-nav-prev {
-        left: 2rem;
-      }
-
-      &.hero-nav-next {
-        right: 2rem;
-      }
-
-      &.hero-nav-down {
-        bottom: 2rem;
-        top: auto;
-        transform: none;
-        animation: bounce 2s infinite;
+        transform: translateX(-50%) scale(1.1);
       }
 
       svg {
-        width: 28px;
-        height: 28px;
-
+        color: #fff;
+        width:20px;
       }
     }
 
-    // INDICATORS (Commented if not needed)
-    // .hero-indicators {
-    //   position: absolute;
-    //   bottom: 2rem;
-    //   left: 50%;
-    //   transform: translateX(-50%);
-    //   display: flex;
-    //   gap: 0.5rem;
-    // }
-
-    // .hero-indicator {
-    //   width: 12px;
-    //   height: 12px;
-    //   border-radius: 50%;
-    //   border: 2px solid rgba(255, 255, 255, 0.5);
-    //   background: transparent;
-    //   cursor: pointer;
-    //   transition: all 0.3s ease;
-
-    //   &.active {
-    //     background: white;
-    //     border-color: white;
-    //   }
-
-    //   &:hover {
-    //     border-color: white;
-    //     transform: scale(1.2);
-    //   }
-    // }
+    svg {
+      width: 28px;
+      height: 28px;
+      color: inherit;
+    }
   }
 
+  // ── Keyframes ───────────────────────────────────────────
   @keyframes gradientShift {
-    0% {
-      background-position: 0% 50%;
-    }
-
-    50% {
-      background-position: 100% 50%;
-    }
-
-    100% {
-      background-position: 0% 50%;
-    }
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
   }
 
   @keyframes kenBurns {
-    0% {
-      transform: scale(1) translate(0, 0);
-    }
-
-    100% {
-      transform: scale(1.45) translate(-5%, 3%);
-    }
+    0%   { transform: scale(1) translate(0, 0); }
+    100% { transform: scale(1.45) translate(-5%, 3%); }
   }
 
   @keyframes bounce {
-
-    0%,
-    20%,
-    50%,
-    80%,
-    100% {
-      transform: translateY(0);
-    }
-
-    40% {
-      transform: translateY(-10px);
-    }
-
-    60% {
-      transform: translateY(-5px);
-    }
+    0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+    40%  { transform: translateX(-50%) translateY(-10px); }
+    60%  { transform: translateX(-50%) translateY(-5px); }
   }
 
-  // Responsive
+  // ── Responsive (FIX: sin anidar .hero-section dentro de .hero-section) ──
   @media (max-width: 768px) {
-    .hero-section {
-      height: 100vh;
+    .hero-content {
+      padding: 0 1rem;
 
-      .hero-content {
-        padding: 0 1rem;
-
-        h1 {
-          font-size: 2.5rem;
-        }
-
-        p {
-          font-size: 1.2rem;
-        }
+      h1 {
+        font-size: 2.5rem;
       }
 
-      .hero-nav {
-        width: 40px;
-        height: 40px;
+      p {
+        font-size: 1.2rem;
+      }
+    }
 
-        &.hero-nav-prev {
-          left: 1rem;
-        }
+    .hero-nav {
+      width: 40px;
+      height: 40px;
 
-        &.hero-nav-next {
-          right: 1rem;
-        }
+      &.hero-nav-prev {
+        left: 1rem;
+      }
 
-        svg {
-          width: 20px;
-          height: 20px;
-        }
+      &.hero-nav-next {
+        right: 1rem;
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
       }
     }
   }
