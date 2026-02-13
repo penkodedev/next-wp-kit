@@ -29,6 +29,10 @@ const ModalController = dynamic(() => import('@/components/features/modals/Modal
   ssr: false
 });
 
+const SmoothScroll = dynamic(() => import('@/components/animations/SmoothScroll'), {
+  ssr: false
+});
+
 const LightboxController = dynamic(() => import('@/components/features/lightbox/LightboxController'), {
   ssr: false
 });
@@ -167,13 +171,15 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             }}
           >
             <WpPageIdProvider>
-              <BodyClass> {/* BodyClass needs to be a client component to read pageId from context */}
-                <HeaderServer />
-                {/* <Breadcrumbs /> */}
-                <main>{children}</main>
-                <Footer />
-                <GlobalUI />
-              </BodyClass>
+              <SmoothScroll>
+                <BodyClass> {/* BodyClass needs to be a client component to read pageId from context */}
+                  <HeaderServer />
+                  {/* <Breadcrumbs /> */}
+                  <main>{children}</main>
+                  <Footer />
+                  <GlobalUI />
+                </BodyClass>
+              </SmoothScroll>
             </WpPageIdProvider>
           </SWRConfig>
         </NextIntlClientProvider>
