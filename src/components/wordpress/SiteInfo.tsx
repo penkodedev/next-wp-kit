@@ -1,5 +1,5 @@
 // src/components/wordpress/SiteInfo.tsx
-import { getSiteInfo } from "@/api/wordpressApi";
+import { safeGetSiteInfo } from "@/api/wordpressApi";
 import type { SiteInfo } from "@/types/wordpressTypes";
 import { headers } from 'next/headers';
 import localesConfig from '@/i18n/locales.generated.json';
@@ -51,8 +51,8 @@ export default async function SiteInfo({
   // Detect current language from headers or use override
   const currentLocale = lang || headers().get('x-locale') || localesConfig.defaultLocale;
   
-  // Fetch site info with language parameter
-  const siteInfo = await getSiteInfo(currentLocale) || defaultSiteInfo;
+  // Fetch site info with language parameter (safe version)
+  const siteInfo = await safeGetSiteInfo(currentLocale);
 
   // Pasamos la información obtenida a la función `children` para que sea renderizada.
   // Esto hace que el componente sea un proveedor de datos reutilizable.

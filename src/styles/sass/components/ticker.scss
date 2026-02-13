@@ -3,7 +3,7 @@
 @use 'abstracts' as *;
 
 .ticker-container {
-  color: #fff;
+  color: #dadada;
   width: 100%;
   max-width: 100%;
   background-color: #2c2c2c;
@@ -20,16 +20,15 @@
 }
 
 .ticker-content {
-  font-family: $font-family-base;
-  font-size: 1.1rem;
-  letter-spacing: 0.8;
+  // font-family: $font-family-base;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   white-space: pre-wrap;
   flex-shrink: 0;
   display: flex;
   align-items: center;
 
   a {
-    color: inherit;
+    color: #bbce16;
     text-decoration: none;
 
     &:hover {
@@ -59,7 +58,7 @@
 .ticker-medium {
   .ticker-content {
     font-size: 1.06rem;
-    padding: 14px 0;
+    padding: 12px 0;
   }
 }
 

@@ -1,5 +1,5 @@
 import Header from '@/components/layout/header/Header';
-import { getCachedSiteInfo } from '@/api/wordpressApi';
+import { safeGetSiteInfo } from '@/api/wordpressApi';
 import type { SiteInfo } from '@/types/wordpressTypes';
 
 interface HeaderConditionalProps {
@@ -37,9 +37,8 @@ const FALLBACK_SITE_INFO: SiteInfo = {
 };
 
 export default async function HeaderConditional({ currentLocale = 'es' }: HeaderConditionalProps) {
-  // Fetch site info for the header
-  const siteInfo = await getCachedSiteInfo();
+  // Fetch site info for the header (safe version)
+  const siteInfo = await safeGetSiteInfo();
   
-  // For now, just use default header - we'll fix the conditional logic later
-  return <Header variant="default" siteInfo={siteInfo || FALLBACK_SITE_INFO} />;
+  return <Header variant="default" siteInfo={siteInfo} />;
 }

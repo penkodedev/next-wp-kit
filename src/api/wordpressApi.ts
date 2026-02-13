@@ -4,7 +4,7 @@
     🏷️ GET ALL TAXONOMIES
     Route: /wp/v2/taxonomies
     Returns all registered taxonomies (built-in and custom)
---------------------------------------------------------------------------------------*/
+ --------------------------------------------------------------------------------------*/
 import type { Taxonomy } from '@/types/wordpressTypes';
 
 /**
@@ -41,7 +41,7 @@ const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
     🏷️ GET TERMS FOR TAXONOMY
     Route: /wp/v2/taxonomy/terms
     Returns all terms for a given taxonomy (built-in or custom)
---------------------------------------------------------------------------------------*/
+ --------------------------------------------------------------------------------------*/
 import type { Term } from '@/types/wordpressTypes';
 
 /**
@@ -58,7 +58,7 @@ export async function getTermsForTaxonomy(taxonomySlug: string): Promise<Term[] 
     This file is the central place for fetching data from the WordPress REST API.
     All custom endpoints consumed here are defined in the headless theme, specifically
     in the file: /inc/api/api-endpoints.php
---------------------------------------------------------------------------------------*/
+ --------------------------------------------------------------------------------------*/
 
 // ********************** SWR Fetcher Function **********************
 /**
@@ -72,16 +72,16 @@ export async function swrFetcher<T>(url: string): Promise<T> {
   if (!API_URL) {
     throw new Error('NEXT_PUBLIC_WORDPRESS_API_URL is not configured');
   }
-  
+   
   const requestUrl = `${API_URL.replace(/\/$/, '')}/${url.replace(/^\//, '')}`;
   const response = await fetch(requestUrl, {
     headers: { 'Content-Type': 'application/json' },
   });
-  
+   
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
-  
+   
   return response.json();
 }
 
@@ -125,7 +125,7 @@ export async function fetchAPI<T>(
   const headers = { 'Content-Type': 'application/json' };
   // Safely constructs the full URL, avoiding double slashes.
   const requestUrl = `${API_URL.replace(/\/$/, '')}/${query.replace(/^\//, '')}`;
-  
+   
   try {
     const { method = 'GET', headers: customHeaders = {}, body = null, next } = options;
 
@@ -177,27 +177,75 @@ export async function fetchAPI<T>(
 /**
  * Fetches basic site information from a custom endpoint.
  * @param lang - Optional language code for WPML translation (e.g. 'en', 'es', 'pt-br')
+ * @throws Error if the API fails to fetch site info (prevents caching failures)
  */
-export async function getSiteInfo(lang?: string): Promise<SiteInfo | null> {
+export async function getSiteInfo(lang?: string): Promise<SiteInfo> {
   const endpoint = lang ? `/custom/v1/site-info?lang=${lang}` : '/custom/v1/site-info';
   const data = await fetchAPI<SiteInfo>(endpoint);
+
+  if (!data) {
+    throw new Error(`[getSiteInfo] Failed to fetch site info${lang ? ` (lang: ${lang})` : ''}`);
+  }
+
   return data;
 }
 
 /**
  * Cached version of getSiteInfo using Next.js unstable_cache.
  * Caches site info for 1 hour to avoid redundant API calls.
- * Use this in layouts and components that don't need real-time data.
+ * Uses tags for on-demand revalidation via webhook.
  * @param lang - Optional language code for WPML translation
  */
 export const getCachedSiteInfo = unstable_cache(
-  async (lang?: string): Promise<SiteInfo | null> => {
-    const endpoint = lang ? `/custom/v1/site-info?lang=${lang}` : '/custom/v1/site-info';
-    return await fetchAPI<SiteInfo>(endpoint);
-  },
+  getSiteInfo,
   ['site-info'],
-  { revalidate: 3600 } // Cache for 1 hour
+  { 
+    revalidate: 3600, // Cache for 1 hour
+    tags: ['site-info'] // Enables revalidateTag('site-info') for on-demand invalidation
+  }
 );
+
+/**
+ * Safe version of getSiteInfo that never throws.
+ * Returns defaultSiteInfo if API fails.
+ * Use this in components that need graceful fallback.
+ */
+export async function safeGetSiteInfo(lang?: string): Promise<SiteInfo> {
+  try {
+    return await getSiteInfo(lang);
+  } catch (error) {
+    logger.error(`[safeGetSiteInfo] API failed, using default:`, error instanceof Error ? error.message : String(error));
+    // Return default SiteInfo to prevent app crash
+    return {
+      title: 'Reaxy | Next/React Kit with Headless WordPress',
+      description: 'Reaxy is a Next Kit with Headless WordPress theme for Next.js/React',
+      back_url: process.env.NEXT_PUBLIC_WORDPRESS_API_URL || '',
+      front_url: process.env.NEXT_PUBLIC_BASE_URL || '',
+      light_logo: `${process.env.NEXT_PUBLIC_BASE_URL || ''}/images/framework-logo-white.png`,
+      dark_logo: `${process.env.NEXT_PUBLIC_BASE_URL || ''}/framework-logo.png`,
+      favicons: {
+        icon_32: '',
+        icon_180: '',
+        icon_192: '',
+        icon_512: '',
+      },
+      date_format: 'j \\d\\e F \\d\\e Y',
+      language: 'es',
+      social: [],
+      contact: [],
+      analytics: {
+        google_analytics_id: '',
+        facebook_pixel_id: '',
+        gtm_id: '',
+        twitter_pixel_id: '',
+      },
+      i18n: {
+        default_locale: 'es',
+        locales: ['es', 'en', 'pt-br']
+      }
+    };
+  }
+}
 
 /*--------------------------------------------------------------------------------------
     🎬 GET HERO DATA
@@ -362,7 +410,7 @@ export async function getContentBySlug<T extends WpContent>(postType: string, sl
     query += `&lang=${lang}`;
   }
   const data = await fetchAPI<T[]>(query);
-  
+   
   return data?.[0] ?? null;
 }
  
@@ -377,35 +425,35 @@ export async function getHomePage(lang?: string): Promise<Page | null> {
   // Get the front page by querying with is_front_page meta key
   // This reliably gets the page configured in WordPress Settings > Reading
   let query = '/wp/v2/pages?per_page=100&_embed';
-  
+   
   if (lang && lang !== localesConfig.defaultLocale) {
     query += `&lang=${lang}`;
   }
-  
+   
   const pages = await fetchAPI<Page[]>(query);
-  
+   
   if (pages && pages.length > 0) {
     // Find the page marked as front page (template = front-page)
     const frontPage = pages.find(p => 
       p.template === 'front-page' || 
       p.meta?.['_wp_page_template'] === 'front-page'
     );
-    
+     
     if (frontPage) {
       return frontPage;
     }
-    
+     
     // Fallback: look for pages with common home page slugs
     const commonSlugs = ['inicio', 'home', 'portada', 'accueil', 'landing'];
     for (const slug of commonSlugs) {
       const page = pages.find(p => p.slug === slug);
       if (page) return page;
     }
-    
+     
     // Final fallback: return first page
     return pages[0];
   }
-  
+   
   return null;
 }
 
@@ -452,7 +500,7 @@ export async function getPostNavigation(postId: number, postType: string, lang: 
 
 
 /*--------------------------------------------------------------------------------------
-    �🍔 SEARCH SITE
+    🔎 SEARCH SITE
     Route: /custom/v1/search?term={term}
     e.g. /custom/v1/search?term=example
 --------------------------------------------------------------------------------------*/
@@ -499,52 +547,83 @@ export interface WpmlTranslation {
 export async function getWpmlTranslation(postId: number, targetLang: string): Promise<WpmlTranslation | null> {
   try {
     const data = await fetchAPI<WpmlTranslation>(`/custom/v1/translation/${postId}?lang=${targetLang}`);
-    
-    // Clean up WordPress query params like ?page_id=657 when translation doesn't exist
-    // WPML returns home URL with page_id when no translation is available
-    if (data && data.url) {
-      const url = new URL(data.url, 'http://localhost:3000');
-      // If it has page_id param, it means no translation exists - return clean home URL
-      if (url.searchParams.has('page_id')) {
-        data.url = url.pathname; // Remove query params, keep only pathname
-      }
-    }
-    
-    return data;
+    return data || null;
   } catch (error) {
-  logger.error(`Error fetching WPML translation for post ${postId} (lang: ${targetLang})`, error instanceof Error ? error : String(error));
+    logger.error(`Error fetching WPML translation for post ${postId}:`, error instanceof Error ? error.message : String(error));
     return null;
   }
 }
 
 /**
- * Helper function to get translated URL or fallback to home
- * @param postId - The ID of the post/page in the current language
- * @param targetLang - The target language code (e.g., 'en', 'es')
- * @returns The translated URL or home URL of target language
+ * Get Ticker Settings from WordPress
+ * Route: /custom/v1/ticker
  */
-export async function getTranslatedUrl(postId: number | undefined, targetLang: string): Promise<string> {
-  // If no postId provided, go to home of target language
-  if (!postId) {
-    return targetLang === localesConfig.defaultLocale ? '/' : `/${targetLang}`;
-  }
-
-  const translation = await getWpmlTranslation(postId, targetLang);
-  
-  // If translation exists, return its URL
-  if (translation?.exists && translation.url) {
-    return translation.url;
-  }
-  
-  // Fallback to home of target language
-  return translation?.fallback_url || (targetLang === localesConfig.defaultLocale ? '/' : `/${targetLang}`);
+export interface TickerSettings {
+  enabled: boolean;
+  pages: number[];
+  text: string;
+  link?: string;
+  speed: number;
+  size: 'small' | 'medium' | 'big' | 'extra-big';
+  noAnimate: boolean;
+  pauseOnHover: boolean;
+  message?: string;
 }
 
+export async function getTickerSettings(): Promise<TickerSettings | null> {
+  const data = await fetchAPI<TickerSettings>('/custom/v1/ticker');
+  return data;
+}
+
+// In-memory cache for ticker settings (simple implementation)
+let tickerCache: { data: TickerSettings | null; timestamp: number } = { data: null, timestamp: 0 };
+
+/**
+ * Get Ticker Settings with caching (5 minutes)
+ * Uses in-memory cache to avoid repeated API calls
+ */
+export async function getCachedTickerSettings(): Promise<TickerSettings | null> {
+  const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
+  
+  // Return cached data if still valid
+  if (tickerCache.data && (Date.now() - tickerCache.timestamp < CACHE_DURATION)) {
+    return tickerCache.data;
+  }
+  
+  // Fetch fresh data
+  const data = await getTickerSettings();
+  
+  // Update cache
+  tickerCache = { data, timestamp: Date.now() };
+  
+  return data;
+}
+
+/**
+ * Force refresh ticker settings cache
+ */
+export function invalidateTickerCache(): void {
+  tickerCache = { data: null, timestamp: 0 };
+}
+
+/*--------------------------------------------------------------------------------------
+    🔒 SAFE GET ALL CONTENT (for generateStaticParams)
+    Wrapper that never throws, returns null on error instead.
+    Used in generateStaticParams where throwing would fail the build.
+--------------------------------------------------------------------------------------*/
+export async function safeGetAllContent<T extends WpContent>(postType: string, params: string = ''): Promise<T[] | null> {
+  try {
+    return await getAllContent<T>(postType, params);
+  } catch (error) {
+    logger.error(`safeGetAllContent failed for ${postType}:`, error instanceof Error ? error.message : String(error));
+    return null;
+  }
+}
 
 /*--------------------------------------------------------------------------------------
     🌐 GET WPML LANGUAGES
     Route: /custom/v1/languages
-    Returns all active languages from WPML configuration
+    Returns the list of active languages in WPML
 --------------------------------------------------------------------------------------*/
 export interface WpmlLanguage {
   code: string;
@@ -554,152 +633,21 @@ export interface WpmlLanguage {
   url: string;
 }
 
-export interface WpmlLanguagesResponse {
+export interface WpmlLanguages {
   languages: WpmlLanguage[];
   default: string;
   count: number;
 }
 
-// Fallback cuando WordPress no está disponible - usa localesConfig
-const FALLBACK_LANGUAGES: WpmlLanguagesResponse = {
-  languages: localesConfig.supportedLocales.map(code => ({
-    code,
-    name: code.toUpperCase(),
-    native_name: code.toUpperCase(),
-    is_default: code === localesConfig.defaultLocale,
-    url: code === localesConfig.defaultLocale ? '/' : `/${code}`
-  })),
-  default: localesConfig.defaultLocale,
-  count: localesConfig.supportedLocales.length
-};
-
-/**
- * Gets active languages from WPML
- * Cached for 1 hour in production, no cache in development
- */
-export async function getWpmlLanguages(): Promise<WpmlLanguagesResponse> {
-  try {
-    const data = await fetchAPI<WpmlLanguagesResponse>('/custom/v1/languages', {
-      next: { revalidate: process.env.NODE_ENV === 'production' ? 3600 : 0 }
-    });
-    return data || FALLBACK_LANGUAGES;
-  } catch (error) {
-  logger.error('Error fetching WPML languages, using fallback', error instanceof Error ? error : String(error));
-    return FALLBACK_LANGUAGES;
-  }
+export async function getWpmlLanguages(): Promise<WpmlLanguages | null> {
+  return await fetchAPI<WpmlLanguages>('/custom/v1/languages');
 }
 
 /*--------------------------------------------------------------------------------------
-    ❤️ POST LIKES
-    Increment like count for a post and get current count
+    ❤️ LIKE POST
+    Route: /custom/v1/posts/{id}/like
+    Increment like count for a post
 --------------------------------------------------------------------------------------*/
-
-/**
- * Increments the like count for a post
- * @param postId The post ID to like
- * @returns Object with success status and new like count
- */
-export async function likePost(postId: number): Promise<{ success: boolean; likes: number }> {
-  try {
-    const data = await fetchAPI<{ success: boolean; likes: number; post_id: number }>(`/custom/v1/like/${postId}`, {
-      method: 'POST',
-      next: { revalidate: 0 } // No cache for POST requests
-    });
-    return { success: data?.success || false, likes: data?.likes || 0 };
-  } catch (error) {
-    logger.error(`Error liking post ${postId}`, error instanceof Error ? error : String(error));
-    throw new Error('Failed to like post');
-  }
+export async function likePost(postId: number): Promise<{ success: boolean; likes: number } | null> {
+  return await fetchAPI<{ success: boolean; likes: number }>(`/custom/v1/posts/${postId}/like`, { method: 'POST' });
 }
-
-/**
- * Gets the current like count for a post
- * @param postId The post ID
- * @returns Current like count
- */
-export async function getPostLikes(postId: number): Promise<number> {
-  try {
-    const data = await fetchAPI<{ post_id: number; likes: number }>(`/custom/v1/likes/${postId}`, {
-      next: { revalidate: 60 } // Cache for 1 minute
-    });
-    return data?.likes || 0;
-  } catch (error) {
-    logger.error(`Error fetching likes for post ${postId}`, error instanceof Error ? error : String(error));
-    return 0;
-  }
-}
-
-/**
- * Safe wrapper for build-time operations.
- * Returns empty array instead of null on network errors.
- */
-export async function safeGetAllContent<T extends { id: number }>(
-  postType: string,
-  params: string = ''
-): Promise<T[]> {
-  try {
-    const data = await fetchAPI<T[]>(`/wp/v2/${postType}${params}`);
-    if (!data) return [];
-    // Filter out entries without valid ID
-    return data.filter((item): item is T => item && typeof item.id === 'number');
-  } catch {
-    logger.error(`safeGetAllContent failed for ${postType}`);
-    return [];
-  }
-}
-
-/**
- * Safe wrapper for site info that returns a minimal fallback.
- */
-export async function safeGetSiteInfo(): Promise<SiteInfo | null> {
-  try {
-    return await getSiteInfo();
-  } catch {
-    logger.error('safeGetSiteInfo failed');
-    return null;
-  }
-}
-
-/**
- * Safe wrapper for content by slug.
- */
-export async function safeGetContentBySlug<T extends WpContent>(
-  postType: string,
-  slug: string,
-  lang?: string
-): Promise<T | null> {
-  try {
-    return await getContentBySlug<T>(postType, slug, lang);
-  } catch {
-    logger.error(`safeGetContentBySlug failed for ${postType}/${slug}`);
-    return null;
-  }
-}
-
-
-/*--------------------------------------------------------------------------------------
-    📰 TICKER
-    Route: /next-wp-kit/v1/ticker
-    Returns ticker configuration (texts, size, duration, pauseOnHover)
---------------------------------------------------------------------------------------*/
-export interface TickerSettings {
-  enabled: boolean;
-  text: string;
-  link: string;
-  pages: number[];
-  speed: number;
-  size: 'small' | 'medium' | 'big' | 'extra-big';
-  noAnimate: boolean;
-  pauseOnHover: boolean;
-}
-
-/**
- * Fetches ticker settings from WordPress custom endpoint.
- * Returns empty settings if ticker is not configured.
- */
-export async function getTickerSettings(): Promise<TickerSettings | null> {
-  return await fetchAPI<TickerSettings>('/custom/v1/ticker', {
-    next: { revalidate: 300 } // Cache for 5 minutes
-  });
-}
-

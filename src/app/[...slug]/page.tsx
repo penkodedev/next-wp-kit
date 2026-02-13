@@ -1,6 +1,6 @@
 // Catch-all route to handle pages, CPT archives, singles, and taxonomies from WordPress.
 
-import { getContentBySlug, getAllContent, getHomePage, getSiteInfo, safeGetAllContent, safeGetContentBySlug } from "@/api/wordpressApi";
+import { getContentBySlug, getAllContent, getHomePage, safeGetSiteInfo, safeGetAllContent } from "@/api/wordpressApi";
 import { fetchAPI } from "@/api/wordpressApi";
 import { generateSeoMetadata } from "@/utils/seo/seo";
 import { notFound } from "next/navigation";
@@ -16,10 +16,10 @@ import localesConfig from '@/i18n/locales.generated.json';
 import { getPostsPerPage } from '@/utils/config/pagination';
 
 // Cache siteInfo to avoid multiple fetches
-let cachedSiteInfo: Awaited<ReturnType<typeof getSiteInfo>> | null = null;
+let cachedSiteInfo: Awaited<ReturnType<typeof safeGetSiteInfo>> | null = null;
 async function getDefaultLocale(): Promise<string> {
   if (!cachedSiteInfo) {
-    cachedSiteInfo = await getSiteInfo();
+    cachedSiteInfo = await safeGetSiteInfo();
   }
   return cachedSiteInfo?.i18n?.default_locale || localesConfig.defaultLocale;
 }

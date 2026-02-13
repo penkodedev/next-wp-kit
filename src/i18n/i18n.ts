@@ -4,24 +4,41 @@
 import { getRequestConfig } from 'next-intl/server';
 import { getWpmlLanguages } from '@/api/wordpressApi';
 
+import localesConfig from '@/i18n/locales.generated.json';
+
 // Type for supported locales
 export type SupportedLocale = string;
 
 /**
  * Get supported locales dynamically from WordPress WPML
- * Falls back to hardcoded values if WordPress is unavailable
+ * Falls back to locales.generated.json if WPML unavailable
  */
 export async function getSupportedLocales(): Promise<string[]> {
-  const wpmlData = await getWpmlLanguages();
-  return wpmlData.languages.map(lang => lang.code);
+  try {
+    const wpmlData = await getWpmlLanguages();
+    if (wpmlData?.languages) {
+      return wpmlData.languages.map(lang => lang.code);
+    }
+  } catch (error) {
+    // Fallback to generated config
+  }
+  return localesConfig.supportedLocales;
 }
 
 /**
  * Get default locale from WordPress WPML
+ * Falls back to locales.generated.json if WPML unavailable
  */
 export async function getDefaultLocale(): Promise<string> {
-  const wpmlData = await getWpmlLanguages();
-  return wpmlData.default;
+  try {
+    const wpmlData = await getWpmlLanguages();
+    if (wpmlData?.default) {
+      return wpmlData.default;
+    }
+  } catch (error) {
+    // Fallback to generated config
+  }
+  return localesConfig.defaultLocale;
 }
 
 // Default configuration for next-intl

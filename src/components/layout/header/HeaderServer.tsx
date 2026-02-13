@@ -1,7 +1,7 @@
 // src/components/layout/header/HeaderServer.tsx
 
 import Header from "./Header";
-import { getCachedSiteInfo, fetchAPI } from "@/api/wordpressApi";
+import { safeGetSiteInfo, fetchAPI } from "@/api/wordpressApi";
 import type { SiteInfo, MenuItem } from "@/types/wordpressTypes";
 import { logger } from "@/utils/wordpress/logger";
 import localesConfig from "@/i18n/locales.generated.json";
@@ -49,8 +49,8 @@ export default async function HeaderServer({
 }: HeaderServerProps) {
   // Handle undefined menuVariant (use responsive as default)
   const menuVariant = menuVariantProp || 'responsive';
-  const cachedSiteInfo = await getCachedSiteInfo();
-  const siteInfo = cachedSiteInfo || defaultSiteInfo;
+  // Fetch site info (safe version)
+  const siteInfo = await safeGetSiteInfo();
   
   const defaultLocale = siteInfo.i18n?.default_locale || localesConfig.defaultLocale;
   const locale = initialLocale || defaultLocale;

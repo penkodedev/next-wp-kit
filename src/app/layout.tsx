@@ -46,11 +46,11 @@ import BodyClass from "@/utils/wordpress/BodyClass";
 import { WpPageIdProvider } from '@/utils/wordpress/WpPageIdContext';
 import localesConfig from '@/i18n/locales.generated.json';
 import Analytics from '@/components/tracking/Analytics';
-import { getCachedSiteInfo } from '@/api/wordpressApi';
+import { safeGetSiteInfo } from '@/api/wordpressApi';
 
 // Generate dynamic metadata from WordPress
 export async function generateMetadata(): Promise<Metadata> {
-  const siteInfo = await getCachedSiteInfo();
+  const siteInfo = await safeGetSiteInfo();
   
   if (!siteInfo) {
     // Fallback metadata if WordPress is unreachable
@@ -126,8 +126,8 @@ function GlobalUI() {
 export default async function RootLayout({ children }: RootLayoutProps) {
   const headersList = headers();
   
-  // Fetch site info for dynamic configuration (cached for 1 hour)
-  const siteInfo = await getCachedSiteInfo();
+  // Fetch site info for dynamic configuration (safe version)
+  const siteInfo = await safeGetSiteInfo();
   
   // Get default locale from WordPress or fallback to config
   const defaultLocale = siteInfo?.i18n?.default_locale || localesConfig.defaultLocale;

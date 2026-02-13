@@ -1,7 +1,7 @@
 // src/components/layout/header/LogoHeaderServer.tsx
 
 import LogoHeader from "./LogoHeader";
-import { getSiteInfo } from "@/api/wordpressApi";
+import { safeGetSiteInfo } from "@/api/wordpressApi";
 import type { SiteInfo } from "@/types/wordpressTypes";
 
 interface LogoHeaderServerProps {
@@ -38,7 +38,8 @@ export default async function LogoHeaderServer({ siteInfo }: LogoHeaderServerPro
     }
   };
 
-  const fetchedSiteInfo = await getSiteInfo();
+  // Fetch site info with error handling
+  const fetchedSiteInfo = await safeGetSiteInfo();
   siteInfo = fetchedSiteInfo || defaultSiteInfo;
 
   return <LogoHeader siteInfo={siteInfo} />;

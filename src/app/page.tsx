@@ -1,7 +1,7 @@
 // src/app/page.tsx
 // HOME PAGE
 
-import { getHomePage, getSiteInfo } from "@/api/wordpressApi";
+import { getHomePage, safeGetSiteInfo } from "@/api/wordpressApi";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { headers } from "next/headers";
@@ -13,7 +13,7 @@ import localesConfig from '@/i18n/locales.generated.json';
  * Connects to WordPress to get the title and description.
  */
 export async function generateMetadata(): Promise<Metadata> {
-  const siteInfo = await getSiteInfo();
+  const siteInfo = await safeGetSiteInfo();
   const defaultLocale = siteInfo?.i18n?.default_locale || localesConfig.defaultLocale;
   const locale = headers().get("x-locale") || defaultLocale;
   const homePage = await getHomePage(locale);
@@ -54,7 +54,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  const siteInfo = await getSiteInfo();
+  const siteInfo = await safeGetSiteInfo();
   const defaultLocale = siteInfo?.i18n?.default_locale || localesConfig.defaultLocale;
   const locale = headers().get("x-locale") || defaultLocale;
   const homePage = await getHomePage(locale);

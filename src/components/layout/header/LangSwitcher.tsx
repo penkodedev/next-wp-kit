@@ -5,7 +5,16 @@
 import { usePathname } from 'next/navigation';
 import { Icons } from '@/components/ui/Icons';
 import { useState, useEffect } from 'react';
-import { getWpmlTranslation, getWpmlLanguages, type WpmlLanguage } from '@/api/wordpressApi';
+import { getWpmlTranslation, getWpmlLanguages, type WpmlLanguages } from '@/api/wordpressApi';
+import localesConfig from '@/i18n/locales.generated.json';
+
+interface LangInfo {
+  code: string;
+  native_name: string;
+  name: string;
+  is_default?: boolean;
+  url?: string;
+}
 import { useWpPageId } from '@/utils/wordpress/WpPageIdContext';
 import { CPT_SLUG_MAP, getTranslatedCptSlug } from '@/utils/config/cptConfig';
 import { shouldPreserveOnLanguageSwitch } from '@/utils/config/frontendPagesConfig';
@@ -17,15 +26,33 @@ interface LangSwitcherProps {
 export default function LangSwitcher({ currentLocale }: LangSwitcherProps) {
   const pathname = usePathname();
   const { pageId } = useWpPageId();
-  const [languages, setLanguages] = useState<WpmlLanguage[]>([]);
+  const [languages, setLanguages] = useState<LangInfo[]>([]);
   const [defaultLang, setDefaultLang] = useState('es');
   const [translatedUrls, setTranslatedUrls] = useState<Record<string, string>>({});
 
   // Fetch available languages from WordPress
   useEffect(() => {
     getWpmlLanguages().then(data => {
-      setLanguages(data.languages);
-      setDefaultLang(data.default);
+      if (data?.languages) {
+        const langs: LangInfo[] = data.languages.map(lang => ({
+          code: lang.code,
+          native_name: lang.native_name,
+          name: lang.name,
+          is_default: lang.is_default,
+          url: lang.url
+        }));
+        setLanguages(langs);
+        setDefaultLang(data.default);
+      } else {
+        // Fallback to locales.generated.json
+        const fallbackLangs = localesConfig.supportedLocales.map(code => ({
+          code,
+          native_name: code,
+          name: code
+        }));
+        setLanguages(fallbackLangs);
+        setDefaultLang(localesConfig.defaultLocale);
+      }
     });
   }, []);
 
