@@ -37,7 +37,7 @@ export function usePostLike(postId: number, initialLikes: number) {
     try {
       const response = await likePost(postId);
       
-      if (response.success) {
+      if (response?.success) {
         setLikes(response.likes);
         
         const newCount = userLikeCount + 1;
