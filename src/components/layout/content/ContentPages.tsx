@@ -1,4 +1,4 @@
-import AnimatedArticle from '@/components/animations/AnimatedArticle';
+import AnimatedArticle from '@/components/animations/framer/AnimatedArticle';
 import Breadcrumbs from '@/components/navigation/Breadcrumbs';
 import { ContactForm7Content } from '@/components/forms';
 import { WpPageIdSetter } from '@/utils/wordpress/WpPageIdContext';

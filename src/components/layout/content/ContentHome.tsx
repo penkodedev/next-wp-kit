@@ -3,6 +3,7 @@ import HeroWrapper from '@/components/sections/HeroWrapper';
 import Slider from '@/components/sections/Slider';
 import { processContent } from '@/utils/wordpress/processContent';
 import type { Page } from '@/types/wordpressTypes';
+import ScrollReveal from '@/components/animations/gsap/ScrollReveal';
 
 type ContentHomeProps = {
   page: Page;
@@ -20,11 +21,7 @@ export default function ContentHome({ page, lang }: ContentHomeProps) {
       <HeroWrapper position="home" lang={lang} />
       <div className="page-one-col">
         <article>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: processContent(page.content.rendered),
-            }}
-          />
+          <ScrollReveal content={page.content.rendered} />
         </article>
       </div>
       <section className="slider-container">

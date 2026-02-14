@@ -2,7 +2,7 @@
 // 
 import Link from 'next/link';
 import { Icons } from '@/components/ui/Icons';
-import AnimatedArticle from '@/components/animations/AnimatedArticle';
+import AnimatedArticle from '@/components/animations/framer/AnimatedArticle';
 import { TaxonomyTermsList, TaxonomyPost } from '@/components/wordpress/CustomTaxonomies';
 import CustomFields from '@/components/wordpress/CustomFields';
 import AudioPlayer from '@/components/ui/AudioPlayer';

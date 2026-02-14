@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { searchSite } from '@/api/wordpressApi';
 import { cleanInternalUrl } from '@/utils/wordpress/url';
-import AnimatedFadeIn from '@/components/animations/AnimatedFadeIn';
+import AnimatedFadeIn from '@/components/animations/framer/AnimatedFadeIn';
 import { logger } from '@/utils/wordpress/logger';
 
 // La API de búsqueda devuelve un 'subtype' que es más útil

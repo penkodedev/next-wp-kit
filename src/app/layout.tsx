@@ -23,13 +23,23 @@ import ScrollToTop from "@/components/navigation/ScrollToTop";
 import AdvertisingPopup from '@/components/features/modals/AdvertisingPopup';
 import WpStyles from "@/components/wordpress/WpStyles";
 
+import BodyClass from "@/utils/wordpress/BodyClass";
+import { WpPageIdProvider } from '@/utils/wordpress/WpPageIdContext';
+import localesConfig from '@/i18n/locales.generated.json';
+import Analytics from '@/components/tracking/Analytics';
+import { safeGetSiteInfo } from '@/api/wordpressApi';
+
 
 // Lazy load heavy components that aren't needed on every page
 const ModalController = dynamic(() => import('@/components/features/modals/ModalController'), {
   ssr: false
 });
 
-const SmoothScroll = dynamic(() => import('@/components/animations/SmoothScroll'), {
+const SmoothScroll = dynamic(() => import('@/components/animations/lenis/SmoothScroll'), {
+  ssr: false
+});
+
+const ScrollProgress = dynamic(() => import('@/components/animations/ScrollProgress'), {
   ssr: false
 });
 
@@ -45,12 +55,6 @@ const ChatWhatsApp = dynamic(() => import('@/components/ui/ChatWhatsApp'), {
   ssr: false
 });
 
-
-import BodyClass from "@/utils/wordpress/BodyClass";
-import { WpPageIdProvider } from '@/utils/wordpress/WpPageIdContext';
-import localesConfig from '@/i18n/locales.generated.json';
-import Analytics from '@/components/tracking/Analytics';
-import { safeGetSiteInfo } from '@/api/wordpressApi';
 
 // Generate dynamic metadata from WordPress
 export async function generateMetadata(): Promise<Metadata> {
@@ -171,11 +175,14 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             }}
           >
             <WpPageIdProvider>
+              <ScrollProgress />
               <SmoothScroll>
                 <BodyClass> {/* BodyClass needs to be a client component to read pageId from context */}
                   <HeaderServer />
                   {/* <Breadcrumbs /> */}
-                  <main>{children}</main>
+
+                    <main>{children}</main>
+
                   <Footer />
                   <GlobalUI />
                 </BodyClass>

@@ -234,12 +234,13 @@ pre a:hover {
 //******************** CODE ************************
 
 pre.wp-block-code {
+    font-size:1rem;
     color: #3ef538;
-    font-size: 1.1rem;
-    line-height: 1.6rem;
+    line-height: 1.2rem;
     background: #2d342a; 
     margin: 10px 0 30px 0 !important;
     padding: 28px;
+    border: 1px solid #535353 !important;
 }
 
 
