@@ -121,6 +121,7 @@ type RootLayoutProps = {
 function GlobalUI() {
   return (
     <>
+
       <ScrollToTop />
       <CookieConsent />
       <CookieManager />

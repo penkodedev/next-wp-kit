@@ -20,11 +20,10 @@ export default function ParallaxEffects() {
 
     // ******** Add selectors to apply parallax  ************//
     const selectors = [
-      '.wp-block-image',
+      // '.wp-block-image',
       '.wp-block-cover__image-background',
       '.wp-block-cover > img',
-      '.wp-block-column img',
-      '.hero-background img',
+      // '.wp-block-column img',
       '[data-parallax]',
     ];
 
