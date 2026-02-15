@@ -27,12 +27,6 @@ html.lenis, html.lenis body {
   pointer-events: none;
 }
 
-// CSS Custom Properties
-:root {
-  --scrollbar-width: 0px;
-  --color-text: #111;
-  --color-bg: #F8F7F7;
-}
 
 // Modern Box Model (Universal)
 *,
@@ -41,12 +35,20 @@ html.lenis, html.lenis body {
   box-sizing: border-box;
 }
 
+
+// CSS Custom Properties
+:root {
+  --scrollbar-width: 0px;
+  --color-text: #111;
+  --color-bg: #F8F7F7;
+}
+
 // HTML Element
 html {
-  scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   min-height: 100%;
+  scrollbar-gutter: stable; /* Avoid full with elements scroll bar */
+  -webkit-text-size-adjust: 100%;
   --scrollbar-width: 0px; // For .full-width elements class to work
 }
 
