@@ -43,6 +43,10 @@ const ScrollProgress = dynamic(() => import('@/components/animations/ScrollProgr
   ssr: false
 });
 
+const ParallaxEffects = dynamic(() => import('@/components/animations/gsap/ParallaxEffects'), {
+  ssr: false
+});
+
 const LightboxController = dynamic(() => import('@/components/features/lightbox/LightboxController'), {
   ssr: false
 });
@@ -177,6 +181,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             <WpPageIdProvider>
               <ScrollProgress />
               <SmoothScroll>
+                <ParallaxEffects />
                 <BodyClass> {/* BodyClass needs to be a client component to read pageId from context */}
                   <HeaderServer />
                   {/* <Breadcrumbs /> */}
