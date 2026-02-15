@@ -1,3 +1,5 @@
+// src/components/animations/gsap/ParallaxEffects.tsx
+
 'use client';
 
 import { useEffect } from 'react';
@@ -9,17 +11,28 @@ export default function ParallaxEffects() {
     const animated = new Set<Element>();
     const triggers: ScrollTrigger[] = [];
 
-    const applyParallax = () => {
-      const selectors = [
-        '.wp-block-cover__image-background',
-        '.wp-block-cover > img',
-        '.wp-block-column img',
-        '[data-parallax]',
-      ];
+    // ******** Add selectors to exclude from parallax  ************//
+    const excludeSelectors = [
+      '[data-no-parallax]',
+      '.modal-content', // Do not apply on modals
+      '.advertising-popup', // Do not apply on modals
+    ];
 
+    // ******** Add selectors to apply parallax  ************//
+    const selectors = [
+      '.wp-block-image',
+      '.wp-block-cover__image-background',
+      '.wp-block-cover > img',
+      '.wp-block-column img',
+      '.hero-background img',
+      '[data-parallax]',
+    ];
+
+    const applyParallax = () => {
       selectors.forEach((selector) => {
         document.querySelectorAll(selector).forEach((el) => {
           if (animated.has(el)) return;
+          if (excludeSelectors.some((exc) => el.closest(exc))) return; // 👈
           animated.add(el);
 
           const speed = parseFloat(el.getAttribute('data-speed') ?? '') || 25; // ******** More or less speed based on preference
