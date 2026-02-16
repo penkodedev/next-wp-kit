@@ -1,6 +1,7 @@
 // src/components/sections/SliderRecursos.tsx
 // Generic slider component for any CPT with i18n support
 
+import 'swiper/css/bundle';
 import { getAllContent } from "@/api/wordpressApi";
 import PostCard from "@/components/ui/PostCard";
 import type { WpContent } from "@/types/wordpressTypes";

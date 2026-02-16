@@ -4,13 +4,13 @@ import type { Metadata } from 'next';
 import type { ReactNode } from "react";
 import dynamic from 'next/dynamic';
 
-import 'swiper/css/bundle';
 import { headers } from 'next/headers';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { SWRConfig } from 'swr';
 
 import "@/styles/sass/main.scss";
+import WpStyles from "@/components/wordpress/WpStyles";
 
 import HeaderServer from '@/components/layout/header/HeaderServer';
 import Footer from "@/components/layout/footer/Footer";
@@ -21,7 +21,6 @@ import CookieConsent from "@/components/cookies/CookieConsent";
 import CookieManager from "@/components/cookies/CookieManager";
 import ScrollToTop from "@/components/navigation/ScrollToTop";
 import AdvertisingPopup from '@/components/features/modals/AdvertisingPopup';
-import WpStyles from "@/components/wordpress/WpStyles";
 
 import BodyClass from "@/utils/wordpress/BodyClass";
 import { WpPageIdProvider } from '@/utils/wordpress/WpPageIdContext';
