@@ -1,23 +1,23 @@
+@use '../abstracts' as *;
+
 //----------------------------------------------------
-//            ARTICLE
+//                   ARTICLE
 //----------------------------------------------------
 
 $article-link: 'article p a, article p a:link, main p a:link, article ul a:link, p#breadcrumbs a,';
 
 #{$article-link} {
-    // color:red;
     text-decoration: none;
-    text-decoration-color: red;
     padding: 0px 0px;
     transition: color 0.6s ease-out, background 0.6s ease-out;
-    background-image: linear-gradient(to right, rgb(199, 199, 99) 100%,#fff 0);
+    background-image: linear-gradient(to right, rgb(71, 71, 71) 100%, #fff 0);
     background-position: 0 110%;
     background-repeat: repeat-x;
-    background-size: 100% 23%;
+    background-size: 100% 18%;
 
     &:hover {
-        color: #000;
-        background:  rgb(199, 199, 99);
+        color: #ffffff;
+        background: rgb(71, 71, 71);
         text-decoration: none;
         border-bottom: none;
     }
@@ -25,33 +25,35 @@ $article-link: 'article p a, article p a:link, main p a:link, article ul a:link,
 
 .wp-block-gallery figure a,
 article a img {
-    transition: transform .3s; /* Animation */
-        &:hover {
+    transition: transform .3s;
+
+    /* Animation */
+    &:hover {
         transform: scale(1.013);
     }
 }
 
 article img {
-    margin-bottom:18px;
+    margin-bottom: 18px;
 }
 
-// Iconos para enlaces externos (target="_blank" o dominios externos)
+//************ Icons for external links (target="_blank" or external domains)
 article p a[target="_blank"]:not(.no-icon)::after,
 article ul a[target="_blank"]:not(.no-icon)::after,
 main p a[target="_blank"]:not(.no-icon)::after,
 .page-content a[target="_blank"]:not(.no-icon)::after {
-  content: "";
-  display: inline-block;
-  width: 13px;
-  height: 13px;
-  margin: -10px 2px 0 4px;
-  background: url('/icons/external-link.svg') no-repeat center;
-  background-size: contain;
-  vertical-align: middle;
+    content: "";
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    margin: -10px 2px 0 4px;
+    background: url('/icons/external-link.svg') no-repeat center;
+    background-size: contain;
+    vertical-align: middle;
 }
 
-// Ocultar si ya tiene un icono dentro
-article a[target="_blank"] .icon-external-link + *::after,
-article a[target="_blank"] .external-icon + *::after {
-  display: none;
+// Hide if it already has an icon inside
+article a[target="_blank"] .icon-external-link+*::after,
+article a[target="_blank"] .external-icon+*::after {
+    display: none;
 }

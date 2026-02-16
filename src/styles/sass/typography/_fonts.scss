@@ -20,9 +20,6 @@ article ol li strong{
 h1,h2,h3,h4,h5,h6 {@include heading;}
 
 
-
-
-
 // clamp(minimum size, fluid size, maximum size)
 // _fonts.scss
 
@@ -55,11 +52,6 @@ h6 {
   font-size: clamp(0.85rem, 2vw, 1rem);
   line-height: 1.5;
 }
-
-
-
-
-
 
 
 main h1 {

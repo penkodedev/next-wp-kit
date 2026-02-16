@@ -17,7 +17,7 @@
     ul {
         font-size: 1em;
         margin: 0;
-        padding: 0;
+        padding: 0 !important;
         display: flex;
         gap: 10px;
 
@@ -25,10 +25,6 @@
             list-style: none;
             font-size: 0.88em;
             color: black;
-            border: 1px solid rgb(207, 207, 207);
-            background-color: #efefef;
-            border-radius: 5px;
-            padding: 3px 8px;
 
             &:before {
                 display: none;

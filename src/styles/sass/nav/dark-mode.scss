@@ -32,13 +32,18 @@
     h4,
     h5,
     h6 {
-        color: #8f8f8f;
+        color: #b1b1b1;
     }
 
-    ul li a,
+    article ul li,
+    article ul li a,
     .post-navigation a {
-        color: #e0e0e0;
+        color: #bdbdbd;   
     }
+
+    article ul li:before {
+            background-color:#a9a9a9;
+}
 
     // =================================================================
     //                    LAYOUT BORDERS

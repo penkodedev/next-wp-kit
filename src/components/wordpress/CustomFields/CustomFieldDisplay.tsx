@@ -42,7 +42,7 @@ export default function CustomFieldDisplay({ field, value, locale = 'es' }: Cust
               rel="noopener noreferrer"
               className="field-value field-link external-link"
             >
-              <Icons.ExternalLink size={18} strokeWidth={1.5} />
+              {/* <Icons.ExternalLink size={18} strokeWidth={1.5} /> */}
               <span>{getFieldText('visitWebsite', locale)}</span>
             </a>
           </p>
@@ -64,7 +64,7 @@ export default function CustomFieldDisplay({ field, value, locale = 'es' }: Cust
               rel="noopener noreferrer"
               className="field-value field-link file-download-link"
             >
-              <FileIcon size={18} strokeWidth={1.5} />
+              {/* <FileIcon size={18} strokeWidth={1.5} /> */}
               <span>{getFieldText('viewFile', locale)}</span>
             </a>
           </p>

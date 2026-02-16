@@ -317,6 +317,10 @@ logger.success('Data loaded successfully');
 
 #### 🎭 **Animation System**
 - **Framer Motion Integration** - Smooth, performant animations out of the box
+- **GSAP + ScrollTrigger** - Advanced scroll-based animations
+  - `ScrollReveal` - Reveal elements on scroll with customizable animations
+  - `ParallaxEffects` - Parallax effects for images and sections
+  - `SmoothScroll` (Lenis) - Smooth scrolling experience
 - **Staggered Animations** - Professional loading sequences
 - **Viewport Triggers** - Elements animate when they enter the screen
 - **Reusable Components** - `AnimatedFadeIn`, `AnimatedArticle`, `StaggeredArticle`
@@ -524,10 +528,18 @@ src/
 │           └── page.tsx
 ├── components/
 │   ├── animations/
-│   │   ├── AnimatedArticle.tsx
-│   │   ├── AnimatedFadeIn.tsx
+│   │   ├── framer/
+│   │   │   ├── AnimatedArticle.tsx
+│   │   │   ├── AnimatedFadeIn.tsx
+│   │   │   ├── StaggeredArticle.tsx
+│   │   │   └── index.ts
+│   │   ├── gsap/
+│   │   │   ├── ScrollReveal.tsx
+│   │   │   ├── ParallaxEffects.tsx
+│   │   │   └── gsap.ts
+│   │   ├── lenis/
+│   │   │   └── SmoothScroll.tsx
 │   │   ├── index.ts
-│   │   ├── StaggeredArticle.tsx
 │   │   └── types.ts
 │   ├── cookies/
 │   │   ├── CookieConsent.tsx
