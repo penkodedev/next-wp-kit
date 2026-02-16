@@ -5,15 +5,9 @@
 import Image from 'next/image';
 // Importa los componentes de Swiper para React
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css/bundle';
 // Importa los módulos que vamos a usar: Navegación, Paginación y A11y (Accesibilidad)
 import { Navigation, Pagination, A11y } from 'swiper/modules';
 
-// Importa los estilos base de Swiper
-import 'swiper/css/bundle';
-// Importa los estilos para los módulos de navegación y paginación
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 
 /**
  * Definimos un tipo para las propiedades de cada slide.

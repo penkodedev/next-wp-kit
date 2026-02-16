@@ -2,6 +2,7 @@
 
 @use 'abstracts' as *;
 
+
 .ticker-container {
   color: #dadada;
   width: 100%;
@@ -10,6 +11,10 @@
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
+
+  // Gradient for fade-in/fade-out on edges
+  mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
 }
 
 .ticker-track {
@@ -19,6 +24,7 @@
   cursor: pointer;
 }
 
+
 .ticker-content {
   // font-family: $font-family-base;
   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -26,6 +32,7 @@
   flex-shrink: 0;
   display: flex;
   align-items: center;
+
 
   a {
     color: #bbce16;
@@ -57,7 +64,7 @@
 // ************ MEDIUM SIZE **************//
 .ticker-medium {
   .ticker-content {
-    font-size: 1.06rem;
+    font-size: 1rem;
     padding: 12px 0;
   }
 }
@@ -77,3 +84,4 @@
     padding: 30px 0;
   }
 }
+

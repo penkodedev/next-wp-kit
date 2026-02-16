@@ -1,7 +1,11 @@
 // src/components/sections/SliderRecursos.tsx
 // Generic slider component for any CPT with i18n support
 
+// Importa los estilos para los módulos de navegación y paginación
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import 'swiper/css/bundle';
+
 import { getAllContent } from "@/api/wordpressApi";
 import PostCard from "@/components/ui/PostCard";
 import type { WpContent } from "@/types/wordpressTypes";

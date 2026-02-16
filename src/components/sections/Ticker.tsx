@@ -69,7 +69,7 @@ export default function Ticker({ pageIdParam }: TickerProps) {
     track.innerHTML = "";
     if (animationRef.current) cancelAnimationFrame(animationRef.current);
 
-    const GAP = 120; // px entre el final de una copia y el inicio de la siguiente
+    const GAP = 220; // px entre el final de una copia y el inicio de la siguiente
 
     // Crear un bloque: .ticker-content + separador invisible al final
     const createBlock = () => {
