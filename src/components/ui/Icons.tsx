@@ -62,7 +62,8 @@ import {
   Play,
   Pause,
   Volume2,
-  Loader2
+  Loader2,
+  Info
 } from 'lucide-react';
 
 
@@ -123,6 +124,7 @@ export const Icons = {
   Play,
   Pause,
   Volume2,
-  Loader2
+  Loader2,
+  Info
 };
 

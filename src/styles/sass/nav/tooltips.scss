@@ -1,0 +1,85 @@
+@use '../abstracts' as *;
+
+// *************  Tooltip variables  *******************//
+$tooltip-bg:      #ffffff;
+$tooltip-border:  1px solid rgb(104, 104, 104);
+$tooltip-radius:  8px;
+
+.pk-tooltip-bubble {
+  font-family: $text-font;
+  font-size: $text-size - 0.22;
+  line-height: 1.5;
+  color: #333;
+  position: fixed;
+  z-index: 9999;
+  display: none;
+  margin-top: 8px;
+  max-width: 300px;
+  width: max-content;
+  padding: 20px;
+  border-radius: $tooltip-radius;
+  background: $tooltip-bg;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.26);
+  border: $tooltip-border;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  transform: translateY(4px);
+
+  a {
+    color: #0073e6;
+    text-decoration: underline;
+
+    &:hover {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -9px;
+    left: var(--arrow-left, 16px);
+    width: 16px;
+    height: 16px;
+    background: $tooltip-bg;
+    border-top: $tooltip-border;
+    border-left: $tooltip-border;
+    transform: rotate(45deg);
+    border-radius: 2px 0 0 0;
+  }
+
+
+
+  // *************  View State  *******************//
+  &--visible {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// *************  Info icon next to tooltip links  *******************//
+.pk-tooltip-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #000000;
+  margin: 0 0 11px 2px;
+  cursor: help;
+  vertical-align: middle;
+
+  // *************  Lucide icons use currentColor  *******************//
+  svg {
+    stroke: currentColor;
+  }
+}
+
+a.tooltip-link {
+  text-decoration: underline dotted !important;
+  background-image: none !important;
+
+  &:hover .pk-tooltip-icon {
+    color: #fdfdfd;
+  }
+}

@@ -11,19 +11,15 @@ export default function ParallaxEffects() {
     const animated = new Set<Element>();
     const triggers: ScrollTrigger[] = [];
 
-    // ******** Add selectors to exclude from parallax  ************//
     const excludeSelectors = [
       '[data-no-parallax]',
-      '.modal-content', // Do not apply on modals
-      '.advertising-popup', // Do not apply on modals
+      '.modal-content',
+      '.advertising-popup',
     ];
 
-    // ******** Add selectors to apply parallax  ************//
     const selectors = [
-      // '.wp-block-image',
-      '.wp-block-cover__image-background',
+      '.wp-block-cover .has-parallax',
       '.wp-block-cover > img',
-      // '.wp-block-column img',
       '[data-parallax]',
     ];
 
@@ -31,14 +27,27 @@ export default function ParallaxEffects() {
       selectors.forEach((selector) => {
         document.querySelectorAll(selector).forEach((el) => {
           if (animated.has(el)) return;
-          if (excludeSelectors.some((exc) => el.closest(exc))) return; // 👈
+          if (excludeSelectors.some((exc) => el.closest(exc))) return;
           animated.add(el);
 
-          const speed = parseFloat(el.getAttribute('data-speed') ?? '') || 25; // ******** More or less speed based on preference
+          const speed = parseFloat(el.getAttribute('data-speed') ?? '') || 25;
           const triggerEl = el.closest('.wp-block-cover') ?? el;
 
+          // 👇 NUEVO: Asegurar que el contenedor tenga overflow hidden
+          const container = el.parentElement;
+          if (container) {
+            container.style.overflow = 'hidden';
+          }
+
+          // 👇 NUEVO: Escalar la imagen para compensar el movimiento
+          const scale = 1 + (speed / 100);
+          gsap.set(el, {
+            scale: scale,
+            yPercent: speed / 2, // Centramos la imagen inicialmente
+          });
+
           const anim = gsap.to(el, {
-            yPercent: -speed,
+            yPercent: -speed / 2, // Movemos desde arriba hacia abajo
             ease: 'none',
             scrollTrigger: {
               trigger: triggerEl,

@@ -21,6 +21,7 @@ import CookieConsent from "@/components/cookies/CookieConsent";
 import CookieManager from "@/components/cookies/CookieManager";
 import ScrollToTop from "@/components/navigation/ScrollToTop";
 import AdvertisingPopup from '@/components/features/modals/AdvertisingPopup';
+import TooltipsProvider from '@/components/features/tooltips/Tooltips';
 
 import BodyClass from "@/utils/wordpress/BodyClass";
 import { WpPageIdProvider } from '@/utils/wordpress/WpPageIdContext';
@@ -183,13 +184,15 @@ export default async function RootLayout({ children }: RootLayoutProps) {
               <SmoothScroll>
                 <ParallaxEffects />
                 <BodyClass> {/* BodyClass needs to be a client component to read pageId from context */}
-                  <HeaderServer />
-                  {/* <Breadcrumbs /> */}
+                  <TooltipsProvider>
+                    <HeaderServer />
+                    {/* <Breadcrumbs /> */}
 
-                    <main>{children}</main>
+                      <main>{children}</main>
 
-                  <Footer />
-                  <GlobalUI />
+                    <Footer />
+                    <GlobalUI />
+                  </TooltipsProvider>
                 </BodyClass>
               </SmoothScroll>
             </WpPageIdProvider>

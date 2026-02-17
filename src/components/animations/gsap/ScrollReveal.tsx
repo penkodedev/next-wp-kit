@@ -17,9 +17,9 @@ export default function WpReveal({ children }: Props) {
 
     const ctx = gsap.context(() => {
       const selector = [
-        'h1', 'h2', 'h3', 'h4', 'p', 'ul', 'ol', 'blockquote', 'button', 'svg', 'hr',
+        'h1', 'h2', 'h3', 'h4', 'p', 'ul', 'ol', 'blockquote', 'button', 'svg', 'hr', 'table',
         'section', '.post-card', '.footer-box',
-        '.wp-block-group', '.wp-block-column', '.wp-block-image', '.wp-block-cover h1', '.wp-block-cover p', 'pre.wp-block-code',
+        '.wp-block-column', '.wp-block-image', '.wp-block-cover h1', '.wp-block-cover p', 'pre.wp-block-code',
         'swiper-wrapper',
       ].join(', ')
 

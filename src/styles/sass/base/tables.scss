@@ -23,7 +23,6 @@ table {
 	margin: 40px auto 40px auto;
 }
 
-
 table th,
 table td,
 table td {
@@ -33,6 +32,7 @@ table td {
     border-top: $table-cell-border-top;
     @include copy-text;
     font-size: $text-size - 0.2rem;
+    background-color:#fff;
 }
 
 // Sets table header font-weight to bold.
