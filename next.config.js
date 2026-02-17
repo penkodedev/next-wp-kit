@@ -32,6 +32,12 @@ const nextConfig = {
         }
       }
 
+      // Always allow penkode.com for external testing
+      patterns.push({
+        protocol: 'https',
+        hostname: 'penkode.com',
+      });
+
       // Additional local hostnames if needed
       if (process.env.NODE_ENV === 'development') {
         patterns.push({

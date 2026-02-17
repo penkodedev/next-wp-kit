@@ -2,7 +2,7 @@
 
 // *************  Tooltip variables  *******************//
 $tooltip-bg:      #ffffff;
-$tooltip-border:  1px solid rgb(104, 104, 104);
+$tooltip-border:  1px solid rgb(126, 126, 126);
 $tooltip-radius:  8px;
 
 .pk-tooltip-bubble {
@@ -28,6 +28,7 @@ $tooltip-radius:  8px;
   a {
     color: #0073e6;
     text-decoration: underline;
+    text-underline-offset: 7px;
 
     &:hover {
       color: inherit;
