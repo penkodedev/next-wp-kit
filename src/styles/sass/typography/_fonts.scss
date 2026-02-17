@@ -3,54 +3,60 @@
 
 //************************ COPY TEXT ***************************
 p,
-article p
- {
-  @include copy-text;
+article p {
+    @include copy-text;
 }
 
 article p b,
 article p strong,
 article ul li strong,
-article ol li strong{
-	font-family: $text-font-strong;
+article ol li strong {
+    font-family: $text-font-strong;
 }
 
 
 //************************ HEADINGS ************************
-h1,h2,h3,h4,h5,h6 {@include heading;}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    @include heading;
+}
 
 
 // clamp(minimum size, fluid size, maximum size)
 // _fonts.scss
 
 h1 {
-  font-size: clamp(2rem, 5vw, 2.8rem);
-  line-height: 1.2; // Sin unidades, proporcional
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    line-height: 1.2; // Sin unidades, proporcional
 }
 
 h2 {
-  font-size: clamp(1.6rem, 4vw, 2.2rem);
-  line-height: 1.25;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    line-height: 1.25;
 }
 
 h3 {
-  font-size: clamp(1.3rem, 3.5vw, 1.8rem);
-  line-height: 1.3;
+    font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+    line-height: 1.3;
 }
 
 h4 {
-  font-size: clamp(1.1rem, 3vw, 1.4rem);
-  line-height: 1.4;
+    font-size: clamp(1.1rem, 3vw, 1.4rem);
+    line-height: 1.4;
 }
 
 h5 {
-  font-size: clamp(0.95rem, 2.5vw, 1.2rem);
-  line-height: 1.45;
+    font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+    line-height: 1.45;
 }
 
 h6 {
-  font-size: clamp(0.85rem, 2vw, 1rem);
-  line-height: 1.5;
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    line-height: 1.5;
 }
 
 
@@ -66,7 +72,7 @@ h1.page-title {
 
 //******************** LISTS ARTICLE ************************
 .wp-block-list {
-    padding-left:0 !important;
+    padding-left: 0 !important;
 }
 
 article ul {
@@ -79,13 +85,14 @@ article ul {
     margin-block-start: 0 !important; // Override WP BLocks styles
     padding-inline-start: 15px !important; // Override WP BLocks styles
 
-    p:empty { // Clean Gutenberg <p> between li
+    p:empty {
+        // Clean Gutenberg <p> between li
         display: none;
     }
 
     li {
         // line-height: $text-lh;
-        margin-bottom: 10px;
+        margin-bottom: 7px;
         // display: flex;
         align-items: center;
     }
@@ -96,8 +103,8 @@ article ul {
         width: 1.3em;
         height: 1.3em;
         margin-right: 5px;
-        vertical-align:middle;
-          
+        vertical-align: middle;
+
         // Lucide Check SVG as mask
         background-color: black; // Icon Color
         -webkit-mask: url('/icons/check.svg') no-repeat center;
@@ -107,13 +114,27 @@ article ul {
     }
 
     a {
-        background-image:none;
+        background-image: none;
     }
 }
 
+// ***** Nested Lists: Remove check icon and adjust spacing *****
+article ul ul {
+            list-style-type: disc !important;
+            margin: 0 0 0 46px;
+
+            li::before {
+                display: none; // Remove check icon from nested list items
+            }
+}
+
+article ul li ul li {
+    font-size: $text-size - 0.12;
+    margin: 10px 0 0 0;
+}
 
 
-article ol {  
+article ol {
     list-style: none;
     counter-reset: my-awesome-counter;
 
@@ -156,16 +177,16 @@ blockquote {
     margin: 40px auto 40px 20px;
     padding: 28px;
     max-width: 600px;
-	
-	cite {
-		margin: 36px 0 0 0;
-	}
-	
-	@media screen and (max-width: 800px) {
-		max-width: 100%;
-		margin: 40px auto 40px 0;
-		padding: 10px;
-	}
+
+    cite {
+        margin: 36px 0 0 0;
+    }
+
+    @media screen and (max-width: 800px) {
+        max-width: 100%;
+        margin: 40px auto 40px 0;
+        padding: 10px;
+    }
 }
 
 blockquote p {
@@ -173,14 +194,15 @@ blockquote p {
     font-size: 1.4em;
     line-height: 1.5em;
     color: $black;
-    text-indent: 1.7em; /*Text indent to fit quote icon size*/
+    text-indent: 1.7em;
+    /*Text indent to fit quote icon size*/
     position: relative;
-	margin: 0;
-	
-	@media screen and (max-width: 800px) {
-		font-size: 1.3em;
-    	line-height: 1.24em;
-	}
+    margin: 0;
+
+    @media screen and (max-width: 800px) {
+        font-size: 1.3em;
+        line-height: 1.24em;
+    }
 
     &:before {
         position: absolute;
@@ -190,12 +212,13 @@ blockquote p {
         font-weight: bold;
         color: $branding-color1;
         top: -10px;
-        left: -40px; /*To match text indent position*/
+        left: -40px;
+        /*To match text indent position*/
     }
-	
-	&:after {
-        content: close-quote;  
-	}
+
+    &:after {
+        content: close-quote;
+    }
 }
 
 //******************** CITE ************************
@@ -203,7 +226,7 @@ cite {
     font-family: $text-font;
     font-size: 1em;
     font-style: normal;
-    color:$black;
+    color: $black;
     padding: 2px 8px;
     margin-bottom: 0px;
 }
@@ -212,28 +235,30 @@ cite {
 //******************** PRE ************************
 
 pre {
-	font:$pre;
-	color: $text-color;
-	background:$branding-color3;
-	border: 1px solid $border-color-medium;
-	margin: 40px 0px 40px 0px !important;
-	padding:$padding40;
+    font: $pre;
+    color: $text-color;
+    background: $branding-color3;
+    border: 1px solid $border-color-medium;
+    margin: 40px 0px 40px 0px !important;
+    padding: $padding40;
     white-space: pre-wrap;
 }
+
 pre a {
-	color: $link-color;
+    color: $link-color;
 }
+
 pre a:hover {
-	color: $link-color-hover;
+    color: $link-color-hover;
 }
 
 //******************** CODE ************************
 
 pre.wp-block-code {
-    font-size:1rem;
+    font-size: 1rem;
     color: #3ef538;
     line-height: 1.2rem;
-    background: #2d342a; 
+    background: #2d342a;
     margin: 10px 0 30px 0 !important;
     padding: 28px;
     border: 1px solid #535353 !important;
@@ -261,9 +286,9 @@ details.wp-block-details {
     }
 
     summary {
-        font-family:$font-family-base;
+        font-family: $font-family-base;
         font-size: 1.1em;
-        font-weight:600;
+        font-weight: 600;
         display: flex;
         align-items: center;
         // justify-content: space-between;
@@ -275,7 +300,8 @@ details.wp-block-details {
         }
 
         // Chevron icon
-        &::before { // Change before and after title
+        &::before {
+            // Change before and after title
             content: "";
             width: 30px;
             height: 30px;
@@ -286,7 +312,8 @@ details.wp-block-details {
     }
 
     // Icon Animation
-    &[open] summary::before { // Change before and after title
+    &[open] summary::before {
+        // Change before and after title
         transform: rotate(180deg);
     }
 }

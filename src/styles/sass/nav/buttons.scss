@@ -17,6 +17,10 @@
 --------------------------------------------------------------------
 */
 
+.wp-block-buttons {
+  gap:26px
+}
+
 .wp-block-button__link {
   height: auto !important; // CLEAN WordPress Height
 }
@@ -25,7 +29,6 @@ input[type="submit" i] {
     padding-block:inherit !important;
     padding-inline: inherit !important;
 }
-
 
 button,
 a.button,

@@ -146,7 +146,7 @@ tooltipEl.style.setProperty('--arrow-left', `${Math.max(8, arrowLeft)}px`);
 
       // Usar Icons de lucide-react via renderToStaticMarkup
       const iconHtml = renderToStaticMarkup(
-        <Icons.Info size={14} strokeWidth={2.4} className="pk-tooltip-icon" />
+        <Icons.Info size={13} strokeWidth={2.4} className="pk-tooltip-icon" />
       );
 
       const iconWrapper = document.createElement('span');
