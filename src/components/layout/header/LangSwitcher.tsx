@@ -73,7 +73,7 @@ export default function LangSwitcher({ currentLocale }: LangSwitcherProps) {
 
     async function fetchTranslations() {
       setIsLoading(true);
-      const urls: Record<string, string> = {};
+      const urls: Record<string, string | null> = {};
       for (const lang of languages) {
         if (lang.code === currentLocale) {
           urls[lang.code] = pathname;
