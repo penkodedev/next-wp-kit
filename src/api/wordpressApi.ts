@@ -545,9 +545,29 @@ export interface WpmlTranslation {
  * @param targetLang - The target language code (e.g., 'en', 'es')
  * @returns Translation data including the URL or fallback
  */
+// In-memory cache for WPML translations (5 minutes)
+let wpmlTranslationCache: { [key: string]: { data: WpmlTranslation | null; timestamp: number } } = {};
+
 export async function getWpmlTranslation(postId: number, targetLang: string): Promise<WpmlTranslation | null> {
+  const cacheKey = `${postId}-${targetLang}`;
+  const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+  
+  // Return cached data if still valid
+  if (wpmlTranslationCache[cacheKey] && 
+      wpmlTranslationCache[cacheKey].data && 
+      (Date.now() - wpmlTranslationCache[cacheKey].timestamp < CACHE_DURATION)) {
+    return wpmlTranslationCache[cacheKey].data;
+  }
+  
   try {
     const data = await fetchAPI<WpmlTranslation>(`/custom/v1/translation/${postId}?lang=${targetLang}`);
+    
+    // Cache the result
+    wpmlTranslationCache[cacheKey] = {
+      data: data || null,
+      timestamp: Date.now()
+    };
+    
     return data || null;
   } catch (error) {
     logger.error(`Error fetching WPML translation for post ${postId}:`, error instanceof Error ? error.message : String(error));

@@ -68,9 +68,9 @@ export async function generateMetadata(): Promise<Metadata> {
       metadataBase: new URL(process.env.BASE_URL || 'http://localhost:3000'),
       title: {
         default: 'Next-WP Kit',
-        template: '%s | Next-WP Kit',
+        template: '%s',
       },
-      description: 'An advanced starter kit for building websites with Next.js and WordPress as headless CMS.',
+      description: process.env.NEXT_PUBLIC_SITE_DESCRIPTION || 'An advanced starter kit for building websites with Next.js and WordPress as headless CMS.',
     };
   }
 
@@ -78,7 +78,7 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(process.env.BASE_URL || 'http://localhost:3000'),
     title: {
       default: siteInfo.title,
-      template: `%s | ${siteInfo.title}`,
+      template: '%s', // Use title exactly as WordPress returns it
     },
     description: siteInfo.description,
     // Dynamic favicons from WordPress Site Icon

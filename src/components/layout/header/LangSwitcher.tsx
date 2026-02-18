@@ -28,7 +28,8 @@ export default function LangSwitcher({ currentLocale }: LangSwitcherProps) {
   const { pageId } = useWpPageId();
   const [languages, setLanguages] = useState<LangInfo[]>([]);
   const [defaultLang, setDefaultLang] = useState('es');
-  const [translatedUrls, setTranslatedUrls] = useState<Record<string, string>>({});
+  const [translatedUrls, setTranslatedUrls] = useState<Record<string, string | null>>({});
+  const [isLoading, setIsLoading] = useState(false);
 
   // Fetch available languages from WordPress
   useEffect(() => {
@@ -71,16 +72,18 @@ export default function LangSwitcher({ currentLocale }: LangSwitcherProps) {
     const currentPageId = pageId;
 
     async function fetchTranslations() {
+      setIsLoading(true);
       const urls: Record<string, string> = {};
       for (const lang of languages) {
         if (lang.code === currentLocale) {
           urls[lang.code] = pathname;
         } else {
           const translation = await getWpmlTranslation(currentPageId, lang.code);
-          urls[lang.code] = translation?.url || (lang.code === defaultLang ? '/' : `/${lang.code}`);
+          urls[lang.code] = translation?.url || null;
         }
       }
       setTranslatedUrls(urls);
+      setIsLoading(false);
     }
     fetchTranslations();
   }, [pageId, currentLocale, languages, defaultLang, pathname]);
@@ -101,10 +104,10 @@ export default function LangSwitcher({ currentLocale }: LangSwitcherProps) {
   }
 
   function buildLanguageUrl(targetLang: string): string {
-    // If we have pageId AND translated URLs from WPML API, use them
-    // CRITICAL: Only use translatedUrls if we have a pageId (single posts/pages)
-    // For archives (no pageId), we must construct the URL manually
-    if (pageId && translatedUrls[targetLang]) {
+    // If we have a valid translated URL from WPML API, use it
+    // If translatedUrls[targetLang] is null, it means the API call is in progress or failed
+    // In that case, try to construct the URL manually instead of falling back to home
+    if (pageId && translatedUrls[targetLang] !== undefined && translatedUrls[targetLang] !== null) {
       return translatedUrls[targetLang];
     }
     
@@ -141,8 +144,10 @@ export default function LangSwitcher({ currentLocale }: LangSwitcherProps) {
       return withLocalePrefix(fullPath, targetLang);
     }
     
-    // For regular pages (non-CPT), we can't translate without pageId, so fallback to home
-    return targetLang === defaultLang ? '/' : `/${targetLang}`;
+    // For regular pages (non-CPT), try to preserve the current path with language prefix
+    // Instead of always going to home, try to switch just the language prefix
+    const currentPath = '/' + routeSegments.join('/');
+    return withLocalePrefix(currentPath, targetLang);
   }
 
   if (languages.length === 0) return null;
