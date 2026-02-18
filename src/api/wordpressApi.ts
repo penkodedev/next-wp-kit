@@ -209,10 +209,11 @@ export const getCachedSiteInfo = unstable_cache(
  * Safe version of getSiteInfo that never throws.
  * Returns defaultSiteInfo if API fails.
  * Use this in components that need graceful fallback.
+ * Uses cached version to avoid duplicate API calls.
  */
 export async function safeGetSiteInfo(lang?: string): Promise<SiteInfo> {
   try {
-    return await getSiteInfo(lang);
+    return await getCachedSiteInfo(lang);
   } catch (error) {
     logger.error(`[safeGetSiteInfo] API failed, using default:`, error instanceof Error ? error.message : String(error));
     // Return default SiteInfo to prevent app crash

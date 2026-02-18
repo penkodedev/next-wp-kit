@@ -29,7 +29,6 @@ import localesConfig from '@/i18n/locales.generated.json';
 import Analytics from '@/components/tracking/Analytics';
 import { safeGetSiteInfo } from '@/api/wordpressApi';
 
-
 // Lazy load heavy components that aren't needed on every page
 const ModalController = dynamic(() => import('@/components/features/modals/ModalController'), {
   ssr: false
@@ -58,7 +57,6 @@ const ChatBot = dynamic(() => import('@/components/ui/ChatBot'), {
 const ChatWhatsApp = dynamic(() => import('@/components/ui/ChatWhatsApp'), {
   ssr: false
 });
-
 
 // Generate dynamic metadata from WordPress
 export async function generateMetadata(): Promise<Metadata> {
@@ -121,7 +119,6 @@ type RootLayoutProps = {
 function GlobalUI() {
   return (
     <>
-
       <ScrollToTop />
       <CookieConsent />
       <CookieManager />
@@ -130,11 +127,9 @@ function GlobalUI() {
       <AdvertisingPopup />
       <ChatBot />
       <ChatWhatsApp />
-   
     </>
   );
 }
-
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   const headersList = headers();
@@ -155,6 +150,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   // Get supported locales from WordPress or fallback to config
   const supportedLocales = siteInfo?.i18n?.locales || localesConfig.supportedLocales;
   
+
   return (
     <html lang={currentLocale} suppressHydrationWarning>
       <head>
@@ -168,6 +164,26 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             twitterPixelId={siteInfo.analytics.twitter_pixel_id}
           />
         )}
+        {/* Language sync script in head for immediate execution */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                var supportedLocales = ${JSON.stringify(supportedLocales)};
+                var defaultLocale = ${JSON.stringify(defaultLocale)};
+                
+                function updateLang() {
+                  var path = window.location.pathname;
+                  var firstSegment = path.split('/').filter(Boolean)[0];
+                  var locale = supportedLocales.includes(firstSegment) ? firstSegment : defaultLocale;
+                  document.documentElement.lang = locale;
+                }
+                updateLang();
+                window.addEventListener('popstate', updateLang);
+              })();
+            `
+          }}
+        />
       </head>
       <body>
         <NextIntlClientProvider locale={currentLocale} messages={messages}>
@@ -198,27 +214,6 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             </WpPageIdProvider>
           </SWRConfig>
         </NextIntlClientProvider>
-        {/* Global locale sync for pages that don't use [...slug] layout */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                var supportedLocales = ${JSON.stringify(supportedLocales)};
-                var defaultLocale = ${JSON.stringify(defaultLocale)};
-                
-                function updateLang() {
-                  var path = window.location.pathname;
-                  var firstSegment = path.split('/').filter(Boolean)[0];
-                  var locale = supportedLocales.includes(firstSegment) ? firstSegment : defaultLocale;
-                  document.documentElement.lang = locale;
-                }
-                updateLang();
-                window.addEventListener('popstate', updateLang);
-              })();
-            `
-          }}
-        />
-
         <CodeBlockCopier />
       </body>
     </html>
