@@ -164,108 +164,9 @@ export default async function WpStyles() {
   const editorLibraryUrl = `${wpUrl}/wp-includes/css/dist/block-editor/style.css`;
 
   // 4. Essential base CSS for Gutenberg
-  const essentialStyles = `
-    /* Base CSS variables in case they don't load from WordPress */
-    :root {
-      --wp--preset--color--black: #000000;
-      --wp--preset--color--cyan-bluish-gray: #abb8c3;
-      --wp--preset--color--white: #ffffff;
-      --wp--preset--color--pale-pink: #f78da7;
-      --wp--preset--color--vivid-red: #cf2e2e;
-      --wp--preset--color--luminous-vivid-orange: #ff6900;
-      --wp--preset--color--luminous-vivid-amber: #fcb900;
-      --wp--preset--color--light-green-cyan: #7bdcb5;
-      --wp--preset--color--vivid-green-cyan: #00d084;
-      --wp--preset--color--pale-cyan-blue: #8ed1fc;
-      --wp--preset--color--vivid-cyan-blue: #0693e3;
-      --wp--preset--color--vivid-purple: #9b51e0;
-    }
-
-    /* Essential classes for text colors */
-    .has-text-color {
-      color: inherit;
-    }
+  // const essentialStyles = `
     
-    .has-background {
-      background-color: inherit;
-    }
-    
-    .has-link-color a {
-      color: inherit;
-    }
-
-    /* Text and background color classes that are sometimes missing */
-    .has-black-color { color: var(--wp--preset--color--black) !important; }
-    .has-white-color { color: var(--wp--preset--color--white) !important; }
-    .has-cyan-bluish-gray-color { color: var(--wp--preset--color--cyan-bluish-gray) !important; }
-    .has-vivid-red-color { color: var(--wp--preset--color--vivid-red) !important; }
-    .has-luminous-vivid-orange-color { color: var(--wp--preset--color--luminous-vivid-orange) !important; }
-    .has-luminous-vivid-amber-color { color: var(--wp--preset--color--luminous-vivid-amber) !important; }
-    .has-light-green-cyan-color { color: var(--wp--preset--color--light-green-cyan) !important; }
-    .has-vivid-green-cyan-color { color: var(--wp--preset--color--vivid-green-cyan) !important; }
-    .has-pale-cyan-blue-color { color: var(--wp--preset--color--pale-cyan-blue) !important; }
-    .has-vivid-cyan-blue-color { color: var(--wp--preset--color--vivid-cyan-blue) !important; }
-    .has-vivid-purple-color { color: var(--wp--preset--color--vivid-purple) !important; }
-
-    .has-black-background-color { background-color: var(--wp--preset--color--black) !important; }
-    .has-white-background-color { background-color: var(--wp--preset--color--white) !important; }
-    .has-cyan-bluish-gray-background-color { background-color: var(--wp--preset--color--cyan-bluish-gray) !important; }
-    .has-pale-pink-background-color { background-color: var(--wp--preset--color--pale-pink) !important; }
-    .has-vivid-red-background-color { background-color: var(--wp--preset--color--vivid-red) !important; }
-    .has-luminous-vivid-orange-background-color { background-color: var(--wp--preset--color--luminous-vivid-orange) !important; }
-    .has-luminous-vivid-amber-background-color { background-color: var(--wp--preset--color--luminous-vivid-amber) !important; }
-    .has-light-green-cyan-background-color { background-color: var(--wp--preset--color--light-green-cyan) !important; }
-    .has-vivid-green-cyan-background-color { background-color: var(--wp--preset--color--vivid-green-cyan) !important; }
-    .has-pale-cyan-blue-background-color { background-color: var(--wp--preset--color--pale-cyan-blue) !important; }
-    .has-vivid-cyan-blue-background-color { background-color: var(--wp--preset--color--vivid-cyan-blue) !important; }
-    .has-vivid-purple-background-color { background-color: var(--wp--preset--color--vivid-purple) !important; }
-    
-    /* Ensure elements with background have padding */
-    .has-background {
-      padding: 1.25em 2.375em;
-    }
-    
-    /* Styles for paragraphs with background */
-    p.has-background {
-      padding: 1em 1.5em;
-    }
-    
-    /* Buttons with colors */
-    .wp-block-button__link.has-background {
-      border: none;
-      text-decoration: none;
-    }
-    
-    /* Text alignments */
-    .has-text-align-left { text-align: left; }
-    .has-text-align-center { text-align: center; }
-    .has-text-align-right { text-align: right; }
-    .has-text-align-justify { text-align: justify; }
-
-
-    /* Image alignments - Classic Editor */
-      .alignleft {
-        float: left;
-        margin-right: 1rem;
-      }
-
-      .aligncenter {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        clear: both;
-      }
-
-      .alignright {
-        float: right;
-        margin-left: 1rem;
-        margin-bottom: 1rem;
-      }
-
-      .alignjustify {
-        text-align: justify;
-      } 
-  `;
+  // `;
 
   return (
     <>
@@ -275,7 +176,7 @@ export default async function WpStyles() {
       <link rel="stylesheet" href={editorLibraryUrl} />
 
       {/* Essential styles (including base CSS variables) */}
-      <style dangerouslySetInnerHTML={{ __html: essentialStyles }} />
+      {/* <style dangerouslySetInnerHTML={{ __html: essentialStyles }} /> */}
 
       {/* CSS generated from WordPress global styles */}
       {generatedCSS && (
