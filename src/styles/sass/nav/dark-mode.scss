@@ -78,7 +78,7 @@
         svg,
         .current-lang,
         .main-menu ul li,
-        .main-menu ul li a  {
+        .main-menu ul li a {
             color: #e0e0e0 !important;
         }
     }
@@ -164,6 +164,19 @@
     .search-modal-content {
         background-color: rgb(37 37 37 / 96%);
         border: 1px solid rgb(75, 75, 75);
+    }
+
+    // =================================================================
+    //                  WORDPRESS BLOCKS
+    // =================================================================
+
+    .details.wp-block-details {
+        background: #252525;
+        border: 1px solid #3f3f3f;
+    }
+
+    .details.wp-block-details summary:before {
+        filter: invert(50%) sepia(100%) saturate(0%) hue-rotate(232deg);
     }
 
     // =================================================================
