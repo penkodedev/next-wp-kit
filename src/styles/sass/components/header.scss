@@ -112,7 +112,7 @@ $header-padding-scrolled: calc($header-height-scrolled * 0.154) $header-padding-
     // padding: $header-padding-scrolled;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
 
-    .main-menu ul li a {
+    .main-menu ul li {
         font-size: 0.86em;
         letter-spacing: 0.01em;
         transition: font-size 0.22s cubic-bezier(.2, .8, .2, 1), letter-spacing 0.22s cubic-bezier(.2, .8, .2, 1);
@@ -151,6 +151,7 @@ $header-padding-scrolled: calc($header-height-scrolled * 0.154) $header-padding-
 body.page-home .header.header-scrolled {
     background-color: #fff !important;
 
+    .main-menu ul li,
     .main-menu ul li a,
     a.search-open-button {
         color: black;
