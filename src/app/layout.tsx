@@ -122,11 +122,11 @@ function GlobalUI() {
       <ScrollToTop />
       <CookieConsent />
       <CookieManager />
-      <ModalController />
-      <LightboxController />
-      <AdvertisingPopup />
-      <ChatBot />
-      <ChatWhatsApp />
+      {/* <ModalController /> */}
+      {/* <LightboxController /> */}
+      {/* <AdvertisingPopup /> */}
+      {/* <ChatBot /> */}
+      {/* <ChatWhatsApp /> */}
     </>
   );
 }
@@ -196,9 +196,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             }}
           >
             <WpPageIdProvider>
-              <ScrollProgress />
-              <SmoothScroll>
-                <ParallaxEffects />
+              {/* <ScrollProgress /> */}
+              {/* <SmoothScroll> */}
+                {/* <ParallaxEffects /> */}
                 <BodyClass> {/* BodyClass needs to be a client component to read pageId from context */}
                   <TooltipsProvider>
                     <HeaderServer />
@@ -210,7 +210,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
                     <GlobalUI />
                   </TooltipsProvider>
                 </BodyClass>
-              </SmoothScroll>
+              {/* </SmoothScroll> */}
             </WpPageIdProvider>
           </SWRConfig>
         </NextIntlClientProvider>
