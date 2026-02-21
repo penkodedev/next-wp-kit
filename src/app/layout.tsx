@@ -206,7 +206,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
 
                       <main>{children}</main>
 
-                    <Footer />
+                    {/* <Footer /> */}
                     <GlobalUI />
                   {/* </TooltipsProvider> */}
                 {/* </BodyClass> */}
