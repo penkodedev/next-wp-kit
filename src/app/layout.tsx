@@ -119,9 +119,9 @@ type RootLayoutProps = {
 function GlobalUI() {
   return (
     <>
-      <ScrollToTop />
-      <CookieConsent />
-      <CookieManager />
+      {/* <ScrollToTop /> */}
+      {/* <CookieConsent /> */}
+      {/* <CookieManager /> */}
       {/* <ModalController /> */}
       {/* <LightboxController /> */}
       {/* <AdvertisingPopup /> */}
@@ -154,16 +154,16 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang={currentLocale} suppressHydrationWarning>
       <head>
-        <WpStyles />
+        {/* <WpStyles /> */}
         {/* Analytics tracking from WordPress settings */}
-        {siteInfo && (
-          <Analytics
-            gtmId={siteInfo.analytics.gtm_id}
-            ga4Id={siteInfo.analytics.google_analytics_id}
-            fbPixelId={siteInfo.analytics.facebook_pixel_id}
-            twitterPixelId={siteInfo.analytics.twitter_pixel_id}
-          />
-        )}
+        {/* {siteInfo && ( */}
+          {/* <Analytics */}
+            {/* gtmId={siteInfo.analytics.gtm_id} */}
+            {/* ga4Id={siteInfo.analytics.google_analytics_id} */}
+            {/* fbPixelId={siteInfo.analytics.facebook_pixel_id} */}
+            {/* twitterPixelId={siteInfo.analytics.twitter_pixel_id} */}
+          {/* /> */}
+        {/* )} */}
         {/* Language sync script in head for immediate execution */}
         <script
           dangerouslySetInnerHTML={{
@@ -199,22 +199,22 @@ export default async function RootLayout({ children }: RootLayoutProps) {
               {/* <ScrollProgress /> */}
               {/* <SmoothScroll> */}
                 {/* <ParallaxEffects /> */}
-                <BodyClass> {/* BodyClass needs to be a client component to read pageId from context */}
-                  <TooltipsProvider>
-                    <HeaderServer />
+                {/* <BodyClass> */}
+                  {/* <TooltipsProvider> */}
+                    {/* <HeaderServer /> */}
                     {/* <Breadcrumbs /> */}
 
                       <main>{children}</main>
 
-                    <Footer />
+                    {/* <Footer /> */}
                     <GlobalUI />
-                  </TooltipsProvider>
-                </BodyClass>
+                  {/* </TooltipsProvider> */}
+                {/* </BodyClass> */}
               {/* </SmoothScroll> */}
             </WpPageIdProvider>
           </SWRConfig>
         </NextIntlClientProvider>
-        <CodeBlockCopier />
+        {/* <CodeBlockCopier /> */}
       </body>
     </html>
   );
