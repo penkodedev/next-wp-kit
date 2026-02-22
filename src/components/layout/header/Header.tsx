@@ -71,7 +71,7 @@ export default function Header({
 
   return (
     <>
-      {/* <Ticker pageIdParam={currentPageId} /> */}
+      <Ticker pageIdParam={currentPageId} />
       
       <header className={headerClasses}>   
       <LogoHeader 
