@@ -15,6 +15,7 @@ import WpStyles from "@/components/wordpress/WpStyles";
 import HeaderServer from '@/components/layout/header/HeaderServer';
 import type { SiteInfo } from '@/types/wordpressTypes';
 import Footer from "@/components/layout/footer/Footer";
+import Breadcrumbs from "@/components/navigation/Breadcrumbs";
 
 import CodeBlockCopier from "@/components/ui/CodeBlockCopier";
 
@@ -203,11 +204,11 @@ export default async function RootLayout({ children }: RootLayoutProps) {
                 <BodyClass>
                   <TooltipsProvider>
                     <HeaderServer siteInfo={siteInfo} />
-                    {/* <Breadcrumbs /> */}
+                    <Breadcrumbs />
 
                       <main>{children}</main>
 
-                    {/* <Footer /> */}
+                    <Footer />
                     <GlobalUI />
                   </TooltipsProvider>
                 </BodyClass>
