@@ -36,7 +36,11 @@ export default function HeaderClient({
 
   return (
     <header className={`header ${variant === "home" ? "header-home" : ""}`}>
-      <LogoHeader siteInfo={siteInfo} />
+      <LogoHeader 
+        title={siteInfo.title} 
+        lightLogo={siteInfo.light_logo} 
+        darkLogo={siteInfo.dark_logo} 
+      />
       <WpNavMenu 
         location="mainnav" 
         className="main-menu" 
