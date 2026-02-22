@@ -74,20 +74,20 @@ export default function Header({
       {/* <Ticker pageIdParam={currentPageId} /> */}
       
       <header className={headerClasses}>   
-      <LogoHeader siteInfo={siteInfo} isHome={isHome} shrink={shouldShrink} />
+      {/* <LogoHeader siteInfo={siteInfo} isHome={isHome} shrink={shouldShrink} /> */}
 
       <div className="actions-container">
-        <WpNavMenu 
-          location="mainnav" 
-          className="main-menu"
-          variant="responsive"
-          locale={currentLocale}
-          menuItems={menuItems}
-        />
+        {/* <WpNavMenu */}
+          {/* location="mainnav" */}
+          {/* className="main-menu" */}
+          {/* variant="responsive" */}
+          {/* locale={currentLocale} */}
+          {/* menuItems={menuItems} */}
+        {/* /> */}
         
-        <SearchTrigger />
-        <DarkModeToggle variant="icon" size={20} strokeWidth={1.4} />
-        <LangSwitcher currentLocale={currentLocale} />
+        {/* <SearchTrigger /> */}
+        {/* <DarkModeToggle variant="icon" size={20} strokeWidth={1.4} /> */}
+        {/* <LangSwitcher currentLocale={currentLocale} /> */}
         
       </div>
       
