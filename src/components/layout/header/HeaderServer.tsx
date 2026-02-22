@@ -1,8 +1,7 @@
 // src/components/layout/header/HeaderServer.tsx
 
 import Header from "./Header";
-// DEBUG: Commented out to test
-// import { safeGetSiteInfo, fetchAPI } from "@/api/wordpressApi";
+import { safeGetSiteInfo, fetchAPI } from "@/api/wordpressApi";
 import type { SiteInfo, MenuItem } from "@/types/wordpressTypes";
 import { logger } from "@/utils/wordpress/logger";
 import localesConfig from "@/i18n/locales.generated.json";
@@ -51,13 +50,19 @@ export default async function HeaderServer({
   // Handle undefined menuVariant (use responsive as default)
   const menuVariant = menuVariantProp || 'responsive';
   
-  // DEBUG: Use default site info instead of fetching
-  const siteInfo = defaultSiteInfo;
+  // DEBUG: Try to fetch site info
+  let siteInfo: SiteInfo;
+  try {
+    siteInfo = await safeGetSiteInfo();
+  } catch (error) {
+    logger.error('HeaderServer: Error fetching siteInfo:', error instanceof Error ? error.message : String(error));
+    siteInfo = defaultSiteInfo;
+  }
   
   const defaultLocale = siteInfo.i18n?.default_locale || localesConfig.defaultLocale;
   const locale = initialLocale || defaultLocale;
 
-  // DEBUG: Empty menus
+  // DEBUG: Empty menus to avoid errors
   const menusByLocale: Record<string, MenuItem[]> = {};
 
   return (
