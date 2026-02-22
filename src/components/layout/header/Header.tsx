@@ -83,13 +83,13 @@ export default function Header({
       />
 
       <div className="actions-container">
-        {/* <WpNavMenu */}
-          {/* location="mainnav" */}
-          {/* className="main-menu" */}
-          {/* variant="responsive" */}
-          {/* locale={currentLocale} */}
-          {/* menuItems={menuItems} */}
-        {/* /> */}
+        <WpNavMenu 
+          location="mainnav" 
+          className="main-menu"
+          variant="responsive"
+          locale={currentLocale}
+          menuItems={menuItems}
+        />
         
         {/* <SearchTrigger /> */}
         {/* <DarkModeToggle variant="icon" size={20} strokeWidth={1.4} /> */}
