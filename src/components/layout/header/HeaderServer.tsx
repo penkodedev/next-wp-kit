@@ -1,8 +1,8 @@
 // src/components/layout/header/HeaderServer.tsx
 
-// DEBUG: Temporarily comment out Header import to isolate the issue
-// import Header from "./Header";
-import { safeGetSiteInfo, fetchAPI } from "@/api/wordpressApi";
+import Header from "./Header";
+// DEBUG: Commented out to test
+// import { safeGetSiteInfo, fetchAPI } from "@/api/wordpressApi";
 import type { SiteInfo, MenuItem } from "@/types/wordpressTypes";
 import { logger } from "@/utils/wordpress/logger";
 import localesConfig from "@/i18n/locales.generated.json";
@@ -50,51 +50,23 @@ export default async function HeaderServer({
 }: HeaderServerProps) {
   // Handle undefined menuVariant (use responsive as default)
   const menuVariant = menuVariantProp || 'responsive';
-  // Fetch site info (safe version)
-  const siteInfo = await safeGetSiteInfo();
+  
+  // DEBUG: Use default site info instead of fetching
+  const siteInfo = defaultSiteInfo;
   
   const defaultLocale = siteInfo.i18n?.default_locale || localesConfig.defaultLocale;
   const locale = initialLocale || defaultLocale;
 
-  // Pre-fetch menus for ALL active locales dynamically
+  // DEBUG: Empty menus
   const menusByLocale: Record<string, MenuItem[]> = {};
 
-  try {
-    // Build promises array dynamically for all locales
-    const menuPromises = localesConfig.supportedLocales.map(loc =>
-      fetchAPI<MenuItem[]>(`/custom/v1/menus?lang=${loc}&location=mainnav`)
-        .then(menu => ({ locale: loc, menu: menu || [] }))
-        .catch(err => {
-          logger.error(`Error fetching menu for ${loc}:`, err);
-          return { locale: loc, menu: [] as MenuItem[] };
-        })
-    );
-
-    const menuResults = await Promise.all(menuPromises);
-    
-    // Organize menus by locale
-    menuResults.forEach(result => {
-      menusByLocale[result.locale] = result.menu;
-    });
-  } catch (error) {
-    logger.error('HeaderServer: Error pre-fetching menus', error as Error);
-  }
-
-  // DEBUG: Return simple content instead of Header component
   return (
-    <div style={{ padding: '20px', border: '1px solid red' }}>
-      DEBUG: HeaderServer working but Header component commented out
-    </div>
+    <Header 
+      variant={variant}
+      menuVariant={menuVariant}
+      initialLocale={locale} 
+      siteInfo={siteInfo}
+      menusByLocale={menusByLocale}
+    />
   );
-
-  // Original return:
-  // return (
-  //   <Header 
-  //     variant={variant}
-  //     menuVariant={menuVariant}
-  //     initialLocale={locale} 
-  //     siteInfo={siteInfo}
-  //     menusByLocale={menusByLocale}
-  //   />
-  // );
 }
