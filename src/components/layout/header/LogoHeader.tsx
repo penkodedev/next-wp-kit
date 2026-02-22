@@ -4,15 +4,22 @@
 import { useState, useEffect } from 'react';
 import Image from "next/image";
 import Link from "next/link";
-import type { SiteInfo } from "@/types/wordpressTypes";
 
 interface LogoHeaderProps {
-  siteInfo: SiteInfo;
+  title: string;
+  lightLogo: string;
+  darkLogo: string;
   isHome?: boolean; // If true, always show light_logo (for dark backgrounds)
   shrink?: boolean; // If true, apply shrink effect to logo
 }
 
-export default function LogoHeader({ siteInfo, isHome = false, shrink = false }: LogoHeaderProps) {
+export default function LogoHeader({ 
+  title, 
+  lightLogo, 
+  darkLogo, 
+  isHome = false, 
+  shrink = false 
+}: LogoHeaderProps) {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
@@ -39,15 +46,15 @@ export default function LogoHeader({ siteInfo, isHome = false, shrink = false }:
   // Home: ALWAYS light_logo (white, never changes)
   // Other pages: switch based on dark mode
   const logoSrc = isHome 
-    ? siteInfo.light_logo 
-    : (isDark ? siteInfo.light_logo : siteInfo.dark_logo);
+    ? lightLogo 
+    : (isDark ? lightLogo : darkLogo);
 
   return (
     <div id="logo-container" className={shrink ? 'logo-shrink' : ''}>
       <Link href="/" aria-label="Ir a la página principal">
         <Image
           src={logoSrc}
-          alt={siteInfo.title}
+          alt={title}
           width={90}
           height={55}
           priority

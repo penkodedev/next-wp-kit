@@ -74,7 +74,13 @@ export default function Header({
       {/* <Ticker pageIdParam={currentPageId} /> */}
       
       <header className={headerClasses}>   
-      <LogoHeader siteInfo={siteInfo} isHome={isHome} shrink={shouldShrink} />
+      <LogoHeader 
+        title={siteInfo.title} 
+        lightLogo={siteInfo.light_logo} 
+        darkLogo={siteInfo.dark_logo} 
+        isHome={isHome} 
+        shrink={shouldShrink} 
+      />
 
       <div className="actions-container">
         {/* <WpNavMenu */}
