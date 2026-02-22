@@ -211,7 +211,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
                     <GlobalUI />
                   {/* </TooltipsProvider> */}
                 {/* </BodyClass> */}
-              {/* </SmoothScroll> */}
+              </SmoothScroll>
             </WpPageIdProvider>
           </SWRConfig>
         </NextIntlClientProvider>
