@@ -91,7 +91,7 @@ export default function Header({
           menuItems={menuItems}
         />
         
-        {/* <SearchTrigger /> */}
+        <SearchTrigger />
         {/* <DarkModeToggle variant="icon" size={20} strokeWidth={1.4} /> */}
         {/* <LangSwitcher currentLocale={currentLocale} /> */}
         
