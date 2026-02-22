@@ -202,7 +202,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
                 {/* <ParallaxEffects /> */}
                 {/* <BodyClass> */}
                   {/* <TooltipsProvider> */}
-                    <HeaderServer siteInfo={siteInfo} />
+                    {/* <HeaderServer siteInfo={siteInfo} /> */}
                     {/* <Breadcrumbs /> */}
 
                       <main>{children}</main>
