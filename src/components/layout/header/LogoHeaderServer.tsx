@@ -42,5 +42,11 @@ export default async function LogoHeaderServer({ siteInfo }: LogoHeaderServerPro
   const fetchedSiteInfo = await safeGetSiteInfo();
   siteInfo = fetchedSiteInfo || defaultSiteInfo;
 
-  return <LogoHeader siteInfo={siteInfo} />;
+  return (
+    <LogoHeader 
+      title={siteInfo.title} 
+      lightLogo={siteInfo.light_logo} 
+      darkLogo={siteInfo.dark_logo} 
+    />
+  );
 }
