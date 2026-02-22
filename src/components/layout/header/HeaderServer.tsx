@@ -1,6 +1,7 @@
 // src/components/layout/header/HeaderServer.tsx
 
-import Header from "./Header";
+// DEBUG: Temporarily comment out Header import to isolate the issue
+// import Header from "./Header";
 import { safeGetSiteInfo, fetchAPI } from "@/api/wordpressApi";
 import type { SiteInfo, MenuItem } from "@/types/wordpressTypes";
 import { logger } from "@/utils/wordpress/logger";
@@ -79,13 +80,21 @@ export default async function HeaderServer({
     logger.error('HeaderServer: Error pre-fetching menus', error as Error);
   }
 
+  // DEBUG: Return simple content instead of Header component
   return (
-    <Header 
-      variant={variant}
-      menuVariant={menuVariant}
-      initialLocale={locale} 
-      siteInfo={siteInfo}
-      menusByLocale={menusByLocale}
-    />
+    <div style={{ padding: '20px', border: '1px solid red' }}>
+      DEBUG: HeaderServer working but Header component commented out
+    </div>
   );
+
+  // Original return:
+  // return (
+  //   <Header 
+  //     variant={variant}
+  //     menuVariant={menuVariant}
+  //     initialLocale={locale} 
+  //     siteInfo={siteInfo}
+  //     menusByLocale={menusByLocale}
+  //   />
+  // );
 }
