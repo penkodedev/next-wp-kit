@@ -2,12 +2,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { SiteInfo } from "@/types/wordpressTypes";
 import { Icons } from "@/components/ui/Icons";
 import { useTranslations } from 'next-intl';
 
+interface ContactItem {
+  type: string;
+  value: string;
+}
+
 interface FooterContactProps {
-  contact: SiteInfo['contact'];
+  contact: ContactItem[];
 }
 
 // Map contact types to Lucide icons

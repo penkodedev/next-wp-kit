@@ -3,13 +3,14 @@
 
 import { useState, useEffect } from 'react';
 import Image from "next/image";
-import type { SiteInfo } from "@/types/wordpressTypes";
 
 interface FooterLogoProps {
-  siteInfo: SiteInfo;
+  title?: string;
+  lightLogo?: string;
+  darkLogo?: string;
 }
 
-export default function FooterLogo({ siteInfo }: FooterLogoProps) {
+export default function FooterLogo({ title, lightLogo, darkLogo }: FooterLogoProps) {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
@@ -32,8 +33,11 @@ export default function FooterLogo({ siteInfo }: FooterLogoProps) {
   return (
     <div className="logo-footer-wrapper">
       <Image
-        src={isDark ? siteInfo.light_logo : siteInfo.dark_logo}
-        alt={siteInfo?.title || "Logo del sitio"}
+        src={isDark ? (lightLogo || '/icons/logo.svg') : (darkLogo || '/icons/logo.svg')}
+        alt={title || "Logo del sitio"}
+        onError={(e) => {
+          (e.target as HTMLImageElement).src = '/icons/logo.svg';
+        }}
         width={90}
         height={55}
         priority

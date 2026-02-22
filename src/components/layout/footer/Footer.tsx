@@ -1,6 +1,5 @@
 // src/components/layout/footer/Footer.tsx
 
-import SiteInfo from "@/components/wordpress/SiteInfo";
 import FooterLogo from "@/components/layout/footer/FooterLogo";
 import FooterCopyright from "@/components/layout/footer/FooterCopyright";
 import FooterSocial from "@/components/layout/footer/FooterSocial";
@@ -8,17 +7,38 @@ import FooterContact from "@/components/layout/footer/FooterContact";
 import FooterMenuClient from "@/components/layout/footer/FooterMenuClient";
 import LatestPostsList from "@/components/sections/LatestPostsList";
 import DarkModeToggle from "@/components/ui/DarkModeToggle";
-import { fetchAPI } from "@/api/wordpressApi";
+import { fetchAPI, safeGetSiteInfo } from "@/api/wordpressApi";
 import type { MenuItem } from "@/types/wordpressTypes";
 import { logger } from "@/utils/wordpress/logger";
 import { headers } from 'next/headers';
 import localesConfig from "@/i18n/locales.generated.json";
+
+// Fetch data directly to avoid circular dependency with SiteInfo component
+async function getFooterData(locale: string) {
+  // Fetch site info and menu in parallel
+  const [siteInfo, menuData] = await Promise.all([
+    safeGetSiteInfo(locale),
+    fetchAPI<MenuItem[]>('/custom/v1/menus?lang=' + locale + '&location=footernav').catch(() => [])
+  ]);
+
+  return {
+    title: siteInfo?.title || 'Next WP Kit',
+    lightLogo: siteInfo?.light_logo || '',
+    darkLogo: siteInfo?.dark_logo || '',
+    social: siteInfo?.social || [],
+    contact: siteInfo?.contact || [],
+    menu: menuData || [] as MenuItem[]
+  };
+}
 
 export default async function Footer() {
   // Get current locale from middleware header
   const headersList = headers();
   const locale = (headersList.get('x-locale') || localesConfig.defaultLocale) as string;
   
+  // Fetch footer data directly (avoiding SiteInfo component to prevent circular deps)
+  const footerData = await getFooterData(locale);
+
   // Pre-fetch menus for ALL active locales dynamically
   const menusByLocale: Record<string, MenuItem[]> = {};
 
@@ -47,39 +67,35 @@ export default async function Footer() {
 
   return (
     <footer className="footer">
-      {/* Usamos el componente SiteInfo como un proveedor de datos */}
-      <SiteInfo>
-        {(siteInfo) => (
-          <>
-            <div className="footer-content">
-              <div className="footer-box footer-social">
-                <FooterSocial social={siteInfo.social} />
-                {/* <DarkModeToggle variant="select" /> */}
-              </div>
+      <div className="footer-content">
+        <div className="footer-box footer-social">
+          <FooterSocial social={footerData.social} />
+          {/* <DarkModeToggle variant="select" /> */}
+        </div>
 
-              <div className="footer-box footer-resources">
-                <LatestPostsList postType="recursos" perPage={6} locale={locale} />
-              </div>
+        <div className="footer-box footer-resources">
+          <LatestPostsList postType="recursos" perPage={6} locale={locale} />
+        </div>
 
-              <div className="footer-box footer-contact">
-                <FooterContact contact={siteInfo.contact} />
-              </div>
-            </div>
+        <div className="footer-box footer-contact">
+          <FooterContact contact={footerData.contact} />
+        </div>
+      </div>
 
-            <FooterMenuClient menusByLocale={menusByLocale} />
+      <FooterMenuClient menusByLocale={menusByLocale} />
 
-            <div className="copyright">
-              <FooterLogo siteInfo={siteInfo} />
-              <FooterCopyright
-                title={siteInfo.title}
-                // description={siteInfo.description}
-                showTitle
-                showDescription
-              />
-            </div>
-          </>
-        )}
-      </SiteInfo>
+      <div className="copyright">
+        <FooterLogo 
+          title={footerData.title}
+          lightLogo={footerData.lightLogo}
+          darkLogo={footerData.darkLogo}
+        />
+        <FooterCopyright
+          title={footerData.title}
+          showTitle
+          showDescription
+        />
+      </div>
     </footer>
   );
 }

@@ -1,12 +1,16 @@
 // src/components/layout/footer/FooterSocial.tsx
 'use client';
 
-import type { SiteInfo } from "@/types/wordpressTypes";
 import { Icons } from "@/components/ui/Icons";
 import { useTranslations } from 'next-intl';
 
+interface SocialItem {
+  name: string;
+  url: string;
+}
+
 interface FooterSocialProps {
-  social: SiteInfo['social'];
+  social: SocialItem[];
 }
 
 // Map social network names to Lucide icons

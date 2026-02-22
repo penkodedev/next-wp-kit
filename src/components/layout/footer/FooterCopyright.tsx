@@ -1,9 +1,8 @@
 // src/components/layout/footer/FooterCopyright.tsx
-import type { SiteInfo } from "@/types/wordpressTypes";
 
 interface FooterCopyrightProps {
-  title: SiteInfo['title'];
-  description?: SiteInfo['description'];
+  title?: string;
+  description?: string;
   showTitle?: boolean;
   showDescription?: boolean;
 }
