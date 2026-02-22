@@ -197,7 +197,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             }}
           >
             <WpPageIdProvider>
-              {/* <ScrollProgress /> */}
+              <ScrollProgress />
               {/* <SmoothScroll> */}
                 {/* <ParallaxEffects /> */}
                 {/* <BodyClass> */}
