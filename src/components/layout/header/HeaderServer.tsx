@@ -8,6 +8,7 @@ interface HeaderServerProps {
   variant?: "default" | "home";
   menuVariant?: 'desktop' | 'mobile' | 'responsive';
   initialLocale?: string;
+  siteInfo?: SiteInfo; // Accept siteInfo from parent
 }
 
 // Default fallback site info when WordPress is unavailable
@@ -44,12 +45,13 @@ export default async function HeaderServer({
   variant = "default",
   menuVariant: menuVariantProp, // Controlled by props
   initialLocale,
+  siteInfo: siteInfoProp, // Site info from parent
 }: HeaderServerProps) {
   // Handle undefined menuVariant (use responsive as default)
   const menuVariant = menuVariantProp || 'responsive';
   
-  // Use default site info for now
-  const siteInfo = defaultSiteInfo;
+  // Use siteInfo from props or fallback to default
+  const siteInfo = siteInfoProp || defaultSiteInfo;
   
   const defaultLocale = siteInfo.i18n?.default_locale || localesConfig.defaultLocale;
   const locale = initialLocale || defaultLocale;

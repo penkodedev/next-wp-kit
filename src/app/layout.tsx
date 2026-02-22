@@ -13,6 +13,7 @@ import "@/styles/sass/main.scss";
 import WpStyles from "@/components/wordpress/WpStyles";
 
 import HeaderServer from '@/components/layout/header/HeaderServer';
+import type { SiteInfo } from '@/types/wordpressTypes';
 import Footer from "@/components/layout/footer/Footer";
 
 import CodeBlockCopier from "@/components/ui/CodeBlockCopier";
@@ -201,7 +202,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
                 {/* <ParallaxEffects /> */}
                 {/* <BodyClass> */}
                   {/* <TooltipsProvider> */}
-                    <HeaderServer />
+                    <HeaderServer siteInfo={siteInfo} />
                     {/* <Breadcrumbs /> */}
 
                       <main>{children}</main>
