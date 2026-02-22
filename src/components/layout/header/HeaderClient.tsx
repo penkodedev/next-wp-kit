@@ -37,9 +37,9 @@ export default function HeaderClient({
   return (
     <header className={`header ${variant === "home" ? "header-home" : ""}`}>
       <LogoHeader 
-        title={siteInfo.title} 
-        lightLogo={siteInfo.light_logo} 
-        darkLogo={siteInfo.dark_logo} 
+        title={siteInfo?.title || 'Logo'} 
+        lightLogo={siteInfo?.light_logo || '/images/framework-logo-white.png'} 
+        darkLogo={siteInfo?.dark_logo || '/framework-logo.png'} 
       />
       <WpNavMenu 
         location="mainnav" 

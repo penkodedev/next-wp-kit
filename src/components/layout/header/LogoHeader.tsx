@@ -7,23 +7,22 @@ import Link from "next/link";
 
 interface LogoHeaderProps {
   title: string;
-  lightLogo: string;
-  darkLogo: string;
-  isHome?: boolean; // If true, always show light_logo (for dark backgrounds)
-  shrink?: boolean; // If true, apply shrink effect to logo
+  lightLogo?: string;
+  darkLogo?: string;
+  isHome?: boolean;
+  shrink?: boolean;
 }
 
 export default function LogoHeader({ 
   title, 
-  lightLogo, 
-  darkLogo, 
+  lightLogo = '/images/framework-logo-white.png', 
+  darkLogo = '/framework-logo.png', 
   isHome = false, 
   shrink = false 
 }: LogoHeaderProps) {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    // Si estamos en home, no necesitamos observar dark mode
     if (isHome) return;
 
     // Detectar dark mode inicial
@@ -43,8 +42,6 @@ export default function LogoHeader({
   }, [isHome]);
 
   // Determine logo source
-  // Home: ALWAYS light_logo (white, never changes)
-  // Other pages: switch based on dark mode
   const logoSrc = isHome 
     ? lightLogo 
     : (isDark ? lightLogo : darkLogo);
@@ -54,7 +51,7 @@ export default function LogoHeader({
       <Link href="/" aria-label="Ir a la página principal">
         <Image
           src={logoSrc}
-          alt={title}
+          alt={title || 'Logo'}
           width={90}
           height={55}
           priority
