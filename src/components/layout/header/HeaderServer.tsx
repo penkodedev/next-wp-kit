@@ -1,6 +1,6 @@
 // src/components/layout/header/HeaderServer.tsx
 
-import Header from "./Header";
+import HeaderDebug from "./HeaderDebug";
 import type { SiteInfo, MenuItem } from "@/types/wordpressTypes";
 import localesConfig from "@/i18n/locales.generated.json";
 
@@ -60,7 +60,7 @@ export default async function HeaderServer({
   const menusByLocale: Record<string, MenuItem[]> = {};
 
   return (
-    <Header 
+    <HeaderDebug 
       variant={variant}
       menuVariant={menuVariant}
       initialLocale={locale} 
