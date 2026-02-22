@@ -1,9 +1,7 @@
 // src/components/layout/header/HeaderServer.tsx
 
 import Header from "./Header";
-import { getSiteInfo, fetchAPI } from "@/api/wordpressApi";
 import type { SiteInfo, MenuItem } from "@/types/wordpressTypes";
-import { logger } from "@/utils/wordpress/logger";
 import localesConfig from "@/i18n/locales.generated.json";
 
 interface HeaderServerProps {
@@ -12,12 +10,12 @@ interface HeaderServerProps {
   initialLocale?: string;
 }
 
-// Default fallback site info when WordPress is unavailable
-const defaultSiteInfo: SiteInfo = {
-  title: "Logo del sitio",
-  description: "",
-  back_url: "",
-  front_url: "",
+// Hardcoded site info - no API calls (DEBUG)
+const siteInfo: SiteInfo = {
+  title: "Reaxy",
+  description: "Reaxy - Next/React Kit with Headless WordPress",
+  back_url: "https://reaxy.penkode.com/wp",
+  front_url: "https://reaxy.penkode.com",
   light_logo: "/images/framework-logo-white.png",
   dark_logo: "/framework-logo.png",
   favicons: {
@@ -26,8 +24,8 @@ const defaultSiteInfo: SiteInfo = {
     icon_192: "",
     icon_512: "",
   },
-  date_format: "",
-  language: "",
+  date_format: "j \\d\\e F \\d\\e Y",
+  language: "es",
   social: [],
   contact: [],
   analytics: {
@@ -37,9 +35,9 @@ const defaultSiteInfo: SiteInfo = {
     twitter_pixel_id: "",
   },
   i18n: {
-    default_locale: localesConfig.defaultLocale,
-    locales: localesConfig.supportedLocales,
-  },
+    default_locale: "es",
+    locales: ["es", "en", "pt-br"]
+  }
 };
 
 export default async function HeaderServer({
@@ -50,20 +48,10 @@ export default async function HeaderServer({
   // Handle undefined menuVariant (use responsive as default)
   const menuVariant = menuVariantProp || 'responsive';
   
-  // DEBUG: Try to fetch site info WITHOUT using cache
-  let siteInfo: SiteInfo;
-  try {
-    const data = await getSiteInfo(); // Use non-cached version
-    siteInfo = data;
-  } catch (error) {
-    logger.error('HeaderServer: Error fetching siteInfo:', error instanceof Error ? error.message : String(error));
-    siteInfo = defaultSiteInfo;
-  }
-  
   const defaultLocale = siteInfo.i18n?.default_locale || localesConfig.defaultLocale;
   const locale = initialLocale || defaultLocale;
 
-  // DEBUG: Empty menus to avoid errors
+  // Empty menus
   const menusByLocale: Record<string, MenuItem[]> = {};
 
   return (
