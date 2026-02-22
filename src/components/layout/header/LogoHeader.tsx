@@ -41,10 +41,10 @@ export default function LogoHeader({
     return () => observer.disconnect();
   }, [isHome]);
 
-  // Determine logo source
-  const logoSrc = isHome 
-    ? lightLogo 
-    : (isDark ? lightLogo : darkLogo);
+  // Determine logo based on dark mode
+  // isHome always uses lightLogo
+  // Not home: dark mode = darkLogo, light mode = lightLogo
+  const logoSrc = isHome ? lightLogo : (isDark ? darkLogo : lightLogo);
 
   return (
     <div id="logo-container" className={shrink ? 'logo-shrink' : ''}>

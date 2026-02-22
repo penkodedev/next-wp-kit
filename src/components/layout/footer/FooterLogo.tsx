@@ -30,10 +30,14 @@ export default function FooterLogo({ title, lightLogo, darkLogo }: FooterLogoPro
     return () => observer.disconnect();
   }, []);
 
+  // Determine logo based on dark mode
+  // Dark mode = dark logo, Light mode = light logo
+  const logoSrc = isDark ? (darkLogo || '/icons/logo.svg') : (lightLogo || '/icons/logo.svg');
+
   return (
     <div className="logo-footer-wrapper">
       <Image
-        src={isDark ? (lightLogo || '/icons/logo.svg') : (darkLogo || '/icons/logo.svg')}
+        src={logoSrc}
         alt={title || "Logo del sitio"}
         onError={(e) => {
           (e.target as HTMLImageElement).src = '/icons/logo.svg';
