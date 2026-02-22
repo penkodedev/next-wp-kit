@@ -200,7 +200,7 @@ export const getCachedSiteInfo = unstable_cache(
   getSiteInfo,
   ['site-info'],
   { 
-    revalidate: 3600, // Cache for 1 hour
+    revalidate: 60, // Cache for 60 seconds (dev), increase for production
     tags: ['site-info'] // Enables revalidateTag('site-info') for on-demand invalidation
   }
 );
