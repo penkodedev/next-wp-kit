@@ -92,7 +92,7 @@ export default function Header({
         />
         
         <SearchTrigger />
-        {/* <DarkModeToggle variant="icon" size={20} strokeWidth={1.4} /> */}
+        <DarkModeToggle variant="icon" size={20} strokeWidth={1.4} />
         {/* <LangSwitcher currentLocale={currentLocale} /> */}
         
       </div>
