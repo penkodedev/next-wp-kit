@@ -1,7 +1,6 @@
 // src/components/layout/header/HeaderServer.tsx
 
 import Header from "./Header";
-import { getHeaderSiteInfo } from "@/api/headerApi";
 import type { SiteInfo, MenuItem } from "@/types/wordpressTypes";
 import localesConfig from "@/i18n/locales.generated.json";
 
@@ -11,6 +10,36 @@ interface HeaderServerProps {
   initialLocale?: string;
 }
 
+// Default fallback site info when WordPress is unavailable
+const defaultSiteInfo: SiteInfo = {
+  title: "Logo del sitio",
+  description: "",
+  back_url: "",
+  front_url: "",
+  light_logo: "/images/framework-logo-white.png",
+  dark_logo: "/images/framework-logo.png",
+  favicons: {
+    icon_32: "",
+    icon_180: "",
+    icon_192: "",
+    icon_512: "",
+  },
+  date_format: "",
+  language: "",
+  social: [],
+  contact: [],
+  analytics: {
+    google_analytics_id: "",
+    facebook_pixel_id: "",
+    gtm_id: "",
+    twitter_pixel_id: "",
+  },
+  i18n: {
+    default_locale: localesConfig.defaultLocale,
+    locales: localesConfig.supportedLocales,
+  },
+};
+
 export default async function HeaderServer({
   variant = "default",
   menuVariant: menuVariantProp, // Controlled by props
@@ -19,8 +48,8 @@ export default async function HeaderServer({
   // Handle undefined menuVariant (use responsive as default)
   const menuVariant = menuVariantProp || 'responsive';
   
-  // Fetch site info using separate API to avoid circular dependency
-  const siteInfo = await getHeaderSiteInfo();
+  // Use default site info for now
+  const siteInfo = defaultSiteInfo;
   
   const defaultLocale = siteInfo.i18n?.default_locale || localesConfig.defaultLocale;
   const locale = initialLocale || defaultLocale;
@@ -33,8 +62,8 @@ export default async function HeaderServer({
       variant={variant}
       menuVariant={menuVariant}
       initialLocale={locale} 
-      siteInfo={siteInfo as unknown as SiteInfo}
-      menusByLocale={menusByLocale as unknown as Record<string, MenuItem[]>}
+      siteInfo={siteInfo}
+      menusByLocale={menusByLocale}
     />
   );
 }
