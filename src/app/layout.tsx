@@ -155,7 +155,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang={currentLocale} suppressHydrationWarning>
       <head>
-        {/* <WpStyles /> */}
+        <WpStyles />
         {/* Analytics tracking from WordPress settings */}
         {/* {siteInfo && ( */}
           {/* <Analytics */}
@@ -200,8 +200,8 @@ export default async function RootLayout({ children }: RootLayoutProps) {
               <ScrollProgress />
               <SmoothScroll>
                 {/* <ParallaxEffects /> */}
-                {/* <BodyClass> */}
-                  {/* <TooltipsProvider> */}
+                <BodyClass>
+                  <TooltipsProvider>
                     <HeaderServer siteInfo={siteInfo} />
                     {/* <Breadcrumbs /> */}
 
@@ -209,8 +209,8 @@ export default async function RootLayout({ children }: RootLayoutProps) {
 
                     {/* <Footer /> */}
                     <GlobalUI />
-                  {/* </TooltipsProvider> */}
-                {/* </BodyClass> */}
+                  </TooltipsProvider>
+                </BodyClass>
               </SmoothScroll>
             </WpPageIdProvider>
           </SWRConfig>
