@@ -17,8 +17,8 @@ const defaultSiteInfo: SiteInfo = {
   description: "",
   back_url: "",
   front_url: "",
-  light_logo: "/images/framework-logo-white.png",
-  dark_logo: "/images/framework-logo.png",
+  light_logo: "",
+  dark_logo: "",
   favicons: {
     icon_32: "",
     icon_180: "",

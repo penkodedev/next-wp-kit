@@ -38,8 +38,8 @@ export default function HeaderClient({
     <header className={`header ${variant === "home" ? "header-home" : ""}`}>
       <LogoHeader 
         title={siteInfo?.title || 'Logo'} 
-        lightLogo={siteInfo?.light_logo || '/images/framework-logo-white.png'} 
-        darkLogo={siteInfo?.dark_logo || '/framework-logo.png'} 
+        lightLogo={siteInfo?.light_logo} 
+        darkLogo={siteInfo?.dark_logo} 
       />
       <WpNavMenu 
         location="mainnav" 

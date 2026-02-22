@@ -31,8 +31,11 @@ export default function FooterLogo({ title, lightLogo, darkLogo }: FooterLogoPro
   }, []);
 
   // Determine logo based on dark mode
-  // Dark mode = dark logo, Light mode = light logo
-  const logoSrc = isDark ? (darkLogo || '/icons/logo.svg') : (lightLogo || '/icons/logo.svg');
+  // Dark mode (dark background) = lightLogo (white logo to contrast)
+  // Light mode (light background) = darkLogo (dark logo to contrast)
+  const logoSrc = isDark 
+    ? (lightLogo || '/icons/logo.svg') 
+    : (darkLogo || '/icons/logo.svg');
 
   return (
     <div className="logo-footer-wrapper">

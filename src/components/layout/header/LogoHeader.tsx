@@ -15,8 +15,8 @@ interface LogoHeaderProps {
 
 export default function LogoHeader({ 
   title, 
-  lightLogo = '/images/framework-logo-white.png', 
-  darkLogo = '/framework-logo.png', 
+  lightLogo, 
+  darkLogo, 
   isHome = false, 
   shrink = false 
 }: LogoHeaderProps) {
@@ -43,8 +43,11 @@ export default function LogoHeader({
 
   // Determine logo based on dark mode
   // isHome always uses lightLogo
-  // Not home: dark mode = darkLogo, light mode = lightLogo
-  const logoSrc = isHome ? lightLogo : (isDark ? darkLogo : lightLogo);
+  // Dark mode (dark background) = lightLogo (white logo to contrast)
+  // Light mode (light background) = darkLogo (dark logo to contrast)
+  const logoSrc = isHome 
+    ? (lightLogo || '') 
+    : (isDark ? (lightLogo || '') : (darkLogo || ''));
 
   return (
     <div id="logo-container" className={shrink ? 'logo-shrink' : ''}>

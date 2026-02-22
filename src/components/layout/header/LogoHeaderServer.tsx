@@ -14,8 +14,8 @@ export default async function LogoHeaderServer({ siteInfo }: LogoHeaderServerPro
     description: "",
     back_url: "",
     front_url: "",
-    light_logo: "/images/framework-logo-white.png",
-    dark_logo: "/framework-logo.png",
+    light_logo: "",
+    dark_logo: "",
     favicons: {
       icon_32: '',
       icon_180: '',
@@ -45,8 +45,8 @@ export default async function LogoHeaderServer({ siteInfo }: LogoHeaderServerPro
   return (
     <LogoHeader 
       title={siteInfo?.title || 'Logo'} 
-      lightLogo={siteInfo?.light_logo || '/images/framework-logo-white.png'} 
-      darkLogo={siteInfo?.dark_logo || '/framework-logo.png'} 
+      lightLogo={siteInfo?.light_logo} 
+      darkLogo={siteInfo?.dark_logo} 
     />
   );
 }

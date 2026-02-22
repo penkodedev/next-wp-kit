@@ -222,8 +222,8 @@ export async function safeGetSiteInfo(lang?: string): Promise<SiteInfo> {
       description: 'Reaxy is a Next Kit with Headless WordPress theme for Next.js/React',
       back_url: process.env.NEXT_PUBLIC_WORDPRESS_API_URL || '',
       front_url: process.env.NEXT_PUBLIC_BASE_URL || '',
-      light_logo: `${process.env.NEXT_PUBLIC_BASE_URL || ''}/images/framework-logo-white.png`,
-      dark_logo: `${process.env.NEXT_PUBLIC_BASE_URL || ''}/framework-logo.png`,
+      light_logo: '',
+      dark_logo: '',
       favicons: {
         icon_32: '',
         icon_180: '',

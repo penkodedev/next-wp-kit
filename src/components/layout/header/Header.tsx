@@ -76,8 +76,8 @@ export default function Header({
       <header className={headerClasses}>   
       <LogoHeader 
         title={siteInfo?.title || 'Logo'} 
-        lightLogo={siteInfo?.light_logo || '/images/framework-logo-white.png'} 
-        darkLogo={siteInfo?.dark_logo || '/framework-logo.png'} 
+        lightLogo={siteInfo?.light_logo} 
+        darkLogo={siteInfo?.dark_logo} 
         isHome={isHome} 
         shrink={shouldShrink} 
       />
