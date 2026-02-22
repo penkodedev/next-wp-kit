@@ -1,5 +1,10 @@
 // src/api/headerApi.ts
 // Separate API file for Header to avoid circular dependencies
+// No imports from the main app to avoid circular dependencies
+
+const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
+const DEFAULT_LOCALE = 'es';
+const SUPPORTED_LOCALES = ['es', 'en', 'pt-br'];
 
 interface SiteInfo {
   title: string;
@@ -16,8 +21,8 @@ interface SiteInfo {
   };
   date_format: string;
   language: string;
-  social: any[];
-  contact: any[];
+  social: unknown[];
+  contact: unknown[];
   analytics: {
     google_analytics_id: string;
     facebook_pixel_id: string;
@@ -29,10 +34,6 @@ interface SiteInfo {
     locales: string[];
   };
 }
-
-const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
-const DEFAULT_LOCALE = 'es';
-const SUPPORTED_LOCALES = ['es', 'en', 'pt-br'];
 
 export async function getHeaderSiteInfo(): Promise<SiteInfo> {
   if (!API_URL) {

@@ -33,8 +33,8 @@ export default async function HeaderServer({
       variant={variant}
       menuVariant={menuVariant}
       initialLocale={locale} 
-      siteInfo={siteInfo as SiteInfo}
-      menusByLocale={menusByLocale}
+      siteInfo={siteInfo as unknown as SiteInfo}
+      menusByLocale={menusByLocale as unknown as Record<string, MenuItem[]>}
     />
   );
 }
