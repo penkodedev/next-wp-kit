@@ -204,11 +204,11 @@ export default async function RootLayout({ children }: RootLayoutProps) {
                 <BodyClass>
                   <TooltipsProvider>
                     <HeaderServer siteInfo={siteInfo} />
-                    <Breadcrumbs />
+                    {/* <Breadcrumbs /> */}
 
                       <main>{children}</main>
 
-                    <Footer />
+                    {/* <Footer /> */}
                     <GlobalUI />
                   </TooltipsProvider>
                 </BodyClass>
