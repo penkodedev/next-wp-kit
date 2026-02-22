@@ -1,7 +1,7 @@
 // src/components/layout/header/HeaderServer.tsx
 
 import Header from "./Header";
-import { safeGetSiteInfo, fetchAPI } from "@/api/wordpressApi";
+import { getSiteInfo, fetchAPI } from "@/api/wordpressApi";
 import type { SiteInfo, MenuItem } from "@/types/wordpressTypes";
 import { logger } from "@/utils/wordpress/logger";
 import localesConfig from "@/i18n/locales.generated.json";
@@ -50,10 +50,11 @@ export default async function HeaderServer({
   // Handle undefined menuVariant (use responsive as default)
   const menuVariant = menuVariantProp || 'responsive';
   
-  // DEBUG: Try to fetch site info
+  // DEBUG: Try to fetch site info WITHOUT using cache
   let siteInfo: SiteInfo;
   try {
-    siteInfo = await safeGetSiteInfo();
+    const data = await getSiteInfo(); // Use non-cached version
+    siteInfo = data;
   } catch (error) {
     logger.error('HeaderServer: Error fetching siteInfo:', error instanceof Error ? error.message : String(error));
     siteInfo = defaultSiteInfo;
