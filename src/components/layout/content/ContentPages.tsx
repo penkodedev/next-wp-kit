@@ -19,7 +19,6 @@ export default function ContentPages({ page }: ContentPagesProps) {
     <>
       <WpPageIdSetter pageId={page.id} />
       <div className="page-one-col">
-        <main>
           <section className="page-title">
             <h1>{page.title.rendered}</h1>
           </section>
@@ -32,7 +31,6 @@ export default function ContentPages({ page }: ContentPagesProps) {
               />
             </article>
           </ScrollReveal>
-        </main>
       </div>
     </>
   );
