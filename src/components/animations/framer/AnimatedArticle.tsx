@@ -12,7 +12,7 @@ type AnimatedArticleProps = {
 
 export default function AnimatedArticle({
   children,
-  className = "article-content",
+  className = "page-content",
   as: Tag = 'article',
   amount = 0,
   ...motionProps

@@ -44,8 +44,8 @@ export default function ContentSingle({
   return (
     <div className="page-sidebar">
       <WpPageId id={post.id} />
-      <div className="main-content">
-        <article className="entry-content">
+      <div className="article-sidebar">
+        <article className="page-content">
           <Link href={backToArchiveUrl} className="back-to-archive-link">
             <Icons.ArrowLeft size={26} strokeWidth={1} className="arrow-left" />
             {archiveName}
@@ -66,9 +66,8 @@ export default function ContentSingle({
               />
             </div>
           </section>
-
           <Breadcrumbs />
-
+          
 
           {/* AUDIO PLAYER GOOGLE TEXT TO SPEECH (config. CPTs*/}
           {['posts', 'recursos', 'noticias'].includes(postType) && post.audio_url && ( 

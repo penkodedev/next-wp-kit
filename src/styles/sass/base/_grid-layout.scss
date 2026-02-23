@@ -50,7 +50,7 @@
   margin: 0 auto;
   
   // Target main-content wrapper and sidebar
-  .main-content,
+  .article-sidebar,
   > aside {
     min-width: 0; // Previene overflow en grid items
   }

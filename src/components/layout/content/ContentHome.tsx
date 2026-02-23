@@ -25,11 +25,11 @@ export default function ContentHome({ page, lang }: ContentHomeProps) {
         <AnimatedArticle>
           <ScrollReveal>
             
-            <article>
+            
            
               <div dangerouslySetInnerHTML={{ __html: processContent(page.content.rendered) }} />
               
-          </article>
+          
           
         </ScrollReveal>
         </AnimatedArticle>

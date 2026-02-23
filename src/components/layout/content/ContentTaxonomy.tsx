@@ -46,7 +46,7 @@ export default function ContentTaxonomy({
   }
 
   return (
-    <div className="page-fullwidth">
+    <div className="page-one-col">
       <section className="page-title">
         <h1>{displayTitle}</h1>
         <div className="columns-wrap">
@@ -58,13 +58,9 @@ export default function ContentTaxonomy({
           )}
         </div>
       </section>
-
-      <article className="page-content">
-        <Breadcrumbs />
-      </article>
-
+      <Breadcrumbs />
       {posts && posts.length > 0 ? (
-        <div className={`post-grid cols-3`}>
+        <div className={`post-grid cols-3 taxonomy`}>
           {posts.map((post) => (
             <PostCard
               key={post.id}
@@ -74,11 +70,11 @@ export default function ContentTaxonomy({
           ))}
         </div>
       ) : (
-        <article>
+        <article className="page-content">
           <p>No se encontró contenido en esta sección.</p>
         </article>
       )}
-  <SearchForm />
+      <SearchForm />
     </div>
   );
 }

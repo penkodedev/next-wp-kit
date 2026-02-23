@@ -234,7 +234,8 @@
 
         // ************** MAIN TEXT *************//
         article p,
-        .entry-content p {
+        .entry-content p,
+        .page-content p {
             font-size: 1rem !important;
             line-height: 1.55rem !important;
         }

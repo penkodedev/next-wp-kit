@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useWpPageId } from "@/utils/wordpress/WpPageIdContext";
 import { CPT_SLUG_MAP } from "@/utils/config/cptConfig";
 import localesConfig from "@/i18n/locales.generated.json";
+import { fetchAPI } from "@/api/wordpressApi";
 
 interface BodyClassProps {
 	children: React.ReactNode;
@@ -13,6 +14,24 @@ interface BodyClassProps {
 const BodyClass = ({ children }: BodyClassProps) => {
 	const pathname = usePathname();
 	const { pageId } = useWpPageId();
+
+	// Fetch taxonomías dinámicamente desde WordPress
+	const [taxonomies, setTaxonomies] = useState<string[]>([]);
+
+	useEffect(() => {
+		const fetchTaxonomies = async () => {
+			try {
+				const data = await fetchAPI('/wp/v2/taxonomies');
+				if (data) {
+					setTaxonomies(Object.keys(data));
+				}
+			} catch (e) {
+				// Fallback a lista vacía si falla
+				setTaxonomies([]);
+			}
+		};
+		fetchTaxonomies();
+	}, []);
 
 	// Generate body classes dynamically from pathname
 	const bodyClasses = useMemo(() => {
@@ -23,8 +42,8 @@ const BodyClass = ({ children }: BodyClassProps) => {
 
 		let classes: string[] = [];
 
-		// Detect taxonomies dynamically (could be improved to fetch from API if needed)
-		const validTaxonomies = ['categoria', 'nivel_educativo', 'tags']; // TODO: make dynamic if needed
+		// Detect taxonomies dynamically desde la API
+		const validTaxonomies = taxonomies;
 
 		// Special routes (search, sitemap, etc.)
 		const specialRoutes = ['search', 'sitemap', 'blog', 'feed.xml'];
@@ -46,7 +65,7 @@ const BodyClass = ({ children }: BodyClassProps) => {
 			}
 		} else if (slugWithoutLocale.length === 1 && validTaxonomies.includes(slugWithoutLocale[0])) {
 			// Taxonomy archive
-			classes = [`taxonomy`, `taxonomy-${slugWithoutLocale[0]}`];
+			classes = [`taxonomy`, `taxonomy-${slugWithoutLocale[0]}`, `page-taxonomy`];
 		} else if (isSpecialRoute) {
 			// Special routes: /search, /sitemap, etc.
 			const routeName = slugWithoutLocale[0];
@@ -61,7 +80,7 @@ const BodyClass = ({ children }: BodyClassProps) => {
 		}
 
 		return classes.join(' ');
-	}, [pathname, pageId]);
+	}, [pathname, pageId, taxonomies]);
 
 	useEffect(() => {
 		// Get existing classes that we don't manage (like 'modal-controller-ready')

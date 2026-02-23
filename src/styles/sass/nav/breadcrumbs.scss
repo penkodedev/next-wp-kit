@@ -1,5 +1,8 @@
-ul.breadcrumb {
-  font-size: 0.93em;
+@use 'abstracts' as *;
+
+nav ul.breadcrumb {
+  font-family: $menu-font;
+  font-size: 0.9em;
   color: #777777;
   list-style: none;
   gap: 1rem 0;

@@ -24,15 +24,18 @@ export default function ContentPages({ page, children }: ContentPagesProps) {
           <section className="page-title">
             <h1>{page.title.rendered}</h1>
           </section>
-          <ScrollReveal>
-            <article className="page-content">
-              <Breadcrumbs />
+        
+        <Breadcrumbs />
+        <ScrollReveal>
+
+            <article className="page-content"> 
               <ContactForm7Content
                 content={page.content.rendered}
                 hasForm={page.content.rendered.includes('wpcf7-form')}
               />
               {children}
-            </article>
+          </article>
+          
           </ScrollReveal>
       </div>
     </>

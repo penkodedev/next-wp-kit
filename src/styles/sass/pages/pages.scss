@@ -3,8 +3,8 @@
 // These are all the WordPress normal pages like About, Contact, etc.
 // -----------------------------------------------------------------------
 
-main { // Global styles for all pages main bottom margin
-  margin-bottom: 66px;
+.page-content { // Global styles for all pages main bottom margin
+  padding-bottom: 66px;
 }
 
 .page article {
