@@ -49,20 +49,17 @@
   padding: 0 2rem;
   margin: 0 auto;
   
-
-  main {
+  // Target main-content wrapper and sidebar
+  .main-content,
+  > aside {
     min-width: 0; // Previene overflow en grid items
-  }
-
-  aside {
-    min-width: 0;
   }
 
   // Responsive settings
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
     
-    aside {
+    > aside {
       order: 2;
     }
   }

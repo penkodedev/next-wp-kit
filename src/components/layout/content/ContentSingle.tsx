@@ -44,7 +44,7 @@ export default function ContentSingle({
   return (
     <div className="page-sidebar">
       <WpPageId id={post.id} />
-      <main>
+      <div className="main-content">
         <article className="entry-content">
           <Link href={backToArchiveUrl} className="back-to-archive-link">
             <Icons.ArrowLeft size={26} strokeWidth={1} className="arrow-left" />
@@ -108,7 +108,7 @@ export default function ContentSingle({
           basePath={backToArchiveUrl}
           locale={locale}
         />
-      </main>
+      </div>
       <Sidebar />
     </div>
   );
