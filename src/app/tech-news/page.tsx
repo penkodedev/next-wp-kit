@@ -1,4 +1,5 @@
 // src/app/tech-news/page.tsx
+
 import { redirect } from 'next/navigation';
 import localesConfig from '@/i18n/locales.generated.json';
 

@@ -1,4 +1,5 @@
 // src/app/[locale]/tech-news/page.tsx
+
 import { getGNews } from '@/services/gnews';
 import { getPage } from '@/api/wordpressApi';
 import localesConfig from '@/i18n/locales.generated.json';
@@ -41,18 +42,16 @@ export default async function TechNewsPage({ params }: PageProps) {
   const wpPage = await getPage('tech-news', locale);
 
   return (
-    <div className="page-fullwidth">
-      {/* WordPress Page Content with full structure */}
+    <>
       {wpPage && (
-        <ContentPages page={wpPage} />
+        <ContentPages page={wpPage}>
+          {news.length > 0 ? (
+            <GridGNews news={news} cols={3} />
+          ) : (
+            <p>No news available at the moment.</p>
+          )}
+        </ContentPages>
       )}
-
-      {/* Tech News Grid - without duplicate article/title */}
-      {news.length > 0 ? (
-        <GridGNews news={news} cols={4} />
-      ) : (
-        <p>No news available at the moment.</p>
-      )}
-    </div>
+    </>
   );
 }
