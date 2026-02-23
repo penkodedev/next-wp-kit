@@ -13,7 +13,6 @@ import "@/styles/sass/main.scss";
 import WpStyles from "@/components/wordpress/WpStyles";
 
 import HeaderServer from '@/components/layout/header/HeaderServer';
-import type { SiteInfo } from '@/types/wordpressTypes';
 import Footer from "@/components/layout/footer/Footer";
 
 import CodeBlockCopier from "@/components/ui/CodeBlockCopier";
@@ -157,14 +156,14 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       <head>
         <WpStyles />
         {/* Analytics tracking from WordPress settings */}
-        {/* {siteInfo && ( */}
-          {/* <Analytics */}
-            {/* gtmId={siteInfo.analytics.gtm_id} */}
-            {/* ga4Id={siteInfo.analytics.google_analytics_id} */}
-            {/* fbPixelId={siteInfo.analytics.facebook_pixel_id} */}
-            {/* twitterPixelId={siteInfo.analytics.twitter_pixel_id} */}
-          {/* /> */}
-        {/* )} */}
+        {siteInfo && (
+          <Analytics
+            gtmId={siteInfo.analytics.gtm_id}
+            ga4Id={siteInfo.analytics.google_analytics_id}
+            fbPixelId={siteInfo.analytics.facebook_pixel_id}
+            twitterPixelId={siteInfo.analytics.twitter_pixel_id}
+          />
+        )}
         {/* Language sync script in head for immediate execution */}
         <script
           dangerouslySetInnerHTML={{
@@ -199,7 +198,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             <WpPageIdProvider>
               <ScrollProgress />
               <SmoothScroll>
-                {/* <ParallaxEffects /> */}
+                <ParallaxEffects />
                 <BodyClass>
                   <TooltipsProvider>
                     <HeaderServer siteInfo={siteInfo} />
@@ -214,7 +213,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             </WpPageIdProvider>
           </SWRConfig>
         </NextIntlClientProvider>
-        {/* <CodeBlockCopier /> */}
+        <CodeBlockCopier />
       </body>
     </html>
   );
