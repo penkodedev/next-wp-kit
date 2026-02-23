@@ -38,7 +38,7 @@ const ScrollToTop = () => {
     <a
       onClick={handleClick}
       className={`scroll-top-btn ${visible ? 'visible' : ''}`}
-      aria-label="Volver arriba"
+      aria-label="Back to top"
     >
       <Icons.ArrowUp size={22} strokeWidth={1.5} />
     </a>

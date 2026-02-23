@@ -232,6 +232,13 @@
     //----------------------------------------------------
     @media screen and (max-width: 400px) {
 
+        // ************** MAIN TEXT *************//
+        article p,
+        .entry-content p {
+            font-size: 1rem !important;
+            line-height: 1.55rem !important;
+        }
+        
         // ************** COOKIES CONSENT *************//
         p.cookie-consent-legal {
             font-size: 0.7em !important;
@@ -278,13 +285,18 @@
             }
         }
 
-        // ************** LAYOUT *************//
+        // ************** FOOTER *************//
 
-        p,
-        article p {
-            font-size: 1em;
-            line-height: 1.55em;
+        footer .copyright {
+            align-items: left;
+            text-align: left;
+
+            .footer-copy {
+                max-width: 80%
+            }
         }
+        
+        // ************** LAYOUT *************//
 
         .post-grid {
             margin: 20px 0;

@@ -38,10 +38,7 @@ article img {
 }
 
 //************ Icons for external links (target="_blank" or external domains)
-article p a[target="_blank"]:not(.no-icon)::after,
-article ul a[target="_blank"]:not(.no-icon)::after,
-main p a[target="_blank"]:not(.no-icon)::after,
-.page-content a[target="_blank"]:not(.no-icon)::after {
+main article p a[target="_blank"]:not(.no-icon)::after {
     content: "";
     display: inline-block;
     width: 13px;

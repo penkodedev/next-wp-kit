@@ -1,31 +1,31 @@
-.scroll-top-btn,
-.whatsapp-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  bottom: 165px;
-  right: 30px;
-  padding: 0;
-  font-size: 1.25rem;
-  background-color: #292929;
-  color: rgb(255, 255, 255);
-  border: 1px solid var(--gray);
-  border-radius: 52px;
-  height: 44px;
-  width: 44px;
-  cursor: pointer;
-  opacity: 0;
-  transform: translateX(100px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+// .scroll-top-btn,
+// .whatsapp-button {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   position: fixed;
+//   bottom: 165px;
+//   right: 30px;
+//   padding: 0;
+//   font-size: 1.25rem;
+//   background-color: #292929;
+//   color: rgb(255, 255, 255);
+//   border: 1px solid var(--gray);
+//   border-radius: 52px;
+//   height: 44px;
+//   width: 44px;
+//   cursor: pointer;
+//   opacity: 0;
+//   transform: translateX(100px);
+//   transition: opacity 0.5s ease, transform 0.5s ease;
 
-  &.visible {
-    opacity: 1;
-    transform: translateX(0);
-  }
+//   &.visible {
+//     opacity: 1;
+//     transform: translateX(0);
+//   }
 
-  &:hover {
-    background-color: #fff;
-    color: #444;
-  }
-}
+//   &:hover {
+//     background-color: #fff;
+//     color: #444;
+//   }
+// }

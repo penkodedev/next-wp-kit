@@ -3,6 +3,9 @@
 // These are all the WordPress normal pages like About, Contact, etc.
 // -----------------------------------------------------------------------
 
+main { // Global styles for all pages main bottom margin
+  margin-bottom: 66px;
+}
 
 .page article {
   min-height: 500px;
@@ -21,6 +24,7 @@
   border-radius: 10px;
   margin: 40px 0 20px 0;
   line-height: 2.7em;
+  width: 100%;
 
   h1 {
     margin: 0;

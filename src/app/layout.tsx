@@ -119,14 +119,17 @@ type RootLayoutProps = {
 function GlobalUI() {
   return (
     <>
-      <ScrollToTop />
       <CookieConsent />
       <CookieManager />
       <ModalController />
       <LightboxController />
       <AdvertisingPopup />
-      <ChatBot />
-      <ChatWhatsApp />
+
+      <div className="fixed-actions">
+        <ScrollToTop />
+        <ChatBot />
+        <ChatWhatsApp />
+      </div>
     </>
   );
 }
