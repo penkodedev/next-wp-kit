@@ -62,8 +62,7 @@ export default function SearchPage() {
 **********************************************/
   return (
     <div className="page-one-col">
-      <main>
-        <article className="page-content search-page-content">
+      <article className="page-content search-page-content">
           <header className="page-header">
             <h1>Resultados de búsqueda para: <span className="bg-query">{query}</span></h1>
           </header>
@@ -97,7 +96,6 @@ export default function SearchPage() {
             )}
           </div>
         </article>
-      </main>
     </div>
   );
 }

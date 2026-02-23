@@ -17,8 +17,7 @@ export default function NotFound() {
 
   return (
     <div className="page-centered">
-      <main>
-        <article className="page-content">
+      <article className="page-content">
           <header className="page-header">
             <h1>404 - Página No Encontrada</h1>
           </header>
@@ -31,7 +30,6 @@ export default function NotFound() {
             Volver a la página de inicio
           </Link>
         </article>
-      </main>
     </div>
   );
 }
