@@ -364,7 +364,7 @@ export default async function CatchAllPage({ params }: PageProps) {
       notFound();
     }
 
-    return <ContentHome page={homePage} />;
+    return <ContentHome page={homePage} lang={lang} />;
   }
 
   // ROUTE 4: Static Pages

@@ -306,7 +306,6 @@ export async function getHeroData(
   return data;
 }
 
-
 /*--------------------------------------------------------------------------------------
     🍔 GET ALL POSTS
     Route: /wp/v2/posts?per_page=100&_embed
@@ -333,6 +332,7 @@ export const getCachedAllPosts = unstable_cache(
   ['all-posts'],
   { revalidate: 300 } // Cache for 5 minutes
 );
+
 
 /*--------------------------------------------------------------------------------------
     🍔 GET ALL PAGES

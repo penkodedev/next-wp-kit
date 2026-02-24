@@ -63,5 +63,5 @@ export default async function Home() {
     notFound();
   }
 
-  return <ContentHome page={homePage} />;
+  return <ContentHome page={homePage} lang={locale} />;
 }
