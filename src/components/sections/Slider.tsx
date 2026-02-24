@@ -22,6 +22,7 @@ interface SliderProps {
   postType?: string;      // CPT to fetch (default: recursos)
   perPage?: number;       // Number of items (default: 6)
   customTitle?: string;   // Optional custom title (overrides i18n)
+  locale?: string;        // Current locale for i18n
 }
 
 /**
@@ -31,11 +32,14 @@ interface SliderProps {
 export default async function Slider({
   postType = 'recursos',
   perPage = 6,
-  customTitle
+  customTitle,
+  locale
 }: SliderProps) {
 
   // Get translated title using i18n
-  const t = await getTranslations('SliderTitle');
+  const t = locale 
+    ? await getTranslations({ locale, namespace: 'SliderTitle' })
+    : await getTranslations('SliderTitle');
   const title = customTitle || t(postType);
 
   // 1. Fetch content from WordPress API
@@ -65,18 +69,18 @@ export default async function Slider({
     navigation: false,
     pagination: { clickable: true },
     loop: true,
-    loopAdditionalSlides: 1,
+    loopAdditionalSlides: 3,
     allowTouchMove: true,
     autoplay: {
       delay: 0,
       disableOnInteraction: false,
     },
     breakpoints: {
-      1920: { slidesPerView: 3 },
-      1440: { slidesPerView: 2.2 },
-      1024: { slidesPerView: 1.7 },
-      900: { slidesPerView: 1.2 },
-      768: { slidesPerView: 1.2 },
+      1920: { slidesPerView: 3.3 },
+      1440: { slidesPerView: 2.6 },
+      1024: { slidesPerView: 2.0 },
+      900: { slidesPerView: 1.7 },
+      768: { slidesPerView: 1.5 },
       640: { slidesPerView: 1 },
       320: { slidesPerView: 1 },
     },

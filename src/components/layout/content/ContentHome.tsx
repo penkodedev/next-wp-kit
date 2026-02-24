@@ -35,7 +35,7 @@ export default function ContentHome({ page, lang }: ContentHomeProps) {
         </AnimatedArticle>
       </div>
       <section className="slider-container">
-        <Slider postType="recursos" />
+        <Slider postType="recursos" locale={lang} />
       </section>
     </>
   );
