@@ -67,22 +67,16 @@ export default function Hero({
   const heroSlides = slides || (title || subtitle || buttonText ? [{ title, subtitle, buttonText, buttonLink }] : []);
 
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isClient, setIsClient] = useState(false);
 
-  // Detectar cuando estamos en el cliente
+  // Auto-play functionality
   useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  // Auto-play functionality - solo en cliente para evitar hydration mismatch
-  useEffect(() => {
-    if (isClient && autoPlay && heroSlides.length > 1) {
+    if (autoPlay && heroSlides.length > 1) {
       const interval = setInterval(() => {
         setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
       }, autoPlayInterval);
       return () => clearInterval(interval);
     }
-  }, [isClient, autoPlay, autoPlayInterval, heroSlides.length]);
+  }, [autoPlay, autoPlayInterval, heroSlides.length]);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
@@ -100,11 +94,17 @@ export default function Hero({
 
   const currentSlideData = heroSlides[currentSlide];
   
-  // Helper para decodificar HTML entities (WordPress escapa el HTML en JSON)
-  const decodeHTML = (html: string) => {
-    const textarea = document.createElement('textarea');
-    textarea.innerHTML = html;
-    return textarea.value;
+  // Helper para decodificar HTML entities (funciona en SSR)
+  const decodeHTML = (html: string): string => {
+    const entities: Record<string, string> = {
+      '&amp;': '&',
+      '&lt;': '<',
+      '&gt;': '>',
+      '&quot;': '"',
+      '&#39;': "'",
+      '&nbsp;': ' ',
+    };
+    return html.replace(/&[^;]+;/g, (entity) => entities[entity] || entity);
   };
   
   // Normalize WordPress snake_case to camelCase for easier use
@@ -216,7 +216,7 @@ export default function Hero({
                   {heroSlides[currentSlide].title}
                 </motion.h1>
               )}
-              {heroSlides[currentSlide]?.subtitle && isClient && (
+              {heroSlides[currentSlide]?.subtitle && (
                 <motion.div 
                   variants={itemVariants}
                   dangerouslySetInnerHTML={{ 
@@ -243,20 +243,20 @@ export default function Hero({
       {/* Controles de navegación si hay múltiples slides */}
       {heroSlides.length > 1 && (
         <>
-          <a
+          <button
             onClick={prevSlide}
             className="hero-nav hero-nav-prev"
             aria-label="Slide anterior"
           >
             <Icons.ChevronLeft size={18} />
-          </a>
-          <a
+          </button>
+          <button
             onClick={nextSlide}
             className="hero-nav hero-nav-next"
             aria-label="Slide siguiente"
           >
             <Icons.ChevronRight size={18} />
-          </a>
+          </button>
         </>
       )}
 
