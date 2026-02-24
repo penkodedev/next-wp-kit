@@ -2,30 +2,69 @@
 @use 'var-layout' as *;
 @use 'var-typography' as *;
 
+
+:root {
+  --primary: #353535;
+  --primary-hover: #eee6e6;
+  --black: #000;
+  --gray: #5E5C5C;
+  --gray-light: #e7e7e7;
+  --radius: 5px;
+  --radius-large: 40px;
+}
+
+
 @mixin button-base {
-    font-family: $text-font;
-    background: $button-bg-color;
-    color: $black;
-    margin: 20px 0;
-    border: 1px solid $black;
-    text-decoration: none;
-    text-transform: uppercase;
-    text-align: center;
-    //box-shadow: 0 .19em rgba(0, 0, 0, .2);
-    cursor: pointer;
-    
-    background-size: 210% 100%;
-    background-position: 99% center;
-    background-image: linear-gradient(100deg, white 50%, $button-bg-color 50%);
+  //display: flex !important; // IMPORTANT to override WP block styles
+  font-family: $text-font, sans-serif;
+  font-size: 1em;
+  text-decoration: none;
+  text-align: center;
+  color: #000;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: .88rem 2.6rem;
+  padding-block: 0 !important;
+  padding-inline: 0 !important;
+  margin: 10px 0 10px 0;
+  background-color: white;
+  border: 1px solid #bdbdbd;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  //@include icon-after(arrow-right, 1em);
+  
 
+  &:hover {
+    background-color: var(--primary-hover);
+    color: #000;
+    transform: translateY(-2px);
+  }
 
-    &:hover {
-        background: $button-bg-color-hover;
-        color: $button-link-color-hover;
-        //box-shadow: 0 .19em rgba(0, 0, 0, .5);
+  &:active {
+    transform: scale(0.98);
+  }
 
+//   // Iconos con Lucide system
+//   &.button-with-icon {
+//     @include icon-after(arrow-right, 1em);
+//   }
 
-    }
+//   &.button-check {
+//     @include icon-after(check, 1em);
+//   }
+
+  // Fallback para iconos existentes
+  svg {
+    transition: transform 0.3s ease;
+  }
+
+  &:hover svg {
+    transform: translateX(4px);
+  }
 }
 
 @mixin button-little {

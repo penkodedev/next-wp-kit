@@ -34,7 +34,9 @@ button,
 a.button,
 .wp-block-button__link,
 input[type="submit"],
-input.wpcf7-submit
+input[type="submit"].wpcf7-form-control,
+input.wpcf7-form-control.wpcf7-submit,
+input.wpcf7-form-control.wpcf7-submit.has-spinner
 {
   //display: flex !important; // IMPORTANT to override WP block styles
   font-family: $text-font, sans-serif;
@@ -85,11 +87,6 @@ input.wpcf7-submit
     transform: translateX(4px);
   }
 }
-
-// .page-ui-components a.wp-block-button__link {
-//   @include icon-after(arrow-right, 1em);
-// }
-
 
 
 //************** Button Copy Code Block *************//

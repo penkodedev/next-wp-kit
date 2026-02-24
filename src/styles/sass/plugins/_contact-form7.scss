@@ -38,3 +38,34 @@ span.wpcf7-not-valid-tip {
 form.wpcf7-form textarea {
   max-height: 180px;
 }
+
+// Botón submit de CF7 - estilos específicos
+.wpcf7-form-control.wpcf7-submit {
+  font-family: $text-font, sans-serif;
+  font-size: 1em;
+  text-decoration: none;
+  text-align: center;
+  color: #000 !important;
+  display: inline-flex !important;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: .88rem 2.6rem !important;
+  margin: 10px 0 10px 0;
+  background-color: white !important;
+  border: 1px solid #bdbdbd !important;
+  border-radius: 50px !important;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  &:hover {
+    background-color: #eee6e6 !important;
+    color: #000 !important;
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
