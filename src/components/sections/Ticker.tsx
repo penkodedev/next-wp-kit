@@ -52,7 +52,7 @@ export default function Ticker({ pageIdParam }: TickerProps) {
       isMounted = false;
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     if (!settings) return;

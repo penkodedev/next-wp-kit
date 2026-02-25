@@ -140,12 +140,19 @@
     }
 
     // =================================================================
-    //                  FORMS SEARCH & INPUTS
+    //                  FORMS SEARCH, INPUTS $ BUTTONS
     // =================================================================
     #search-form-input {
         background-color: #1f1f1f;
         border: 1px solid #333;
         color: #ffffff;
+    }
+
+    button,
+    .button,
+    a.wp-block-button {
+        background-color: transparent;
+        border-width: 2px;
     }
 
 
@@ -170,7 +177,7 @@
     //                  WORDPRESS BLOCKS
     // =================================================================
 
-    .details.wp-block-details {
+    details.wp-block-details {
         background: #252525;
         border: 1px solid #3f3f3f;
     }
@@ -193,5 +200,15 @@
 
     .footer-menu-nav ul a {
         color: #7d7d7d;
+    }
+
+    footer .copyright {
+        align-items: flex-start;
+
+        .footer-copy {
+            text-align: left;
+            max-width: 310px;
+            font-size: 0.68em;
+        }
     }
 }

@@ -213,6 +213,13 @@
         margin: 0;
     }
 
+    //*************** WP BLOCKS ***********//
+    .wp-block-buttons .is-horizontal {
+        display: flex;
+        flex-direction: column;
+
+    }
+
     // ************** CHATBOT *************//
     // Chat window centered both horizontally and vertically
     .chat-bot-window {
@@ -239,7 +246,7 @@
             font-size: 1rem !important;
             line-height: 1.55rem !important;
         }
-        
+
         // ************** COOKIES CONSENT *************//
         p.cookie-consent-legal {
             font-size: 0.7em !important;
@@ -296,7 +303,7 @@
                 max-width: 80%
             }
         }
-        
+
         // ************** LAYOUT *************//
 
         .post-grid {
@@ -313,6 +320,14 @@
         }
 
         .swiper .post-card {
-    width:320px;
-    } }
+            width: 320px;
+        }
+
+        // ************** WP BLOCKS *************//
+
+        details.wp-block-details {
+            margin: 10px 14px;
+        }
+
+    }
 }
