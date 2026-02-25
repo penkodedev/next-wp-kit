@@ -295,39 +295,40 @@
 
         // ************** FOOTER *************//
         footer .copyright {
-        align-items: flex-start;
+            align-items: flex-start;
 
-        .footer-copy {
-            text-align: left;
-            max-width: 310px;
-            font-size: 0.68em;
+            .footer-copy {
+                text-align: left;
+                max-width: 310px;
+                font-size: 0.68em;
+            }
+
+
+            // ************** LAYOUT *************//
+
+            .post-grid {
+                margin: 20px 0;
+            }
+
+            .post-card {
+                padding: 0;
+                border-radius: 8px;
+            }
+
+            .post-card-content {
+                padding: 18px 10px 8px 10px;
+            }
+
+            .swiper .post-card {
+                width: 320px;
+            }
+
+            // ************** WP BLOCKS *************//
+
+            details.wp-block-details {
+                margin: 10px 14px;
+            }
+
         }
-        
-
-        // ************** LAYOUT *************//
-
-        .post-grid {
-            margin: 20px 0;
-        }
-
-        .post-card {
-            padding: 0;
-            border-radius: 8px;
-        }
-
-        .post-card-content {
-            padding: 18px 10px 8px 10px;
-        }
-
-        .swiper .post-card {
-            width: 320px;
-        }
-
-        // ************** WP BLOCKS *************//
-
-        details.wp-block-details {
-            margin: 10px 14px;
-        }
-
     }
 }
