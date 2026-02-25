@@ -296,11 +296,12 @@
         // ************** FOOTER *************//
         footer .copyright {
             align-items: flex-start;
+            max-width: 240px;
+            margin: 0 auto 0 10px;
 
-            .footer-copy {
+            p .footer-copy {
                 text-align: left;
-                max-width: 310px;
-                font-size: 0.68em;
+                font-size: 0.7em;
             }
 
 
