@@ -294,7 +294,14 @@
         }
 
         // ************** FOOTER *************//
+        footer .copyright {
+        align-items: flex-start;
 
+        .footer-copy {
+            text-align: left;
+            max-width: 310px;
+            font-size: 0.68em;
+        }
         
 
         // ************** LAYOUT *************//
