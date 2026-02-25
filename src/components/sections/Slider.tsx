@@ -62,27 +62,32 @@ export default async function Slider({
   }
 
   // 3. Define slider configuration
+  // Only enable loop if we have enough slides (more than the max slidesPerView)
+  const maxSlidesPerView = 3;
+  const shouldLoop = postsConImagen.length > maxSlidesPerView;
+  
   const sliderOptions: SwiperOptions = {
-    slidesPerView: 3.7,
+    slidesPerView: 1,
+    slidesPerGroup: 1,
     speed: 7000,
     freeMode: true,
     navigation: false,
     pagination: { clickable: true },
-    loop: true,
-    loopAdditionalSlides: 3,
+    loop: shouldLoop,
+    loopAdditionalSlides: shouldLoop ? 10 : 0,
     allowTouchMove: true,
     autoplay: {
       delay: 0,
       disableOnInteraction: false,
     },
     breakpoints: {
-      1920: { slidesPerView: 3.3 },
-      1440: { slidesPerView: 2.6 },
-      1024: { slidesPerView: 2.0 },
-      900: { slidesPerView: 1.7 },
-      768: { slidesPerView: 1.5 },
-      640: { slidesPerView: 1 },
-      320: { slidesPerView: 1 },
+      1920: { slidesPerView: 3, slidesPerGroup: 1 },
+      1440: { slidesPerView: 3, slidesPerGroup: 1 },
+      1024: { slidesPerView: 2, slidesPerGroup: 1 },
+      900: { slidesPerView: 2, slidesPerGroup: 1 },
+      768: { slidesPerView: 1.5, slidesPerGroup: 1 },
+      640: { slidesPerView: 1, slidesPerGroup: 1 },
+      320: { slidesPerView: 1, slidesPerGroup: 1 },
     },
   };
 

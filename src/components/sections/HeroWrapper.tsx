@@ -19,7 +19,6 @@ export default async function HeroWrapper({ position, lang }: HeroWrapperProps) 
   
   // If no active hero for this position, don't render anything
   if (!heroData || !heroData.active || !heroData.slides || heroData.slides.length === 0) {
-    console.log(`⚠️ No active hero found for position: ${position}`);
     // Fallback to hardcoded hero
     return <HeroConfig />;
   }

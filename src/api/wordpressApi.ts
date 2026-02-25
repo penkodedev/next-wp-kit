@@ -672,3 +672,17 @@ export async function getWpmlLanguages(): Promise<WpmlLanguages | null> {
 export async function likePost(postId: number): Promise<{ success: boolean; likes: number } | null> {
   return await fetchAPI<{ success: boolean; likes: number }>(`/custom/v1/posts/${postId}/like`, { method: 'POST' });
 }
+
+/*--------------------------------------------------------------------------------------
+    🤖 GET CHATBOT CONFIG
+    Route: /custom/v1/chatbot
+    e.g. /custom/v1/chatbot?lang=en
+--------------------------------------------------------------------------------------*/
+/**
+ * Fetches ChatBot configuration from WordPress.
+ * @param lang - Optional language code for WPML translation (e.g. 'en', 'es', 'pt-br')
+ */
+export async function getChatBotConfig(lang?: string): Promise<any> {
+  const endpoint = lang ? `/custom/v1/chatbot?lang=${lang}` : '/custom/v1/chatbot';
+  return await fetchAPI<any>(endpoint);
+}

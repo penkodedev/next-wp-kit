@@ -3,6 +3,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bot, X, Send, Loader2 } from 'lucide-react';
+import { getChatBotConfig } from '@/api/wordpressApi';
+import { usePathname } from 'next/navigation';
+import localesConfig from '@/i18n/locales.generated.json';
 
 // Types
 interface ChatBotConfig {
@@ -133,19 +136,16 @@ export default function ChatBot() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+  
+  // Get current locale from URL pathname
+  const currentLocale = pathname ? pathname.split('/')[1] || localesConfig.defaultLocale : localesConfig.defaultLocale;
 
   // Fetch config on mount
   useEffect(() => {
-    // Use base URL without /wp-json since we add it in the fetch
-    const wpApiUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL?.replace('/wp-json', '') || '';
-    
     async function fetchConfig() {
-      const wpApiUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL?.replace('/wp-json', '') || '';
-      
       try {
-        const res = await fetch(`${wpApiUrl}/wp-json/custom/v1/chatbot`);
-        if (!res.ok) throw new Error('Failed to fetch config');
-        const data = await res.json();
+        const data = await getChatBotConfig(currentLocale);
         setConfig(data);
         
         if (data.enabled && data.welcome) {
@@ -170,14 +170,14 @@ export default function ChatBot() {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
 
-    const wpApiUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL?.replace('/wp-json', '') || '';
     const userMessage = input.trim();
     setInput('');
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
     setIsLoading(true);
 
     try {
-      const res = await fetch(`${wpApiUrl}/wp-json/custom/v1/chatbot`, {
+      const wpApiUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL?.replace('/wp-json', '') || '';
+      const res = await fetch(`${wpApiUrl}/wp-json/custom/v1/chatbot?lang=${currentLocale}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userMessage }),
@@ -248,7 +248,7 @@ export default function ChatBot() {
                 )}
                 <div>
                   <h3 className={CLASSES.chatName}>{config.name}</h3>
-                  <p className={CLASSES.chatStatus}>En línea</p>
+                  <p className={CLASSES.chatStatus}>Status: Online</p>
                 </div>
               </div>
               <a

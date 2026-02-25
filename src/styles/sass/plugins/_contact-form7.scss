@@ -69,3 +69,10 @@ form.wpcf7-form textarea {
     transform: scale(0.98);
   }
 }
+
+
+// Fallback for INPUT SPACES bottom: CF7 se pone chulo
+span.wpcf7-form-control-wrap {
+  margin-bottom: -10px;
+}
+
