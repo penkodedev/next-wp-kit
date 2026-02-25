@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getTickerSettings, type TickerSettings } from "@/api/wordpressApi";
 import { usePathname } from "next/navigation";
+import localesConfig from "@/i18n/locales.generated.json";
 
 interface TickerProps {
   pageIdParam?: number;
@@ -41,7 +42,9 @@ export default function Ticker({ pageIdParam }: TickerProps) {
   useEffect(() => {
     let isMounted = true;
     const fetchSettings = async () => {
-      const data = await getTickerSettings();
+      // Get current locale from URL pathname
+      const currentLocale = pathname ? pathname.split('/')[1] || localesConfig.defaultLocale : localesConfig.defaultLocale;
+      const data = await getTickerSettings(currentLocale);
       if (isMounted) setSettings(data);
     };
     fetchSettings();

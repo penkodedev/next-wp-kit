@@ -591,8 +591,9 @@ export interface TickerSettings {
   message?: string;
 }
 
-export async function getTickerSettings(): Promise<TickerSettings | null> {
-  const data = await fetchAPI<TickerSettings>('/custom/v1/ticker');
+export async function getTickerSettings(lang?: string): Promise<TickerSettings | null> {
+  const endpoint = lang ? `/custom/v1/ticker?lang=${lang}` : '/custom/v1/ticker';
+  const data = await fetchAPI<TickerSettings>(endpoint);
   return data;
 }
 
@@ -602,17 +603,18 @@ let tickerCache: { data: TickerSettings | null; timestamp: number } = { data: nu
 /**
  * Get Ticker Settings with caching (5 minutes)
  * Uses in-memory cache to avoid repeated API calls
+ * @param lang - Optional language code for WPML translation
  */
-export async function getCachedTickerSettings(): Promise<TickerSettings | null> {
+export async function getCachedTickerSettings(lang?: string): Promise<TickerSettings | null> {
   const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
   
-  // Return cached data if still valid
+  // Return cached data if still valid (note: cache is per-language in practice)
   if (tickerCache.data && (Date.now() - tickerCache.timestamp < CACHE_DURATION)) {
     return tickerCache.data;
   }
   
   // Fetch fresh data
-  const data = await getTickerSettings();
+  const data = await getTickerSettings(lang);
   
   // Update cache
   tickerCache = { data, timestamp: Date.now() };
