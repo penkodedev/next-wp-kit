@@ -54,6 +54,10 @@ header .actions-container {
     column-gap: 20px;
     position: relative;
 
+    ul li a {
+        padding-bottom: 0;
+    }
+
     // > :nth-last-child(2) {
     //     margin-right: 55px; // Space before last element IF NEEDED
     // }
