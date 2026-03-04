@@ -56,6 +56,10 @@
         color: #bdbdbd;
     }
 
+    .tooltip-link svg {
+        color: #bdbdbd;
+    }
+
     // =================================================================
     //                    LAYOUT BORDERS
     // =================================================================
@@ -90,7 +94,7 @@
     // =================================================================
     header {
         background-color: transparent;
-        border-bottom: 0; 
+        border-bottom: 0;
 
         svg,
         .current-lang,
@@ -160,10 +164,13 @@
     // =================================================================
     //                  FORMS SEARCH, INPUTS $ BUTTONS
     // =================================================================
-    #search-form-input {
-        background-color: #1f1f1f;
-        border: 1px solid #333;
-        
+    .input-wrapper {
+
+        #search-form-input {
+            background-color: #1f1f1f;
+            border: 1px solid #333;
+        }
+
         label {
             color: #c9c9c9;
         }
@@ -173,9 +180,10 @@
         }
     }
 
+
     button,
     .button,
-    a.wp-block-button {
+    a.wp-block-button__link {
         background-color: transparent;
         border-width: 2px;
         color: #fff;
@@ -208,9 +216,9 @@
         border: 1px solid #3f3f3f;
     }
 
-    .details.wp-block-details summary:before {
-        filter: invert(50%) sepia(100%) saturate(0%) hue-rotate(232deg);
-    }
+    details.wp-block-details summary::before {
+    filter: invert(1);
+}
 
     // =================================================================
     //                  FOOTER
@@ -220,7 +228,7 @@
         background-color: #00000041;
         border-top: 0;
     }
-    
+
     .footer-social ul.social-links li a {
         color: #fff;
 

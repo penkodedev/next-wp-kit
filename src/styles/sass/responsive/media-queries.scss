@@ -107,6 +107,14 @@
         margin: 20px !important;
     }
 
+    // ************** WP BLOCKS *************//
+    .wp-block-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        
+    }
+
     // ************** HEADER *************//
     .header {
         height: 80px;
