@@ -52,6 +52,10 @@
         }
     }
 
+    time.post-date {
+        color: #bdbdbd;
+    }
+
     // =================================================================
     //                    LAYOUT BORDERS
     // =================================================================
@@ -159,7 +163,14 @@
     #search-form-input {
         background-color: #1f1f1f;
         border: 1px solid #333;
-        color: #ffffff;
+        
+        label {
+            color: #c9c9c9;
+        }
+
+        .search-icon {
+            color: #c9c9c9;
+        }
     }
 
     button,
