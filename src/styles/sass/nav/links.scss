@@ -43,8 +43,7 @@ main article p a[target="_blank"]:not(.no-icon)::after {
   display: inline-block;
   width: 13px;
   height: 13px;
-  margin-left: 4px;
-  vertical-align: middle;
+  margin: 0 2px 4px 4px;
   background-color: currentColor;       /* icon takes link color */
   -webkit-mask: url("/icons/external-link.svg") no-repeat center;
   -webkit-mask-size: contain;
