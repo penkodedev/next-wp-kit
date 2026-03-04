@@ -216,9 +216,11 @@
         border: 1px solid #3f3f3f;
     }
 
-    details.wp-block-details summary::before {
-    filter: invert(1);
-}
+    details.wp-block-details summary::before,
+    details.wp-block-details summary p,
+    details.wp-block-details summary strong {
+        filter: invert(1);
+    }
 
     // =================================================================
     //                  FOOTER
