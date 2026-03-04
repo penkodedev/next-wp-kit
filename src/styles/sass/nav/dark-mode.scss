@@ -17,8 +17,9 @@
     //                    BASE STYLES
     // =================================================================
     body {
-        background-color: #121212;
-        color: #e0e0e0;
+        background-image: url("/images/bg-dark.jpg");
+        background-size: cover;
+        background-attachment: fixed;
     }
 
     // =================================================================
@@ -84,7 +85,8 @@
     //                    HEADER & menú
     // =================================================================
     header {
-        background-color: #1f1f1f; // Dark background by default
+        background-color: transparent;
+        border-bottom: 0; 
 
         svg,
         .current-lang,
@@ -95,7 +97,8 @@
     }
 
     // Home page: solid background when scrolled
-    body.page-home .header.header-scrolled {
+    body.page-home .header.header-scrolled,
+    body .header.header-scrolled {
         background-color: #1f1f1f !important;
     }
 
@@ -202,6 +205,11 @@
     //                  FOOTER
     // =================================================================
 
+    footer {
+        background-color: #00000041;
+        border-top: 0;
+    }
+    
     .footer-social ul.social-links li a {
         color: #fff;
 
