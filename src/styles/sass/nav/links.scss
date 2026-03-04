@@ -39,14 +39,17 @@ article img {
 
 //************ Icons for external links (target="_blank" or external domains)
 main article p a[target="_blank"]:not(.no-icon)::after {
-    content: "";
-    display: inline-block;
-    width: 13px;
-    height: 13px;
-    margin: -10px 2px 0 4px;
-    background: url('/icons/external-link.svg') no-repeat center;
-    background-size: contain;
-    vertical-align: middle;
+  content: "";
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  margin-left: 4px;
+  vertical-align: middle;
+  background-color: currentColor;       /* icon takes link color */
+  -webkit-mask: url("/icons/external-link.svg") no-repeat center;
+  -webkit-mask-size: contain;
+  mask: url("/icons/external-link.svg") no-repeat center;
+  mask-size: contain;
 }
 
 // Hide if it already has an icon inside

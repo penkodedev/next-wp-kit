@@ -38,7 +38,8 @@
 
     article ul li,
     article ul li a,
-    .post-navigation a {
+    .post-navigation a,
+    article p a:after {
         color: #bdbdbd;
     }
 
@@ -196,6 +197,10 @@
     .audio-player {
         background-color: #181818;
         border: 1px solid #474747;
+
+        a.play-button svg {
+            color:white;
+        }
     }
 
     // =================================================================
