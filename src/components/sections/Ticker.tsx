@@ -5,44 +5,24 @@ import { getTickerSettings, type TickerSettings } from "@/api/wordpressApi";
 import { usePathname } from "next/navigation";
 import localesConfig from "@/i18n/locales.generated.json";
 
-interface TickerProps {
-  pageIdParam?: number;
-}
-
-export default function Ticker({ pageIdParam }: TickerProps) {
+export default function Ticker() {
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number | null>(null);
   const [settings, setSettings] = useState<TickerSettings | null>(null);
   const [shouldRender, setShouldRender] = useState(false);
-  const [currentPageId, setCurrentPageId] = useState<number | undefined>(pageIdParam);
   const pathname = usePathname();
 
-  useEffect(() => {
-    if (pageIdParam) {
-      setCurrentPageId(pageIdParam);
-      return;
-    }
+  const currentSlug = (() => {
     const segments = pathname.split('/').filter(Boolean);
-    const slug = segments[segments.length - 1];
-    if (!slug) return;
-    const fetchPageId = async () => {
-      try {
-        const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
-        const response = await fetch(`${API_URL?.replace(/\/$/, '')}/wp/v2/pages?slug=${slug}&_fields=id`);
-        if (response.ok) {
-          const pages = await response.json();
-          if (pages && pages.length > 0) setCurrentPageId(pages[0].id);
-        }
-      } catch {}
-    };
-    fetchPageId();
-  }, [pathname, pageIdParam]);
+    const locales = localesConfig.supportedLocales || [];
+    const filtered = segments.filter(s => !locales.includes(s));
+    return filtered.length === 0 ? '/' : filtered[filtered.length - 1];
+  })();
 
   useEffect(() => {
     let isMounted = true;
     const fetchSettings = async () => {
-      // Get current locale from URL pathname
       const currentLocale = pathname ? pathname.split('/')[1] || localesConfig.defaultLocale : localesConfig.defaultLocale;
       const data = await getTickerSettings(currentLocale);
       if (isMounted) setSettings(data);
@@ -59,8 +39,8 @@ export default function Ticker({ pageIdParam }: TickerProps) {
     const { enabled = false, pages = [], text = '' } = settings;
     if (!enabled || !text) { setShouldRender(false); return; }
     if (pages.length === 0) { setShouldRender(true); return; }
-    setShouldRender(Boolean(currentPageId && pages.includes(currentPageId)));
-  }, [settings, currentPageId]);
+    setShouldRender(pages.includes(currentSlug));
+  }, [settings, currentSlug]);
 
   useEffect(() => {
     if (!shouldRender || !settings || !trackRef.current || !containerRef.current) return;

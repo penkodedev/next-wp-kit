@@ -2,7 +2,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { Icons } from '@/components/ui/Icons';
+import { getAppearanceSettings, type AppearanceSettings } from '@/api/wordpressApi';
+import localesConfig from '@/i18n/locales.generated.json';
 
 interface DarkModeToggleProps {
   variant?: 'button' | 'select' | 'icon';
@@ -10,27 +13,55 @@ interface DarkModeToggleProps {
   strokeWidth?: number;
 }
 
-// Change the default variant to 'select or button'
+function resolveDefaultDark(defaultMode: AppearanceSettings['defaultMode']): boolean {
+  if (defaultMode === 'dark') return true;
+  if (defaultMode === 'system' && typeof window !== 'undefined') {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  return false;
+}
+
 export default function DarkModeToggle({ 
   variant = 'select',
   size = 22,
   strokeWidth = 1.6
 }: DarkModeToggleProps) {
   const [isDark, setIsDark] = useState(false);
+  const [enabled, setEnabled] = useState<boolean | null>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
-    // Check localStorage (ignore system preference, default is light mode)
-    const stored = localStorage.getItem('darkMode');
-    
-    // Only activate dark mode if explicitly set to 'true' in localStorage
-    const shouldBeDark = stored === 'true';
-    setIsDark(shouldBeDark);
-    
-    if (shouldBeDark) {
-      document.documentElement.classList.add('dark-mode');
-    } else {
-      document.documentElement.classList.remove('dark-mode');
-    }
+    let cancelled = false;
+    const currentLocale = pathname
+      ? pathname.split('/')[1] || localesConfig.defaultLocale
+      : localesConfig.defaultLocale;
+
+    getAppearanceSettings(currentLocale).then((settings) => {
+      if (cancelled) return;
+
+      if (settings && !settings.darkModeEnabled) {
+        setEnabled(false);
+        document.documentElement.classList.remove('dark-mode');
+        return;
+      }
+
+      setEnabled(true);
+      const stored = localStorage.getItem('darkMode');
+      const shouldBeDark = stored !== null
+        ? stored === 'true'
+        : resolveDefaultDark(settings?.defaultMode ?? 'light');
+
+      setIsDark(shouldBeDark);
+      document.documentElement.classList.toggle('dark-mode', shouldBeDark);
+    }).catch(() => {
+      setEnabled(true);
+      const stored = localStorage.getItem('darkMode');
+      const shouldBeDark = stored === 'true';
+      setIsDark(shouldBeDark);
+      document.documentElement.classList.toggle('dark-mode', shouldBeDark);
+    });
+
+    return () => { cancelled = true; };
   }, []);
 
   const toggle = () => {
@@ -41,6 +72,8 @@ export default function DarkModeToggle({
       return newValue;
     });
   };
+
+  if (enabled !== true) return null;
 
 // =================================================================
 //                    Button variant (icon toggle)

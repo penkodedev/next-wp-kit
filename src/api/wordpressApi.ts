@@ -581,7 +581,7 @@ export async function getWpmlTranslation(postId: number, targetLang: string): Pr
  */
 export interface TickerSettings {
   enabled: boolean;
-  pages: number[];
+  pages: string[];
   text: string;
   link?: string;
   speed: number;
@@ -673,6 +673,21 @@ export async function getWpmlLanguages(): Promise<WpmlLanguages | null> {
 --------------------------------------------------------------------------------------*/
 export async function likePost(postId: number): Promise<{ success: boolean; likes: number } | null> {
   return await fetchAPI<{ success: boolean; likes: number }>(`/custom/v1/posts/${postId}/like`, { method: 'POST' });
+}
+
+/*--------------------------------------------------------------------------------------
+    🎨 APPEARANCE SETTINGS
+    Route: /custom/v1/appearance
+    Returns dark mode toggle and default color scheme configuration.
+--------------------------------------------------------------------------------------*/
+export interface AppearanceSettings {
+  darkModeEnabled: boolean;
+  defaultMode: 'light' | 'dark' | 'system';
+}
+
+export async function getAppearanceSettings(lang?: string): Promise<AppearanceSettings | null> {
+  const endpoint = lang ? `/custom/v1/appearance?lang=${lang}` : '/custom/v1/appearance';
+  return await fetchAPI<AppearanceSettings>(endpoint);
 }
 
 /*--------------------------------------------------------------------------------------
