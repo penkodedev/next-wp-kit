@@ -39,20 +39,22 @@ export default function DarkModeToggle({
     getAppearanceSettings(currentLocale).then((settings) => {
       if (cancelled) return;
 
+      const shouldBeDark = resolveDefaultDark(settings?.defaultMode ?? 'light');
+
       if (settings && !settings.darkModeEnabled) {
         setEnabled(false);
-        document.documentElement.classList.remove('dark-mode');
+        document.documentElement.classList.toggle('dark-mode', shouldBeDark);
         return;
       }
 
       setEnabled(true);
       const stored = localStorage.getItem('darkMode');
-      const shouldBeDark = stored !== null
+      const finalDark = stored !== null
         ? stored === 'true'
-        : resolveDefaultDark(settings?.defaultMode ?? 'light');
+        : shouldBeDark;
 
-      setIsDark(shouldBeDark);
-      document.documentElement.classList.toggle('dark-mode', shouldBeDark);
+      setIsDark(finalDark);
+      document.documentElement.classList.toggle('dark-mode', finalDark);
     }).catch(() => {
       setEnabled(true);
       const stored = localStorage.getItem('darkMode');

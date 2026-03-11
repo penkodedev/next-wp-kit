@@ -25,7 +25,7 @@ export const getCachedTaxonomies = unstable_cache(
     return await fetchAPI<Record<string, Taxonomy>>('/wp/v2/taxonomies');
   },
   ['taxonomies'],
-  { revalidate: 3600 } // Cache for 1 hour
+  { revalidate: 3600, tags: ['taxonomies'] }
 );
 
 
@@ -330,7 +330,7 @@ export const getCachedAllPosts = unstable_cache(
     return await fetchAPI<Post[]>(`/wp/v2/posts${params}`);
   },
   ['all-posts'],
-  { revalidate: 300 } // Cache for 5 minutes
+  { revalidate: 300, tags: ['all-posts'] }
 );
 
 
@@ -372,7 +372,7 @@ export const getCachedAllPages = unstable_cache(
     return await fetchAPI<Page[]>(`/wp/v2/pages${params}`);
   },
   ['all-pages'],
-  { revalidate: 300 } // Cache for 5 minutes
+  { revalidate: 300, tags: ['all-pages'] }
 );
 
 /*--------------------------------------------------------------------------------------
@@ -480,8 +480,8 @@ export const getAllMenus = unstable_cache(
   async (): Promise<AllMenus | null> => {
     return await fetchAPI<AllMenus>('/custom/v1/menus');
   },
-  ['all-menus'], // Cache key
-  { revalidate: 300 } // Revalidate every 5 minutes
+  ['all-menus'],
+  { revalidate: 300, tags: ['all-menus'] }
 );
 
 /*--------------------------------------------------------------------------------------
