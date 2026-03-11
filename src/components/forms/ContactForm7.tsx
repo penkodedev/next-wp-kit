@@ -91,20 +91,7 @@ export default function ContactForm7({ children }: ContactForm7Props) {
           body: formData,
         });
 
-        // #region agent log
-        const responseText = await response.text();
-        fetch('http://127.0.0.1:7430/ingest/915c7e85-1d91-4cb7-8d4d-74686032ad55',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'fb15d5'},body:JSON.stringify({sessionId:'fb15d5',location:'ContactForm7.tsx:response',message:'CF7 response received',data:{status:response.status,statusText:response.statusText,bodyPreview:responseText.substring(0,500),bodyLength:responseText.length},timestamp:Date.now()})}).catch(()=>{});
-        console.log('[CF7:fb15d5] response:', response.status, responseText.substring(0, 500));
-        let result: any;
-        try {
-          result = JSON.parse(responseText);
-        } catch (parseErr) {
-          console.log('[CF7:fb15d5] JSON PARSE FAILED:', parseErr, 'body:', responseText.substring(0, 300));
-          showMessage(form, 'Error al procesar la respuesta del servidor.', 'error');
-          return;
-        }
-        console.log('[CF7:fb15d5] parsed result:', result?.status, result?.message);
-        // #endregion
+        const result = await response.json();
 
         // Handle the response
         if (result.status === 'mail_sent') {
@@ -120,10 +107,7 @@ export default function ContactForm7({ children }: ContactForm7Props) {
         }
 
       } catch (error) {
-  logger.error('Contact Form 7 submission error:', error as Error);
-        // #region agent log
-        console.log('[CF7:fb15d5] CATCH error:', error);
-        // #endregion
+        logger.error('Contact Form 7 submission error:', error as Error);
         showMessage(form, 'Error de conexión. Por favor, inténtalo de nuevo.', 'error');
       } finally {
         // Reset loading state
