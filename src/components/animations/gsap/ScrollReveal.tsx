@@ -33,13 +33,10 @@ export default function WpReveal({ children }: Props) {
           el,
 
           // ─── INITIAL STATE (hidden) ────────────────────────────────────────
-          // This is how the element looks before the animation plays.
           {
-            opacity: 0,       // 0 = invisible, 1 = fully visible
-            y: 0,           // vertical offset in px — positive = starts below, negative = above
-            scale: 0.3,      // slight zoom-out effect — 1 = normal size, 0.8 = very small
-            rotationX: 5,     // 3D tilt in degrees — needs perspective on the parent to look good
-                              // add style={{ perspective: '1200px' }} to the wrapper div below
+            opacity: 0.2,
+            y: 0,
+            scale: 0.95,
           },
 
           // ─── FINAL STATE (visible) + ANIMATION CONFIG ─────────────────────
@@ -47,10 +44,9 @@ export default function WpReveal({ children }: Props) {
             opacity: 1,
             y: 0,
             scale: 1,
-            rotationX: 0,
 
-            duration: 1.8,    // animation length in seconds — try 0.6–1.2 for snappier feel
-            ease: 'back.out(0.2)', // easing curve:
+            duration: 0.8,
+            ease: 'power3.out', // easing curve:
                                 //   'power1.out' → subtle
                                 //   'power3.out' → smooth and natural (current)
                                 //   'power4.out' → fast start, slow finish
@@ -79,7 +75,7 @@ export default function WpReveal({ children }: Props) {
               // 'none'    → does nothing
               //
               // Current: plays forward when entering, reverses when leaving in any direction
-              toggleActions: 'play reverse play none',
+              toggleActions: 'play none play none',
             },
           }
         )

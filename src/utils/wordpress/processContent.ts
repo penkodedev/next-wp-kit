@@ -1,5 +1,4 @@
 import type { WpContent } from "@/types/wordpressTypes";
-// src/utils/processContent.ts
 
 // Local WpBlock interface for block processing
 interface WpBlock {
@@ -95,6 +94,56 @@ function processShortcodes(content: string): string {
 
 	return content;
 }
+
+
+// ===================================================================
+// Content Segments — splits HTML at slider markers so templates
+// can render React components between HTML blocks.
+// ===================================================================
+
+export type ContentSegment =
+	| { type: 'html'; content: string }
+	| { type: 'slider'; sliderId: number };
+
+const SLIDER_MARKER_REGEX = /<div\s+data-component="slider"\s+data-slider-id="(\d+)"[^>]*><\/div>/gi;
+
+/**
+ * Splits processed HTML into segments of plain HTML and slider markers.
+ * Use this in templates that need to render interactive slider components
+ * within WordPress content.
+ */
+export function splitContentSegments(html: string): ContentSegment[] {
+	const segments: ContentSegment[] = [];
+	let lastIndex = 0;
+	let match: RegExpExecArray | null;
+
+	// Reset regex state
+	SLIDER_MARKER_REGEX.lastIndex = 0;
+
+	while ((match = SLIDER_MARKER_REGEX.exec(html)) !== null) {
+		const before = html.slice(lastIndex, match.index);
+		if (before.trim()) {
+			segments.push({ type: 'html', content: before });
+		}
+		segments.push({ type: 'slider', sliderId: parseInt(match[1], 10) });
+		lastIndex = match.index + match[0].length;
+	}
+
+	const after = html.slice(lastIndex);
+	if (after.trim()) {
+		segments.push({ type: 'html', content: after });
+	}
+
+	return segments;
+}
+
+/**
+ * Quick check: does this content contain slider markers?
+ */
+export function hasSliderMarkers(html: string): boolean {
+	return /data-component="slider"/.test(html);
+}
+
 
 /**
  * Re-wraps `wp-block-group` HTML with the necessary classes that the REST API strips.

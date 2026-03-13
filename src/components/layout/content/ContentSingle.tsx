@@ -14,7 +14,8 @@ import ButtonLike from '@/components/ui/ButtonLike';
 import PostDate from '@/components/ui/PostDate';
 import ButtonCopyLink from '@/components/ui/ButtonCopyLink';
 import { WpPageId } from '@/utils/wordpress/WpPageId';
-import { processContent } from '@/utils/wordpress/processContent';
+import { processContent, hasSliderMarkers, splitContentSegments } from '@/utils/wordpress/processContent';
+import SliderRenderer from '@/components/sections/sliders/SliderRenderer';
 import { getTranslatedCptSlug } from '@/utils/config/cptConfig';
 import type { WpContent } from '@/types/wordpressTypes';
 import localesConfig from '@/i18n/locales.generated.json';
@@ -83,11 +84,20 @@ export default function ContentSingle({
           <AnimatedArticle className="custom-article-class" amount={0.5}>
             <PostDate date={post.date} />
             
-            <div
-              dangerouslySetInnerHTML={{
-                __html: processContent(post.content.rendered),
-              }}
-            />
+            {(() => {
+              const processed = processContent(post.content.rendered);
+              if (hasSliderMarkers(processed)) {
+                const segments = splitContentSegments(processed);
+                return segments.map((seg, i) =>
+                  seg.type === 'html' ? (
+                    <div key={i} dangerouslySetInnerHTML={{ __html: seg.content }} />
+                  ) : (
+                    <SliderRenderer key={i} sliderId={seg.sliderId} lang={locale} />
+                  )
+                );
+              }
+              return <div dangerouslySetInnerHTML={{ __html: processed }} />;
+            })()}
           </AnimatedArticle>
 
           {/* // Dynamic custom fields – automatically displayed if they exist */}

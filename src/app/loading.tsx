@@ -1,13 +1,12 @@
 // src/app/loading.tsx
 
-/**
- * Global loading component
- * Next.js automatically shows this while any page is loading
- */
-
+import { getAppearanceSettings } from '@/api/wordpressApi';
 import LoadingSpinner from '@/components/ui/LoadingSpiner';
 
-export default function Loading() {
+export default async function Loading() {
+  const appearance = await getAppearanceSettings();
+  if (appearance?.loading === false) return null;
+
   return (
     <div className="loading-page">
       <LoadingSpinner overlay />

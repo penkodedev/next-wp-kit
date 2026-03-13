@@ -27,7 +27,8 @@ import BodyClass from "@/utils/wordpress/BodyClass";
 import { WpPageIdProvider } from '@/utils/wordpress/WpPageIdContext';
 import localesConfig from '@/i18n/locales.generated.json';
 import Analytics from '@/components/tracking/Analytics';
-import { safeGetSiteInfo } from '@/api/wordpressApi';
+import { safeGetSiteInfo, getAppearanceSettings } from '@/api/wordpressApi';
+import type { AppearanceSettings } from '@/api/wordpressApi';
 
 // Lazy load heavy components that aren't needed on every page
 const ModalController = dynamic(() => import('@/components/features/modals/ModalController'), {
@@ -115,18 +116,18 @@ type RootLayoutProps = {
   children: ReactNode;
 };
 
-// Group global UI components for better organization
-function GlobalUI() {
+function GlobalUI({ appearance }: { appearance: AppearanceSettings | null }) {
+  const ui = appearance ?? {} as Partial<AppearanceSettings>;
   return (
     <>
       <CookieConsent />
       <CookieManager />
-      <ModalController />
-      <LightboxController />
-      <AdvertisingPopup />
+      {ui.popups !== false && <ModalController />}
+      {ui.lightbox !== false && <LightboxController />}
+      {ui.popups !== false && <AdvertisingPopup />}
 
       <div className="fixed-actions">
-        <ScrollToTop />
+        {ui.scrollToTop !== false && <ScrollToTop />}
         <ChatBot />
         <ChatWhatsApp />
       </div>
@@ -137,8 +138,11 @@ function GlobalUI() {
 export default async function RootLayout({ children }: RootLayoutProps) {
   const headersList = headers();
   
-  // Fetch site info for dynamic configuration (safe version)
-  const siteInfo = await safeGetSiteInfo();
+  // Fetch site info and appearance config from WordPress
+  const [siteInfo, appearance] = await Promise.all([
+    safeGetSiteInfo(),
+    getAppearanceSettings(),
+  ]);
   
   // Get default locale from WordPress or fallback to config
   const defaultLocale = siteInfo?.i18n?.default_locale || localesConfig.defaultLocale;
@@ -199,17 +203,15 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             }}
           >
             <WpPageIdProvider>
-              <ScrollProgress />
-              <SmoothScroll>
+              {appearance?.scrollProgress !== false && <ScrollProgress />}
+              <SmoothScroll enabled={appearance?.smoothScroll !== false}>
                 <ParallaxEffects />
                 <BodyClass>
                   <TooltipsProvider>
                     <HeaderServer siteInfo={siteInfo} />
-
                       <main>{children}</main>
-
                     <Footer />
-                    <GlobalUI />
+                    <GlobalUI appearance={appearance} />
                   </TooltipsProvider>
                 </BodyClass>
               </SmoothScroll>

@@ -4,19 +4,25 @@ import Breadcrumbs from '@/components/navigation/Breadcrumbs';
 import { ContactForm7Content } from '@/components/forms';
 import { WpPageIdSetter } from '@/utils/wordpress/WpPageIdContext';
 import type { Page } from '@/types/wordpressTypes';
-import { processContent } from '@/utils/wordpress/processContent';
+import { processContent, hasSliderMarkers, splitContentSegments } from '@/utils/wordpress/processContent';
+import SliderRenderer from '@/components/sections/sliders/SliderRenderer';
 import type { ReactNode } from 'react';
 
 type ContentPagesProps = {
   page: Page;
-  children?: ReactNode; // Optional children to render inside article
+  lang?: string;
+  children?: ReactNode;
 };
 
 /**
  * Template para mostrar páginas estáticas de WordPress
  * Usado por el catch-all
  */
-export default function ContentPages({ page, children }: ContentPagesProps) {
+export default function ContentPages({ page, lang, children }: ContentPagesProps) {
+  const processed = processContent(page.content.rendered);
+  const hasForm = page.content.rendered.includes('wpcf7-form');
+  const hasSliders = hasSliderMarkers(processed);
+
   return (
     <>
       <WpPageIdSetter pageId={page.id} />
@@ -27,17 +33,39 @@ export default function ContentPages({ page, children }: ContentPagesProps) {
         
         <Breadcrumbs />
         <ScrollReveal>
-
-            <article className="page-content"> 
-              <ContactForm7Content
-                content={page.content.rendered}
-                hasForm={page.content.rendered.includes('wpcf7-form')}
-              />
+            <article className="page-content">
+              {hasSliders ? (
+                <ContentWithSliders html={processed} lang={lang} hasForm={hasForm} />
+              ) : (
+                <ContactForm7Content
+                  content={processed}
+                  hasForm={hasForm}
+                />
+              )}
               {children}
           </article>
-          
-          </ScrollReveal>
+        </ScrollReveal>
       </div>
+    </>
+  );
+}
+
+function ContentWithSliders({ html, lang, hasForm }: { html: string; lang?: string; hasForm: boolean }) {
+  const segments = splitContentSegments(html);
+
+  return (
+    <>
+      {segments.map((seg, i) =>
+        seg.type === 'html' ? (
+          <ContactForm7Content
+            key={i}
+            content={seg.content}
+            hasForm={hasForm && seg.content.includes('wpcf7-form')}
+          />
+        ) : (
+          <SliderRenderer key={i} sliderId={seg.sliderId} lang={lang} />
+        )
+      )}
     </>
   );
 }

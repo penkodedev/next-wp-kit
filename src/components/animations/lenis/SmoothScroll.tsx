@@ -7,8 +7,9 @@ import Lenis from 'lenis';
  * Smooth scrolling wrapper using Lenis
  * Provides momentum scrolling for a premium feel
  */
-export default function SmoothScroll({ children }: { children: ReactNode }) {
+export default function SmoothScroll({ children, enabled = true }: { children: ReactNode; enabled?: boolean }) {
   useEffect(() => {
+    if (!enabled) return;
     const lenis = new Lenis({
       duration: 2.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),

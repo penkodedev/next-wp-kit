@@ -90,14 +90,11 @@ export default async function Footer() {
           lightLogo={footerData.lightLogo}
           darkLogo={footerData.darkLogo}
         />
-        <p>
         <FooterCopyright
-          
           title={footerData.title}
           showTitle
           showDescription
-          
-        /></p>
+        />
       </div>
     </footer>
   );

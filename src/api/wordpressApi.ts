@@ -678,17 +678,74 @@ export async function likePost(postId: number): Promise<{ success: boolean; like
 /*--------------------------------------------------------------------------------------
     🎨 APPEARANCE SETTINGS
     Route: /custom/v1/appearance
-    Returns dark mode toggle and default color scheme configuration.
+    Returns dark mode, UI component toggles, and default color scheme configuration.
 --------------------------------------------------------------------------------------*/
 export interface AppearanceSettings {
   darkModeEnabled: boolean;
   defaultMode: 'light' | 'dark' | 'system';
+  scrollToTop: boolean;
+  breadcrumbs: boolean;
+  loading: boolean;
+  scrollProgress: boolean;
+  lightbox: boolean;
+  smoothScroll: boolean;
+  popups: boolean;
 }
 
 export async function getAppearanceSettings(lang?: string): Promise<AppearanceSettings | null> {
   const endpoint = lang ? `/custom/v1/appearance?lang=${lang}` : '/custom/v1/appearance';
   return await fetchAPI<AppearanceSettings>(endpoint);
 }
+
+/*--------------------------------------------------------------------------------------
+    🎠 GET SLIDER DATA
+    Route: /custom/v1/sliders/{id}
+    Returns full slider config + slides (or posts for CPT type).
+--------------------------------------------------------------------------------------*/
+export type SliderType = 'cpt' | 'testimonials' | 'media' | 'custom';
+
+export interface SliderConfig {
+  autoplay: number;
+  speed: number;
+  perView: number;
+  loop: number;
+  navigation: number;
+  pagination: number;
+  fullWidth: number;
+  displayMode: 'contain' | 'cover';
+  gap: number;
+  grayscale: number;
+  opacity: number;
+}
+
+export interface SliderSlide {
+  name?: string;
+  role?: string;
+  text?: string;
+  title?: string;
+  caption?: string;
+  image_id?: number;
+  image_url?: string;
+  image_thumb?: string;
+  link?: string;
+  alt?: string;
+}
+
+export interface SliderData {
+  id: number;
+  title: string;
+  type: SliderType;
+  config: SliderConfig;
+  source?: { postType: string; perPage: number; order: string };
+  slides?: SliderSlide[];
+  posts?: WpContent[];
+}
+
+export async function getSliderById(id: number, lang?: string): Promise<SliderData | null> {
+  const endpoint = lang ? `/custom/v1/sliders/${id}?lang=${lang}` : `/custom/v1/sliders/${id}`;
+  return await fetchAPI<SliderData>(endpoint);
+}
+
 
 /*--------------------------------------------------------------------------------------
     🤖 GET CHATBOT CONFIG

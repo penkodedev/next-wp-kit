@@ -1,31 +1,41 @@
-"use client"; // Convertimos a Client Component para usar hooks
+"use client";
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import localesConfig from '@/i18n/locales.generated.json';
+import { getAppearanceSettings } from '@/api/wordpressApi';
 
 interface BreadcrumbItem {
   label: string;
   href: string;
 }
 
-// ------------------------ CONFIGURACIÓN ------------------------
-// Cambia a 'true' si no quieres mostrar el último elemento (la página actual).
 const HIDE_LAST_ITEM = false;
 
 export default function Breadcrumbs() {
   const pathname = usePathname();
   const t = useTranslations('Navigation');
-  const segments = pathname.split('/').filter(Boolean); // Dividir y filtrar segmentos vacíos
+  const [enabled, setEnabled] = useState<boolean | null>(null);
+  const segments = pathname.split('/').filter(Boolean);
 
-  // Detect if we're in a localized route
   const isLocalized = segments.length > 0 && localesConfig.supportedLocales.includes(segments[0]);
-  const locale = isLocalized ? segments[0] : null; // null for default (Spanish) routes
+  const locale = isLocalized ? segments[0] : null;
   const actualSegments = isLocalized ? segments.slice(1) : segments;
 
-  if (actualSegments.length === 0) {
-    return null; // No mostrar breadcrumbs en la página de inicio
+  useEffect(() => {
+    let cancelled = false;
+    getAppearanceSettings().then((settings) => {
+      if (!cancelled) setEnabled(settings?.breadcrumbs !== false);
+    }).catch(() => {
+      if (!cancelled) setEnabled(true);
+    });
+    return () => { cancelled = true; };
+  }, []);
+
+  if (enabled === false || actualSegments.length === 0) {
+    return null;
   }
 
   let breadcrumbItems: BreadcrumbItem[] = [
