@@ -690,6 +690,9 @@ export interface AppearanceSettings {
   lightbox: boolean;
   smoothScroll: boolean;
   popups: boolean;
+  copyLink: boolean;
+  likeButton: boolean;
+  shareButton: boolean;
 }
 
 export async function getAppearanceSettings(lang?: string): Promise<AppearanceSettings | null> {

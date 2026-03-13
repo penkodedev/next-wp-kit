@@ -19,11 +19,20 @@
     // =================================================================
 
 
+    //radial EXPLAINED(ellipse 80% 55% at 10% -20%, var(--pk-bg-glow), transparent)
+    //                  │       │   │      │    │            │             │
+    //                  │       │   │      │    │            │             └─ Fades to fully transparent at edges
+    //                  │       │   │      │    │            └──────────────────── Start color: the glow tint
+    //                  │       │   │      │    └─────────  Y position: -20% (above viewport top)
+    //                  │       │   │      └────────────── X position: 10% (near left edge)
+    //                  │       │   └─────────────────── Vertical radius: 55% of container height
+    //                  │       └─────────────────────── Horizontal radius: 80% of container width
+    //                  └─────────────────────────────── Shape: ellipse (oval, not circle) 
 
     body {
         --pk-bg:            #141414;
-        --pk-bg-glow:       rgba(59, 223, 0, 0.336);
-        --pk-bg-glow2:      rgba(0, 160, 223, 0.336);
+        --pk-bg-glow:       rgba(59, 223, 0, 0.247);
+        --pk-bg-glow2:      rgba(0, 160, 223, 0.315);
         
         background-attachment: fixed;
         background-color: var(--pk-bg);
@@ -55,6 +64,10 @@
 
     article ul li:before {
         background-color: #a9a9a9;
+    }
+
+    article ol li {
+        color: #dbdbdb;
     }
 
     nav ul.breadcrumb {

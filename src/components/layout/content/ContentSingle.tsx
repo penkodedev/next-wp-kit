@@ -17,6 +17,7 @@ import { WpPageId } from '@/utils/wordpress/WpPageId';
 import { processContent, hasSliderMarkers, splitContentSegments } from '@/utils/wordpress/processContent';
 import SliderRenderer from '@/components/sections/sliders/SliderRenderer';
 import { getTranslatedCptSlug } from '@/utils/config/cptConfig';
+import { getAppearanceSettings } from '@/api/wordpressApi';
 import type { WpContent } from '@/types/wordpressTypes';
 import localesConfig from '@/i18n/locales.generated.json';
 
@@ -30,12 +31,12 @@ type ContentSingleProps = {
  * Template to display a single post from any post type
  * Internally computes backToArchiveUrl and archiveName based on postType and locale
  */
-export default function ContentSingle({
+export default async function ContentSingle({
   post,
   postType,
   locale
 }: ContentSingleProps) {
-  // Compute backToArchiveUrl and archiveName internally
+  const appearance = await getAppearanceSettings(locale);
   const translatedSlug = getTranslatedCptSlug(postType, locale);
   const safeSlug = translatedSlug || postType || 'posts'; // Triple fallback
   const archiveName = safeSlug.charAt(0).toUpperCase() + safeSlug.slice(1);
@@ -56,15 +57,19 @@ export default function ContentSingle({
             <h1>{post.title.rendered}</h1>
 
             <div className="icons-wrap">
-              <ButtonCopyLink className="copy-link" />
-              <ButtonShare 
-                title={post.title.rendered}
-                description={post.excerpt?.rendered?.replace(/<[^>]*>/g, '')}
-              />
-              <ButtonLike 
-                postId={post.id}
-                initialLikes={post.likes || 0}
-              />
+              {appearance?.copyLink !== false && <ButtonCopyLink className="copy-link" />}
+              {appearance?.shareButton !== false && (
+                <ButtonShare 
+                  title={post.title.rendered}
+                  description={post.excerpt?.rendered?.replace(/<[^>]*>/g, '')}
+                />
+              )}
+              {appearance?.likeButton !== false && (
+                <ButtonLike 
+                  postId={post.id}
+                  initialLikes={post.likes || 0}
+                />
+              )}
             </div>
           </section>
           <Breadcrumbs />
