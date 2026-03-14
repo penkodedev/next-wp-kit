@@ -751,6 +751,28 @@ export async function getSliderById(id: number, lang?: string): Promise<SliderDa
 
 
 /*--------------------------------------------------------------------------------------
+    📊 GET COUNTER STATS GROUP
+    Route: /custom/v1/stats/{id}
+    Returns a single counter stats group by 1-based index.
+--------------------------------------------------------------------------------------*/
+export interface StatsItem {
+  number: number;
+  label: string;
+}
+
+export interface StatsGroup {
+  title: string;
+  duration: number;
+  items: StatsItem[];
+}
+
+export async function getStatsById(id: number, lang?: string): Promise<StatsGroup | null> {
+  const endpoint = lang ? `/custom/v1/stats/${id}?lang=${lang}` : `/custom/v1/stats/${id}`;
+  return await fetchAPI<StatsGroup>(endpoint);
+}
+
+
+/*--------------------------------------------------------------------------------------
     🤖 GET CHATBOT CONFIG
     Route: /custom/v1/chatbot
     e.g. /custom/v1/chatbot?lang=en

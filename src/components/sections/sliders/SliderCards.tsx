@@ -1,3 +1,10 @@
+// src/components/sections/sliders/SliderCards.tsx
+
+/**
+ * Presentational card components for each slider type
+ * (testimonials, media, custom).
+ */
+
 import Image from 'next/image';
 import type { SliderSlide } from '@/api/wordpressApi';
 

@@ -1,3 +1,10 @@
+// src/components/sections/sliders/SliderBase.tsx
+
+/**
+ * Client Component that wraps Swiper.js with configurable options
+ * (autoplay, navigation, pagination, free mode, etc.).
+ */
+
 "use client";
 
 import React, { Children } from 'react';

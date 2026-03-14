@@ -103,13 +103,14 @@ function processShortcodes(content: string): string {
 
 export type ContentSegment =
 	| { type: 'html'; content: string }
-	| { type: 'slider'; sliderId: number };
+	| { type: 'slider'; sliderId: number }
+	| { type: 'stats'; statsId: number };
 
-const SLIDER_MARKER_REGEX = /<div\s+data-component="slider"\s+data-slider-id="(\d+)"[^>]*><\/div>/gi;
+const COMPONENT_MARKER_REGEX = /<div\s+data-component="(slider|stats)"\s+data-(?:slider|stats)-id="(\d+)"[^>]*><\/div>/gi;
 
 /**
- * Splits processed HTML into segments of plain HTML and slider markers.
- * Use this in templates that need to render interactive slider components
+ * Splits processed HTML into segments of plain HTML, slider markers, and stats markers.
+ * Use this in templates that need to render interactive React components
  * within WordPress content.
  */
 export function splitContentSegments(html: string): ContentSegment[] {
@@ -117,15 +118,23 @@ export function splitContentSegments(html: string): ContentSegment[] {
 	let lastIndex = 0;
 	let match: RegExpExecArray | null;
 
-	// Reset regex state
-	SLIDER_MARKER_REGEX.lastIndex = 0;
+	COMPONENT_MARKER_REGEX.lastIndex = 0;
 
-	while ((match = SLIDER_MARKER_REGEX.exec(html)) !== null) {
+	while ((match = COMPONENT_MARKER_REGEX.exec(html)) !== null) {
 		const before = html.slice(lastIndex, match.index);
 		if (before.trim()) {
 			segments.push({ type: 'html', content: before });
 		}
-		segments.push({ type: 'slider', sliderId: parseInt(match[1], 10) });
+
+		const componentType = match[1];
+		const id = parseInt(match[2], 10);
+
+		if (componentType === 'slider') {
+			segments.push({ type: 'slider', sliderId: id });
+		} else if (componentType === 'stats') {
+			segments.push({ type: 'stats', statsId: id });
+		}
+
 		lastIndex = match.index + match[0].length;
 	}
 
@@ -138,10 +147,15 @@ export function splitContentSegments(html: string): ContentSegment[] {
 }
 
 /**
- * Quick check: does this content contain slider markers?
+ * Quick check: does this content contain component markers (sliders, stats, etc.)?
  */
+export function hasComponentMarkers(html: string): boolean {
+	return /data-component="(slider|stats)"/.test(html);
+}
+
+/** @deprecated Use hasComponentMarkers instead */
 export function hasSliderMarkers(html: string): boolean {
-	return /data-component="slider"/.test(html);
+	return hasComponentMarkers(html);
 }
 
 

@@ -1,3 +1,10 @@
+// src/components/sections/sliders/SliderRenderer.tsx
+
+/**
+ * Server Component that fetches slider data from the API
+ * and renders the appropriate slide cards based on slider type.
+ */
+
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/bundle';

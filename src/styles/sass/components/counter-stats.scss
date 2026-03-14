@@ -1,0 +1,45 @@
+// ===================================================================
+// Counter Stats — animated number counters
+// ===================================================================
+
+.counter-stats {
+  width: 100%;
+  padding: 3rem 0;
+}
+
+.counter-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.counter-stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.5rem 1rem;
+
+  h4 {
+    margin: 0;
+  }
+}
+
+.counter-stat-number {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--color-accent, #3ADF00);
+}
+
+.counter-stat-label {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

@@ -1,3 +1,10 @@
+// src/components/sections/sliders/buildSwiperOptions.ts
+
+/**
+ * Pure function that builds Swiper.js options object
+ * from WordPress slider configuration.
+ */
+
 import type { SliderConfig } from '@/api/wordpressApi';
 import type { SwiperOptions } from 'swiper/types';
 

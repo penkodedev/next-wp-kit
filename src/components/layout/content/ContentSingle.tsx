@@ -1,5 +1,5 @@
 // src/components/layout/content/ContentSingle.tsx
-// 
+
 import Link from 'next/link';
 import { Icons } from '@/components/ui/Icons';
 import AnimatedArticle from '@/components/animations/framer/AnimatedArticle';
