@@ -82,19 +82,23 @@ export async function generateMetadata(): Promise<Metadata> {
       template: '%s', // Use title exactly as WordPress returns it
     },
     description: siteInfo.description,
-    // Dynamic favicons from WordPress Site Icon
-    icons: siteInfo.favicons ? {
-      icon: [
-        { url: siteInfo.favicons.icon_32, sizes: '32x32', type: 'image/png' },
-        { url: siteInfo.favicons.icon_192, sizes: '192x192', type: 'image/png' },
-      ],
-      apple: [
-        { url: siteInfo.favicons.icon_180, sizes: '180x180', type: 'image/png' },
-      ],
-      other: [
-        { rel: 'icon', url: siteInfo.favicons.icon_512, sizes: '512x512', type: 'image/png' },
-      ],
-    } : undefined,
+    // Dynamic favicons from WordPress Site Icon (only include valid URLs)
+    icons: (() => {
+      const f = siteInfo.favicons;
+      if (!f) return undefined;
+      const icon = [
+        f.icon_32 && { url: f.icon_32, sizes: '32x32', type: 'image/png' as const },
+        f.icon_192 && { url: f.icon_192, sizes: '192x192', type: 'image/png' as const },
+      ].filter(Boolean) as { url: string; sizes: string; type: string }[];
+      const apple = [
+        f.icon_180 && { url: f.icon_180, sizes: '180x180', type: 'image/png' as const },
+      ].filter(Boolean) as { url: string; sizes: string; type: string }[];
+      const other = [
+        f.icon_512 && { rel: 'icon' as const, url: f.icon_512, sizes: '512x512', type: 'image/png' as const },
+      ].filter(Boolean) as { rel: string; url: string; sizes: string; type: string }[];
+      if (icon.length === 0 && apple.length === 0 && other.length === 0) return undefined;
+      return { icon, apple, other };
+    })(),
     openGraph: {
       title: siteInfo.title,
       description: siteInfo.description,

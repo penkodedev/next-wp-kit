@@ -4,12 +4,11 @@
 
 .counter-stats {
   width: 100%;
-  padding: 3rem 0;
 }
 
 .counter-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  display: flex;
+  justify-content: center;
   gap: 1rem;
   max-width: 1200px;
   margin: 0 auto;
@@ -36,10 +35,14 @@
 }
 
 .counter-stat-label {
-  display: block;
-  margin-top: 0.5rem;
-  font-size: 0.95rem;
-  opacity: 0.8;
+  font-size: 0.88rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  margin-top: 0.5rem;
+}
+
+// Countdown timer — finished state
+.counter-stat-card--finished {
+  .counter-stat-number {
+    opacity: 0.6;
+  }
 }

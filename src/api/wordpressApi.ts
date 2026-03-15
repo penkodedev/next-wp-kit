@@ -762,13 +762,47 @@ export interface StatsItem {
 
 export interface StatsGroup {
   title: string;
-  duration: number;
-  items: StatsItem[];
+  type: 'counter' | 'countdown';
+  duration?: number;
+  items?: StatsItem[];
+  start_date?: string;
+  end_date?: string;
 }
 
 export async function getStatsById(id: number, lang?: string): Promise<StatsGroup | null> {
   const endpoint = lang ? `/custom/v1/stats/${id}?lang=${lang}` : `/custom/v1/stats/${id}`;
   return await fetchAPI<StatsGroup>(endpoint);
+}
+
+
+/*--------------------------------------------------------------------------------------
+    🗺️ GET MAP DATA
+    Route: /custom/v1/map
+    Returns all locations (pins) + default center/zoom for the single map.
+--------------------------------------------------------------------------------------*/
+export interface MapLocation {
+  id: number;
+  title: string;
+  lat: number;
+  lng: number;
+  address: string;
+  description: string;
+}
+
+export interface MapData {
+  center: { lat: number | null; lng: number | null };
+  zoom: number;
+  clustering: boolean;
+  style: string;
+  height: string;
+  tooltipTrigger: 'hover' | 'click';
+  showZoomControls: boolean;
+  locations: MapLocation[];
+}
+
+export async function getMapData(lang?: string): Promise<MapData | null> {
+  const endpoint = lang ? `/custom/v1/map?lang=${lang}` : '/custom/v1/map';
+  return await fetchAPI<MapData>(endpoint);
 }
 
 

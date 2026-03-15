@@ -3,6 +3,7 @@
 import { splitContentSegments, hasComponentMarkers } from '@/utils/wordpress/processContent';
 import SliderRenderer from '@/components/sections/sliders/SliderRenderer';
 import CounterStatsRenderer from '@/components/features/counter-stats/CounterStatsRenderer';
+import MapRenderer from '@/components/features/map/MapRenderer';
 
 interface DynamicContentProps {
   html: string;
@@ -37,6 +38,7 @@ export default function DynamicContent({ html, lang, renderHtml }: DynamicConten
         }
         if (seg.type === 'slider') return <SliderRenderer key={i} sliderId={seg.sliderId} lang={lang} />;
         if (seg.type === 'stats') return <CounterStatsRenderer key={i} statsId={seg.statsId} lang={lang} />;
+        if (seg.type === 'map') return <MapRenderer key={i} lang={lang} />;
         return null;
       })}
     </>

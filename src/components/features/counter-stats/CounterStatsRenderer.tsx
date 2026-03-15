@@ -2,11 +2,17 @@
 
 /**
  * Server Component that fetches a counter stats group from the API
- * and renders an animated grid of counter cards.
+ * and renders either animated counter cards or a countdown timer.
  */
 
+import dynamic from 'next/dynamic';
 import { getStatsById } from '@/api/wordpressApi';
 import CounterStatCard from './CounterStatCard';
+
+const CountdownTimer = dynamic(() => import('./CountdownTimer').then((m) => m.default), {
+  ssr: false,
+  loading: () => <div className="counter-stats" style={{ minHeight: 80 }} />,
+});
 
 interface CounterStatsRendererProps {
   statsId: number;
@@ -16,7 +22,19 @@ interface CounterStatsRendererProps {
 export default async function CounterStatsRenderer({ statsId, lang }: CounterStatsRendererProps) {
   const data = await getStatsById(statsId, lang);
 
-  if (!data || !data.items || data.items.length === 0) return null;
+  if (!data) return null;
+
+  if (data.type === 'countdown') {
+    if (!data.end_date) return null;
+    return (
+      <CountdownTimer
+        startDate={data.start_date || null}
+        endDate={data.end_date}
+      />
+    );
+  }
+
+  if (!data.items || data.items.length === 0) return null;
 
   return (
     <section className="counter-stats">
@@ -26,7 +44,7 @@ export default async function CounterStatsRenderer({ statsId, lang }: CounterSta
             key={i}
             number={item.number}
             label={item.label}
-            duration={data.duration}
+            duration={data.duration ?? 2000}
           />
         ))}
       </div>

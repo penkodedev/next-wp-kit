@@ -158,15 +158,13 @@ export default async function WpStyles() {
   // 2. Fallback: obtener estilos del tema usando tu endpoint custom
   const themeStyles = await getWpThemeStyles();
 
-  // 3. URLs for standard Gutenberg stylesheets
+  // 3. URLs for standard Gutenberg stylesheets (ensure valid URLs)
   const blockLibraryUrl = `${wpUrl}/wp-includes/css/dist/block-library/style.css`;
   const themeLibraryUrl = `${wpUrl}/wp-includes/css/dist/block-library/theme.css`;
   const editorLibraryUrl = `${wpUrl}/wp-includes/css/dist/block-editor/style.css`;
+  const hasValidUrls = blockLibraryUrl.startsWith('http') && themeLibraryUrl && editorLibraryUrl;
 
-  // 4. Essential base CSS for Gutenberg
-  // const essentialStyles = `
-    
-  // `;
+  if (!hasValidUrls) return null;
 
   return (
     <>

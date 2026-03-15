@@ -104,9 +104,10 @@ function processShortcodes(content: string): string {
 export type ContentSegment =
 	| { type: 'html'; content: string }
 	| { type: 'slider'; sliderId: number }
-	| { type: 'stats'; statsId: number };
+	| { type: 'stats'; statsId: number }
+	| { type: 'map' };
 
-const COMPONENT_MARKER_REGEX = /<div\s+data-component="(slider|stats)"\s+data-(?:slider|stats)-id="(\d+)"[^>]*><\/div>/gi;
+const COMPONENT_MARKER_REGEX = /<div\s+data-component="(slider|stats|map)"(?:\s+data-(?:slider|stats)-id="(\d+)")?[^>]*><\/div>/gi;
 
 /**
  * Splits processed HTML into segments of plain HTML, slider markers, and stats markers.
@@ -127,12 +128,14 @@ export function splitContentSegments(html: string): ContentSegment[] {
 		}
 
 		const componentType = match[1];
-		const id = parseInt(match[2], 10);
+		const idStr = match[2];
 
-		if (componentType === 'slider') {
-			segments.push({ type: 'slider', sliderId: id });
-		} else if (componentType === 'stats') {
-			segments.push({ type: 'stats', statsId: id });
+		if (componentType === 'slider' && idStr) {
+			segments.push({ type: 'slider', sliderId: parseInt(idStr, 10) });
+		} else if (componentType === 'stats' && idStr) {
+			segments.push({ type: 'stats', statsId: parseInt(idStr, 10) });
+		} else if (componentType === 'map') {
+			segments.push({ type: 'map' });
 		}
 
 		lastIndex = match.index + match[0].length;
@@ -150,7 +153,7 @@ export function splitContentSegments(html: string): ContentSegment[] {
  * Quick check: does this content contain component markers (sliders, stats, etc.)?
  */
 export function hasComponentMarkers(html: string): boolean {
-	return /data-component="(slider|stats)"/.test(html);
+	return /data-component="(slider|stats|map)"/.test(html);
 }
 
 /** @deprecated Use hasComponentMarkers instead */
