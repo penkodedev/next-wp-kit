@@ -76,7 +76,8 @@ export default function CounterStatCard({ number, label, suffix, duration = 2000
 
   return (
     <div className="counter-stat-card" ref={ref}>
-      <h4 className="counter-stat-number">{displayValue}{suffix ?? ''}</h4>
+      {/* <h4 className="counter-stat-number">{displayValue}{suffix ?? ''}</h4> */}
+      <h4 className="counter-stat-number">{displayValue}{suffix ? ` ${suffix}` : ''}</h4>
       {label && <p className="counter-stat-label">{label}</p>}
     </div>
   );

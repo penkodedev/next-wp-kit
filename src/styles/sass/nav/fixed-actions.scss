@@ -6,7 +6,7 @@
     position: fixed;
     right: 20px;
     bottom: 20px;
-    z-index: 9998;
+    z-index: 9;
 
     // Force inline-flex to ensure gap works even if children are block elements 
     > * {

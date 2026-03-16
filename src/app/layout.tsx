@@ -212,7 +212,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
                 <ParallaxEffects />
                 <BodyClass>
                   <TooltipsProvider>
-                    <HeaderServer siteInfo={siteInfo} />
+                    <HeaderServer siteInfo={siteInfo} initialLocale={currentLocale} />
                       <main>{children}</main>
                     <Footer />
                     <GlobalUI appearance={appearance} />

@@ -1,0 +1,236 @@
+// =================================================================
+//                    MEGA MENU
+// Panel de ancho completo con todas las secciones en columnas
+// Disparador: icono hamburger (sin items en texto en desktop)
+// =================================================================
+@use '../abstracts' as *;
+
+$mega-menu-breakpoint: 1224px;
+
+// Panel dropdown en desktop (abre al hacer click en hamburger)
+// z-index > backdrop (1000) para que los links sean clicables
+.mega-menu-panel-dropdown {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1010;
+  cursor: default;
+}
+
+// Botón cerrar dentro del panel (position absolute para que puedas posicionarlo)
+.mega-menu-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #f0f0f0;
+  border: none;
+  border-radius: 100%;
+  cursor: pointer;
+  padding: 8px;
+  color: inherit;
+  z-index: 9999999;
+
+  &:hover {
+    background: #d8d8d8;
+  }
+}
+
+
+
+// Estilos del panel cuando se usa con hamburger (panelOnly)
+// Los estilos están anidados en .mega-menu, aquí los repetimos para .mega-menu-panel-only
+.mega-menu-panel-only {
+  .mega-menu-panel {
+    @include copy-text;
+    position: relative;
+    left: auto;
+    transform: none;
+    width: 100vw;
+    height: 100vh;
+    margin: 0 auto;
+    background: #fff;
+    padding: 5rem;
+  }
+
+  .mega-menu-panel-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: 2rem;
+  }
+
+  .mega-menu-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .mega-menu-column-title {
+    font-weight: 600;
+    font-size: 1.5em;
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      color: rgb(124, 124, 124);
+    }
+  }
+
+  .mega-menu-image img {
+    width: 100%;
+    height: auto;
+    max-height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  .mega-menu-description {
+    margin: 0;
+    font-size: 0.85em;
+    color: #555;
+    line-height: 1.4;
+  }
+
+  .mega-menu-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: 0.25rem;
+
+      a {
+        text-decoration: none;
+        color: inherit;
+        font-size: 0.9em;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .mega-menu-child-title {
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+  }
+}
+.mega-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .mega-menu-triggers {
+    list-style: none;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    gap: 28px;
+  }
+
+  .mega-menu-trigger-item {
+    font-size: inherit;
+  }
+
+  .mega-menu-trigger {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    padding-bottom: 5px;
+
+    &:hover {
+      color: rgb(124, 124, 124);
+    }
+  }
+
+  // Panel de ancho completo debajo del header
+  .mega-menu-panel {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(96vw, 1200px);
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    padding: 1.5rem 2rem;
+    z-index: 100;
+    margin-top: 4px;
+  }
+
+  .mega-menu-panel-inner {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 2rem;
+  }
+
+  .mega-menu-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .mega-menu-column-title {
+    font-weight: 600;
+    font-size: 1em;
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      color: rgb(124, 124, 124);
+    }
+  }
+
+  .mega-menu-image {
+    img {
+      width: 100%;
+      height: auto;
+      max-height: 100px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    a {
+      display: block;
+    }
+  }
+
+  .mega-menu-description {
+    margin: 0;
+    font-size: 0.85em;
+    color: #555;
+    line-height: 1.4;
+  }
+
+  .mega-menu-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: 0.25rem;
+
+      a {
+        text-decoration: none;
+        color: inherit;
+        font-size: 0.9em;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .mega-menu-child-title {
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+  }
+}
+

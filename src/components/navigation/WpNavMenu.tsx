@@ -3,7 +3,7 @@
 "use client";
 
 import Link from 'next/link';
-import { swrFetcher } from '@/api/wordpressApi';
+import { menuSwrFetcher } from '@/api/wordpressApi';
 import type { MenuItem, AllMenus } from '@/types/wordpressTypes';
 import { cleanInternalUrl } from '@/utils/wordpress/url';
 import useSWR from 'swr';
@@ -29,8 +29,9 @@ type WpNavMenuProps = {
 
 /**
  * Recursive component to render an individual menu item and its children.
+ * Exported for use in MegaMenuHamburger (off-canvas panel).
  */
-function NavItem({ item, isMobile = false, isSubmenu = false, onLinkClick }: { item: MenuItem; isMobile?: boolean; isSubmenu?: boolean; onLinkClick?: () => void }) {
+export function NavItem({ item, isMobile = false, isSubmenu = false, onLinkClick }: { item: MenuItem; isMobile?: boolean; isSubmenu?: boolean; onLinkClick?: () => void }) {
   const wpDomain = process.env.NEXT_PUBLIC_WORDPRESS_API_URL ? new URL(process.env.NEXT_PUBLIC_WORDPRESS_API_URL).origin : '';
   const frontendDomain = process.env.NEXT_PUBLIC_BASE_URL || '';
 
@@ -168,7 +169,7 @@ function WpNavMenu({
   // Use SWR for client-side fetching with pre-fetched data as fallback
   const { data: menuItems, error } = useSWR<MenuItem[]>(
     apiUrl, // Key for cache (null disables fetching if locale is not ready)
-    swrFetcher<MenuItem[]>,
+    menuSwrFetcher,
     {
       fallbackData: prefetchedMenuItems, // Use server-side data initially
       revalidateOnFocus: false, // Don't refetch on window focus

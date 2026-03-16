@@ -29,7 +29,7 @@ export const getCachedTaxonomies = unstable_cache(
 );
 
 
-import type { WpContent, SiteInfo, MenuItem, SearchResult, Page, Modal, PostNavigation, AllMenus, Post } from '@/types/wordpressTypes';
+import type { WpContent, SiteInfo, MenuItem, MenuResponse, SearchResult, Page, Modal, PostNavigation, AllMenus, Post } from '@/types/wordpressTypes';
 import { unstable_cache } from 'next/cache';
 import { logger } from '@/utils/wordpress/logger';
 import localesConfig from '@/i18n/locales.generated.json';
@@ -483,6 +483,21 @@ export const getAllMenus = unstable_cache(
   ['all-menus'],
   { revalidate: 300, tags: ['all-menus'] }
 );
+
+/** Fetches menu by location. Returns items + mega_menu_enabled. */
+export async function fetchMenuByLocation(
+  location: string,
+  lang: string
+): Promise<MenuResponse | null> {
+  return fetchAPI<MenuResponse>(`/custom/v1/menus?lang=${lang}&location=${location}`);
+}
+
+/** SWR fetcher for menu: extracts items from MenuResponse for backward compat. */
+export async function menuSwrFetcher(url: string): Promise<MenuItem[]> {
+  const data = await swrFetcher<MenuResponse | MenuItem[]>(url);
+  if (Array.isArray(data)) return data;
+  return data?.items ?? [];
+}
 
 /*--------------------------------------------------------------------------------------
     🍔 GET POST NAVIGATION (PREVIOUS/NEXT)

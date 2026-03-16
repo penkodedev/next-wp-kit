@@ -205,6 +205,14 @@ export interface MenuItem {
   target?: string; // E.g. '_blank'
   classes?: string[]; // CSS classes assigned in the WP menu
   children?: MenuItem[]; // Optional, recursive
+  description?: string; // Native WP (Description in menu editor)
+  image?: string; // Image URL for Mega Menu
+}
+
+/** API response when fetching menu by location/slug */
+export interface MenuResponse {
+  items: MenuItem[];
+  mega_menu_enabled: boolean;
 }
 
 // -----------------------------------------------------

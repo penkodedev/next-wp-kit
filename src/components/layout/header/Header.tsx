@@ -7,6 +7,7 @@ import DarkModeToggle from "@/components/ui/DarkModeToggle";
 import LogoHeader from "@/components/layout/header/LogoHeader";
 import LangSwitcher from "@/components/layout/header/LangSwitcher"; 
 import WpNavMenu from '@/components/navigation/WpNavMenu';
+import MegaMenuHamburger from '@/components/navigation/MegaMenuHamburger';
 import SearchTrigger from '@/components/features/search/SearchTrigger';
 import type { SiteInfo, MenuItem } from "@/types/wordpressTypes";
 import localesConfig from '@/i18n/locales.generated.json';
@@ -18,6 +19,7 @@ interface HeaderProps {
   initialLocale?: string;
   siteInfo: SiteInfo;
   menusByLocale?: Record<string, MenuItem[]>;
+  megaMenuEnabled?: boolean;
   currentPageId?: number;
   shrinkOnScroll?: boolean;
 }
@@ -28,6 +30,7 @@ export default function Header({
   initialLocale = localesConfig.defaultLocale, 
   siteInfo,
   menusByLocale,
+  megaMenuEnabled = false,
   currentPageId,
 
   // =================================================================
@@ -56,7 +59,6 @@ export default function Header({
   // Detect if we're on home page
   const isHome = pathname === '/' || pathname === `/${currentLocale}`;
 
-  // Get pre-fetched menu for current locale (if available)
   const menuItems = menusByLocale?.[currentLocale];
 
   // Build header classes
@@ -83,18 +85,20 @@ export default function Header({
       />
 
       <div className="actions-container">
-        <WpNavMenu 
-          location="mainnav" 
-          className="main-menu"
-          variant="responsive"
-          locale={currentLocale}
-          menuItems={menuItems}
-        />
-        
         <SearchTrigger />
         <DarkModeToggle variant="icon" size={20} strokeWidth={1.4} />
         <LangSwitcher currentLocale={currentLocale} />
-        
+        {megaMenuEnabled && menuItems?.length ? (
+          <MegaMenuHamburger menuItems={menuItems} className="main-menu" />
+        ) : (
+          <WpNavMenu
+            location="mainnav"
+            className="main-menu"
+            variant="responsive"
+            locale={currentLocale}
+            menuItems={menuItems}
+          />
+        )}
       </div>
       
     </header>

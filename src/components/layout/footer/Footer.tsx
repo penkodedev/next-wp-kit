@@ -8,18 +8,18 @@ import FooterMenuClient from "@/components/layout/footer/FooterMenuClient";
 import LatestPostsList from "@/components/sections/LatestPostsList";
 import DarkModeToggle from "@/components/ui/DarkModeToggle";
 import { fetchAPI, safeGetSiteInfo } from "@/api/wordpressApi";
-import type { MenuItem } from "@/types/wordpressTypes";
+import type { MenuItem, MenuResponse } from "@/types/wordpressTypes";
 import { logger } from "@/utils/wordpress/logger";
 import { headers } from 'next/headers';
 import localesConfig from "@/i18n/locales.generated.json";
 
 // Fetch data directly to avoid circular dependency with SiteInfo component
 async function getFooterData(locale: string) {
-  // Fetch site info and menu in parallel
   const [siteInfo, menuData] = await Promise.all([
     safeGetSiteInfo(locale),
-    fetchAPI<MenuItem[]>('/custom/v1/menus?lang=' + locale + '&location=footernav').catch(() => [])
+    fetchAPI<MenuResponse>('/custom/v1/menus?lang=' + locale + '&location=footernav').catch(() => null)
   ]);
+  const menuItems = menuData?.items ?? [];
 
   return {
     title: siteInfo?.title || 'Next WP Kit',
@@ -27,7 +27,7 @@ async function getFooterData(locale: string) {
     darkLogo: siteInfo?.dark_logo || '',
     social: siteInfo?.social || [],
     contact: siteInfo?.contact || [],
-    menu: menuData || [] as MenuItem[]
+    menu: menuItems
   };
 }
 
@@ -46,9 +46,8 @@ export default async function Footer() {
     // Fetch menus for all locales in parallel using LOCATION (same as header)
     const menuPromises = localesConfig.supportedLocales.map(async (localeKey) => {
       try {
-        // Use footer location - WPML will handle translation via icl_object_id
-        const menu = await fetchAPI<MenuItem[]>(`/custom/v1/menus?lang=${localeKey}&location=footernav`);
-        return { locale: localeKey, menu: menu || [] };
+        const res = await fetchAPI<MenuResponse>(`/custom/v1/menus?lang=${localeKey}&location=footernav`);
+        return { locale: localeKey, menu: res?.items ?? [] };
       } catch (err) {
   logger.error(`Error fetching footer menu for ${localeKey}:`, err as Error);
         return { locale: localeKey, menu: [] };
