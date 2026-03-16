@@ -15,6 +15,18 @@
   padding: 0 1rem;
 }
 
+.counter-stats--left .counter-stats-grid {
+  justify-content: flex-start;
+}
+
+.counter-stats--center .counter-stats-grid {
+  justify-content: center;
+}
+
+.counter-stats--right .counter-stats-grid {
+  justify-content: flex-end;
+}
+
 .counter-stat-card {
   display: flex;
   flex-direction: column;

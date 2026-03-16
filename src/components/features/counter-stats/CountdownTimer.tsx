@@ -16,6 +16,7 @@ const UNITS: { key: string; labelEs: string }[] = [
 interface CountdownTimerProps {
   startDate: string | null;
   endDate: string;
+  align?: 'left' | 'center' | 'right';
 }
 
 function parseDate(value: string): number | null {
@@ -24,10 +25,11 @@ function parseDate(value: string): number | null {
   return isNaN(d.getTime()) ? null : d.getTime();
 }
 
-const renderer: CountdownRendererFn = ({ days, hours, minutes, seconds, completed }) => {
+const createRenderer = (align: 'left' | 'center' | 'right'): CountdownRendererFn => ({ days, hours, minutes, seconds, completed }) => {
+  const alignClass = `counter-stats--${align}`;
   if (completed) {
     return (
-      <div className="counter-stats">
+      <div className={`counter-stats ${alignClass}`}>
         <div className="counter-stats-grid">
           <div className="counter-stat-card counter-stat-card--finished">
             <h4 className="counter-stat-number">0</h4>
@@ -44,7 +46,7 @@ const renderer: CountdownRendererFn = ({ days, hours, minutes, seconds, complete
   const visibleUnits = UNITS.slice(startIndex);
 
   return (
-    <section className="counter-stats">
+    <section className={`counter-stats ${alignClass}`}>
       <div className="counter-stats-grid">
         {visibleUnits.map((unit, i) => {
           const idx = startIndex + i;
@@ -61,12 +63,15 @@ const renderer: CountdownRendererFn = ({ days, hours, minutes, seconds, complete
   );
 };
 
-export default function CountdownTimer({ startDate, endDate }: CountdownTimerProps) {
+export default function CountdownTimer({ startDate, endDate, align = 'center' }: CountdownTimerProps) {
   const targetDate = parseDate(endDate);
+
+  const alignClass = `counter-stats--${align}`;
+  const renderer = createRenderer(align);
 
   if (!targetDate) {
     return (
-      <div className="counter-stats">
+      <div className={`counter-stats ${alignClass}`}>
         <div className="counter-stats-grid">
           <div className="counter-stat-card counter-stat-card--finished">
             <h4 className="counter-stat-number">—</h4>

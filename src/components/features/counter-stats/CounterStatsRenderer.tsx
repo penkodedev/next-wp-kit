@@ -24,12 +24,15 @@ export default async function CounterStatsRenderer({ statsId, lang }: CounterSta
 
   if (!data) return null;
 
+  const align = data.align ?? 'center';
+
   if (data.type === 'countdown') {
     if (!data.end_date) return null;
     return (
       <CountdownTimer
         startDate={data.start_date || null}
         endDate={data.end_date}
+        align={align}
       />
     );
   }
@@ -37,13 +40,14 @@ export default async function CounterStatsRenderer({ statsId, lang }: CounterSta
   if (!data.items || data.items.length === 0) return null;
 
   return (
-    <section className="counter-stats">
+    <section className={`counter-stats counter-stats--${align}`}>
       <div className="counter-stats-grid">
         {data.items.map((item, i) => (
           <CounterStatCard
             key={i}
             number={item.number}
             label={item.label}
+            suffix={item.suffix}
             duration={data.duration ?? 2000}
           />
         ))}

@@ -12,6 +12,7 @@ import { useEffect, useRef, useState } from 'react';
 interface CounterStatCardProps {
   number: number;
   label: string;
+  suffix?: string;
   duration?: number;
 }
 
@@ -24,7 +25,7 @@ function formatNumber(value: number, isDecimal: boolean): string {
   return Math.round(value).toLocaleString();
 }
 
-export default function CounterStatCard({ number, label, duration = 2000 }: CounterStatCardProps) {
+export default function CounterStatCard({ number, label, suffix, duration = 2000 }: CounterStatCardProps) {
   const [displayValue, setDisplayValue] = useState('0');
   const ref = useRef<HTMLDivElement>(null);
   const animationId = useRef(0);
@@ -75,7 +76,7 @@ export default function CounterStatCard({ number, label, duration = 2000 }: Coun
 
   return (
     <div className="counter-stat-card" ref={ref}>
-      <h4 className="counter-stat-number">{displayValue}</h4>
+      <h4 className="counter-stat-number">{displayValue}{suffix ?? ''}</h4>
       {label && <p className="counter-stat-label">{label}</p>}
     </div>
   );

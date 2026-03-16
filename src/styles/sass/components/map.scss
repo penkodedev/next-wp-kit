@@ -1,6 +1,10 @@
 // Map — locations/pins from Maps CPT
 // Uses Mapbox GL via react-map-gl
 
+canvas.mapboxgl-canvas {
+  border-radius: 12px;
+}
+
 .map-section {
   margin: 1.5rem 0;
 }

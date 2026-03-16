@@ -758,11 +758,13 @@ export async function getSliderById(id: number, lang?: string): Promise<SliderDa
 export interface StatsItem {
   number: number;
   label: string;
+  suffix?: string;
 }
 
 export interface StatsGroup {
   title: string;
   type: 'counter' | 'countdown';
+  align?: 'left' | 'center' | 'right';
   duration?: number;
   items?: StatsItem[];
   start_date?: string;
