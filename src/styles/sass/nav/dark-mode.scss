@@ -30,15 +30,15 @@
     //                  └─────────────────────────────── Shape: ellipse (oval, not circle) 
 
     body {
-        --pk-bg:            #141414;
-        --pk-bg-glow:       rgba(59, 223, 0, 0.247);
-        --pk-bg-glow2:      rgba(0, 160, 223, 0.315);
-        
+        --pk-bg: #141414;
+        --pk-bg-glow: rgba(59, 223, 0, 0.247);
+        --pk-bg-glow2: rgba(0, 160, 223, 0.315);
+
         background-attachment: fixed;
         background-color: var(--pk-bg);
         background-image:
-    radial-gradient(ellipse 80% 55% at 10% -20%, var(--pk-bg-glow), transparent),
-    radial-gradient(ellipse 60% 55% at 90% 125%, var(--pk-bg-glow2), transparent);
+            radial-gradient(ellipse 80% 55% at 10% -20%, var(--pk-bg-glow), transparent),
+            radial-gradient(ellipse 60% 55% at 90% 125%, var(--pk-bg-glow2), transparent);
     }
 
     // =================================================================
@@ -222,7 +222,7 @@
         border: 1px solid #474747;
 
         a.play-button svg {
-            color:white;
+            color: white;
         }
     }
 
@@ -286,4 +286,20 @@
         filter: invert(90%) hue-rotate(180deg);
     }
 
+
+    // =================================================================
+    //                  LOADING SPINNER
+    // =================================================================
+    .spinner-dots span {
+        background-color: #ccc;
+    }
+
+    .spinner-pulse {
+        background-color: #ccc;
+    }
+
+    .spinner-bars span {
+        background-color: #ccc;
+
+    }
 }

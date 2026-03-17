@@ -85,20 +85,24 @@ export default function Header({
       />
 
       <div className="actions-container">
+        {megaMenuEnabled && menuItems?.length ? (
+          <div className="actions-menu actions-menu--mega">
+            <MegaMenuHamburger menuItems={menuItems} className="main-menu" />
+          </div>
+        ) : (
+          <div className="actions-menu actions-menu--normal">
+            <WpNavMenu
+              location="mainnav"
+              className="main-menu"
+              variant="responsive"
+              locale={currentLocale}
+              menuItems={menuItems}
+            />
+          </div>
+        )}
         <SearchTrigger />
         <DarkModeToggle variant="icon" size={20} strokeWidth={1.4} />
         <LangSwitcher currentLocale={currentLocale} />
-        {megaMenuEnabled && menuItems?.length ? (
-          <MegaMenuHamburger menuItems={menuItems} className="main-menu" />
-        ) : (
-          <WpNavMenu
-            location="mainnav"
-            className="main-menu"
-            variant="responsive"
-            locale={currentLocale}
-            menuItems={menuItems}
-          />
-        )}
       </div>
       
     </header>

@@ -277,7 +277,7 @@ function WpNavMenu({
         {/* Available burger icons: Icons.Menu, Icons.AlignJustify, Icons.AlignLeft, Icons.AlignRight, Icons.MoreVertical, Icons.MoreHorizontal */}
         {isMobileMenuOpen 
           ? <Icons.X size={28} strokeWidth={1} className="close-icon" /> 
-          : <Icons.AlignRight size={40} strokeWidth={1.2} className="burger-icon" />} 
+          : <Icons.AlignRight size={36} strokeWidth={1.2} className="burger-icon" />} 
       </a>
       
 

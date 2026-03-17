@@ -132,7 +132,7 @@ export default function MegaMenuHamburger({ menuItems, className = '' }: MegaMen
         {isOpen ? (
           <Icons.X size={28} strokeWidth={1} className="close-icon" />
         ) : (
-          <Icons.AlignRight size={40} strokeWidth={1.2} className="burger-icon" />
+          <Icons.AlignRight size={36} strokeWidth={1.2} className="burger-icon" />
         )}
       </a>
 

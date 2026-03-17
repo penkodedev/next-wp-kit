@@ -122,7 +122,12 @@
 
         .actions-container {
             display: flex;
-            flex-direction: row-reverse; // REVERT ORDER IF NEEDED of menu and components on smaller screens
+            flex-direction: row-reverse; // Hamburguer menus always at the right
+
+            // Mega menu: in mobile always at the right
+            .actions-menu--mega {
+                order: 0;
+            }
         }
     }
 

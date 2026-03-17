@@ -7,11 +7,11 @@
   padding-bottom: 66px;
 }
 
-.page article {
-  min-height: 500px;
+main  {
+  min-height: 80vh;
 }
 
-.article-content {
+.article-content{
   padding-bottom: 120px;
 }
 
@@ -35,28 +35,4 @@
 .full-width {
   width: 100vw;
   margin-inline: calc(50% - 50vw);
-}
-
-
-body.page-id-279 {
-  background-image: url("/images/18.webp");
-  background-size: contain;
-
-  .breadcrumb {
-    display: none;
-  }
-
-  header {
-    background: none;
-    border: none;
-  }
-
-  footer {
-    background-color: white;
-  }
-
-  .page-title {
-    border:none;
-    margin-bottom: 55px;
-  }
 }

@@ -58,9 +58,15 @@ header .actions-container {
         padding-bottom: 0;
     }
 
-    // > :nth-last-child(2) {
-    //     margin-right: 55px; // Space before last element IF NEEDED
-    // }
+    // Menú normal: desktop nav primero (izq), hamburger último (der) en mobile
+    .actions-menu--normal {
+        order: 0;
+    }
+
+    // Mega menu: hamburger último (der) en desktop, último (der) en mobile
+    .actions-menu--mega {
+        order: 4;
+    }
 }
 
 
