@@ -1,6 +1,7 @@
 // src/components/layout/header/Header.tsx
 "use client";
 
+import { memo } from 'react';
 import { usePathname } from 'next/navigation';
 import { useScrollShrink } from '@/hooks/useScrollShrink';
 import DarkModeToggle from "@/components/ui/DarkModeToggle";
@@ -12,6 +13,14 @@ import SearchTrigger from '@/components/features/search/SearchTrigger';
 import type { SiteInfo, MenuItem } from "@/types/wordpressTypes";
 import localesConfig from '@/i18n/locales.generated.json';
 import Ticker from '@/components/sections/Ticker';
+
+// Prevent re-renders of children that don't depend on scroll state
+const MemoTicker = memo(Ticker);
+const MemoSearchTrigger = memo(SearchTrigger);
+const MemoDarkModeToggle = memo(DarkModeToggle);
+const MemoLangSwitcher = memo(LangSwitcher);
+const MemoWpNavMenu = memo(WpNavMenu);
+const MemoMegaMenuHamburger = memo(MegaMenuHamburger);
 
 interface HeaderProps {
   variant?: 'default' | 'home';
@@ -73,7 +82,7 @@ export default function Header({
 
   return (
     <>
-      <Ticker />
+      <MemoTicker />
       
       <header className={headerClasses}>   
       <LogoHeader 
@@ -87,11 +96,11 @@ export default function Header({
       <div className="actions-container">
         {megaMenuEnabled && menuItems?.length ? (
           <div className="actions-menu actions-menu--mega">
-            <MegaMenuHamburger menuItems={menuItems} className="main-menu" />
+            <MemoMegaMenuHamburger menuItems={menuItems} className="main-menu" />
           </div>
         ) : (
           <div className="actions-menu actions-menu--normal">
-            <WpNavMenu
+            <MemoWpNavMenu
               location="mainnav"
               className="main-menu"
               variant="responsive"
@@ -100,9 +109,9 @@ export default function Header({
             />
           </div>
         )}
-        <SearchTrigger />
-        <DarkModeToggle variant="icon" size={20} strokeWidth={1.4} />
-        <LangSwitcher currentLocale={currentLocale} />
+        <MemoSearchTrigger />
+        <MemoDarkModeToggle variant="icon" size={20} strokeWidth={1.4} />
+        <MemoLangSwitcher currentLocale={currentLocale} />
       </div>
       
     </header>

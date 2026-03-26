@@ -12,34 +12,53 @@ interface AudioPlayerProps {
   className?: string;
 }
 
+function formatTime(time: number) {
+  if (!time || !isFinite(time)) return '0:00';
+  const minutes = Math.floor(time / 60);
+  const seconds = Math.floor(time % 60);
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
 export default function AudioPlayer({ src, title, className = '' }: AudioPlayerProps) {
   const t = useTranslations();
   const audioRef = useRef<HTMLAudioElement>(null);
+  const sliderRef = useRef<HTMLInputElement>(null);
+  const timeRef = useRef<HTMLParagraphElement>(null);
+  const rafRef = useRef(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Sync slider + time display via rAF while playing (zero React re-renders)
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const handlers = {
-      timeupdate: () => setCurrentTime(audio.currentTime),
-      loadedmetadata: () => setDuration(audio.duration),
-      loadstart: () => setIsLoading(true),
-      canplay: () => setIsLoading(false),
-      ended: () => setIsPlaying(false),
-    };
+    function tick() {
+      const t = audio!.currentTime;
+      if (sliderRef.current) sliderRef.current.value = String(t);
+      if (timeRef.current) timeRef.current.textContent = formatTime(t);
+      rafRef.current = requestAnimationFrame(tick);
+    }
 
-    Object.entries(handlers).forEach(([event, handler]) => 
-      audio.addEventListener(event, handler)
-    );
+    const onPlay = () => { rafRef.current = requestAnimationFrame(tick); };
+    const onPause = () => cancelAnimationFrame(rafRef.current);
+
+    audio.addEventListener('play', onPlay);
+    audio.addEventListener('pause', onPause);
+    audio.addEventListener('loadedmetadata', () => setDuration(audio.duration));
+    audio.addEventListener('loadstart', () => setIsLoading(true));
+    audio.addEventListener('canplay', () => setIsLoading(false));
+    audio.addEventListener('ended', () => setIsPlaying(false));
 
     return () => {
-      Object.entries(handlers).forEach(([event, handler]) => 
-        audio.removeEventListener(event, handler)
-      );
+      cancelAnimationFrame(rafRef.current);
+      audio.removeEventListener('play', onPlay);
+      audio.removeEventListener('pause', onPause);
+      audio.removeEventListener('loadedmetadata', () => setDuration(audio.duration));
+      audio.removeEventListener('loadstart', () => setIsLoading(true));
+      audio.removeEventListener('canplay', () => setIsLoading(false));
+      audio.removeEventListener('ended', () => setIsPlaying(false));
     };
   }, []);
 
@@ -60,17 +79,8 @@ export default function AudioPlayer({ src, title, className = '' }: AudioPlayerP
 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const time = parseFloat(e.target.value);
-    if (audioRef.current) {
-      audioRef.current.currentTime = time;
-      setCurrentTime(time);
-    }
-  };
-
-  const formatTime = (time: number) => {
-    if (!time || !isFinite(time)) return '0:00';
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    if (audioRef.current) audioRef.current.currentTime = time;
+    if (timeRef.current) timeRef.current.textContent = formatTime(time);
   };
 
   return (
@@ -93,12 +103,13 @@ export default function AudioPlayer({ src, title, className = '' }: AudioPlayerP
         </a>
 
         <div className="progress-container">
-          <p className="time-display">{formatTime(currentTime)}</p>
+          <p ref={timeRef} className="time-display">0:00</p>
           <input
+            ref={sliderRef}
             type="range"
             min="0"
             max={duration || 0}
-            value={currentTime}
+            defaultValue={0}
             onInput={handleSeek}
             onChange={handleSeek}
             className="progress-bar"

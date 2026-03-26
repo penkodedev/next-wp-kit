@@ -1,8 +1,8 @@
 'use client';
 
 /**
- * Mega Menu — panel con todas las secciones en columnas.
- * Usado con MegaMenuHamburger (disparador: icono hamburger).
+ * Mega menu - Panel with all sections in columns.
+ * Used with MegaMenuHamburger (trigger: hamburger icon).
  */
 
 import Link from 'next/link';
@@ -12,7 +12,7 @@ import { cleanInternalUrl } from '@/utils/wordpress/url';
 interface MegaMenuProps {
   menuItems: MenuItem[];
   className?: string;
-  /** Callback al hacer click en un item (para cerrar el menú) */
+  /** Callback when clicking on an item (to close the menu) */
   onItemClick?: () => void;
 }
 

@@ -1,6 +1,5 @@
 import ScrollReveal from '@/components/animations/gsap/ScrollReveal';
 import Breadcrumbs from '@/components/navigation/Breadcrumbs';
-import { ContactForm7Content } from '@/components/forms';
 import { WpPageIdSetter } from '@/utils/wordpress/WpPageIdContext';
 import type { Page } from '@/types/wordpressTypes';
 import { processContent } from '@/utils/wordpress/processContent';
@@ -35,13 +34,7 @@ export default function ContentPages({ page, lang, children }: ContentPagesProps
               <DynamicContent
                 html={processed}
                 lang={lang}
-                renderHtml={(html, i) => (
-                  <ContactForm7Content
-                    key={i}
-                    content={html}
-                    hasForm={hasForm && html.includes('wpcf7-form')}
-                  />
-                )}
+                hasForm={hasForm}
               />
               {children}
           </article>

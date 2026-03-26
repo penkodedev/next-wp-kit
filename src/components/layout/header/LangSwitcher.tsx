@@ -27,66 +27,54 @@ export default function LangSwitcher({ currentLocale }: LangSwitcherProps) {
   const pathname = usePathname();
   const { pageId } = useWpPageId();
   const [languages, setLanguages] = useState<LangInfo[]>([]);
-  const [defaultLang, setDefaultLang] = useState('es');
   const [translatedUrls, setTranslatedUrls] = useState<Record<string, string | null>>({});
-  const [isLoading, setIsLoading] = useState(false);
+
+  const defaultLang = languages.find(l => l.is_default)?.code || localesConfig.defaultLocale;
 
   // Fetch available languages from WordPress
   useEffect(() => {
     getWpmlLanguages().then(data => {
       if (data?.languages) {
-        const langs: LangInfo[] = data.languages.map(lang => ({
+        setLanguages(data.languages.map(lang => ({
           code: lang.code,
           native_name: lang.native_name,
           name: lang.name,
           is_default: lang.is_default,
           url: lang.url
-        }));
-        setLanguages(langs);
-        setDefaultLang(data.default);
+        })));
       } else {
-        // Fallback to locales.generated.json
-        const fallbackLangs = localesConfig.supportedLocales.map(code => ({
+        setLanguages(localesConfig.supportedLocales.map(code => ({
           code,
           native_name: code,
           name: code
-        }));
-        setLanguages(fallbackLangs);
-        setDefaultLang(localesConfig.defaultLocale);
+        })));
       }
     });
   }, []);
 
-  // Clear translations when pathname changes
+  // Fetch translations for current page (clears stale URLs on every dep change)
   useEffect(() => {
-    // CRITICAL: Always clear translations when pathname changes
-    // This ensures archive pages (without pageId) don't show stale URLs
     setTranslatedUrls({});
-  }, [pathname]);
 
-  // Fetch translations for current page
-  useEffect(() => {
-    // Early return for archive pages - they don't have pageId, so no WPML translations
     if (!pageId || languages.length === 0) return;
 
-    const currentPageId = pageId;
+    let cancelled = false;
 
-    async function fetchTranslations() {
-      setIsLoading(true);
-      const urls: Record<string, string | null> = {};
-      for (const lang of languages) {
-        if (lang.code === currentLocale) {
-          urls[lang.code] = pathname;
-        } else {
-          const translation = await getWpmlTranslation(currentPageId, lang.code);
-          urls[lang.code] = translation?.url || null;
-        }
-      }
+    const otherLangs = languages.filter(l => l.code !== currentLocale);
+
+    Promise.all(
+      otherLangs.map(lang =>
+        getWpmlTranslation(pageId, lang.code).then(t => [lang.code, t?.url || null] as const)
+      )
+    ).then(entries => {
+      if (cancelled) return;
+      const urls: Record<string, string | null> = { [currentLocale]: pathname };
+      for (const [code, url] of entries) urls[code] = url;
       setTranslatedUrls(urls);
-      setIsLoading(false);
-    }
-    fetchTranslations();
-  }, [pageId, currentLocale, languages, defaultLang, pathname]);
+    });
+
+    return () => { cancelled = true; };
+  }, [pageId, currentLocale, languages, pathname]);
 
   function getRouteSegments() {
     const segments = pathname.split('/').filter(Boolean);

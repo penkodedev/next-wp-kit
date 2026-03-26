@@ -141,7 +141,7 @@ export default function ChatBot() {
   // Get current locale from URL pathname
   const currentLocale = pathname ? pathname.split('/')[1] || localesConfig.defaultLocale : localesConfig.defaultLocale;
 
-  // Fetch config on mount
+  // Fetch config when locale changes (e.g. language switch)
   useEffect(() => {
     async function fetchConfig() {
       try {
@@ -156,7 +156,7 @@ export default function ChatBot() {
       }
     }
     fetchConfig();
-  }, []);
+  }, [currentLocale]);
 
   // Scroll to bottom on new messages
   useEffect(() => {

@@ -53,7 +53,7 @@ export default function SearchForm() {
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [searchContainerRef]);
+  }, []);
 
   // Handle form submission (on Enter key)
   const handleSearchSubmit = (e: React.FormEvent) => {

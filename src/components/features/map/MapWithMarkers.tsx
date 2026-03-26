@@ -80,11 +80,12 @@ export default function MapWithMarkers({
 
   return (
     <Map
-      mapboxAccessToken={token}
-      initialViewState={initialViewState}
-      style={{ width: '100%', height: '100%' }}
-      mapStyle={mapStyle}
-      onClick={handleMapClick}
+    mapboxAccessToken={token}
+    initialViewState={initialViewState}
+    style={{ width: '100%', height: '100%' }}
+    mapStyle={mapStyle}
+    onClick={handleMapClick}
+    attributionControl={false}
     >
       {showZoomControls && (
           <NavigationControl position="top-right" showCompass={false} showZoom />

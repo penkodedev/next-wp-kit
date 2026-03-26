@@ -31,10 +31,11 @@ export default function MegaMenuHamburger({ menuItems, className = '' }: MegaMen
   }, []);
 
   useEffect(() => {
-    const check = () => setIsMobileView(window.innerWidth < 1224);
-    check();
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
+    const mq = window.matchMedia('(max-width: 1223px)');
+    setIsMobileView(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setIsMobileView(e.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
   }, []);
 
   useEffect(() => {

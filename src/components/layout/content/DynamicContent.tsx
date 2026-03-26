@@ -1,46 +1,52 @@
 // src/components/layout/content/DynamicContent.tsx
 
-import { splitContentSegments, hasComponentMarkers } from '@/utils/wordpress/processContent';
+import parse from 'html-react-parser';
+import type { DOMNode } from 'html-react-parser';
 import SliderRenderer from '@/components/sections/sliders/SliderRenderer';
 import CounterStatsRenderer from '@/components/features/counter-stats/CounterStatsRenderer';
 import MapRenderer from '@/components/features/map/MapRenderer';
+import ContactForm7 from '@/components/forms/ContactForm7';
 
 interface DynamicContentProps {
   html: string;
   lang?: string;
-  /** Render function for plain HTML segments (e.g. wrap with ContactForm7Content) */
-  renderHtml?: (html: string, index: number) => React.ReactNode;
+  /** Wrap output with ContactForm7 client handler when the page contains a CF7 form */
+  hasForm?: boolean;
 }
 
 /**
  * Renders WordPress content that may contain dynamic component markers
- * (sliders, stats, etc.). Splits the HTML at marker boundaries and
- * renders the appropriate React component for each one.
+ * (sliders, stats, map). Uses html-react-parser to replace marker nodes
+ * in-place, preserving the full DOM tree (columns, groups, etc.).
  *
  * When adding a new dynamic component, update ONLY this file.
  */
-export default function DynamicContent({ html, lang, renderHtml }: DynamicContentProps) {
-  if (!hasComponentMarkers(html)) {
-    return renderHtml
-      ? <>{renderHtml(html, 0)}</>
-      : <div dangerouslySetInnerHTML={{ __html: html }} />;
+export default function DynamicContent({ html, lang, hasForm }: DynamicContentProps) {
+  const content = parse(html, {
+    replace(domNode: DOMNode) {
+      if (domNode.type !== 'tag') return;
+
+      const el = domNode as DOMNode & { attribs: Record<string, string> };
+      const componentType = el.attribs?.['data-component'];
+      if (!componentType) return;
+
+      if (componentType === 'map') {
+        return <MapRenderer lang={lang} />;
+      }
+      if (componentType === 'slider') {
+        const id = el.attribs['data-slider-id'];
+        if (id) return <SliderRenderer sliderId={Number(id)} lang={lang} />;
+      }
+      if (componentType === 'stats') {
+        const id = el.attribs['data-stats-id'];
+        if (id) return <CounterStatsRenderer statsId={Number(id)} lang={lang} />;
+      }
+    },
+  });
+
+  if (hasForm) {
+    return <ContactForm7>{content}</ContactForm7>;
   }
 
-  const segments = splitContentSegments(html);
-
-  return (
-    <>
-      {segments.map((seg, i) => {
-        if (seg.type === 'html') {
-          return renderHtml
-            ? <span key={i}>{renderHtml(seg.content, i)}</span>
-            : <div key={i} dangerouslySetInnerHTML={{ __html: seg.content }} />;
-        }
-        if (seg.type === 'slider') return <SliderRenderer key={i} sliderId={seg.sliderId} lang={lang} />;
-        if (seg.type === 'stats') return <CounterStatsRenderer key={i} statsId={seg.statsId} lang={lang} />;
-        if (seg.type === 'map') return <MapRenderer key={i} lang={lang} />;
-        return null;
-      })}
-    </>
-  );
+  return <>{content}</>;
 }
