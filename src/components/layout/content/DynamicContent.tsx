@@ -31,7 +31,8 @@ export default function DynamicContent({ html, lang, hasForm }: DynamicContentPr
       if (!componentType) return;
 
       if (componentType === 'map') {
-        return <MapRenderer lang={lang} />;
+        const group = el.attribs['data-map-group'] || undefined;
+        return <MapRenderer lang={lang} group={group} />;
       }
       if (componentType === 'slider') {
         const id = el.attribs['data-slider-id'];

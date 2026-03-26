@@ -807,6 +807,7 @@ export interface MapLocation {
 }
 
 export interface MapData {
+  group: string | null;
   center: { lat: number | null; lng: number | null };
   zoom: number;
   clustering: boolean;
@@ -814,11 +815,16 @@ export interface MapData {
   height: string;
   tooltipTrigger: 'hover' | 'click';
   showZoomControls: boolean;
+  projection: 'globe' | 'mercator';
   locations: MapLocation[];
 }
 
-export async function getMapData(lang?: string): Promise<MapData | null> {
-  const endpoint = lang ? `/custom/v1/map?lang=${lang}` : '/custom/v1/map';
+export async function getMapData(lang?: string, group?: string): Promise<MapData | null> {
+  const params = new URLSearchParams();
+  if (lang) params.set('lang', lang);
+  if (group) params.set('group', group);
+  const qs = params.toString();
+  const endpoint = qs ? `/custom/v1/map?${qs}` : '/custom/v1/map';
   return await fetchAPI<MapData>(endpoint);
 }
 

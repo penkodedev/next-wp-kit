@@ -19,6 +19,7 @@ interface MapWithMarkersProps {
   locations: MapLocation[];
   tooltipTrigger: 'hover' | 'click';
   showZoomControls?: boolean;
+  projection?: 'globe' | 'mercator';
 }
 
 export default function MapWithMarkers({
@@ -28,6 +29,7 @@ export default function MapWithMarkers({
   locations,
   tooltipTrigger,
   showZoomControls = true,
+  projection = 'globe',
 }: MapWithMarkersProps) {
   const [selectedLocation, setSelectedLocation] = useState<MapLocation | null>(null);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -84,6 +86,7 @@ export default function MapWithMarkers({
     initialViewState={initialViewState}
     style={{ width: '100%', height: '100%' }}
     mapStyle={mapStyle}
+    projection={projection}
     onClick={handleMapClick}
     attributionControl={false}
     >

@@ -54,7 +54,7 @@ export default function MapClient({ data }: MapClientProps) {
           [minLng - lngDelta, minLat - latDelta],
           [maxLng + lngDelta, maxLat + latDelta],
         ] as [[number, number], [number, number]],
-        fitBoundsOptions: { padding: 50 },
+        fitBoundsOptions: { padding: 160 }, // Change this to adjust the zoom level relativve to pins
       };
     }
     return { longitude: -3.7, latitude: 40.4, zoom: 4 };
@@ -90,6 +90,7 @@ export default function MapClient({ data }: MapClientProps) {
           locations={data.locations}
           tooltipTrigger={data.tooltipTrigger}
           showZoomControls={data.showZoomControls ?? true}
+          projection={data.projection ?? 'globe'}
         />
       </div>
     </section>

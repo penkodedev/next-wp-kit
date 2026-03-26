@@ -73,6 +73,11 @@ canvas.mapboxgl-canvas {
     background: #dadada;
     padding: 5px;
     border-radius: 4px;
+    word-wrap: break-word;
+
+    a:focus:not(:focus-visible) {
+      outline: none;
+    }
 
     p {
       margin: 0 0 0.5rem;
