@@ -36,6 +36,12 @@
     "yet-another-react-lightbox": "^3.25.0",
     "zustand": "^5.0.8"
   },
+  "browserslist": [
+    "Chrome >= 93",
+    "Edge >= 93",
+    "Firefox >= 92",
+    "Safari >= 15.4"
+  ],
   "devDependencies": {
     "@swc/jest": "^0.2.39",
     "@testing-library/jest-dom": "^6.9.1",
