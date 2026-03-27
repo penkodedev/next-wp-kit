@@ -167,8 +167,12 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang={currentLocale} suppressHydrationWarning>
       <head>
-        {wpOrigin && <link rel="preconnect" href={wpOrigin} />}
-        <link rel="preconnect" href="https://connect.facebook.net" crossOrigin="anonymous" />
+        {wpOrigin && (
+          <>
+            <link rel="preconnect" href={wpOrigin} />
+            <link rel="preconnect" href={wpOrigin} crossOrigin="anonymous" />
+          </>
+        )}
         <link rel="preload" href="/fonts/poppins-regular/Poppins-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/poppins-bold/Poppins-Bold.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <WpStyles />
