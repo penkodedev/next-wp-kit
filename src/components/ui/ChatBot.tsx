@@ -230,6 +230,8 @@ export default function ChatBot() {
             animate="animate"
             exit="exit"
             className={CLASSES.chatWindow}
+            role="dialog"
+            aria-label={`Chat con ${config.name}`}
           >
             {/* Header */}
             <div 

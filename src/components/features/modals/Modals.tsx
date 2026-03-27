@@ -85,6 +85,7 @@ export default function Modals() {
           exit="hidden"
           role="dialog"
           aria-modal="true"
+          aria-label={modalContent?.title?.rendered || 'Modal'}
         >
           {modalContent && (
             <motion.div

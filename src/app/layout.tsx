@@ -130,7 +130,7 @@ function GlobalUI({ appearance }: { appearance: AppearanceSettings | null }) {
       {ui.lightbox !== false && <LightboxController />}
       {ui.popups !== false && <AdvertisingPopup />}
 
-      <div className="fixed-actions">
+      <div className="fixed-actions" role="group" aria-label="Quick actions">
         {ui.scrollToTop !== false && <ScrollToTop />}
         <ChatBot />
         <ChatWhatsApp />

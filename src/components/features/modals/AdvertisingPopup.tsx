@@ -140,7 +140,7 @@ export default function AdvertisingPopup() {
           exit="hidden"
           role="dialog"
           aria-modal="true"
-          aria-labelledby="popup-title"
+          aria-label={activePopup.title?.rendered || 'Popup'}
         >
           <motion.div
             className="modal-content advertising-popup"
