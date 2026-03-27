@@ -82,30 +82,32 @@ export default function DarkModeToggle({
 // =================================================================
   if (variant === 'button') {
     return (
-      <a 
+      <button 
+        type="button"
         onClick={toggle}
         className="dark-mode-toggle"
         aria-label={isDark ? 'Light mode' : 'Dark mode'}
         title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       >
         {isDark ? <Icons.Sun size={size} strokeWidth={strokeWidth} /> : <Icons.Moon size={size} strokeWidth={strokeWidth} />}
-      </a>
+      </button>
     );
   }
 
 // =================================================================
-//                    Icon variant (simple link)
+//                    Icon variant (simple icon)
 // =================================================================
   if (variant === 'icon') {
     return (
-      <a 
+      <button 
+        type="button"
         onClick={toggle}
         className="dark-mode-icon"
         aria-label={isDark ? 'Light mode' : 'Dark mode'}
         title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       >
         {isDark ? <Icons.Sun size={size} strokeWidth={strokeWidth} /> : <Icons.Moon size={size} strokeWidth={strokeWidth} />}
-      </a>
+      </button>
     );
   }
 

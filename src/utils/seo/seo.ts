@@ -61,9 +61,14 @@ export async function generateSeoMetadata(
 			? yoast.canonical.replace(/^https?:\/\/[^\/]+/, '')
 			: content.link.replace(/^https?:\/\/[^\/]+/, '');
 
+		const description = yoast.description
+			|| yoast.og_description
+			|| content.excerpt?.rendered?.replace(/<[^>]+>/g, '').trim()
+			|| undefined;
+
 		return {
 			title: yoast.title,
-			description: yoast.description,
+			description,
 
 			// Open Graph for Facebook, LinkedIn, etc.
 			openGraph: {
