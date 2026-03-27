@@ -144,6 +144,19 @@ async function getWpThemeStyles() {
   }
 }
 
+async function fetchCssText(url: string): Promise<string> {
+  try {
+    const res = await fetch(url, {
+      next: { revalidate: 86400 },
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!res.ok) return '';
+    return await res.text();
+  } catch {
+    return '';
+  }
+}
+
 export default async function WpStyles() {
   const wpUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL?.replace("/wp-json", "");
 
@@ -151,37 +164,31 @@ export default async function WpStyles() {
     return null;
   }
 
-  // 1. Obtener los estilos globales usando la API oficial de WordPress
-  const globalStyles = await getWpGlobalStyles();
+  // Fetch all styles in parallel on the server
+  const [globalStyles, themeStyles, blockLibraryCss, blockThemeCss] = await Promise.all([
+    getWpGlobalStyles(),
+    getWpThemeStyles(),
+    fetchCssText(`${wpUrl}/wp-includes/css/dist/block-library/style.css`),
+    fetchCssText(`${wpUrl}/wp-includes/css/dist/block-library/theme.css`),
+    // block-editor/style.css intentionally excluded — it's editor-only, not needed on frontend
+  ]);
+
   const generatedCSS = generateCSSFromGlobalStyles(globalStyles);
-
-  // 2. Fallback: obtener estilos del tema usando tu endpoint custom
-  const themeStyles = await getWpThemeStyles();
-
-  // 3. URLs for standard Gutenberg stylesheets (ensure valid URLs)
-  const blockLibraryUrl = `${wpUrl}/wp-includes/css/dist/block-library/style.css`;
-  const themeLibraryUrl = `${wpUrl}/wp-includes/css/dist/block-library/theme.css`;
-  const editorLibraryUrl = `${wpUrl}/wp-includes/css/dist/block-editor/style.css`;
-  const hasValidUrls = blockLibraryUrl.startsWith('http') && themeLibraryUrl && editorLibraryUrl;
-
-  if (!hasValidUrls) return null;
+  const inlinedBlockCss = [blockLibraryCss, blockThemeCss].filter(Boolean).join('\n');
 
   return (
     <>
-      {/* Standard WordPress/Gutenberg stylesheets */}
-      <link rel="stylesheet" href={blockLibraryUrl} />
-      <link rel="stylesheet" href={themeLibraryUrl} />
-      <link rel="stylesheet" href={editorLibraryUrl} />
-
-      {/* Essential styles (including base CSS variables) */}
-      {/* <style dangerouslySetInnerHTML={{ __html: essentialStyles }} /> */}
+      {/* Gutenberg block styles — inlined to avoid render-blocking <link> tags */}
+      {inlinedBlockCss && (
+        <style dangerouslySetInnerHTML={{ __html: inlinedBlockCss }} />
+      )}
 
       {/* CSS generated from WordPress global styles */}
       {generatedCSS && (
         <style dangerouslySetInnerHTML={{ __html: generatedCSS }} />
       )}
 
-      {/* Theme styles (fallback) */}
+      {/* Theme styles */}
       {themeStyles && (
         <style dangerouslySetInnerHTML={{ __html: themeStyles }} />
       )}
