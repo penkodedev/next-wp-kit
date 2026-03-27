@@ -4,6 +4,7 @@ import { WpPageIdSetter } from '@/utils/wordpress/WpPageIdContext';
 import type { Page } from '@/types/wordpressTypes';
 import { processContent } from '@/utils/wordpress/processContent';
 import DynamicContent from './DynamicContent';
+import YoastJsonLd from '@/components/seo/YoastJsonLd';
 import type { ReactNode } from 'react';
 
 type ContentPagesProps = {
@@ -22,6 +23,7 @@ export default function ContentPages({ page, lang, children }: ContentPagesProps
 
   return (
     <>
+      <YoastJsonLd content={page} />
       <WpPageIdSetter pageId={page.id} />
       <div className="page-one-col">
           <section className="page-title">

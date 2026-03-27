@@ -16,6 +16,7 @@ import ButtonCopyLink from '@/components/ui/ButtonCopyLink';
 import { WpPageId } from '@/utils/wordpress/WpPageId';
 import { processContent } from '@/utils/wordpress/processContent';
 import DynamicContent from './DynamicContent';
+import YoastJsonLd from '@/components/seo/YoastJsonLd';
 import { getTranslatedCptSlug } from '@/utils/config/cptConfig';
 import { getAppearanceSettings } from '@/api/wordpressApi';
 import type { WpContent } from '@/types/wordpressTypes';
@@ -45,6 +46,7 @@ export default async function ContentSingle({
 
   return (
     <div className="page-sidebar">
+      <YoastJsonLd content={post} />
       <WpPageId id={post.id} />
       <div className="article-sidebar">
         <article className="page-content">

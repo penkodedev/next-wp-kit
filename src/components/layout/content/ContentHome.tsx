@@ -5,6 +5,7 @@ import type { Page } from '@/types/wordpressTypes';
 import ScrollReveal from '@/components/animations/gsap/ScrollReveal';
 import AnimatedArticle from '@/components/animations/framer/AnimatedArticle';
 import DynamicContent from './DynamicContent';
+import YoastJsonLd from '@/components/seo/YoastJsonLd';
 
 type ContentHomeProps = {
   page: Page;
@@ -20,6 +21,7 @@ export default function ContentHome({ page, lang }: ContentHomeProps) {
 
   return (
     <>
+      <YoastJsonLd content={page} />
       <WpPageIdSetter pageId={page.id} />
       <HeroWrapper position="home" lang={lang} />
       <div className="page-one-col">

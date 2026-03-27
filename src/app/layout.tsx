@@ -162,9 +162,12 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   const supportedLocales = siteInfo?.i18n?.locales || localesConfig.supportedLocales;
   
 
+  const wpOrigin = process.env.NEXT_PUBLIC_WORDPRESS_API_URL?.replace('/wp-json', '') || '';
+
   return (
     <html lang={currentLocale} suppressHydrationWarning>
       <head>
+        {wpOrigin && <link rel="preconnect" href={wpOrigin} />}
         <WpStyles />
         {/* Analytics tracking from WordPress settings */}
         {siteInfo && (
