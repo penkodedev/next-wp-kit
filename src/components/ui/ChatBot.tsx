@@ -208,7 +208,8 @@ export default function ChatBot() {
     <div className={`${CLASSES.chatBot} ${positionClass}`}>
       <AnimatePresence mode="wait">
         {!isOpen ? (
-          <motion.a
+          <motion.button
+            type="button"
             key="chatButton"
             variants={buttonVariants}
             initial="initial"
@@ -220,7 +221,7 @@ export default function ChatBot() {
             aria-label={`Abrir chat con ${config.name}`}
           >
             <Bot className={CLASSES.chatButtonIcon} />
-          </motion.a>
+          </motion.button>
         ) : (
           <motion.div
             key="chatWindow"
@@ -251,13 +252,14 @@ export default function ChatBot() {
                   <p className={CLASSES.chatStatus}>Status: Online</p>
                 </div>
               </div>
-              <a
+              <button
+                type="button"
                 className={CLASSES.closeButton}
                 onClick={() => setIsOpen(false)}
                 aria-label="Cerrar chat"
               >
                 <X className={CLASSES.closeIcon} />
-              </a>
+              </button>
             </div>
 
             {/* Messages */}
