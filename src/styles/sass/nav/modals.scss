@@ -43,20 +43,22 @@ a[href*="/modales/"] {
   overflow-y: auto; // Show scrollbar only when content overflows
   overflow-x: hidden; // NOT shown scrollbar only when content overflows
 
-        a.modal-close {
+        .modal-close {
         display: flex;
         align-items: center;
         justify-content: center;
         position: absolute;
-        top: 14px; //Adjusted to align with border size
-        right: 14px; //Adjusted to align with border size
+        top: 14px;
+        right: 14px;
         width: 40px;
         height: 40px;
         background: #fff;
+        border: none;
         border-radius: 50%;
         color: var(--text-color, #000);
         cursor: pointer;
         padding: 0;
+        font: inherit;
         opacity: 1;
         transition: opacity 0.2s;
         z-index: 99999;

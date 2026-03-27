@@ -117,11 +117,11 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <a href="#" onClick={(e) => { e.preventDefault(); handleClose(); }}
+            <button type="button" onClick={handleClose}
               className="search-modal-close"
               aria-label={t('closeSearch')}>
               <Icons.X size={28} strokeWidth={1.2} />
-            </a>
+            </button>
 
             <form onSubmit={handleSearchSubmit} className="search-modal-form">
               <div className="input-wrapper">

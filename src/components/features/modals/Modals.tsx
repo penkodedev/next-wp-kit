@@ -101,9 +101,9 @@ export default function Modals() {
               <div className="modal-scroll-wrapper">
                 <div className="modal-body" dangerouslySetInnerHTML={{ __html: processContent(modalContent.content.rendered) }} />
 
-                <a className="modal-close" onClick={closeModal} aria-label="Cerrar modal">
+                <button type="button" className="modal-close" onClick={closeModal} aria-label="Cerrar modal">
                 <Icons.X size={28} strokeWidth={1} />
-                </a>
+                </button>
                 
               </div>
             </motion.div>

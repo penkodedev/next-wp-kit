@@ -243,20 +243,22 @@ export default function Hero({
       {/* Controles de navegación si hay múltiples slides */}
       {heroSlides.length > 1 && (
         <>
-          <a
+          <button
+            type="button"
             onClick={prevSlide}
             className="hero-nav hero-nav-prev"
             aria-label="Slide anterior"
           >
             <Icons.ChevronLeft size={18} />
-          </a>
-          <a
+          </button>
+          <button
+            type="button"
             onClick={nextSlide}
             className="hero-nav hero-nav-next"
             aria-label="Slide siguiente"
           >
             <Icons.ChevronRight size={18} />
-          </a>
+          </button>
         </>
       )}
 

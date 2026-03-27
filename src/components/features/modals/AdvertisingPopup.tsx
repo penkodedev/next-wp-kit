@@ -148,9 +148,9 @@ export default function AdvertisingPopup() {
             onClick={(e) => e.stopPropagation()}
             role="document"
           >
-            <a className="modal-close" onClick={handleClose} aria-label="Cerrar popup">
+            <button type="button" className="modal-close" onClick={handleClose} aria-label="Cerrar popup">
               <Icons.X size={28} strokeWidth={1} />
-            </a>
+            </button>
             <div className="modal-body" dangerouslySetInnerHTML={{ __html: activePopup.content.rendered.replace(/loading="lazy"/g, 'loading="eager"') }} />
           </motion.div>
         </motion.div>
