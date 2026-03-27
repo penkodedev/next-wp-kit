@@ -168,16 +168,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
     <html lang={currentLocale} suppressHydrationWarning>
       <head>
         {wpOrigin && <link rel="preconnect" href={wpOrigin} />}
+        <link rel="preload" href="/fonts/poppins-regular/Poppins-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/poppins-bold/Poppins-Bold.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <WpStyles />
-        {/* Analytics tracking from WordPress settings */}
-        {siteInfo && (
-          <Analytics
-            gtmId={siteInfo.analytics.gtm_id}
-            ga4Id={siteInfo.analytics.google_analytics_id}
-            fbPixelId={siteInfo.analytics.facebook_pixel_id}
-            twitterPixelId={siteInfo.analytics.twitter_pixel_id}
-          />
-        )}
         {/* Language sync script in head for immediate execution */}
         <script
           dangerouslySetInnerHTML={{
@@ -226,6 +219,14 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           </SWRConfig>
         </NextIntlClientProvider>
         <CodeBlockCopier />
+        {siteInfo && (
+          <Analytics
+            gtmId={siteInfo.analytics.gtm_id}
+            ga4Id={siteInfo.analytics.google_analytics_id}
+            fbPixelId={siteInfo.analytics.facebook_pixel_id}
+            twitterPixelId={siteInfo.analytics.twitter_pixel_id}
+          />
+        )}
       </body>
     </html>
   );

@@ -1,5 +1,7 @@
 // src/components/tracking/Analytics.tsx
-// Server Component - renders tracking scripts in HTML
+'use client';
+
+import Script from 'next/script';
 
 interface AnalyticsProps {
   gtmId?: string;
@@ -11,17 +13,15 @@ interface AnalyticsProps {
 /**
  * Analytics component that injects tracking scripts dynamically from WordPress settings.
  * Prioritizes Google Tag Manager (GTM) if available, otherwise loads individual scripts.
- * Server Component to ensure scripts appear in initial HTML.
+ * Uses next/script with afterInteractive strategy to avoid blocking the first paint.
  */
 export default function Analytics({ gtmId, ga4Id, fbPixelId, twitterPixelId }: AnalyticsProps) {
-  // If GTM is configured, use it exclusively (manages all other trackers)
   if (gtmId) {
     return (
       <>
-        {/* Google Tag Manager */}
-        {/* eslint-disable-next-line @next/next/next-script-for-ga */}
-        <script
+        <Script
           id="gtm"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -32,7 +32,6 @@ export default function Analytics({ gtmId, ga4Id, fbPixelId, twitterPixelId }: A
           `,
           }}
         />
-        {/* GTM noscript fallback */}
         <noscript>
           <iframe
             src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
@@ -45,15 +44,18 @@ export default function Analytics({ gtmId, ga4Id, fbPixelId, twitterPixelId }: A
     );
   }
 
-  // Fallback: Load individual tracking scripts if GTM is not configured
   return (
     <>
-      {/* Google Analytics 4 */}
       {ga4Id && (
         <>
-          <script async src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`} />
-          <script
+          <Script
+            id="ga4-lib"
+            strategy="afterInteractive"
+            src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}
+          />
+          <Script
             id="google-analytics"
+            strategy="afterInteractive"
             dangerouslySetInnerHTML={{
               __html: `
               window.dataLayer = window.dataLayer || [];
@@ -66,10 +68,10 @@ export default function Analytics({ gtmId, ga4Id, fbPixelId, twitterPixelId }: A
         </>
       )}
 
-      {/* Facebook Pixel */}
       {fbPixelId && (
-        <script
+        <Script
           id="facebook-pixel"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
             !function(f,b,e,v,n,t,s)
@@ -87,10 +89,10 @@ export default function Analytics({ gtmId, ga4Id, fbPixelId, twitterPixelId }: A
         />
       )}
 
-      {/* Twitter Pixel */}
       {twitterPixelId && (
-        <script
+        <Script
           id="twitter-pixel"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
             !function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
