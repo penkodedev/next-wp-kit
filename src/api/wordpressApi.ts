@@ -816,6 +816,11 @@ export interface MapData {
   tooltipTrigger: 'hover' | 'click';
   showZoomControls: boolean;
   projection: 'globe' | 'mercator';
+  pinIcon: string;
+  pinSize: number;
+  pinFillColor: string;
+  pinStrokeColor: string;
+  pinStrokeWidth: number;
   locations: MapLocation[];
 }
 

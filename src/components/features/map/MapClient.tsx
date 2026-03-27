@@ -91,6 +91,11 @@ export default function MapClient({ data }: MapClientProps) {
           tooltipTrigger={data.tooltipTrigger}
           showZoomControls={data.showZoomControls ?? true}
           projection={data.projection ?? 'globe'}
+          pinIcon={data.pinIcon ?? 'map-pin'}
+          pinSize={data.pinSize ?? 32}
+          pinFillColor={data.pinFillColor ?? '#dc2626'}
+          pinStrokeColor={data.pinStrokeColor ?? '#ffffff'}
+          pinStrokeWidth={data.pinStrokeWidth ?? 2}
         />
       </div>
     </section>

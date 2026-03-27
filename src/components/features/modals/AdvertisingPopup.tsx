@@ -114,7 +114,7 @@ export default function AdvertisingPopup() {
             // Could not write to sessionStorage
           }
         }
-      }, popupForThisPage.popup_settings?.delay ?? 2000); // Use delay from API, or default to 2s
+      }, Math.max(popupForThisPage.popup_settings?.delay ?? 5000, 5000)); // Min 5s to avoid becoming LCP element
 
       // Cleanup timer on component unmount or dependency change
       return () => clearTimeout(timer);
@@ -151,7 +151,7 @@ export default function AdvertisingPopup() {
             <a className="modal-close" onClick={handleClose} aria-label="Cerrar popup">
               <Icons.X size={28} strokeWidth={1} />
             </a>
-            <div className="modal-body" dangerouslySetInnerHTML={{ __html: activePopup.content.rendered }} />
+            <div className="modal-body" dangerouslySetInnerHTML={{ __html: activePopup.content.rendered.replace(/loading="lazy"/g, 'loading="eager"') }} />
           </motion.div>
         </motion.div>
       )}

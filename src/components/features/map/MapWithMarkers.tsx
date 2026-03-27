@@ -3,9 +3,53 @@
 import { useState, useCallback, useRef } from 'react';
 import Map, { Marker, Popup, NavigationControl } from 'react-map-gl/mapbox';
 import type { MapLocation } from '@/api/wordpressApi';
+import type { LucideIcon } from 'lucide-react';
+import {
+  MapPin,
+  MapPinCheck,
+  MapPinCheckInside,
+  MapPinHouse,
+  MapPinMinusInside,
+  MapPinPen,
+  Locate,
+  LocateFixed,
+  Building2,
+  Store,
+  Hotel,
+  Landmark,
+  Hospital,
+  CircleDot,
+  Navigation,
+  User,
+  Circle,
+  ShoppingBasket,
+  ShoppingCart,
+} from 'lucide-react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 const HOVER_CLOSE_DELAY_MS = 150;
+
+const ICON_MAP: Record<string, LucideIcon> = {
+  'map-pin': MapPin,
+  'map-pin-check': MapPinCheck,
+  'map-pin-check-inside': MapPinCheckInside,
+  'map-pin-house': MapPinHouse,
+  'map-pin-minus-inside': MapPinMinusInside,
+  'map-pin-pen': MapPinPen,
+  'locate': Locate,
+  'locate-fixed': LocateFixed,
+  'building-2': Building2,
+  'store': Store,
+  'hotel': Hotel,
+  'landmark': Landmark,
+  'hospital': Hospital,
+  'circle-dot': CircleDot,
+  'navigation': Navigation,
+  'user': User,
+  'circle': Circle,
+  'shopping-basket': ShoppingBasket,
+  'shopping-cart': ShoppingCart,
+};
 
 interface MapWithMarkersProps {
   token: string;
@@ -20,6 +64,11 @@ interface MapWithMarkersProps {
   tooltipTrigger: 'hover' | 'click';
   showZoomControls?: boolean;
   projection?: 'globe' | 'mercator';
+  pinIcon?: string;
+  pinSize?: number;
+  pinFillColor?: string;
+  pinStrokeColor?: string;
+  pinStrokeWidth?: number;
 }
 
 export default function MapWithMarkers({
@@ -30,6 +79,11 @@ export default function MapWithMarkers({
   tooltipTrigger,
   showZoomControls = true,
   projection = 'globe',
+  pinIcon = 'map-pin',
+  pinSize = 32,
+  pinFillColor = '#dc2626',
+  pinStrokeColor = '#ffffff',
+  pinStrokeWidth = 2,
 }: MapWithMarkersProps) {
   const [selectedLocation, setSelectedLocation] = useState<MapLocation | null>(null);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -100,6 +154,11 @@ export default function MapWithMarkers({
           tooltipTrigger={tooltipTrigger}
           onSelect={handleSelect}
           isSelected={selectedLocation?.id === loc.id}
+          pinIcon={pinIcon}
+          pinSize={pinSize}
+          pinFillColor={pinFillColor}
+          pinStrokeColor={pinStrokeColor}
+          pinStrokeWidth={pinStrokeWidth}
         />
       ))}
       {selectedLocation && (
@@ -149,12 +208,24 @@ function MapMarker({
   tooltipTrigger,
   onSelect,
   isSelected,
+  pinIcon,
+  pinSize,
+  pinFillColor,
+  pinStrokeColor,
+  pinStrokeWidth,
 }: {
   location: MapLocation;
   tooltipTrigger: 'hover' | 'click';
   onSelect: (loc: MapLocation | null, immediate?: boolean) => void;
   isSelected: boolean;
+  pinIcon: string;
+  pinSize: number;
+  pinFillColor: string;
+  pinStrokeColor: string;
+  pinStrokeWidth: number;
 }) {
+  const Icon = ICON_MAP[pinIcon] ?? MapPin;
+
   const handleClick = useCallback(
     (e: { originalEvent: MouseEvent }) => {
       e.originalEvent.stopPropagation();
@@ -197,7 +268,14 @@ function MapMarker({
             handleClick({ originalEvent: e.nativeEvent as unknown as MouseEvent });
           }
         }}
-      />
+      >
+        <Icon
+          size={pinSize}
+          color={pinStrokeColor}
+          fill={pinFillColor}
+          strokeWidth={pinStrokeWidth}
+        />
+      </div>
     </Marker>
   );
 }

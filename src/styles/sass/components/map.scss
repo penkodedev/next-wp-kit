@@ -28,13 +28,19 @@ canvas.mapboxgl-canvas {
 }
 
 .map-marker {
-  padding: 11px; // Larger hit area (~48x48) for easier hover/click
-  background: #dc2626;
-  border: 1px solid #fff;
-  border-radius: 50% 50% 50% 0;
-  transform: rotate(-45deg);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
   cursor: pointer;
+  display: flex;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+  transition: filter 0.15s ease, transform 0.15s ease;
+
+  &:hover {
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.5));
+    transform: scale(1.1);
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
 }
 
 .map-popup {
