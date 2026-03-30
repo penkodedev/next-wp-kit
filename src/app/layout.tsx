@@ -201,16 +201,16 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         <NextIntlClientProvider locale={currentLocale} messages={messages}>
           <SWRConfig
             value={{
-              refreshInterval: 0, // Disable auto-refresh (manual revalidation only)
-              revalidateOnFocus: false, // Don't refetch when window gets focus
-              revalidateOnReconnect: true, // Refetch when coming back online
-              dedupingInterval: 60000, // Dedupe identical requests within 1 minute
+              refreshInterval: 0,
+              revalidateOnFocus: false,
+              revalidateOnReconnect: true,
+              dedupingInterval: 60000,
             }}
           >
             <WpPageIdProvider>
-              {appearance?.scrollProgress !== false && <ScrollProgress />}
-              <SmoothScroll enabled={appearance?.smoothScroll !== false}>
-                <ParallaxEffects />
+              {!appearance?.spaMode && appearance?.scrollProgress !== false && <ScrollProgress />}
+              <SmoothScroll enabled={!appearance?.spaMode && appearance?.smoothScroll !== false}>
+                {!appearance?.spaMode && <ParallaxEffects />}
                 <BodyClass>
                   <TooltipsProvider>
                     <HeaderServer siteInfo={siteInfo} initialLocale={currentLocale} />
