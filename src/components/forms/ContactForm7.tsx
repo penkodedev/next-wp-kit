@@ -48,9 +48,144 @@ export default function ContactForm7({ children }: ContactForm7Props) {
       });
     };
 
+    const formatFileSize = (bytes: number): string => {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / 1048576).toFixed(1) + ' MB';
+    };
+
+    const fileUploadI18n: Record<string, { drag: string; browse: string }> = {
+      es: { drag: 'Arrastra archivos aquí o',        browse: 'selecciona' },
+      en: { drag: 'Drag files here or',              browse: 'browse' },
+      pt: { drag: 'Arraste arquivos aqui ou',        browse: 'selecione' },
+      fr: { drag: 'Glissez les fichiers ici ou',     browse: 'parcourir' },
+      it: { drag: 'Trascina i file qui o',           browse: 'sfoglia' },
+      de: { drag: 'Dateien hierher ziehen oder',     browse: 'durchsuchen' },
+    };
+
+    const initFileUpload = () => {
+      const lang = document.documentElement.lang?.split('-')[0] || 'es';
+      const t = fileUploadI18n[lang] || fileUploadI18n.es;
+      const cf7Forms = document.querySelectorAll('.wpcf7-form');
+
+      cf7Forms.forEach(form => {
+        const fileInputs = form.querySelectorAll<HTMLInputElement>('input[type="file"]');
+
+        fileInputs.forEach(input => {
+          if (input.dataset.enhanced) return;
+          input.dataset.enhanced = 'true';
+          input.setAttribute('multiple', 'multiple');
+
+          const wrap = input.closest('.wpcf7-form-control-wrap') as HTMLElement;
+          if (!wrap) return;
+
+          const dropZone = document.createElement('div');
+          dropZone.className = 'cf7-file-dropzone';
+          dropZone.innerHTML = `
+            <div class="cf7-file-dropzone__label">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+              <span>${t.drag} <span class="cf7-file-dropzone__browse">${t.browse}</span></span>
+            </div>
+            <div class="cf7-file-preview"></div>
+          `;
+
+          input.style.display = 'none';
+          wrap.appendChild(dropZone);
+
+          const previewContainer = dropZone.querySelector('.cf7-file-preview') as HTMLElement;
+
+          const renderPreviews = () => {
+            previewContainer.innerHTML = '';
+            if (!input.files?.length) return;
+
+            Array.from(input.files).forEach((file, i) => {
+              const item = document.createElement('div');
+              item.className = 'cf7-file-preview__item';
+
+              if (file.type.startsWith('image/')) {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.onload = () => URL.revokeObjectURL(img.src);
+                item.appendChild(img);
+              } else {
+                const icon = document.createElement('span');
+                icon.className = 'cf7-file-preview__file-icon';
+                icon.textContent = file.name.split('.').pop()?.toUpperCase() || 'FILE';
+                item.appendChild(icon);
+              }
+
+              const name = document.createElement('span');
+              name.className = 'cf7-file-preview__name';
+              name.textContent = file.name;
+              item.appendChild(name);
+
+              const size = document.createElement('span');
+              size.className = 'cf7-file-preview__size';
+              size.textContent = formatFileSize(file.size);
+              item.appendChild(size);
+
+              const removeBtn = document.createElement('button');
+              removeBtn.type = 'button';
+              removeBtn.className = 'cf7-file-preview__remove';
+              removeBtn.setAttribute('aria-label', `Remove ${file.name}`);
+              removeBtn.textContent = '×';
+              removeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const dt = new DataTransfer();
+                Array.from(input.files!).forEach((f, j) => {
+                  if (j !== i) dt.items.add(f);
+                });
+                input.files = dt.files;
+                renderPreviews();
+              });
+              item.appendChild(removeBtn);
+
+              previewContainer.appendChild(item);
+            });
+          };
+
+          dropZone.addEventListener('click', (e) => {
+            if ((e.target as HTMLElement).closest('.cf7-file-preview__remove')) return;
+            input.click();
+          });
+
+          dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('cf7-file-dropzone--active');
+          });
+          dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('cf7-file-dropzone--active');
+          });
+          dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('cf7-file-dropzone--active');
+            if (e.dataTransfer?.files?.length) {
+              const dt = new DataTransfer();
+              if (input.files) {
+                Array.from(input.files).forEach(f => dt.items.add(f));
+              }
+              Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
+              input.files = dt.files;
+              renderPreviews();
+            }
+          });
+
+          input.addEventListener('change', renderPreviews);
+        });
+      });
+    };
+
     // Run on mount and after a short delay (CF7 might inject HTML asynchronously)
     initFloatingLabels();
-    const timer = setTimeout(initFloatingLabels, 500);
+    initFileUpload();
+    const timer = setTimeout(() => {
+      initFloatingLabels();
+      initFileUpload();
+    }, 500);
 
     // Function to handle form submission
     const handleFormSubmit = async (event: Event) => {
@@ -98,6 +233,7 @@ export default function ContactForm7({ children }: ContactForm7Props) {
           // Success
           showMessage(form, result.message, 'success');
           form.reset();
+          form.querySelectorAll('.cf7-file-preview').forEach(p => { p.innerHTML = ''; });
         } else if (result.status === 'validation_failed') {
           // Validation errors
           showValidationErrors(form, result.invalid_fields);

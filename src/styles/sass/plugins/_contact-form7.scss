@@ -76,3 +76,96 @@ span.wpcf7-form-control-wrap {
   margin-bottom: -10px;
 }
 
+
+/********************** File Upload Dropzone **********************/
+.cf7-file-dropzone {
+  border: 2px dashed #9f9f9f;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s;
+
+  &:hover,
+  &--active { border-color: $branding-color1; }
+
+  &__label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    gap: 8px;
+    
+    svg { flex-shrink: 0; }
+  }
+
+  &__browse { color: $branding-color1; text-decoration: underline; }
+}
+
+.cf7-file-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+
+  &:empty { display: none; }
+
+  &__item {
+    position: relative;
+    width: 90px;
+    text-align: center;
+
+    img {
+      width: 90px;
+      height: 64px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+  }
+
+  &__file-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90px;
+    height: 64px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    opacity: 0.3;
+    border-radius: 4px;
+    border: 1px solid rgba($black, 0.1);
+    text-transform: uppercase;
+  }
+
+  &__name {
+    font-size: 0.65rem;
+    line-height: 1.2;
+    margin-top: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 90px;
+  }
+
+  &__size { font-size: 0.6rem; opacity: 0.4; }
+
+  &__remove {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: none;
+    background: rgba($black, 0.6);
+    color: $white;
+    font-size: 12px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
