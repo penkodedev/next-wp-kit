@@ -7,6 +7,7 @@ export interface MapLocation {
   lng: number;
   address: string;
   description: string;
+  link?: string | null;
 }
 
 export interface MapData {

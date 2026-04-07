@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useRef } from 'react';
+import Link from 'next/link';
 import Map, { Marker, Popup, NavigationControl } from 'react-map-gl/mapbox';
 import type { MapLocation } from '@/api/wordpressApi';
 import type { LucideIcon } from 'lucide-react';
@@ -177,7 +178,15 @@ export default function MapWithMarkers({
             onMouseLeave={handlePopupMouseLeave}
             onClick={handlePopupClick}
           >
-            <h3 className="map-popup-title">{selectedLocation.title}</h3>
+            <h3 className="map-popup-title">
+              {selectedLocation.link ? (
+                <Link href={selectedLocation.link} className="map-popup-title-link">
+                  {selectedLocation.title}
+                </Link>
+              ) : (
+                selectedLocation.title
+              )}
+            </h3>
             {selectedLocation.address && (
               <span className="map-popup-address">
                 <a

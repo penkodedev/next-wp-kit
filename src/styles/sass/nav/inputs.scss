@@ -42,6 +42,10 @@ textarea:focus::placeholder {
     margin: 0;
   }
 
+  textarea {
+    padding-top: 22px;
+  }
+
   label {
     font-family: $font-family-base;
     font-size: $text-size / 1.2;
@@ -64,26 +68,26 @@ textarea:focus::placeholder {
   // When input has content or is focused, label floats up
   input:focus~label,
   input:not(:placeholder-shown)~label {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: $text-color;
     top: 0;
     left: 12px;
-    transform: translateY(-50%);
-    background: $input-bg-color-focus;
-    padding: 2px 9px;
+    transform: translateY(-10%);
+    // 
+    // padding: 2px 9px;
     border-radius: 4px;
   }
 
   // Textarea floating state (separate from inputs)
   textarea:focus~label,
   textarea:not(:placeholder-shown)~label {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: $text-color;
-    top: -10px; // Different position for textarea
-    left: 12px;
+    top: 2px; // Different position for textarea
+    left: 22px;
     transform: none; // No vertical centering
-    background: $input-bg-color-focus;
-    padding: 2px 9px;
+    // background: $input-bg-color-focus;
+    // padding: 12px;
     border-radius: 4px;
   }
 }

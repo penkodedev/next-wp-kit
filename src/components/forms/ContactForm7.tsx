@@ -54,13 +54,15 @@ export default function ContactForm7({ children }: ContactForm7Props) {
       return (bytes / 1048576).toFixed(1) + ' MB';
     };
 
-    const fileUploadI18n: Record<string, { drag: string; browse: string }> = {
-      es: { drag: 'Arrastra archivos aquí o',        browse: 'selecciona' },
-      en: { drag: 'Drag files here or',              browse: 'browse' },
-      pt: { drag: 'Arraste arquivos aqui ou',        browse: 'selecione' },
-      fr: { drag: 'Glissez les fichiers ici ou',     browse: 'parcourir' },
-      it: { drag: 'Trascina i file qui o',           browse: 'sfoglia' },
-      de: { drag: 'Dateien hierher ziehen oder',     browse: 'durchsuchen' },
+    const ALLOWED_FORMATS = 'jpg, png, pdf, doc, docx, xls, xlsx, mp3, mp4';
+
+    const fileUploadI18n: Record<string, { drag: string; browse: string; allowed: string }> = {
+      es: { drag: 'Arrastra archivos aquí o',                browse: 'selecciona',  allowed: `Formatos permitidos: ${ALLOWED_FORMATS}` },
+      en: { drag: 'Drag files here or',                      browse: 'browse',      allowed: `Allowed formats: ${ALLOWED_FORMATS}` },
+      pt: { drag: 'Arraste arquivos aqui ou',                browse: 'selecione',   allowed: `Formatos permitidos: ${ALLOWED_FORMATS}` },
+      fr: { drag: 'Glissez les fichiers ici ou',             browse: 'parcourir',   allowed: `Formats autorisés: ${ALLOWED_FORMATS}` },
+      it: { drag: 'Trascina i file qui o',                   browse: 'sfoglia',     allowed: `Formati consentiti: ${ALLOWED_FORMATS}` },
+      de: { drag: 'Dateien hierher ziehen oder',             browse: 'durchsuchen', allowed: `Erlaubte Formate: ${ALLOWED_FORMATS}` },
     };
 
     const initFileUpload = () => {
@@ -74,7 +76,6 @@ export default function ContactForm7({ children }: ContactForm7Props) {
         fileInputs.forEach(input => {
           if (input.dataset.enhanced) return;
           input.dataset.enhanced = 'true';
-          input.setAttribute('multiple', 'multiple');
 
           const wrap = input.closest('.wpcf7-form-control-wrap') as HTMLElement;
           if (!wrap) return;
@@ -90,6 +91,7 @@ export default function ContactForm7({ children }: ContactForm7Props) {
               </svg>
               <span>${t.drag} <span class="cf7-file-dropzone__browse">${t.browse}</span></span>
             </div>
+            <small class="cf7-file-dropzone__formats">${t.allowed}</small>
             <div class="cf7-file-preview"></div>
           `;
 
@@ -98,54 +100,40 @@ export default function ContactForm7({ children }: ContactForm7Props) {
 
           const previewContainer = dropZone.querySelector('.cf7-file-preview') as HTMLElement;
 
-          const renderPreviews = () => {
+          const renderPreview = () => {
             previewContainer.innerHTML = '';
             if (!input.files?.length) return;
 
-            Array.from(input.files).forEach((file, i) => {
-              const item = document.createElement('div');
-              item.className = 'cf7-file-preview__item';
+            const file = input.files[0];
+            const item = document.createElement('div');
+            item.className = 'cf7-file-preview__item';
 
-              if (file.type.startsWith('image/')) {
-                const img = document.createElement('img');
-                img.src = URL.createObjectURL(file);
-                img.onload = () => URL.revokeObjectURL(img.src);
-                item.appendChild(img);
-              } else {
-                const icon = document.createElement('span');
-                icon.className = 'cf7-file-preview__file-icon';
-                icon.textContent = file.name.split('.').pop()?.toUpperCase() || 'FILE';
-                item.appendChild(icon);
-              }
+            if (file.type.startsWith('image/')) {
+              const img = document.createElement('img');
+              img.src = URL.createObjectURL(file);
+              img.onload = () => URL.revokeObjectURL(img.src);
+              item.appendChild(img);
+            }
 
-              const name = document.createElement('span');
-              name.className = 'cf7-file-preview__name';
-              name.textContent = file.name;
-              item.appendChild(name);
+            const ext = file.name.split('.').pop()?.toUpperCase() || 'FILE';
+            const info = document.createElement('span');
+            info.className = 'cf7-file-preview__info';
+            info.textContent = `${ext} · ${formatFileSize(file.size)}`;
+            item.appendChild(info);
 
-              const size = document.createElement('span');
-              size.className = 'cf7-file-preview__size';
-              size.textContent = formatFileSize(file.size);
-              item.appendChild(size);
-
-              const removeBtn = document.createElement('button');
-              removeBtn.type = 'button';
-              removeBtn.className = 'cf7-file-preview__remove';
-              removeBtn.setAttribute('aria-label', `Remove ${file.name}`);
-              removeBtn.textContent = '×';
-              removeBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const dt = new DataTransfer();
-                Array.from(input.files!).forEach((f, j) => {
-                  if (j !== i) dt.items.add(f);
-                });
-                input.files = dt.files;
-                renderPreviews();
-              });
-              item.appendChild(removeBtn);
-
-              previewContainer.appendChild(item);
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'cf7-file-preview__remove';
+            removeBtn.setAttribute('aria-label', `Remove ${file.name}`);
+            removeBtn.textContent = '×';
+            removeBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              input.value = '';
+              renderPreview();
             });
+            item.appendChild(removeBtn);
+
+            previewContainer.appendChild(item);
           };
 
           dropZone.addEventListener('click', (e) => {
@@ -165,16 +153,13 @@ export default function ContactForm7({ children }: ContactForm7Props) {
             dropZone.classList.remove('cf7-file-dropzone--active');
             if (e.dataTransfer?.files?.length) {
               const dt = new DataTransfer();
-              if (input.files) {
-                Array.from(input.files).forEach(f => dt.items.add(f));
-              }
-              Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
+              dt.items.add(e.dataTransfer.files[0]);
               input.files = dt.files;
-              renderPreviews();
+              renderPreview();
             }
           });
 
-          input.addEventListener('change', renderPreviews);
+          input.addEventListener('change', renderPreview);
         });
       });
     };
@@ -233,7 +218,6 @@ export default function ContactForm7({ children }: ContactForm7Props) {
           // Success
           showMessage(form, result.message, 'success');
           form.reset();
-          form.querySelectorAll('.cf7-file-preview').forEach(p => { p.innerHTML = ''; });
         } else if (result.status === 'validation_failed') {
           // Validation errors
           showValidationErrors(form, result.invalid_fields);
