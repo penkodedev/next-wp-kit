@@ -239,21 +239,21 @@ const CookieConsent = () => {
         <div className="cookie-consent-actions">
           <button 
             ref={acceptAllRef}
-            className={`btn-accept-all ${activeAction === 'accept' ? 'active' : ''}`}
+            className={`btn-accept-all button ${activeAction === 'accept' ? 'active' : ''}`}
             onClick={acceptAll}
           >
             Aceptar todas
           </button>
           <button 
             ref={rejectAllRef}
-            className={`btn-reject-all ${activeAction === 'reject' ? 'active' : ''}`}
+            className={`btn-reject-all button ${activeAction === 'reject' ? 'active' : ''}`}
             onClick={rejectAll}
           >
             Rechazar todas
           </button>
           <button 
             ref={customizeRef}
-            className={`btn-customize ${activeAction === 'customize' ? 'active' : ''}`}
+            className={`btn-customize button ${activeAction === 'customize' ? 'active' : ''}`}
             onClick={handleCustomize}
           >
             {showDetails ? 'Ocultar detalles' : 'Personalizar'}
@@ -328,7 +328,7 @@ const CookieConsent = () => {
 
         <div className="cookie-consent-footer">
           <button 
-            className="btn-save" 
+            className="btn-save button" 
             onClick={handleSaveConsent}
           >
             Guardar y acceptar

@@ -38,6 +38,8 @@ export default async function ContentSingle({
   locale
 }: ContentSingleProps) {
   const appearance = await getAppearanceSettings(locale);
+  const processedContent = processContent(post.content.rendered);
+  const hasForm = post.content.rendered.includes('wpcf7-form');
   const translatedSlug = getTranslatedCptSlug(postType, locale);
   const safeSlug = translatedSlug || postType || 'posts'; // Triple fallback
   const archiveName = safeSlug.charAt(0).toUpperCase() + safeSlug.slice(1);
@@ -91,7 +93,7 @@ export default async function ContentSingle({
           <AnimatedArticle className="custom-article-class" amount={0.5}>
             <PostDate date={post.date} />
             
-            <DynamicContent html={processContent(post.content.rendered)} lang={locale} />
+            <DynamicContent html={processedContent} lang={locale} hasForm={hasForm} />
           </AnimatedArticle>
 
           {/* // Dynamic custom fields – automatically displayed if they exist */}

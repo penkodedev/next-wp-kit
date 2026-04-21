@@ -18,6 +18,7 @@ type ContentHomeProps = {
  */
 export default function ContentHome({ page, lang }: ContentHomeProps) {
   const processed = processContent(page.content.rendered);
+  const hasForm = page.content.rendered.includes('wpcf7-form');
 
   return (
     <>
@@ -25,9 +26,10 @@ export default function ContentHome({ page, lang }: ContentHomeProps) {
       <WpPageIdSetter pageId={page.id} />
       <HeroWrapper position="home" lang={lang} />
       <div className="page-one-col">
+      <span id='index-home' />
         <AnimatedArticle>
           <ScrollReveal>
-            <DynamicContent html={processed} lang={lang} />
+            <DynamicContent html={processed} lang={lang} hasForm={hasForm} />
           </ScrollReveal>
         </AnimatedArticle>
       </div>

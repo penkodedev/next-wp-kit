@@ -10,7 +10,6 @@ canvas.mapboxgl-canvas {
 }
 
 .map-container {
-  width: 100%;
   border-radius: 10px;
   overflow: visible; // Allow popup to extend beyond map edges when pin is near border
   overscroll-behavior: contain;

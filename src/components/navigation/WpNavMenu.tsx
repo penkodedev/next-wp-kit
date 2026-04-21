@@ -46,8 +46,49 @@ export function NavItem({ item, isMobile = false, isSubmenu = false, onLinkClick
   const liClass = item.classes && item.classes.length > 0 ? item.classes.join(' ') : undefined;
   const linkClass = hasChildren ? 'has-submenu' : undefined;
   
-  // Si la URL es '#', es un item de menú sin enlace (parent de submenú)
+  // Bare "#" → submenu parent (not clickable)
   const isAnchorOnly = item.url === '#' || item.url === `${frontendDomain}#` || item.url === `${wpDomain}#`;
+
+  // Any internal URL with a meaningful hash fragment → same-page anchor
+  const hashIdx = linkUrl.indexOf('#');
+  const isHashAnchor = !isAnchorOnly && hashIdx !== -1 && linkUrl.length > hashIdx + 1;
+  const anchorHash = isHashAnchor ? linkUrl.slice(hashIdx) : null;
+
+  // Shared inner content for all link types
+  const linkContent = (
+    <>
+      {isMobile && item.parent !== '0' && (
+        <Icons.ChevronRight size={20} strokeWidth={1} className="submenu-arrow-mobile" />
+      )}
+      {isSubmenu && !isMobile && (
+        <Icons.MoveRight size={14} strokeWidth={1} className="submenu-item-icon" />
+      )}
+      {item.title}
+      {hasChildren && !isMobile && (
+        <motion.span
+          className="submenu-arrow"
+          aria-hidden="true"
+          animate={{ rotate: 0 }}
+          transition={{ duration: 0.22, ease: [0.2, 0.8, 0.2, 1] }}
+        >
+          <motion.span
+            initial={{ opacity: 1 }}
+            animate={{ opacity: isHovered ? 0 : 1 }}
+            transition={{ duration: 0.22 }}
+          >
+            <Icons.ChevronDown size={19} strokeWidth={2.2}  />
+          </motion.span>
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isHovered ? 1 : 0 }}
+            transition={{ duration: 0.22 }}
+          >
+            <Icons.ChevronUp size={19} strokeWidth={2.2}  />
+          </motion.span>
+        </motion.span>
+      )}
+    </>
+  );
   
   return (
     <li
@@ -56,39 +97,15 @@ export function NavItem({ item, isMobile = false, isSubmenu = false, onLinkClick
       onMouseLeave={() => setIsHovered(false)}
     >
       {isAnchorOnly ? (
-        // Si es un anchor (#), no es clickeable - solo muestra el texto para el submenú
-        <span className={linkClass}>
-          {isMobile && item.parent !== '0' && (
-            <Icons.ChevronRight size={20} strokeWidth={1} className="submenu-arrow-mobile" />
-          )}
-          {isSubmenu && !isMobile && (
-            <Icons.MoveRight size={14} strokeWidth={1} className="submenu-item-icon" />
-          )}
-          {item.title}
-          {hasChildren && !isMobile && (
-            <motion.span
-              className="submenu-arrow"
-              aria-hidden="true"
-              animate={{ rotate: 0 }}
-              transition={{ duration: 0.22, ease: [0.2, 0.8, 0.2, 1] }}
-            >
-              <motion.span
-                initial={{ opacity: 1 }}
-                animate={{ opacity: isHovered ? 0 : 1 }}
-                transition={{ duration: 0.22 }}
-              >
-                <Icons.ChevronDown size={19} strokeWidth={2.2}  />
-              </motion.span>
-              <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: isHovered ? 1 : 0 }}
-                transition={{ duration: 0.22 }}
-              >
-                <Icons.ChevronUp size={19} strokeWidth={2.2}  />
-              </motion.span>
-            </motion.span>
-          )}
-        </span>
+        <span className={linkClass}>{linkContent}</span>
+      ) : isHashAnchor ? (
+        <a
+          href={anchorHash!}
+          onClick={onLinkClick}
+          {...(linkClass ? { className: linkClass } : {})}
+        >
+          {linkContent}
+        </a>
       ) : (
         <Link
           href={linkUrl || '/'} 
@@ -96,37 +113,8 @@ export function NavItem({ item, isMobile = false, isSubmenu = false, onLinkClick
           onClick={onLinkClick}
           {...(linkClass ? { className: linkClass } : {})}
         >
-        {isMobile && item.parent !== '0' && (
-          <Icons.ChevronRight size={20} strokeWidth={1} className="submenu-arrow-mobile" />
-        )}
-        {isSubmenu && !isMobile && (
-          <Icons.MoveRight size={14} strokeWidth={1} className="submenu-item-icon" />
-        )}
-        {item.title}
-        {hasChildren && !isMobile && (
-          <motion.span
-            className="submenu-arrow"
-            aria-hidden="true"
-            animate={{ rotate: 0 }}
-            transition={{ duration: 0.22, ease: [0.2, 0.8, 0.2, 1] }}
-          >
-            <motion.span
-              initial={{ opacity: 1 }}
-              animate={{ opacity: isHovered ? 0 : 1 }}
-              transition={{ duration: 0.22 }}
-            >
-              <Icons.ChevronDown size={19} strokeWidth={2.2}  />
-            </motion.span>
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: isHovered ? 1 : 0 }}
-              transition={{ duration: 0.22 }}
-            >
-              <Icons.ChevronUp size={19} strokeWidth={2.2}  />
-            </motion.span>
-          </motion.span>
-        )}
-      </Link>
+          {linkContent}
+        </Link>
       )}
       {hasChildren && item.children && (
         <ul className={isMobile ? "submenu-mobile" : "submenu"}>

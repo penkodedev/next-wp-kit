@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import Map, { Marker, Popup, NavigationControl } from 'react-map-gl/mapbox';
+import Map, { Marker, Popup, NavigationControl, MapRef } from 'react-map-gl/mapbox';
 import type { MapLocation } from '@/api/wordpressApi';
 import type { LucideIcon } from 'lucide-react';
 import {
@@ -88,6 +88,37 @@ export default function MapWithMarkers({
 }: MapWithMarkersProps) {
   const [selectedLocation, setSelectedLocation] = useState<MapLocation | null>(null);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const mapRef = useRef<MapRef>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // ResizeObserver covers layout-based size changes (viewport resize, etc.)
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver(() => {
+      mapRef.current?.resize();
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Poll resize during entry animations: CSS transform: scale() doesn't trigger
+  // ResizeObserver (layout size doesn't change), but Mapbox reads getBoundingClientRect()
+  // which returns scaled dimensions. Polling for ~2s covers any parent animation duration.
+  useEffect(() => {
+    const interval = setInterval(() => {
+      mapRef.current?.resize();
+    }, 100);
+    const timeout = setTimeout(() => clearInterval(interval), 2000);
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, []);
+
+  const handleLoad = useCallback(() => {
+    mapRef.current?.resize();
+  }, []);
 
   const clearCloseTimer = useCallback(() => {
     if (closeTimerRef.current) {
@@ -136,14 +167,17 @@ export default function MapWithMarkers({
   }, []);
 
   return (
+    <div ref={containerRef} style={{ width: '100%', height: '100%' }}>
     <Map
-    mapboxAccessToken={token}
-    initialViewState={initialViewState}
-    style={{ width: '100%', height: '100%' }}
-    mapStyle={mapStyle}
-    projection={projection}
-    onClick={handleMapClick}
-    attributionControl={false}
+      ref={mapRef}
+      mapboxAccessToken={token}
+      initialViewState={initialViewState}
+      style={{ width: '100%', height: '100%' }}
+      mapStyle={mapStyle}
+      projection={projection}
+      onClick={handleMapClick}
+      onLoad={handleLoad}
+      attributionControl={false}
     >
       {showZoomControls && (
           <NavigationControl position="top-right" showCompass={false} showZoom />
@@ -209,6 +243,7 @@ export default function MapWithMarkers({
         </Popup>
       )}
     </Map>
+    </div>
   );
 }
 
