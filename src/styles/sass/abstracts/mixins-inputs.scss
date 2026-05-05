@@ -5,10 +5,10 @@
 @mixin inputs() {
   // Typography
   font-family: $font-family-base;
-  font-size: $text-size / 1;
+  font-size: $form-font-size;
   color: $input-text-color;
   // Layout
-  padding: 16px 22px 10px 22px;
+  padding: 13px 22px;
   margin: 0 0 8px 0;
   width: 100%;
   // Appearance

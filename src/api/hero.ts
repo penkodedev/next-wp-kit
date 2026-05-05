@@ -7,6 +7,7 @@ export interface HeroSlide {
   content_position: 'top' | 'center' | 'bottom';
   content_align: 'left' | 'center' | 'right';
   overlay_opacity: number;
+  overlay_color: string;
   ken_burns: number;
   button_text: string;
   button_link: string;
@@ -18,6 +19,10 @@ export interface HeroSlide {
   gradient_color_1: string;
   gradient_color_2: string;
   gradient_direction: string;
+  vignette_mode: 'none' | 'round' | 'up' | 'down';
+  vignette_color: string;
+  vignette_intensity: number;
+  vignette_size: number;
 }
 
 export interface HeroData {

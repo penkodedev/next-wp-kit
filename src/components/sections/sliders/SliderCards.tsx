@@ -28,7 +28,7 @@ export function CardTestimonial({ slide }: { slide: SliderSlide }) {
       )}
       {slide.text && (
         <p className="testimonial-quote">
-          <p>{slide.text}</p>
+          {slide.text}
         </p>
       )}
       <div className="testimonial-author">

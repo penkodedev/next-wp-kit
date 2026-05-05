@@ -9,7 +9,8 @@ import { useInView } from "framer-motion";
 interface PostCardProps {
   item: WpContent;
   basePath: string;
-  excerptLength?: number; // Prop opcional para la longitud del extracto
+  excerptLength?: number;
+  imageLink?: boolean;
 }
 /**
  * Crea un extracto de texto plano a partir de contenido HTML.
@@ -26,7 +27,8 @@ function createExcerpt(content: WpContent, length: number): string {
   const plainText = sourceHtml.replace(/<[^>]+>/g, "");
 
   // 2. Si el texto es más largo que la longitud deseada, córtalo y añade puntos suspensivos.
-  if (plainText.length > length) {
+  // length === 0 significa sin límite → texto completo.
+  if (length > 0 && plainText.length > length) {
     return plainText.substring(0, length) + "...";
   }
 
@@ -38,6 +40,7 @@ export default function PostCard({
   item,
   basePath,
   excerptLength = 150,
+  imageLink = true,
 }: PostCardProps) {
   const featuredMedia = item._embedded?.["wp:featuredmedia"]?.[0];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -72,29 +75,37 @@ export default function PostCard({
         transition: 'opacity 0.6s ease-out, transform 0.6s ease-out'
       }}
     >
-      <Link href={`${basePath}/${item.slug}`} className="post-card-link">
-        {imageUrl && (
+      {imageUrl && (
+        imageLink ? (
+          <Link href={`${basePath}/${item.slug}`} className="post-card-link">
+            <div
+              className="post-card-image"
+              style={{ position: "relative", aspectRatio: "16 / 10" }}
+            >
+              <Image
+                src={imageUrl}
+                alt={mediaDetails?.alt_text || item.title.rendered}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                style={{ objectFit: "cover", objectPosition: "center center" }}
+              />
+            </div>
+          </Link>
+        ) : (
           <div
             className="post-card-image"
-            style={{
-              position: "relative",
-              aspectRatio: "16 / 10",
-            }}
+            style={{ position: "relative", aspectRatio: "16 / 10" }}
           >
             <Image
               src={imageUrl}
               alt={mediaDetails?.alt_text || item.title.rendered}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              style={{
-                objectFit: "cover",
-                objectPosition: "center center",
-               }}
+              style={{ objectFit: "cover", objectPosition: "center center" }}
             />
-
           </div>
-        )}
-</Link>
+        )
+      )}
         <div className="post-card-content">
           <h3 className="post-card-title">{item.title.rendered}</h3>
           {excerptText && <p className="post-card-excerpt">{excerptText}</p>}

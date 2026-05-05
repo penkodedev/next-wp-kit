@@ -18,7 +18,7 @@ export default function AnimatedArticle({
   ...motionProps
 }: AnimatedArticleProps) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: false, amount });
+  const inView = useInView(ref, { once: true, amount });
 
   const MotionTag = motion.create(Tag);
 
@@ -26,9 +26,9 @@ export default function AnimatedArticle({
     <MotionTag
       ref={ref}
       className={className}
-      initial={{ opacity: 0, scale: 0.25 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
+      initial={{ opacity: 0, scale: 0.97 }}
+      animate={{ opacity: inView ? 1 : 0, scale: inView ? 1 : 0.97 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       {...motionProps}
     >
       {children}

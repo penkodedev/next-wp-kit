@@ -18,6 +18,7 @@ type HeroSlide = {
   content_position?: 'top' | 'center' | 'bottom';
   content_align?: 'left' | 'center' | 'right';
   overlay_opacity?: number;
+  overlay_color?: string;
   ken_burns?: number;
   buttonText?: string;
   button_text?: string; // WordPress uses snake_case
@@ -36,6 +37,10 @@ type HeroSlide = {
   gradient_color_1?: string;
   gradient_color_2?: string;
   gradient_direction?: string;
+  vignette_mode?: 'none' | 'round' | 'up' | 'down';
+  vignette_color?: string;
+  vignette_intensity?: number;
+  vignette_size?: number;
 };
 
 type HeroProps = {
@@ -165,13 +170,26 @@ export default function Hero({
         </AnimatePresence>
       </div>
       
-      {/* Overlay con opacidad dinámica */}
+      {/* Overlay con opacidad y color dinámicos */}
       <div 
         className="hero-overlay" 
         style={{ 
+          backgroundColor: currentSlideData?.overlay_color ?? '#000000',
           opacity: currentSlideData?.overlay_opacity ?? 0.3 
         }} 
       />
+
+      {/* Viñeta fotográfica */}
+      {currentSlideData?.vignette_mode && currentSlideData.vignette_mode !== 'none' && (
+        <div
+          className={`hero-vignette hero-vignette--${currentSlideData.vignette_mode}`}
+          style={{
+            '--vignette-color': currentSlideData.vignette_color ?? '#000000',
+            '--vignette-intensity': currentSlideData.vignette_intensity ?? 0.5,
+            '--vignette-size': `${currentSlideData.vignette_size ?? 50}%`,
+          } as React.CSSProperties}
+        />
+      )}
 
       {/* Contenido animado con slides */}
       <div 

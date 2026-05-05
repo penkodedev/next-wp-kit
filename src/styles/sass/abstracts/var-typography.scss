@@ -51,6 +51,10 @@ $pre: $font-family-mono;
 $mono: $font-family-mono;
 
 
+// Form font size — controls inputs text + floating labels default state
+$form-font-size: calc($text-size / 1);
+
+
 // Caption variables (used in mixins)
 $caption-color: #000;
 $caption-margin: -10px 0 10px 0;

@@ -16,11 +16,11 @@ export default function AnimatedFadeIn({
   className,
   as: Tag = 'div',
   amount = 0,
-  once = false, // Por defecto, anima cada vez que entra en vista
+  once = true,
   ...motionProps
 }: AnimatedFadeInProps) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: false, amount });
+  const inView = useInView(ref, { once, amount });
 
   const MotionTag = motion.create(Tag);
 

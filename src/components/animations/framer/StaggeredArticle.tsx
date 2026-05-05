@@ -16,7 +16,7 @@ export default function StaggeredArticle({
   staggerDelay = 0.15
 }: StaggeredArticleProps) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: false, amount: 0.1 });
+  const inView = useInView(ref, { once: true, amount: 0.1 });
 
   // Procesar HTML para animar elementos individuales
   const processedContent = useMemo(() => {

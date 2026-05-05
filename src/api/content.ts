@@ -73,21 +73,26 @@ export async function getHomePage(lang?: string): Promise<Page | null> {
   const pages = await fetchAPI<Page[]>(query);
    
   if (pages && pages.length > 0) {
-    const frontPage = pages.find(p => 
-      p.template === 'front-page' || 
+    // Most reliable: the front page always has '/' as its pathname in WP
+    const byRootLink = pages.find(p => {
+      try { return new URL(p.link).pathname === '/'; } catch { return false; }
+    });
+    if (byRootLink) return byRootLink;
+
+    // Fallback: template marker
+    const byTemplate = pages.find(p =>
+      p.template === 'front-page' ||
       p.meta?.['_wp_page_template'] === 'front-page'
     );
-     
-    if (frontPage) {
-      return frontPage;
-    }
-     
+    if (byTemplate) return byTemplate;
+
+    // Fallback: common slugs
     const commonSlugs = ['inicio', 'home', 'portada', 'accueil', 'landing'];
     for (const slug of commonSlugs) {
       const page = pages.find(p => p.slug === slug);
       if (page) return page;
     }
-     
+
     return pages[0];
   }
    

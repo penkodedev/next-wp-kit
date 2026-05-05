@@ -15,6 +15,9 @@ export interface SliderConfig {
   gap: number;
   grayscale: number;
   opacity: number;
+  showExcerpt: number;
+  excerptLength: number;
+  imageLink: number;
 }
 
 export interface SliderSlide {

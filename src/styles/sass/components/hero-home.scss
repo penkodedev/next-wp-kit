@@ -225,3 +225,44 @@
     }
   }
 }
+
+// ── Viñeta fotográfica ──────────────────────────────────────────────
+// Overlay de degradado que simula el efecto viñeta de fotografía analógica.
+// Controlado por CSS custom properties inyectadas desde Hero.tsx:
+//   --vignette-color     : color base (hex)
+//   --vignette-intensity : opacidad máxima del degradado (0–1)
+//   --vignette-size      : hasta dónde llega el degradado (%)
+
+.hero-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2; // Por encima del overlay plano, por debajo del contenido
+  pointer-events: none;
+
+  // Round/oval — oscurece los 4 bordes como en fotos antiguas
+  &--round {
+    background: radial-gradient(
+      ellipse at center,
+      transparent var(--vignette-size, 50%),
+      color-mix(in srgb, var(--vignette-color, #000) calc(var(--vignette-intensity, 0.5) * 100%), transparent) 100%
+    );
+  }
+
+  // Up — degradado desde arriba hacia abajo
+  &--up {
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--vignette-color, #000) calc(var(--vignette-intensity, 0.5) * 100%), transparent) 0%,
+      transparent var(--vignette-size, 50%)
+    );
+  }
+
+  // Down — degradado desde abajo hacia arriba
+  &--down {
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--vignette-color, #000) calc(var(--vignette-intensity, 0.5) * 100%), transparent) 0%,
+      transparent var(--vignette-size, 50%)
+    );
+  }
+}

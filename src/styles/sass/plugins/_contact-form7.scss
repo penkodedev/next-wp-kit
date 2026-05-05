@@ -1,8 +1,8 @@
 @use '../abstracts' as *;
 
-.hidden-fields-container {
-  display: none;
-}
+// .hidden-fields-container {
+//   display: none;
+// }
 
 .wpcf7-response-output {
   font-family: $text-font;
@@ -39,41 +39,55 @@ form.wpcf7-form textarea {
   max-height: 180px;
 }
 
-// Botón submit de CF7 - estilos específicos
-.wpcf7-form-control.wpcf7-submit {
-  font-family: $text-font, sans-serif;
-  font-size: 1em;
-  text-decoration: none;
-  text-align: center;
-  color: #000 !important;
-  display: inline-flex !important;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  padding: .8rem 2rem !important;
-  margin: 10px 0 10px 0;
-  background-color: white !important;
-  border: 1px solid #bdbdbd !important;
-  border-radius: 50px !important;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-
-  &:hover {
-    background-color: #eee6e6 !important;
-    color: #000 !important;
-    transform: translateY(-2px);
+// Consistent spacing: remove <br> extra line-height and <p> margins.
+// All gaps come exclusively from the wrap margin-bottom.
+form.wpcf7-form {
+  p {
+    margin: 0;
   }
 
-  &:active {
-    transform: scale(0.98);
+  br {
+    display: none;
   }
 }
 
-
-// Fallback for INPUT SPACES bottom: CF7 se pone chulo
+// Space between CF7 fields
 span.wpcf7-form-control-wrap {
-  margin-bottom: -10px;
+  margin-bottom: 12px;
+}
+
+
+/********************** Checkbox, Radio & Acceptance **********************/
+
+// Each option on its own line with vertical spacing
+.wpcf7-list-item {
+  display: flex;
+  flex-direction: row;
+  margin: 6px 0;
+}
+
+// Reset floating-label styles that leak from forms.scss
+// and lay out checkbox/radio + text side by side
+.wpcf7-checkbox,
+.wpcf7-radio,
+.wpcf7-acceptance {
+  display: flex;
+  flex-direction: row; // Orientation vertical or horizontal (adjust gap accordingly)
+  gap: 22px; // Space between checkboxes
+  
+
+  label {
+    display: flex;
+    align-items: center;
+    position: static;
+    transform: none;
+    font-size: inherit;
+    top: auto;
+    left: auto;
+    pointer-events: auto;
+    gap: 4px; // Space between checkbox/radio and text
+    cursor: pointer;
+  }
 }
 
 

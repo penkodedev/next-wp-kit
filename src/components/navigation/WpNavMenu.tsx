@@ -52,7 +52,10 @@ export function NavItem({ item, isMobile = false, isSubmenu = false, onLinkClick
   // Any internal URL with a meaningful hash fragment → same-page anchor
   const hashIdx = linkUrl.indexOf('#');
   const isHashAnchor = !isAnchorOnly && hashIdx !== -1 && linkUrl.length > hashIdx + 1;
-  const anchorHash = isHashAnchor ? linkUrl.slice(hashIdx) : null;
+  // Normaliza hash anchors para que siempre incluyan ruta: "#seccion" → "/#seccion"
+  const anchorHref = isHashAnchor
+    ? (linkUrl.startsWith('#') ? `/${linkUrl}` : linkUrl)
+    : null;
 
   // Shared inner content for all link types
   const linkContent = (
@@ -99,13 +102,13 @@ export function NavItem({ item, isMobile = false, isSubmenu = false, onLinkClick
       {isAnchorOnly ? (
         <span className={linkClass}>{linkContent}</span>
       ) : isHashAnchor ? (
-        <a
-          href={anchorHash!}
+        <Link
+          href={anchorHref!}
           onClick={onLinkClick}
           {...(linkClass ? { className: linkClass } : {})}
         >
           {linkContent}
-        </a>
+        </Link>
       ) : (
         <Link
           href={linkUrl || '/'} 

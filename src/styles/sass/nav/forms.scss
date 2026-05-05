@@ -1,0 +1,254 @@
+@use '../abstracts' as *;
+
+// =============================================================================
+// FORMS — All form elements: inputs, select, textarea, checkbox, radio
+// =============================================================================
+
+
+// -----------------------------------------------------------------------------
+// 1. Text-like inputs + select + textarea — base mixin
+// -----------------------------------------------------------------------------
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+select,
+textarea {
+  @include inputs;
+}
+
+
+// -----------------------------------------------------------------------------
+// 2. Type-specific overrides
+// -----------------------------------------------------------------------------
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 44px;
+  cursor: pointer;
+  color: $gray800; // first option ("Tipo de masaje") matches other placeholder text
+
+  option {
+    color: $input-text-color; // real options in dropdown at full color
+  }
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+input[type="date"],
+input[type="time"] {
+  cursor: pointer;
+}
+
+// Remove browser spinners from number inputs
+input[type="number"] {
+  appearance: textfield;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+}
+
+
+// -----------------------------------------------------------------------------
+// 3. Placeholder — muted so it's clearly distinct from real values
+// -----------------------------------------------------------------------------
+input::placeholder,
+textarea::placeholder {
+  color: $gray800;
+  transition: opacity 0.3s ease;
+}
+
+// Date input — browser native format hint (dd/mm/yyyy) ignores ::placeholder
+// Must use webkit pseudo-elements to match other inputs
+input[type="date"],
+input[type="time"] {
+  &::-webkit-datetime-edit {
+    color: $gray800;
+  }
+  &::-webkit-datetime-edit-fields-wrapper {
+    color: $gray800;
+  }
+  &::-webkit-datetime-edit-text {
+    color: $gray800;
+  }
+  // Once a real value is set, restore to input-text-color
+  &:not([value=""]) {
+    color: $input-text-color;
+  }
+}
+
+input:focus::placeholder,
+textarea:focus::placeholder {
+  opacity: 0;
+}
+
+
+// -----------------------------------------------------------------------------
+// 4. Checkbox & Radio — custom styled (resets.scss strips native appearance)
+// -----------------------------------------------------------------------------
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  border: 2px solid $gray500;
+  border-radius: 8px;
+  background-color: $input-bg-color;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  flex-shrink: 0;
+  vertical-align: middle;
+
+  &:hover {
+    border-color: $branding-color1;
+  }
+
+  &:checked {
+    background-color: $branding-color1;
+    border-color: $branding-color1;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 1px;
+      width: 6px;
+      height: 10px;
+      border: 2px solid $white;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid $branding-color1;
+    outline-offset: 2px;
+  }
+}
+
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  border: 2px solid $gray500;
+  border-radius: 50%;
+  background-color: $input-bg-color;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.2s ease;
+  flex-shrink: 0;
+  vertical-align: middle;
+
+  &:hover {
+    border-color: $branding-color1;
+  }
+
+  &:checked {
+    border-color: $branding-color1;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: $branding-color1;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid $branding-color1;
+    outline-offset: 2px;
+  }
+}
+
+
+// -----------------------------------------------------------------------------
+// 5. Floating Labels
+// Requires: placeholder=" " on the input (set by ContactForm7.tsx for CF7)
+// Works with: .input-wrapper, .form-group, .wpcf7-form-control-wrap
+// -----------------------------------------------------------------------------
+.input-wrapper,
+.form-group,
+.wpcf7-form-control-wrap {
+  position: relative;
+  display: block;
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="search"],
+  textarea {
+    padding: 16px 22px 10px 22px; // asymmetric: room for floating label on top
+    margin: 0;
+  }
+
+  textarea {
+    padding-top: 22px;
+  }
+
+  > label {
+    font-family: $font-family-base;
+    font-size: $form-font-size;
+    color: $gray800;           // consistent with select/date placeholder text
+    background: transparent;
+    position: absolute;
+    top: 50%;
+    left: 22px;
+    padding: 0;
+    transform: translateY(-50%);
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  textarea ~ label {
+    top: 28px;
+    transform: none;
+  }
+
+  // Floated state — input has content or is focused
+  input:focus ~ label,
+  input:not(:placeholder-shown) ~ label {
+    font-size: 0.72rem;
+    color: $text-color;
+    top: 0;
+    left: 12px;
+    transform: translateY(-10%);
+    border-radius: 4px;
+  }
+
+  // Floated state — textarea
+  textarea:focus ~ label,
+  textarea:not(:placeholder-shown) ~ label {
+    font-size: 0.72rem;
+    color: $text-color;
+    top: 2px;
+    left: 22px;
+    transform: none;
+    border-radius: 4px;
+  }
+}

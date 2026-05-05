@@ -13,3 +13,33 @@
 .wp-block-columns {
   gap: 30px;
 }
+
+// Gallery block
+.wp-block-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+
+  .wp-block-image {
+    flex-grow: 1;
+    margin: 0;
+
+    figure {
+      height: 100%;
+      margin: 0;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  &.columns-2 .wp-block-image { flex-basis: calc(50% - 0.5em); }
+  &.columns-3 .wp-block-image { flex-basis: calc(33.33% - 0.5em); }
+  &.columns-4 .wp-block-image { flex-basis: calc(25% - 0.5em); }
+  &.columns-5 .wp-block-image { flex-basis: calc(20% - 0.5em); }
+  &.columns-6 .wp-block-image { flex-basis: calc(16.66% - 0.5em); }
+}

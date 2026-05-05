@@ -27,6 +27,10 @@ interface SliderRendererProps {
 }
 
 function renderSlides(data: SliderData): React.ReactNode[] {
+  const showExcerpt = data.config.showExcerpt !== 0;
+  const excerptLength = showExcerpt ? (data.config.excerptLength ?? 150) : 0;
+  const imageLink = data.config.imageLink !== 0;
+
   switch (data.type) {
     case 'cpt':
       return (data.posts ?? []).map((post: WpContent) => (
@@ -34,6 +38,8 @@ function renderSlides(data: SliderData): React.ReactNode[] {
           key={post.id}
           item={post}
           basePath={`/${data.source?.postType ?? 'posts'}`}
+          excerptLength={excerptLength}
+          imageLink={imageLink}
         />
       ));
 
@@ -77,12 +83,14 @@ export default async function SliderRenderer({ sliderId, lang }: SliderRendererP
     '--slide-opacity': opacity,
   } as React.CSSProperties;
 
+  const sourceClass = data.source?.postType ? ` slider-${data.source.postType}` : '';
+
   return (
     <section
-      className={`slider-section slider-${data.type} media-${displayMode}${fullWidth ? ' full-width' : ''}`}
+      className={`slider-section slider-${data.type}${sourceClass} media-${displayMode}${fullWidth ? ' full-width' : ''}`}
       style={cssVars}
     >
-      <SliderBase swiperOptions={swiperOptions} className={`slider-${data.type}`}>
+      <SliderBase swiperOptions={swiperOptions} className={`slider-${data.type}${sourceClass}`}>
         {slides}
       </SliderBase>
     </section>
