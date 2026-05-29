@@ -90,7 +90,7 @@ export default async function ContentSingle({
             </div>
           )}
 
-          <AnimatedArticle className="custom-article-class" amount={0.5}>
+          <AnimatedArticle className="custom-article-class" amount={0}>
             <PostDate date={post.date} />
             
             <DynamicContent html={processedContent} lang={locale} hasForm={hasForm} />

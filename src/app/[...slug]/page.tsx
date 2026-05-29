@@ -196,8 +196,8 @@ export async function generateStaticParams() {
         
         for (const locale of localesConfig.supportedLocales) {
           const apiParams = locale === localesConfig.defaultLocale 
-            ? '?per_page=100&_embed'
-            : `?per_page=100&_embed&lang=${locale}`;
+            ? '?per_page=10&_embed'
+            : `?per_page=10&_embed&lang=${locale}`;
           const posts = await safeGetAllContent<WpContent>(cpt, apiParams);
           if (posts && posts.length > 0) allPosts.push(...posts);
         }
