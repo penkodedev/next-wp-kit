@@ -108,7 +108,7 @@ export default function PostCard({
       )}
         <div className="post-card-content">
           <h3 className="post-card-title">{item.title.rendered}</h3>
-          {excerptText && <p className="post-card-excerpt">{excerptText}</p>}
+          {excerptLength !== 0 && excerptText && <p className="post-card-excerpt">{excerptText}</p>}
           <div className="post-card-actions">
             <Link
               href={`${basePath}/${item.slug}`}
