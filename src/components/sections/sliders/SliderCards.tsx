@@ -7,34 +7,89 @@
 
 import Image from 'next/image';
 import type { SliderSlide } from '@/api/wordpressApi';
+import { Icons } from '@/components/ui/Icons';
 
 
 // ----------------------------------------------------------
 //  Testimonial
 // ----------------------------------------------------------
+// Every sub-element renders only when it has a value, so unused
+// fields never pollute the layout. The optional link wraps the
+// author block (name + role/company). The avatar is always rendered
+// (with a User icon fallback when there is no featured image).
+
+function TestimonialStars({ rating }: { rating: number }) {
+  const safe = Math.max(0, Math.min(5, Math.round(rating)));
+  if (safe === 0) return null;
+  return (
+    <p className="testimonial-rating" aria-label={`${safe} out of 5 stars`}>
+      {'★'.repeat(safe)}{'☆'.repeat(5 - safe)}
+    </p>
+  );
+}
 
 export function CardTestimonial({ slide }: { slide: SliderSlide }) {
+  const hasRoleOrCompany = slide.role || slide.company;
+  const authorMeta = [slide.role, slide.company].filter(Boolean).join(' · ');
+
+  const avatarBlock = (
+    <div className={`testimonial-avatar${!slide.image_url ? ' testimonial-avatar--placeholder' : ''}`}>
+      {slide.image_url ? (
+        <Image
+          src={slide.image_url}
+          alt={slide.name || ''}
+          fill
+          style={{ objectFit: 'cover' }}
+        />
+      ) : (
+        <Icons.User
+          className="testimonial-avatar-icon"
+          strokeWidth={1.4}
+          aria-hidden="true"
+        />
+      )}
+    </div>
+  );
+
+  const authorBlock = (
+    <div className="testimonial-author">
+      {slide.name && <p><strong className="testimonial-name">{slide.name}</strong></p>}
+      {hasRoleOrCompany && <p><span className="testimonial-role">{authorMeta}</span></p>}
+    </div>
+  );
+
   return (
     <div className="testimonial-card">
-      {slide.image_url && (
-        <div className="testimonial-avatar">
-          <Image
-            src={slide.image_url}
-            alt={slide.name || ''}
-            fill
-            style={{ objectFit: 'cover' }}
+      {/* 1. Avatar (top) */}
+      {avatarBlock}
+
+      {/* 2. Rating + quote (middle) */}
+      {typeof slide.rating === 'number' && slide.rating > 0 && (
+        <TestimonialStars rating={slide.rating} />
+      )}
+      {slide.text && (
+        <div className="testimonial-quote-wrap">
+          <span className="testimonial-quote-mark" aria-hidden="true">&ldquo;</span>
+          <div
+            className="testimonial-quote"
+            dangerouslySetInnerHTML={{ __html: slide.text }}
           />
         </div>
       )}
-      {slide.text && (
-        <p className="testimonial-quote">
-          {slide.text}
-        </p>
+
+      {/* 3. Author (bottom) — optional link wraps just the author block */}
+      {slide.link ? (
+        <a
+          href={slide.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="testimonial-link"
+        >
+          {authorBlock}
+        </a>
+      ) : (
+        authorBlock
       )}
-      <div className="testimonial-author">
-        {slide.name && <p><strong className="testimonial-name">{slide.name}</strong></p>}
-        {slide.role && <p><span className="testimonial-role">{slide.role}</span></p>}
-      </div>
     </div>
   );
 }

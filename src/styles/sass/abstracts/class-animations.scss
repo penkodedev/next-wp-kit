@@ -115,3 +115,27 @@
 .bounce-down {
   @include bounce-down;
 }
+
+// =========================================
+// BORDER EFFECTS
+// =========================================
+
+.border-beam {
+  @include border-beam;
+}
+
+.border-beam-fast {
+  @include border-beam($duration: 1.5s);
+}
+
+.border-beam-slow {
+  @include border-beam($duration: 5s);
+}
+
+.border-beam-pink {
+  @include border-beam($color-from: #ec4899, $color-to: #f97316);
+}
+
+.border-beam-cyan {
+  @include border-beam($color-from: #06b6d4, $color-to: #3b82f6);
+}

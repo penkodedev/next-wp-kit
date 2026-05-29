@@ -10,8 +10,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/bundle';
 
 import { getSliderById } from '@/api/wordpressApi';
-import type { SliderData, SliderSlide } from '@/api/wordpressApi';
-import type { WpContent } from '@/types/wordpressTypes';
+import type { SliderData, SliderSlide, WpTestimonioPost } from '@/api/wordpressApi';
 import dynamic from 'next/dynamic';
 import PostCard from '@/components/ui/PostCard';
 import { CardTestimonial, CardMedia, CardCustom } from './SliderCards';
@@ -26,14 +25,45 @@ interface SliderRendererProps {
   lang?: string;
 }
 
+/**
+ * Maps a testimonios CPT post into the SliderSlide shape used by CardTestimonial.
+ * Native fields → testimonial fields:
+ *   post_title       → name
+ *   post_content     → text (HTML)
+ *   featured image   → image_url
+ *   meta._testimonio → role / company / rating / link
+ */
+function mapTestimonioPostToSlide(post: WpTestimonioPost): SliderSlide {
+  const featured = post._embedded?.['wp:featuredmedia']?.[0];
+  return {
+    name: post.title?.rendered ?? '',
+    text: post.content?.rendered ?? '',
+    image_url: featured?.source_url ?? '',
+    role: post.testimonio?.role,
+    company: post.testimonio?.company,
+    rating: post.testimonio?.rating,
+    link: post.testimonio?.link,
+  };
+}
+
 function renderSlides(data: SliderData): React.ReactNode[] {
   const showExcerpt = data.config.showExcerpt !== 0;
   const excerptLength = showExcerpt ? (data.config.excerptLength ?? 150) : 0;
   const imageLink = data.config.imageLink !== 0;
 
   switch (data.type) {
-    case 'cpt':
-      return (data.posts ?? []).map((post: WpContent) => (
+    case 'cpt': {
+      const posts = data.posts ?? [];
+
+      // Auto-detect: testimonios CPT renders with CardTestimonial.
+      // Any other CPT renders with the generic PostCard.
+      if (data.source?.postType === 'testimonios') {
+        return posts.map((post) => (
+          <CardTestimonial key={post.id} slide={mapTestimonioPostToSlide(post)} />
+        ));
+      }
+
+      return posts.map((post) => (
         <PostCard
           key={post.id}
           item={post}
@@ -42,11 +72,7 @@ function renderSlides(data: SliderData): React.ReactNode[] {
           imageLink={imageLink}
         />
       ));
-
-    case 'testimonials':
-      return (data.slides ?? []).map((slide: SliderSlide, i: number) => (
-        <CardTestimonial key={i} slide={slide} />
-      ));
+    }
 
     case 'media':
       return (data.slides ?? []).map((slide: SliderSlide, i: number) => (

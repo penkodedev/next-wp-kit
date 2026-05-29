@@ -7,6 +7,13 @@
 @use 'var-layout' as *;
 @use 'var-typography' as *;
 
+// Required to animate --border-angle in border-beam
+@property --border-angle {
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: 0turn;
+}
+
 // =========================================
 // 🎯 FADE ANIMATIONS
 // =========================================
@@ -307,6 +314,68 @@
   to {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+@keyframes borderBeamSpin {
+  to { --border-angle: 1turn; }
+}
+
+// =========================================
+// BORDER BEAM EFFECT
+// =========================================
+//
+// Technique: ::before same size as element + mask-composite: exclude.
+// The padding creates an inner "hole" — only the border ring is visible.
+//
+// Usage: @include border-beam($color-from: #ec4899, $color-to: #f97316);
+// The element must have a non-static position (the mixin adds relative).
+
+@mixin border-beam(
+  // ↓ BEAM COLOR — start and end colors of the gradient sweep
+  $color-from: #08f,
+  $color-to:   #f03,
+  // ↓ BORDER THICKNESS — width of the visible beam ring (in px)
+  $thickness:  2px,
+  // ↓ ANIMATION SPEED — full rotation duration (lower = faster, higher = slower)
+  $duration:   3s
+) {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;               // same size as the element
+    // ↓ BORDER RADIUS — inherits from the parent element automatically
+    border-radius: inherit;
+    padding: #{$thickness}; // shrinks content-box → creates the visible ring width
+    pointer-events: none;
+    z-index: 1;
+
+    // ↓ GRADIENT — the spinning conic-gradient that forms the beam
+    background: conic-gradient(
+      from var(--border-angle),
+      transparent 25%,
+      #{$color-from},
+      #{$color-to} 99%,
+      transparent
+    );
+
+    // Mask trick: show ONLY the padding ring
+    // - layer 1: white mask clipped to content-box (the inner hole)
+    // - layer 2: white mask over the full area
+    // - exclude/xor: only what is in one layer but not both = the ring
+    -webkit-mask:
+      linear-gradient(white, white) content-box,
+      linear-gradient(white, white);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+
+    animation: borderBeamSpin $duration linear infinite;
+  }
+
+  &:hover::before {
+    animation-play-state: paused;
   }
 }
 

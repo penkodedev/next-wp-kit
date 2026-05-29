@@ -280,6 +280,18 @@ export interface ContactInfo {
 
 
 // -----------------------------------------------------
+//             Gutenberg Block Types
+// -----------------------------------------------------
+
+export interface WpBlock {
+  blockName: string;
+  attrs: Record<string, unknown>;
+  innerBlocks: WpBlock[];
+  innerHTML: string;
+  rendered?: string;
+}
+
+// -----------------------------------------------------
 //             WordPress Content Types
 // -----------------------------------------------------
 /**
@@ -332,6 +344,7 @@ export interface WpContent {
     twitter_image?: string;
     schema?: Record<string, any>; // JSON-LD structured data
   };
+  blocks?: WpBlock[];
   // Custom meta fields exposed at root level via register_rest_field
   recurso_autoria?: string;
   recurso_web_url?: string;

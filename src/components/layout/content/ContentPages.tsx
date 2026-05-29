@@ -4,6 +4,7 @@ import { WpPageIdSetter } from '@/utils/wordpress/WpPageIdContext';
 import type { Page } from '@/types/wordpressTypes';
 import { processContent } from '@/utils/wordpress/processContent';
 import DynamicContent from './DynamicContent';
+import BlockRenderer from '@/components/blocks/BlockRenderer';
 import YoastJsonLd from '@/components/seo/YoastJsonLd';
 import type { ReactNode } from 'react';
 
@@ -33,11 +34,15 @@ export default function ContentPages({ page, lang, children }: ContentPagesProps
         <Breadcrumbs />
         <ScrollReveal>
             <article className="page-content">
-              <DynamicContent
-                html={processed}
-                lang={lang}
-                hasForm={hasForm}
-              />
+              {page.blocks && page.blocks.length > 0 ? (
+                <BlockRenderer blocks={page.blocks} lang={lang} />
+              ) : (
+                <DynamicContent
+                  html={processed}
+                  lang={lang}
+                  hasForm={hasForm}
+                />
+              )}
               {children}
           </article>
         </ScrollReveal>
