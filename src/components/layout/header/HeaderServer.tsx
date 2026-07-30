@@ -4,7 +4,7 @@ import { headers } from 'next/headers';
 import Header from "./Header";
 import type { SiteInfo, MenuItem } from "@/types/wordpressTypes";
 import localesConfig from "@/i18n/locales.generated.json";
-import { fetchMenuByLocation } from "@/api/wordpressApi";
+import { getCachedMenuByLocation, getCachedMenuResponse } from "@/api/menus";
 
 interface HeaderServerProps {
   variant?: "default" | "home";
@@ -63,28 +63,13 @@ export default async function HeaderServer({
   const menusByLocale: Record<string, MenuItem[]> = {};
   let megaMenuEnabled = false;
 
-  if (menusByLocale && Object.keys(menusByLocale).length > 0) {
-    supportedLocales.forEach((loc) => {
-      if (!menusByLocale[loc]) return;
-      menusByLocale[loc] = menusByLocale[loc] ?? [];
-      if (!megaMenuEnabled) {
-        const entry = menusByLocale[loc];
-      }
-    });
-  } else {
-    try {
-      const menuPromises = supportedLocales.map(async (loc) => {
-        const res = await fetchMenuByLocation('mainnav', loc);
-        return { locale: loc, res };
-      });
-      const results = await Promise.all(menuPromises);
-      results.forEach(({ locale: loc, res }) => {
-        menusByLocale[loc] = res?.items ?? [];
-        if (res?.mega_menu_enabled) megaMenuEnabled = true;
-      });
-    } catch {
-      // Fallback: menus fetched client-side
-    }
+  try {
+    const menuRes = await getCachedMenuResponse(locale, 'mainnav');
+    const menuItems = menuRes?.items ?? [];
+    menusByLocale[locale] = menuItems;
+    if (menuRes?.mega_menu_enabled) megaMenuEnabled = true;
+  } catch {
+    // Fallback: menu fetched client-side
   }
 
   return (

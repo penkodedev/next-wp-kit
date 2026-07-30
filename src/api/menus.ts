@@ -10,6 +10,23 @@ export const getAllMenus = unstable_cache(
   { revalidate: 300, tags: ['all-menus'] }
 );
 
+export const getCachedMenuByLocation = unstable_cache(
+  async (lang: string, location: string): Promise<MenuItem[]> => {
+    const data = await fetchAPI<MenuResponse>(`/custom/v1/menus?lang=${lang}&location=${location}`);
+    return data?.items ?? [];
+  },
+  ['menu-by-location'],
+  { revalidate: 300, tags: ['menus'] }
+);
+
+export const getCachedMenuResponse = unstable_cache(
+  async (lang: string, location: string): Promise<MenuResponse | null> => {
+    return await fetchAPI<MenuResponse>(`/custom/v1/menus?lang=${lang}&location=${location}`);
+  },
+  ['menu-response'],
+  { revalidate: 300, tags: ['menus'] }
+);
+
 export async function fetchMenuByLocation(
   location: string,
   lang: string

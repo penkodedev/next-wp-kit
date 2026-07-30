@@ -103,7 +103,7 @@ export default function Header({
             <MemoWpNavMenu
               location="mainnav"
               className="main-menu"
-              variant="responsive"
+              variant={menuVariant}
               locale={currentLocale}
               menuItems={menuItems}
             />

@@ -29,7 +29,7 @@ export default function LangSwitcher({ currentLocale }: LangSwitcherProps) {
   const [languages, setLanguages] = useState<LangInfo[]>([]);
   const [translatedUrls, setTranslatedUrls] = useState<Record<string, string | null>>({});
 
-  const defaultLang = languages.find(l => l.is_default)?.code || localesConfig.defaultLocale;
+  const defaultLang = localesConfig.defaultLocale;
 
   // Fetch available languages from WordPress
   useEffect(() => {

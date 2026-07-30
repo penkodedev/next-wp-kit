@@ -61,14 +61,24 @@ function generateLocalesConfig(languages: WPMLLanguage[]): LocalesConfig {
   }
 
   const defaultLanguage = languages.find(lang => lang.is_default || lang.default);
-  
+
   if (!defaultLanguage) {
-    throw new Error('No default language found in WPML configuration.');
+    console.warn('⚠️  No default language found in WPML configuration. Using fallback.');
+    return {
+      supportedLocales: languages.map(lang => lang.code),
+      defaultLocale: DEFAULT_LOCALE,
+      generatedAt: new Date().toISOString(),
+    };
+  }
+
+  const finalDefault = defaultLanguage.code === DEFAULT_LOCALE ? defaultLanguage.code : DEFAULT_LOCALE;
+  if (finalDefault !== defaultLanguage.code) {
+    console.warn(`⚠️  WPML default language (${defaultLanguage.code}) differs from expected default (${DEFAULT_LOCALE}). Forcing ${DEFAULT_LOCALE}.`);
   }
 
   return {
     supportedLocales: languages.map(lang => lang.code),
-    defaultLocale: defaultLanguage.code,
+    defaultLocale: finalDefault,
     generatedAt: new Date().toISOString(),
   };
 }
