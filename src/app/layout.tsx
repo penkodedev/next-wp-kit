@@ -20,14 +20,14 @@ import CodeBlockCopier from "@/components/ui/CodeBlockCopier";
 import CookieConsent from "@/components/cookies/CookieConsent";
 import CookieManager from "@/components/cookies/CookieManager";
 import ScrollToTop from "@/components/navigation/ScrollToTop";
-import AdvertisingPopup from '@/components/features/modals/AdvertisingPopup';
+const AdvertisingPopup = dynamic(() => import('@/components/features/modals/AdvertisingPopup'), { ssr: false });
 import TooltipsProvider from '@/components/features/tooltips/Tooltips';
 
 import BodyClass from "@/utils/wordpress/BodyClass";
 import { WpPageIdProvider } from '@/utils/wordpress/WpPageIdContext';
 import localesConfig from '@/i18n/locales.generated.json';
-import Analytics from '@/components/tracking/Analytics';
-import { safeGetSiteInfo, getAppearanceSettings } from '@/api/wordpressApi';
+const Analytics = dynamic(() => import('@/components/tracking/Analytics'), { ssr: false });
+import { safeGetSiteInfo } from '@/api/wordpressApi';
 import type { AppearanceSettings } from '@/api/wordpressApi';
 
 // Lazy load heavy components that aren't needed on every page
@@ -143,10 +143,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   const headersList = headers();
   
   // Fetch site info and appearance config from WordPress
-  const [siteInfo, appearance] = await Promise.all([
-    safeGetSiteInfo(),
-    getAppearanceSettings(),
-  ]);
+  const [siteInfo] = await Promise.all([safeGetSiteInfo()]);
   
   // Get default locale from WordPress or fallback to config
   const defaultLocale = siteInfo?.i18n?.default_locale || localesConfig.defaultLocale;
@@ -206,15 +203,15 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             }}
           >
             <WpPageIdProvider>
-              {!appearance?.spaMode && appearance?.scrollProgress !== false && <ScrollProgress />}
-              <SmoothScroll enabled={!appearance?.spaMode && appearance?.smoothScroll !== false}>
-                {!appearance?.spaMode && <ParallaxEffects />}
+              {false && <ScrollProgress />}
+              <SmoothScroll enabled={true}>
+                {false && <ParallaxEffects />}
                 <BodyClass>
                   <TooltipsProvider>
                     <HeaderServer siteInfo={siteInfo} initialLocale={currentLocale} />
                       <main>{children}</main>
                     <Footer siteInfo={siteInfo} />
-                    <GlobalUI appearance={appearance} />
+                    <GlobalUI appearance={null} />
                   </TooltipsProvider>
                 </BodyClass>
               </SmoothScroll>
@@ -234,3 +231,4 @@ export default async function RootLayout({ children }: RootLayoutProps) {
     </html>
   );
 }
+

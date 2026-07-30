@@ -1,7 +1,7 @@
 // src/app/page.tsx
 // HOME PAGE
 
-import { getCachedHomePage, safeGetSiteInfo } from "@/api/wordpressApi";
+import { getCachedHomePage } from "@/api/wordpressApi";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { headers } from "next/headers";
@@ -12,8 +12,7 @@ import localesConfig from '@/i18n/locales.generated.json';
 export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const siteInfo = await safeGetSiteInfo();
-  const defaultLocale = siteInfo?.i18n?.default_locale || localesConfig.defaultLocale;
+  const defaultLocale = localesConfig.defaultLocale;
   const locale = headers().get("x-locale") || defaultLocale;
   const homePage = await getCachedHomePage(locale);
 
@@ -28,8 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  const siteInfo = await safeGetSiteInfo();
-  const defaultLocale = siteInfo?.i18n?.default_locale || localesConfig.defaultLocale;
+  const defaultLocale = localesConfig.defaultLocale;
   const locale = headers().get("x-locale") || defaultLocale;
   const homePage = await getCachedHomePage(locale);
 

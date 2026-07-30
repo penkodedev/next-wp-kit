@@ -1,3 +1,4 @@
+import { unstable_cache } from 'next/cache';
 import { fetchAPI } from './client';
 
 export interface AppearanceSettings {
@@ -18,6 +19,14 @@ export interface AppearanceSettings {
 }
 
 export async function getAppearanceSettings(lang?: string): Promise<AppearanceSettings | null> {
-  const endpoint = lang ? `/custom/v1/appearance?lang=${lang}` : '/custom/v1/appearance';
-  return await fetchAPI<AppearanceSettings>(endpoint);
+  const key = ['appearance', lang].filter(Boolean).join('-');
+  const cached = await unstable_cache(
+    async () => {
+      const endpoint = lang ? '/custom/v1/appearance?lang=' + lang : '/custom/v1/appearance';
+      return await fetchAPI<AppearanceSettings>(endpoint);
+    },
+    [key],
+    { revalidate: 300, tags: ['appearance'] }
+  )();
+  return cached;
 }

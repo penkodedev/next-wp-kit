@@ -21,7 +21,7 @@ interface PostCardProps {
  */
 function createExcerpt(content: WpContent, length: number): string {
   // Prioriza el extracto explícito si existe, si no, usa el contenido principal.
-  const sourceHtml = content.excerpt?.rendered || content.content.rendered;
+  const sourceHtml = content.excerpt?.rendered || content.content?.rendered || '';
 
   // 1. Elimina todas las etiquetas HTML para obtener texto plano.
   const plainText = sourceHtml.replace(/<[^>]+>/g, "");

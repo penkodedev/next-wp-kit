@@ -3,6 +3,10 @@ const withNextIntl = require('next-intl/plugin')(
   './src/i18n/i18n.ts' // Apunta al archivo de configuración
 );
 
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   sassOptions: {
@@ -90,3 +94,5 @@ const nextConfig = {
 };
 
 module.exports = withNextIntl(nextConfig);
+
+

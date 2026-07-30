@@ -8,7 +8,8 @@ import DarkModeToggle from "@/components/ui/DarkModeToggle";
 import LogoHeader from "@/components/layout/header/LogoHeader";
 import LangSwitcher from "@/components/layout/header/LangSwitcher"; 
 import WpNavMenu from '@/components/navigation/WpNavMenu';
-import MegaMenuHamburger from '@/components/navigation/MegaMenuHamburger';
+import dynamic from 'next/dynamic';
+const MegaMenuHamburger = dynamic(() => import('@/components/navigation/MegaMenuHamburger'), { ssr: false });
 import SearchTrigger from '@/components/features/search/SearchTrigger';
 import type { SiteInfo, MenuItem } from "@/types/wordpressTypes";
 import localesConfig from '@/i18n/locales.generated.json';
@@ -118,3 +119,4 @@ export default function Header({
     </>
   );
 }
+
