@@ -107,6 +107,7 @@ export const heroSettings = {
 
   // Easing curves for smooth animations
   slideEasing: [0.25, 0.46, 0.45, 0.94], // Custom cubic-bezier
+  
   backgroundEasing: "easeInOut" as const,
 };
 

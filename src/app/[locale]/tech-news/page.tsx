@@ -27,6 +27,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
+export const revalidate = 60;
+
 export default async function TechNewsPage({ params }: PageProps) {
   const { locale } = await params;
   

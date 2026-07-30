@@ -17,7 +17,7 @@ interface WpBlockAttrs {
 }
 
 /**
- * Processes HTML content from WordPress to make it compatible with the Next.js frontend.
+ * Processes HTML content from WordPress (Gutenberg editor) to make it compatible with the Next.js frontend.
  *
  * - Replaces absolute backend URLs with relative frontend paths.
  * - Adds `data-next-ignore="true"` to modal links so ModalController can intercept them.
@@ -40,10 +40,14 @@ export function processContent(content: string, blocks?: WpBlock[]): string {
 
 	const backendUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL?.replace('/wp-json', '');
 
-	// Replace backend URLs with relative paths
+	// Replace backend URLs with relative paths only for navigation href values.
+	// Keep /wp-content links absolute so galleries/lightbox/media continue working.
 	if (backendUrl) {
-		const backendUrlRegex = new RegExp(backendUrl.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g');
-		processedContent = processedContent.replace(backendUrlRegex, '');
+		const escaped = backendUrl.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+		processedContent = processedContent.replace(
+			new RegExp(`(href=["'])${escaped}(?!\\/wp-content\\/)`, 'g'),
+			'$1'
+		);
 	}
 
 	// Add data-next-ignore to modal links

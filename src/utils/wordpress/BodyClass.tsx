@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useWpPageId } from "@/utils/wordpress/WpPageIdContext";
 import { CPT_SLUG_MAP } from "@/utils/config/cptConfig";
@@ -11,95 +11,109 @@ interface BodyClassProps {
 	children: React.ReactNode;
 }
 
+const SPECIAL_ROUTES = new Set(["search", "sitemap", "blog", "feed.xml"]);
+
+function stripLocale(pathSegments: string[]): string[] {
+	if (pathSegments.length > 0 && localesConfig.supportedLocales.includes(pathSegments[0])) {
+		return pathSegments.slice(1);
+	}
+	return pathSegments;
+}
+
+function resolveBodyClasses(
+	segments: string[],
+	pageId: number | null,
+	taxonomies: string[],
+): string[] {
+	if (segments.length === 0) {
+		return ["page-home"];
+	}
+
+	const [first, second] = segments;
+	const cptSlug = CPT_SLUG_MAP[first];
+
+	if (segments.length === 1 && cptSlug) {
+		return ["archive", `archive-${cptSlug}`];
+	}
+
+	if (segments.length === 2 && cptSlug) {
+		const classes = ["single", `single-${cptSlug}`];
+		if (pageId) classes.push(`postid-${pageId}`);
+		return classes;
+	}
+
+	if (segments.length === 1 && taxonomies.includes(first)) {
+		return ["taxonomy", `taxonomy-${first}`, "page-taxonomy"];
+	}
+
+	if (SPECIAL_ROUTES.has(first)) {
+		return ["page", `page-${first}`];
+	}
+
+	const pageSlug = segments[segments.length - 1] || "home";
+	const classes = ["page", `page-${pageSlug}`];
+	if (pageId) classes.push(`page-id-${pageId}`);
+	return classes;
+}
+
+let taxonomySlugsCache: string[] | null = null;
+let taxonomySlugsPromise: Promise<string[]> | null = null;
+
+function loadTaxonomySlugs(): Promise<string[]> {
+	if (taxonomySlugsCache) {
+		return Promise.resolve(taxonomySlugsCache);
+	}
+
+	if (!taxonomySlugsPromise) {
+		taxonomySlugsPromise = fetchAPI<Record<string, unknown>>("/wp/v2/taxonomies")
+			.then((data) => {
+				taxonomySlugsCache = data ? Object.keys(data) : [];
+				return taxonomySlugsCache;
+			})
+			.catch(() => {
+				taxonomySlugsCache = [];
+				return [];
+			});
+	}
+
+	return taxonomySlugsPromise;
+}
+
 const BodyClass = ({ children }: BodyClassProps) => {
 	const pathname = usePathname();
 	const { pageId } = useWpPageId();
-
-	// Fetch taxonomías dinámicamente desde WordPress
-	const [taxonomies, setTaxonomies] = useState<string[]>([]);
+	const [taxonomies, setTaxonomies] = useState<string[]>(taxonomySlugsCache ?? []);
+	const appliedClassesRef = useRef<string[]>([]);
 
 	useEffect(() => {
-		const fetchTaxonomies = async () => {
-			try {
-				const data = await fetchAPI('/wp/v2/taxonomies');
-				if (data) {
-					setTaxonomies(Object.keys(data));
-				}
-			} catch (e) {
-				// Fallback a lista vacía si falla
-				setTaxonomies([]);
+		let cancelled = false;
+
+		loadTaxonomySlugs().then((slugs) => {
+			if (!cancelled) {
+				setTaxonomies(slugs);
 			}
+		});
+
+		return () => {
+			cancelled = true;
 		};
-		fetchTaxonomies();
 	}, []);
 
-	// Generate body classes dynamically from pathname
 	const bodyClasses = useMemo(() => {
-		const pathSegments = (pathname || '').split('/').filter(Boolean);
-
-		// Remove locale from path segments for class generation
-		const slugWithoutLocale = (pathSegments.length > 0 && localesConfig.supportedLocales.includes(pathSegments[0])) ? pathSegments.slice(1) : pathSegments;
-
-		let classes: string[] = [];
-
-		// Detect taxonomies dynamically desde la API
-		const validTaxonomies = taxonomies;
-
-		// Special routes (search, sitemap, etc.)
-		const specialRoutes = ['search', 'sitemap', 'blog', 'feed.xml'];
-		const isSpecialRoute = slugWithoutLocale.length > 0 && specialRoutes.includes(slugWithoutLocale[0]);
-
-		if (slugWithoutLocale.length === 1 && CPT_SLUG_MAP[slugWithoutLocale[0]]) {
-			// CPT Archive
-			const internalCpt = CPT_SLUG_MAP[slugWithoutLocale[0]];
-			classes = ['archive', `archive-${internalCpt}`];
-		} else if (slugWithoutLocale.length === 0) {
-			// Home page
-			classes = ["page-home"];
-		} else if (slugWithoutLocale.length === 2 && CPT_SLUG_MAP[slugWithoutLocale[0]]) {
-			// CPT Single
-			const internalCpt = CPT_SLUG_MAP[slugWithoutLocale[0]];
-			classes = [`single`, `single-${internalCpt}`];
-			if (pageId) {
-				classes.push(`postid-${pageId}`);
-			}
-		} else if (slugWithoutLocale.length === 1 && validTaxonomies.includes(slugWithoutLocale[0])) {
-			// Taxonomy archive
-			classes = [`taxonomy`, `taxonomy-${slugWithoutLocale[0]}`, `page-taxonomy`];
-		} else if (isSpecialRoute) {
-			// Special routes: /search, /sitemap, etc.
-			const routeName = slugWithoutLocale[0];
-			classes = ["page", `page-${routeName}`];
-		} else {
-			// Static pages
-			const pageSlug = slugWithoutLocale[slugWithoutLocale.length - 1] || 'home';
-			classes = ["page", `page-${pageSlug}`];
-			if (pageId) {
-				classes.push(`page-id-${pageId}`);
-			}
-		}
-
-		return classes.join(' ');
+		const segments = stripLocale((pathname || "").split("/").filter(Boolean));
+		return resolveBodyClasses(segments, pageId, taxonomies);
 	}, [pathname, pageId, taxonomies]);
 
 	useEffect(() => {
-		// Get existing classes that we don't manage (like 'modal-controller-ready')
-		const existingClasses = Array.from(document.body.classList);
-		const managedClasses = ['page', 'page-home', 'page-id-', 'postid-', 'single', 'single-', 'archive', 'archive-', 'taxonomy', 'taxonomy-'];
-		
-		// Filter out managed classes but keep others (like modal-controller-ready)
-		const unmanagedClasses = existingClasses.filter(cls => 
-			!managedClasses.some(prefix => cls.startsWith(prefix))
-		);
-		
-		// Combine unmanaged classes with our new body classes
-		const finalClasses = [...unmanagedClasses, ...bodyClasses.split(' ')].join(' ');
-		document.body.className = finalClasses;
-		
+		const previousClasses = appliedClassesRef.current;
+
+		previousClasses.forEach((cls) => document.body.classList.remove(cls));
+		bodyClasses.forEach((cls) => document.body.classList.add(cls));
+		appliedClassesRef.current = bodyClasses;
+
 		return () => {
-			// On cleanup, only remove our managed classes
-			const classesToRemove = bodyClasses.split(' ');
-			classesToRemove.forEach(cls => document.body.classList.remove(cls));
+			appliedClassesRef.current.forEach((cls) => document.body.classList.remove(cls));
+			appliedClassesRef.current = [];
 		};
 	}, [bodyClasses]);
 

@@ -5,8 +5,12 @@
  * Usage: npm run prebuild (automatic) or tsx src/utils/build/fetch-locales.ts
  */
 
+import { config } from 'dotenv';
 import { writeFileSync } from 'fs';
-import { join } from 'path';
+import { join, resolve } from 'path';
+
+config({ path: resolve(process.cwd(), '.env.local') });
+config({ path: resolve(process.cwd(), '.env') });
 
 interface WPMLLanguage {
   code: string;
@@ -24,7 +28,7 @@ interface LocalesConfig {
 const WORDPRESS_API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || 'https://penkode.com/headless/wp-json';
 const WPML_ENDPOINT = '/custom/v1/languages';
 const OUTPUT_PATH = join(process.cwd(), 'src', 'i18n', 'locales.generated.json');
-const SUPPORTED_LOCALES = ['es', 'en', 'pt-br'];
+const SUPPORTED_LOCALES = ['es', 'en'];
 const DEFAULT_LOCALE = 'es';
 
 /**
@@ -88,14 +92,27 @@ function writeLocalesFile(config: LocalesConfig): void {
 }
 
 /**
- * Main execution
+ * Main execution — fetches active languages from WPML and writes locales.generated.json.
+ * Falls back to static locales if WordPress is unreachable.
  */
 async function main() {
-  console.log('🔄 Usando configuración de locales estática...');
-  console.log(`   File: ${OUTPUT_PATH}`);
-  console.log(`   Supported: [${SUPPORTED_LOCALES.join(', ')}]`);
-  console.log(`   Default: ${DEFAULT_LOCALE}`);
-  process.exit(0);
+  console.log('🔄 Fetching active languages from WordPress WPML...');
+  console.log(`   API: ${WORDPRESS_API_URL}${WPML_ENDPOINT}`);
+
+  try {
+    const languages = await fetchActiveLanguages();
+    const config = generateLocalesConfig(languages);
+    writeLocalesFile(config);
+  } catch {
+    console.warn('⚠️  Could not fetch languages from WordPress. Using static fallback.');
+    console.warn(`   Supported: [${SUPPORTED_LOCALES.join(', ')}]`);
+    console.warn(`   Default: ${DEFAULT_LOCALE}`);
+    writeLocalesFile({
+      supportedLocales: SUPPORTED_LOCALES,
+      defaultLocale: DEFAULT_LOCALE,
+      generatedAt: new Date().toISOString(),
+    });
+  }
 }
 
 // Run if executed directly (not imported)

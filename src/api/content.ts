@@ -64,40 +64,47 @@ export async function getContentBySlug<T extends WpContent>(postType: string, sl
 
 /** Fetches the home page content, with optional language support. */
 export async function getHomePage(lang?: string): Promise<Page | null> {
-  let query = '/wp/v2/pages?per_page=100&_embed';
-   
-  if (lang && lang !== localesConfig.defaultLocale) {
-    query += `&lang=${lang}`;
-  }
-   
+  const slug = lang && lang !== localesConfig.defaultLocale ? `home-${lang}` : 'home';
+  const query = `/wp/v2/pages?slug=${encodeURIComponent(slug)}&_embed`;
+  
   const pages = await fetchAPI<Page[]>(query);
-   
   if (pages && pages.length > 0) {
-    // Most reliable: the front page always has '/' as its pathname in WP
-    const byRootLink = pages.find(p => {
+    return pages[0];
+  }
+
+  const fallbackQuery = lang && lang !== localesConfig.defaultLocale
+    ? `/wp/v2/pages?_embed&lang=${lang}`
+    : '/wp/v2/pages?_embed';
+  const fallbackPages = await fetchAPI<Page[]>(fallbackQuery);
+
+  if (fallbackPages && fallbackPages.length > 0) {
+    const byRootLink = fallbackPages.find(p => {
       try { return new URL(p.link).pathname === '/'; } catch { return false; }
     });
     if (byRootLink) return byRootLink;
 
-    // Fallback: template marker
-    const byTemplate = pages.find(p =>
-      p.template === 'front-page' ||
-      p.meta?.['_wp_page_template'] === 'front-page'
+    const byTemplate = fallbackPages.find(p =>
+      p.template === 'front-page' || p.meta?.['_wp_page_template'] === 'front-page'
     );
     if (byTemplate) return byTemplate;
 
-    // Fallback: common slugs
     const commonSlugs = ['inicio', 'home', 'portada', 'accueil', 'landing'];
-    for (const slug of commonSlugs) {
-      const page = pages.find(p => p.slug === slug);
+    for (const s of commonSlugs) {
+      const page = fallbackPages.find(p => p.slug === s);
       if (page) return page;
     }
 
-    return pages[0];
+    return fallbackPages[0];
   }
-   
+
   return null;
 }
+
+export const getCachedHomePage = unstable_cache(
+  getHomePage,
+  ['home-page'],
+  { revalidate: 300, tags: ['home-page'] }
+);
 
 /**
  * Safe wrapper that never throws, returns null on error.

@@ -7,6 +7,8 @@ import { headers } from 'next/headers';
 import localesConfig from '@/i18n/locales.generated.json';
 import { getPostsPerPage } from '@/utils/config/pagination';
 
+export const revalidate = 60;
+
 export default async function BlogIndexPage() {
   // Get current locale from middleware header
   const headersList = headers();

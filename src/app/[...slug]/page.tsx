@@ -239,6 +239,8 @@ export async function generateStaticParams() {
  * - Home page
  * - Static pages
  */
+export const revalidate = 60;
+
 export default async function CatchAllPage({ params }: PageProps) {
   const path = getPathFromParams(params);
   const routeType = await detectRouteType(params.slug);

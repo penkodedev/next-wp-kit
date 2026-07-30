@@ -1,28 +1,11 @@
 'use client'
 import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
-import { useCookieAware, useGoogleAnalytics, useFacebookPixel } from '@/hooks/useCookieConsent'
+import { useCookieAware } from '@/hooks/useCookieConsent'
 import localesConfig from '@/i18n/locales.generated.json'
 
-// Componente que maneja Google Analytics
-const GoogleAnalyticsManager = () => {
-  const { shouldLoad } = useCookieAware('analytics', 'performance')
-
-  // Usar el hook para inicializar Google Analytics
-  useGoogleAnalytics('GA_MEASUREMENT_ID') // Reemplazar con tu ID real
-
-  return null
-}
-
-// Componente que maneja Facebook Pixel
-const FacebookPixelManager = () => {
-  const { shouldLoad } = useCookieAware('facebook_pixel', 'marketing')
-
-  // Usar el hook para inicializar Facebook Pixel
-  useFacebookPixel('FB_PIXEL_ID') // Reemplazar con tu ID real
-
-  return null
-}
+// Analytics tracking is handled in layout.tsx via <Analytics />
+// using real IDs loaded from WordPress settings.
 
 // Componente que maneja cookies de funcionalidad
 const FunctionalityManager = () => {
@@ -41,9 +24,7 @@ const FunctionalityManager = () => {
       
       // Ejemplo: guardar preferencias del usuario (usa locale dinámico)
       const userPreferences = {
-        theme: 'dark',
         language: currentLocale,
-        notifications: true
       }
       localStorage.setItem('user_preferences', JSON.stringify(userPreferences))
     }
@@ -54,13 +35,7 @@ const FunctionalityManager = () => {
 
 // Componente principal que gestiona todas las cookies
 const CookieManager = () => {
-  return (
-    <>
-      <GoogleAnalyticsManager />
-      <FacebookPixelManager />
-      <FunctionalityManager />
-    </>
-  )
+  return <FunctionalityManager />
 }
 
 export default CookieManager 

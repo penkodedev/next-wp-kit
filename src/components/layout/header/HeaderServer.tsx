@@ -10,7 +10,8 @@ interface HeaderServerProps {
   variant?: "default" | "home";
   menuVariant?: 'desktop' | 'mobile' | 'responsive';
   initialLocale?: string;
-  siteInfo?: SiteInfo; // Accept siteInfo from parent
+  siteInfo?: SiteInfo;
+  menusByLocale?: Record<string, MenuItem[]>;
 }
 
 // Default fallback site info when WordPress is unavailable
@@ -62,18 +63,28 @@ export default async function HeaderServer({
   const menusByLocale: Record<string, MenuItem[]> = {};
   let megaMenuEnabled = false;
 
-  try {
-    const menuPromises = supportedLocales.map(async (loc) => {
-      const res = await fetchMenuByLocation('mainnav', loc);
-      return { locale: loc, res };
+  if (menusByLocale && Object.keys(menusByLocale).length > 0) {
+    supportedLocales.forEach((loc) => {
+      if (!menusByLocale[loc]) return;
+      menusByLocale[loc] = menusByLocale[loc] ?? [];
+      if (!megaMenuEnabled) {
+        const entry = menusByLocale[loc];
+      }
     });
-    const results = await Promise.all(menuPromises);
-    results.forEach(({ locale: loc, res }) => {
-      menusByLocale[loc] = res?.items ?? [];
-      if (res?.mega_menu_enabled) megaMenuEnabled = true; // Global setting, same for all locales
-    });
-  } catch {
-    // Fallback: menus fetched client-side
+  } else {
+    try {
+      const menuPromises = supportedLocales.map(async (loc) => {
+        const res = await fetchMenuByLocation('mainnav', loc);
+        return { locale: loc, res };
+      });
+      const results = await Promise.all(menuPromises);
+      results.forEach(({ locale: loc, res }) => {
+        menusByLocale[loc] = res?.items ?? [];
+        if (res?.mega_menu_enabled) megaMenuEnabled = true;
+      });
+    } catch {
+      // Fallback: menus fetched client-side
+    }
   }
 
   return (

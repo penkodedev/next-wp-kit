@@ -24,6 +24,8 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
   return generateSeoMetadata(post, locale);
 }
 
+export const revalidate = 60;
+
 // 2. Generar Rutas Estáticas en el momento de la compilación
 export async function generateStaticParams() {
   const posts = await getAllContent<Post>('posts', '?_fields=slug');

@@ -2,38 +2,67 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { Icons } from "../ui/Icons";
 import { useHeroConfig } from "./HeroConfig";
+import { decodeHTML, normalizeHeroSlide } from "@/utils/wordpress/heroHelpers";
 import type { HeroSlide as APIHeroSlide } from "@/api/wordpressApi";
 
-// Local type for backward compatibility + WordPress API support
+type ContentPosition = 'top' | 'center' | 'bottom';
+type ContentAlign = 'left' | 'center' | 'right';
+
+type NormalizedHeroSlide = {
+  title?: string;
+  titleAlign?: 'left' | 'center' | 'right';
+  subtitle?: string;
+  contentPosition?: ContentPosition;
+  contentAlign?: ContentAlign;
+  overlayOpacity?: number;
+  overlayColor?: string;
+  kenBurns?: number;
+  buttonText?: string;
+  buttonLink?: string;
+  buttonStyle?: 'default' | 'outline';
+  backgroundType?: 'gradient' | 'image' | 'video' | 'none';
+  backgroundImage?: string;
+  backgroundVideo?: string;
+  backgroundColor?: string;
+  videoPlaybackRate?: number;
+  gradientColor1?: string;
+  gradientColor2?: string;
+  gradientDirection?: string;
+  vignetteMode?: 'none' | 'round' | 'up' | 'down';
+  vignetteColor?: string;
+  vignetteIntensity?: number;
+  vignetteSize?: number;
+};
+
 type HeroSlide = {
   title?: string;
   title_align?: 'left' | 'center' | 'right';
   subtitle?: string;
-  content_position?: 'top' | 'center' | 'bottom';
-  content_align?: 'left' | 'center' | 'right';
+  content_position?: ContentPosition;
+  content_align?: ContentAlign;
   overlay_opacity?: number;
   overlay_color?: string;
   ken_burns?: number;
   buttonText?: string;
-  button_text?: string; // WordPress uses snake_case
+  button_text?: string;
   buttonLink?: string;
-  button_link?: string; // WordPress uses snake_case
+  button_link?: string;
   button_style?: 'default' | 'outline';
   backgroundType?: 'gradient' | 'image' | 'video' | 'none';
-  background_type?: 'gradient' | 'image' | 'video' | 'none'; // WordPress uses snake_case
+  background_type?: 'gradient' | 'image' | 'video' | 'none';
   backgroundImage?: string;
-  background_image?: string; // WordPress uses snake_case
+  background_image?: string;
   backgroundVideo?: string;
-  background_video?: string; // WordPress uses snake_case
+  background_video?: string;
   backgroundColor?: string;
   videoPlaybackRate?: number;
-  video_playback_rate?: number; // WordPress uses snake_case
+  video_playback_rate?: number;
   gradient_color_1?: string;
   gradient_color_2?: string;
   gradient_direction?: string;
@@ -44,17 +73,33 @@ type HeroSlide = {
 };
 
 type HeroProps = {
-  // Single slide (backward compatibility)
   title?: string;
   subtitle?: string;
   backgroundImage?: string;
   backgroundVideo?: string;
   buttonText?: string;
   buttonLink?: string;
-  // Multiple slides
   slides?: HeroSlide[];
   autoPlay?: boolean;
   autoPlayInterval?: number;
+};
+
+const contentPositionMap: Record<ContentPosition, string> = {
+  top: 'flex-start',
+  center: 'center',
+  bottom: 'flex-end',
+};
+
+const contentAlignMap: Record<ContentAlign, string> = {
+  left: 'flex-start',
+  center: 'center',
+  right: 'flex-end',
+};
+
+const textAlignMap: Record<ContentAlign, string> = {
+  left: 'left',
+  center: 'center',
+  right: 'right',
 };
 
 export default function Hero({
@@ -68,62 +113,72 @@ export default function Hero({
   autoPlay = true,
   autoPlayInterval = 5000,
 }: HeroProps) {
-  // Determinar si usar slides o props individuales
   const heroSlides = slides || (title || subtitle || buttonText ? [{ title, subtitle, buttonText, buttonLink }] : []);
+  const normalizedSlides = useMemo(() => heroSlides.map(normalizeHeroSlide) as NormalizedHeroSlide[], [heroSlides]);
 
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [allowVideo, setAllowVideo] = useState(false);
 
-  // Auto-play functionality
   useEffect(() => {
-    if (autoPlay && heroSlides.length > 1) {
+    let cancelled = false;
+    const enableVideo = () => {
+      if (!cancelled) setAllowVideo(true);
+    };
+
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      const id = window.requestIdleCallback(enableVideo, { timeout: 1500 });
+      return () => {
+        cancelled = true;
+        window.cancelIdleCallback(id as number);
+      };
+    }
+
+    if (typeof window !== 'undefined') {
+      const t = setTimeout(enableVideo, 200);
+      return () => {
+        cancelled = true;
+        clearTimeout(t);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    if (autoPlay && normalizedSlides.length > 1) {
       const interval = setInterval(() => {
-        setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+        setCurrentSlide((prev) => (prev + 1) % normalizedSlides.length);
       }, autoPlayInterval);
       return () => clearInterval(interval);
     }
-  }, [autoPlay, autoPlayInterval, heroSlides.length]);
+  }, [autoPlay, autoPlayInterval, normalizedSlides.length]);
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    setCurrentSlide((prev) => (prev + 1) % normalizedSlides.length);
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+    setCurrentSlide((prev) => (prev - 1 + normalizedSlides.length) % normalizedSlides.length);
   };
 
-  // Use centralized animation variants from HeroConfig
   const { variants: heroVariants } = useHeroConfig();
   const containerVariants = heroVariants.containerVariants;
   const itemVariants = heroVariants.itemVariants;
   const slideVariants = heroVariants.slideVariants;
 
-  const currentSlideData = heroSlides[currentSlide];
-  
-  // Helper para decodificar HTML entities (funciona en SSR)
-  const decodeHTML = (html: string): string => {
-    const entities: Record<string, string> = {
-      '&amp;': '&',
-      '&lt;': '<',
-      '&gt;': '>',
-      '&quot;': '"',
-      '&#39;': "'",
-      '&nbsp;': ' ',
-    };
-    return html.replace(/&[^;]+;/g, (entity) => entities[entity] || entity);
-  };
-  
-  // Normalize WordPress snake_case to camelCase for easier use
-  const bgType = (currentSlideData?.background_type || currentSlideData?.backgroundType || 'gradient') as 'gradient' | 'image' | 'video' | 'none';
-  const bgImage = currentSlideData?.background_image || currentSlideData?.backgroundImage;
-  const bgVideo = currentSlideData?.background_video || currentSlideData?.backgroundVideo;
-  const playbackRate = currentSlideData?.video_playback_rate || currentSlideData?.videoPlaybackRate || 1;
-  const gradientColor1 = currentSlideData?.gradient_color_1 || '#6366f1';
-  const gradientColor2 = currentSlideData?.gradient_color_2 || '#8b5cf6';
-  const gradientDirection = currentSlideData?.gradient_direction || 'to bottom';
+  const currentSlideData = normalizedSlides[currentSlide];
+
+  const bgType = (currentSlideData?.backgroundType || 'gradient') as 'gradient' | 'image' | 'video' | 'none';
+  const bgImage = currentSlideData?.backgroundImage;
+  const bgVideo = currentSlideData?.backgroundVideo;
+  const playbackRate = currentSlideData?.videoPlaybackRate || 1;
+  const gradientColor1 = currentSlideData?.gradientColor1 || '#6366f1';
+  const gradientColor2 = currentSlideData?.gradientColor2 || '#8b5cf6';
+  const gradientDirection = currentSlideData?.gradientDirection || 'to bottom';
+
+  const contentPosition = currentSlideData?.contentPosition || 'center';
+  const contentAlign = currentSlideData?.contentAlign || 'center';
 
   return (
     <section className="hero-section">
-      {/* Capa de fondo dinámica con crossfade */}
       <div className={`hero-background hero-background-${bgType}`}>
         <AnimatePresence mode="sync">
           <motion.div
@@ -144,11 +199,11 @@ export default function Hero({
                 fill
                 sizes="100vw"
                 style={{ objectFit: 'cover' }}
-                className={currentSlideData?.ken_burns ? 'ken-burns-active' : ''}
+                className={currentSlideData?.kenBurns ? 'ken-burns-active' : ''}
                 priority
               />
             )}
-            {bgType === 'video' && bgVideo && (
+            {bgType === 'video' && bgVideo && allowVideo && (
               <video
                 ref={(video) => {
                   if (video && playbackRate) {
@@ -156,11 +211,11 @@ export default function Hero({
                   }
                 }}
                 src={bgVideo}
+                preload="metadata"
                 autoPlay
                 loop
                 muted
                 playsInline
-                // Styles moved to hero-home.scss for consistency
               />
             )}
             {bgType === 'none' && currentSlideData?.backgroundColor && (
@@ -169,39 +224,32 @@ export default function Hero({
           </motion.div>
         </AnimatePresence>
       </div>
-      
-      {/* Overlay con opacidad y color dinámicos */}
-      <div 
-        className="hero-overlay" 
-        style={{ 
-          backgroundColor: currentSlideData?.overlay_color ?? '#000000',
-          opacity: currentSlideData?.overlay_opacity ?? 0.3 
-        }} 
+
+      <div
+        className="hero-overlay"
+        style={{
+          backgroundColor: currentSlideData?.overlayColor ?? '#000000',
+          opacity: currentSlideData?.overlayOpacity ?? 0.3
+        }}
       />
 
-      {/* Viñeta fotográfica */}
-      {currentSlideData?.vignette_mode && currentSlideData.vignette_mode !== 'none' && (
+      {currentSlideData?.vignetteMode && currentSlideData.vignetteMode !== 'none' && (
         <div
-          className={`hero-vignette hero-vignette--${currentSlideData.vignette_mode}`}
+          className={`hero-vignette hero-vignette--${currentSlideData.vignetteMode}`}
           style={{
-            '--vignette-color': currentSlideData.vignette_color ?? '#000000',
-            '--vignette-intensity': currentSlideData.vignette_intensity ?? 0.5,
-            '--vignette-size': `${currentSlideData.vignette_size ?? 50}%`,
+            '--vignette-color': currentSlideData.vignetteColor ?? '#000000',
+            '--vignette-intensity': currentSlideData.vignetteIntensity ?? 0.5,
+            '--vignette-size': `${currentSlideData.vignetteSize ?? 50}%`,
           } as React.CSSProperties}
         />
       )}
 
-      {/* Contenido animado con slides */}
-      <div 
+      <div
         className="hero-content"
         style={{
-          justifyContent: currentSlideData?.content_position === 'top' ? 'flex-start' 
-                        : currentSlideData?.content_position === 'bottom' ? 'flex-end' 
-                        : 'center',
-          alignItems: currentSlideData?.content_align === 'left' ? 'flex-start'
-                    : currentSlideData?.content_align === 'right' ? 'flex-end'
-                    : 'center',
-          textAlign: (currentSlideData?.content_align || 'center') as 'left' | 'center' | 'right'
+          justifyContent: contentPositionMap[contentPosition],
+          alignItems: contentAlignMap[contentAlign],
+          textAlign: textAlignMap[contentAlign] as 'left' | 'center' | 'right',
         }}
       >
         <AnimatePresence mode="wait">
@@ -213,7 +261,7 @@ export default function Hero({
             exit="exit"
             transition={{
               duration: 0.8,
-              ease: [0.25, 0.46, 0.45, 0.94], // Cubic bezier para más suavidad
+              ease: [0.25, 0.46, 0.45, 0.94],
               scale: { duration: 0.6 },
               opacity: { duration: 0.4 }
             }}
@@ -224,32 +272,29 @@ export default function Hero({
               initial="hidden"
               animate="visible"
             >
-              {heroSlides[currentSlide]?.title && (
-                <motion.h1 
+              {currentSlideData?.title && (
+                <motion.h1
                   variants={itemVariants}
-                  style={{ 
-                    textAlign: (heroSlides[currentSlide].title_align || 'left') as 'left' | 'center' | 'right' 
-                  }}
+                  style={{ textAlign: currentSlideData.titleAlign || 'left' }}
                 >
-                  {heroSlides[currentSlide].title}
+                  {currentSlideData.title}
                 </motion.h1>
               )}
-              {heroSlides[currentSlide]?.subtitle && (
-                <motion.div 
+              {currentSlideData?.subtitle && (
+                <motion.div
                   variants={itemVariants}
-                  dangerouslySetInnerHTML={{ 
-                    __html: decodeHTML(heroSlides[currentSlide].subtitle || '') 
+                  dangerouslySetInnerHTML={{
+                    __html: decodeHTML(currentSlideData.subtitle)
                   }}
                 />
               )}
-              {(heroSlides[currentSlide]?.buttonText || heroSlides[currentSlide]?.button_text) && 
-               (heroSlides[currentSlide]?.buttonLink || heroSlides[currentSlide]?.button_link) && (
+              {currentSlideData?.buttonText && currentSlideData?.buttonLink && (
                 <motion.div variants={itemVariants}>
-                  <Link 
-                    href={(heroSlides[currentSlide].button_link || heroSlides[currentSlide].buttonLink)!} 
-                    className={`button hero-button hero-button-${heroSlides[currentSlide].button_style || 'primary'}`}
+                  <Link
+                    href={currentSlideData.buttonLink}
+                    className={`button hero-button hero-button-${currentSlideData.buttonStyle || 'primary'}`}
                   >
-                    {heroSlides[currentSlide].button_text || heroSlides[currentSlide].buttonText} <Icons.ArrowRight size={21} strokeWidth={1.5} />
+                    {currentSlideData.buttonText} <Icons.ArrowRight size={21} strokeWidth={1.5} />
                   </Link>
                 </motion.div>
               )}
@@ -258,8 +303,7 @@ export default function Hero({
         </AnimatePresence>
       </div>
 
-      {/* Controles de navegación si hay múltiples slides */}
-      {heroSlides.length > 1 && (
+      {normalizedSlides.length > 1 && (
         <>
           <button
             type="button"
@@ -280,7 +324,6 @@ export default function Hero({
         </>
       )}
 
-      {/* Botón de scroll hacia abajo */}
       <a
         href="#index-home"
         className="hero-nav hero-nav-down"
@@ -288,27 +331,24 @@ export default function Hero({
         onClick={(e) => {
           e.preventDefault();
           const target = document.getElementById('index-home');
-          if (target) {
-            const start = window.scrollY;
-            const targetTop = target.offsetTop;
-            const distance = targetTop - start;
-            const duration = 1000; // Más alto = más lento
-            const startTime = performance.now();
+          if (!target) return;
+          const start = window.scrollY;
+          const targetTop = target.offsetTop;
+          const distance = targetTop - start;
+          const duration = 1000;
+          const startTime = performance.now();
 
-            const animateScroll = (currentTime: number) => {
-              const elapsed = currentTime - startTime;
-              const progress = Math.min(elapsed / duration, 1);
-              const ease = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+          const animateScroll = (currentTime: number) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const ease = 1 - Math.pow(1 - progress, 3);
+            window.scrollTo(0, start + distance * ease);
+            if (progress < 1) {
+              requestAnimationFrame(animateScroll);
+            }
+          };
 
-              window.scrollTo(0, start + distance * ease);
-
-              if (progress < 1) {
-                requestAnimationFrame(animateScroll);
-              }
-            };
-
-            requestAnimationFrame(animateScroll);
-          }
+          requestAnimationFrame(animateScroll);
         }}
       >
         <Icons.ArrowDown size={22} strokeWidth={1.5} />

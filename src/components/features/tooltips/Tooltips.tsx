@@ -168,7 +168,7 @@ tooltipEl.style.setProperty('--arrow-left', `${Math.max(8, arrowLeft)}px`);
     observer.observe(document.body, { childList: true, subtree: true });
 
     // ─── Fetch ────────────────────────────────────────────────────────────────
-    const wpApiUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL ?? '';
+    const wpApiUrl = (process.env.NEXT_PUBLIC_WORDPRESS_API_URL ?? '').replace(/\/$/, '');
 
     fetch(`${wpApiUrl}/custom/v1/tooltips`)
       .then((r) => {
