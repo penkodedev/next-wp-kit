@@ -47,7 +47,8 @@ export default function PostCard({
   const mediaDetails = featuredMedia as any;
   const imageUrl =
     mediaDetails?.media_details?.sizes?.large?.source_url ||
-    featuredMedia?.source_url;
+    featuredMedia?.source_url ||
+    item.featured_media;
   const excerptText = createExcerpt(item, excerptLength);
 
   // Estado para controlar cuándo animar (permite re-animación)
