@@ -103,6 +103,10 @@ inputs label {
 
 
 // *************   CHAT BOT   ************* //
+.chat-bot-window {
+  z-index: 10000;
+}
+
 .chat-bot-position-right,
 .chat-bot-position-left {
   z-index: 1000;
